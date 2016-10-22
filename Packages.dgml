@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DirectedGraph GraphDirection="LeftToRight" xmlns="http://schemas.microsoft.com/vs/2009/dgml">
+  <Nodes>
+    <Node Id="APRDashboard" Label="APRDashboard" Category="Project" />
+    <Node Id="Antlr 3.4.1.9004" Label="Antlr 3.4.1.9004" Category="Package" />
+    <Node Id="AspNet.ScriptManager.jQuery 1.8.2" Label="AspNet.ScriptManager.jQuery 1.8.2" Category="Package" />
+    <Node Id="AspNet.ScriptManager.jQuery.UI.Combined 1.8.24" Label="AspNet.ScriptManager.jQuery.UI.Combined 1.8.24" Category="Package" />
+    <Node Id="DotNetOpenAuth.AspNet 4.1.4.12333" Label="DotNetOpenAuth.AspNet 4.1.4.12333" Category="Package" />
+    <Node Id="DotNetOpenAuth.Core 4.1.4.12333" Label="DotNetOpenAuth.Core 4.1.4.12333" Category="Package" />
+    <Node Id="DotNetOpenAuth.OAuth.Consumer 4.1.4.12333" Label="DotNetOpenAuth.OAuth.Consumer 4.1.4.12333" Category="Package" />
+    <Node Id="DotNetOpenAuth.OAuth.Core 4.1.4.12333" Label="DotNetOpenAuth.OAuth.Core 4.1.4.12333" Category="Package" />
+    <Node Id="DotNetOpenAuth.OpenId.Core 4.1.4.12333" Label="DotNetOpenAuth.OpenId.Core 4.1.4.12333" Category="Package" />
+    <Node Id="DotNetOpenAuth.OpenId.RelyingParty 4.1.4.12333" Label="DotNetOpenAuth.OpenId.RelyingParty 4.1.4.12333" Category="Package" />
+    <Node Id="EntityFramework 5.0.0" Label="EntityFramework 5.0.0" Category="Package" />
+    <Node Id="jQuery 1.8.2" Label="jQuery 1.8.2" Category="Package" />
+    <Node Id="jQuery.UI.Combined 1.8.24" Label="jQuery.UI.Combined 1.8.24" Category="Package" />
+    <Node Id="Microsoft.AspNet.FriendlyUrls.Core 1.0.0" Label="Microsoft.AspNet.FriendlyUrls.Core 1.0.0" Category="Package" />
+    <Node Id="Microsoft.AspNet.Membership.OpenAuth 1.0.1" Label="Microsoft.AspNet.Membership.OpenAuth 1.0.1" Category="Package" />
+    <Node Id="Microsoft.AspNet.Providers.Core 1.2" Label="Microsoft.AspNet.Providers.Core 1.2" Category="Package" />
+    <Node Id="Microsoft.AspNet.Providers.LocalDB 1.1" Label="Microsoft.AspNet.Providers.LocalDB 1.1" Category="Package" />
+    <Node Id="Microsoft.AspNet.Web.Optimization 1.1.3" Label="Microsoft.AspNet.Web.Optimization 1.1.3" Category="Package" />
+    <Node Id="Microsoft.Web.Infrastructure 1.0.0.0" Label="Microsoft.Web.Infrastructure 1.0.0.0" Category="Package" />
+    <Node Id="Modernizr 2.6.2" Label="Modernizr 2.6.2" Category="Package" />
+    <Node Id="Newtonsoft.Json 5.0.4" Label="Newtonsoft.Json 5.0.4" Category="Package" />
+    <Node Id="WebGrease 1.5.2" Label="WebGrease 1.5.2" Category="Package" />
+    <Node Id="C:\Users\jsucco\Dropbox (Standard Textile)\APR_Publish\APRFINAL\" Label="C:\...\APRFINAL\" Category="Project" />
+    <Node Id="Antlr 3.4.1.9004" Label="Antlr 3.4.1.9004" Category="Package" />
+    <Node Id="Bundling.Extensions 0.2.0" Label="Bundling.Extensions 0.2.0" Category="Package" />
+    <Node Id="dotless 1.4.1.0" Label="dotless 1.4.1.0" Category="Package" />
+    <Node Id="EcmaScript.Net 1.0.1.0" Label="EcmaScript.Net 1.0.1.0" Category="Package" />
+    <Node Id="Microsoft.AspNet.Web.Optimization 1.1.3" Label="Microsoft.AspNet.Web.Optimization 1.1.3" Category="Package" />
+    <Node Id="Microsoft.Web.Infrastructure 1.0.0.0" Label="Microsoft.Web.Infrastructure 1.0.0.0" Category="Package" />
+    <Node Id="Newtonsoft.Json 5.0.4" Label="Newtonsoft.Json 5.0.4" Category="Package" />
+    <Node Id="WebGrease 1.5.2" Label="WebGrease 1.5.2" Category="Package" />
+    <Node Id="YUICompressor.NET 2.7.0.0" Label="YUICompressor.NET 2.7.0.0" Category="Package" />
+  </Nodes>
+  <Links>
+    <Link Source="AspNet.ScriptManager.jQuery 1.8.2" Target="jQuery 1.8.2" Category="Package Dependency" />
+    <Link Source="AspNet.ScriptManager.jQuery.UI.Combined 1.8.24" Target="jQuery.UI.Combined 1.8.24" Category="Package Dependency" />
+    <Link Source="DotNetOpenAuth.AspNet 4.1.4.12333" Target="DotNetOpenAuth.OpenId.RelyingParty 4.1.4.12333" Category="Package Dependency" />
+    <Link Source="DotNetOpenAuth.AspNet 4.1.4.12333" Target="DotNetOpenAuth.OAuth.Consumer 4.1.4.12333" Category="Package Dependency" />
+    <Link Source="DotNetOpenAuth.OAuth.Consumer 4.1.4.12333" Target="DotNetOpenAuth.OAuth.Core 4.1.4.12333" Category="Package Dependency" />
+    <Link Source="DotNetOpenAuth.OAuth.Core 4.1.4.12333" Target="DotNetOpenAuth.Core 4.1.4.12333" Category="Package Dependency" />
+    <Link Source="DotNetOpenAuth.OpenId.Core 4.1.4.12333" Target="DotNetOpenAuth.Core 4.1.4.12333" Category="Package Dependency" />
+    <Link Source="DotNetOpenAuth.OpenId.RelyingParty 4.1.4.12333" Target="DotNetOpenAuth.OpenId.Core 4.1.4.12333" Category="Package Dependency" />
+    <Link Source="jQuery.UI.Combined 1.8.24" Target="jQuery 1.8.2" Category="Package Dependency" />
+    <Link Source="Microsoft.AspNet.FriendlyUrls.Core 1.0.0" Target="Microsoft.Web.Infrastructure 1.0.0.0" Category="Package Dependency" />
+    <Link Source="Microsoft.AspNet.Membership.OpenAuth 1.0.1" Target="EntityFramework 5.0.0" Category="Package Dependency" />
+    <Link Source="Microsoft.AspNet.Providers.Core 1.2" Target="EntityFramework 5.0.0" Category="Package Dependency" />
+    <Link Source="Microsoft.AspNet.Providers.LocalDB 1.1" Target="Microsoft.AspNet.Providers.Core 1.2" Category="Package Dependency" />
+    <Link Source="Microsoft.AspNet.Web.Optimization 1.1.3" Target="Microsoft.Web.Infrastructure 1.0.0.0" Category="Package Dependency" />
+    <Link Source="Microsoft.AspNet.Web.Optimization 1.1.3" Target="WebGrease 1.5.2" Category="Package Dependency" />
+    <Link Source="WebGrease 1.5.2" Target="Antlr 3.4.1.9004" Category="Package Dependency" />
+    <Link Source="WebGrease 1.5.2" Target="Newtonsoft.Json 5.0.4" Category="Package Dependency" />
+    <Link Source="APRDashboard" Target="AspNet.ScriptManager.jQuery 1.8.2" Category="Installed Package" />
+    <Link Source="APRDashboard" Target="AspNet.ScriptManager.jQuery.UI.Combined 1.8.24" Category="Installed Package" />
+    <Link Source="APRDashboard" Target="DotNetOpenAuth.AspNet 4.1.4.12333" Category="Installed Package" />
+    <Link Source="APRDashboard" Target="Microsoft.AspNet.FriendlyUrls.Core 1.0.0" Category="Installed Package" />
+    <Link Source="APRDashboard" Target="Microsoft.AspNet.Membership.OpenAuth 1.0.1" Category="Installed Package" />
+    <Link Source="APRDashboard" Target="Microsoft.AspNet.Providers.LocalDB 1.1" Category="Installed Package" />
+    <Link Source="APRDashboard" Target="Microsoft.AspNet.Web.Optimization 1.1.3" Category="Installed Package" />
+    <Link Source="APRDashboard" Target="Modernizr 2.6.2" Category="Installed Package" />
+    <Link Source="Bundling.Extensions 0.2.0" Target="dotless 1.4.1.0" Category="Package Dependency" />
+    <Link Source="Bundling.Extensions 0.2.0" Target="Microsoft.AspNet.Web.Optimization 1.1.3" Category="Package Dependency" />
+    <Link Source="Bundling.Extensions 0.2.0" Target="YUICompressor.NET 2.7.0.0" Category="Package Dependency" />
+    <Link Source="Microsoft.AspNet.Web.Optimization 1.1.3" Target="Microsoft.Web.Infrastructure 1.0.0.0" Category="Package Dependency" />
+    <Link Source="Microsoft.AspNet.Web.Optimization 1.1.3" Target="WebGrease 1.5.2" Category="Package Dependency" />
+    <Link Source="WebGrease 1.5.2" Target="Antlr 3.4.1.9004" Category="Package Dependency" />
+    <Link Source="WebGrease 1.5.2" Target="Newtonsoft.Json 5.0.4" Category="Package Dependency" />
+    <Link Source="YUICompressor.NET 2.7.0.0" Target="EcmaScript.Net 1.0.1.0" Category="Package Dependency" />
+    <Link Source="C:\Users\jsucco\Dropbox (Standard Textile)\APR_Publish\APRFINAL\" Target="Bundling.Extensions 0.2.0" Category="Installed Package" />
+  </Links>
+  <Categories>
+    <Category Id="Project" />
+    <Category Id="Package" />
+  </Categories>
+  <Styles>
+    <Style TargetType="Node" GroupLabel="Project" ValueLabel="True">
+      <Condition Expression="HasCategory('Project')" />
+      <Setter Property="Background" Value="Blue" />
+    </Style>
+    <Style TargetType="Link" GroupLabel="Package Dependency" ValueLabel="True">
+      <Condition Expression="HasCategory('Package Dependency')" />
+      <Setter Property="Background" Value="Yellow" />
+    </Style>
+  </Styles>
+</DirectedGraph>
