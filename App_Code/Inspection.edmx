@@ -1,0 +1,2403 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Inspection_Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ButtonLibrary">
+          <Key>
+            <PropertyRef Name="ButtonId" />
+          </Key>
+          <Property Name="ButtonId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Text" Type="varchar" MaxLength="50" />
+          <Property Name="DefectImage" Type="varbinary(max)" />
+          <Property Name="DefectImage_Desc" Type="varchar(max)" />
+          <Property Name="DefectCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="Hide" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ButtonTemplate">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TabTemplateId" Type="int" Nullable="false" />
+          <Property Name="ButtonId" Type="int" Nullable="false" />
+          <Property Name="DefectType" Type="varchar" MaxLength="20" />
+          <Property Name="Hide" Type="bit" Nullable="false" />
+          <Property Name="Timer" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DefectMaster">
+          <Key>
+            <PropertyRef Name="DefectID" />
+          </Key>
+          <Property Name="DefectID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DefectTime" Type="datetime" />
+          <Property Name="DefectDesc" Type="varchar" MaxLength="50" />
+          <Property Name="POnumber" Type="varchar" MaxLength="50" />
+          <Property Name="DataNo" Type="varchar" MaxLength="50" />
+          <Property Name="EmployeeNo" Type="varchar" MaxLength="50" />
+          <Property Name="AQL" Type="varchar" MaxLength="50" />
+          <Property Name="ThisPieceNo" Type="varchar" MaxLength="50" />
+          <Property Name="SampleSize" Type="varchar" MaxLength="50" />
+          <Property Name="RejectLimiter" Type="int" />
+          <Property Name="TotalLotPieces" Type="varchar" MaxLength="50" />
+          <Property Name="Product" Type="varchar" MaxLength="50" />
+          <Property Name="DefectClass" Type="varchar" MaxLength="50" />
+          <Property Name="MergeDate" Type="datetime" />
+          <Property Name="Tablet" Type="varchar" MaxLength="50" />
+          <Property Name="WorkOrder" Type="varchar" MaxLength="50" />
+          <Property Name="LotNo" Type="varchar" MaxLength="50" />
+          <Property Name="Location" Type="varchar" MaxLength="50" />
+          <Property Name="DataType" Type="varchar" MaxLength="50" />
+          <Property Name="Dimensions" Type="varchar" MaxLength="50" />
+          <Property Name="Comment" Type="varchar" MaxLength="50" />
+          <Property Name="LoomNo" Type="varchar" MaxLength="50" />
+          <Property Name="DefectPoints" Type="varchar" MaxLength="50" />
+          <Property Name="GriegeNo" Type="varchar" MaxLength="50" />
+          <Property Name="RollNo" Type="varchar" MaxLength="50" />
+          <Property Name="Operation" Type="varchar" MaxLength="50" />
+          <Property Name="TemplateId" Type="int" Nullable="false" />
+          <Property Name="InspectionId" Type="int" Nullable="false" />
+          <Property Name="DefectImage" Type="varbinary(max)" />
+          <Property Name="DefectImage_Filename" Type="nvarchar" MaxLength="100" />
+          <Property Name="DefectImage_ContentType" Type="nvarchar" MaxLength="100" />
+          <Property Name="ButtonTemplateId" Type="int" />
+          <Property Name="Inspector" Type="varchar" MaxLength="50" />
+          <Property Name="ItemNumber" Type="varchar" MaxLength="50" />
+          <Property Name="InspectionState" Type="varchar" MaxLength="20" />
+          <Property Name="CasePackConv" Type="decimal" Precision="13" Scale="2" />
+          <Property Name="WorkRoom" Type="nchar" MaxLength="10" />
+          <Property Name="InspectionJobSummaryId" Type="int" />
+        </EntityType>
+        <EntityType Name="DefectTimer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StatusValue" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="InspectionJobSummaryId" Type="int" Nullable="false" />
+          <Property Name="ButtonTemplateId" Type="int" Nullable="false" />
+          <Property Name="DefectID" Type="int" Nullable="false" />
+          <Property Name="SessionId" Type="nvarchar" MaxLength="100" />
+          <Property Name="ButtonLocationId" Type="int" Nullable="false" />
+          <Property Name="Timestamp" Type="datetime" Nullable="false" />
+          <Property Name="StopTimestamp" Type="datetime" />
+        </EntityType>
+        <EntityType Name="InspectionJobSummary">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JobType" Type="varchar" MaxLength="20" />
+          <Property Name="JobNumber" Type="varchar" MaxLength="30" />
+          <Property Name="DataNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="CID" Type="nchar" MaxLength="10" />
+          <Property Name="TemplateId" Type="int" Nullable="false" />
+          <Property Name="ItemPassCount" Type="int" Nullable="false" />
+          <Property Name="ItemFailCount" Type="int" Nullable="false" />
+          <Property Name="WOQuantity" Type="int" />
+          <Property Name="WorkOrderPieces" Type="int" />
+          <Property Name="AQL_Level" Type="decimal" Precision="18" Scale="1" />
+          <Property Name="Standard" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="SampleSize" Type="int" />
+          <Property Name="TotalInspectedItems" Type="int" />
+          <Property Name="RejectLimiter" Type="int" />
+          <Property Name="Technical_PassFail" Type="bit" />
+          <Property Name="Technical_PassFail_Timestamp" Type="datetime" />
+          <Property Name="UserConfirm_PassFail" Type="bit" />
+          <Property Name="UserConfirm_PassFail_Timestamp" Type="datetime" />
+          <Property Name="Inspection_Started" Type="datetime" />
+          <Property Name="Inspection_Finished" Type="datetime" />
+          <Property Name="PRP_Code" Type="varchar" MaxLength="50" />
+          <Property Name="UnitCost" Type="float" />
+          <Property Name="UnitDesc" Type="varchar(max)" />
+          <Property Name="Comments" Type="varchar(max)" />
+          <Property Name="ProdMachineName" Type="varchar" MaxLength="50" />
+          <Property Name="MajorsCount" Type="int" />
+          <Property Name="MinorsCount" Type="int" />
+          <Property Name="RepairsCount" Type="int" />
+          <Property Name="ScrapCount" Type="int" />
+        </EntityType>
+        <EntityType Name="InspectionTypes">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Abreviation" Type="nvarchar" MaxLength="10" />
+          <Property Name="Description" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="ProductSpecification">
+          <Key>
+            <PropertyRef Name="SpecId" />
+          </Key>
+          <Property Name="SpecId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="POM_Row" Type="int" />
+          <Property Name="TabTemplateId" Type="int" />
+          <Property Name="DataNo" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="ProductType" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Spec_Description" Type="varchar(max)" Nullable="false" />
+          <Property Name="HowTo" Type="varchar(max)" />
+          <Property Name="value" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Upper_Spec_Value" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Lower_Spec_Value" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="GlobalSpec" Type="bit" Nullable="false" />
+          <Property Name="ME_SessionID" Type="varchar(max)" />
+          <Property Name="SpecSource" Type="varchar" MaxLength="15" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RollInspectionDetail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RollInspectionSummaryId" Type="int" Nullable="false" />
+          <Property Name="TemplateId" Type="int" Nullable="false" />
+          <Property Name="ButtonTemplateId" Type="int" />
+          <Property Name="ShiftNumber" Type="int" Nullable="false" />
+          <Property Name="DHY" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="DefectCount" Type="int" />
+        </EntityType>
+        <EntityType Name="RollInspectionSummary">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LoomNo" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="RollNumber" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Style" Type="nvarchar" MaxLength="50" />
+          <Property Name="Yards_Inspected" Type="decimal" Precision="18" Scale="1" Nullable="false" />
+          <Property Name="DefectiveYards" Type="int" Nullable="false" />
+          <Property Name="DHY" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="RollStartTimestamp" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SpecMeasurements">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TabTemplateId" Type="int" />
+          <Property Name="SpecId" Type="int" Nullable="false" />
+          <Property Name="DefectId" Type="int" />
+          <Property Name="ItemNumber" Type="int" />
+          <Property Name="InspectionJobSummaryId" Type="int" />
+          <Property Name="InspectionId" Type="int" />
+          <Property Name="Timestamp" Type="datetime" Nullable="false" />
+          <Property Name="MeasureValue" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="SpecDelta" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="TabTemplate">
+          <Key>
+            <PropertyRef Name="TabTemplateId" />
+          </Key>
+          <Property Name="TabTemplateId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TemplateId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="TabNumber" Type="int" Nullable="false" />
+          <Property Name="ProductSpecs" Type="bit" Nullable="false" />
+          <Property Name="Updated" Type="datetime" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TemplateActivator">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LocationMasterId" Type="int" Nullable="false" />
+          <Property Name="TemplateId" Type="int" Nullable="false" />
+          <Property Name="Status" Type="bit" Nullable="false" />
+          <Property Name="Inserted_Timestamp" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TemplateName">
+          <Key>
+            <PropertyRef Name="TemplateId" />
+          </Key>
+          <Property Name="TemplateId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Owner" Type="varchar" MaxLength="50" />
+          <Property Name="DateCreated" Type="datetime" />
+          <Property Name="Active" Type="bit" />
+          <Property Name="LineTypeId" Type="int" />
+          <Property Name="LineType" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Ins_GriegeBatch" Type="bit" />
+          <Property Name="Ins_WorkOrderInspection" Type="bit" />
+          <Property Name="Loc_STT" Type="bit" />
+          <Property Name="Loc_CAR" Type="bit" />
+          <Property Name="Loc_STJ" Type="bit" />
+          <Property Name="Loc_SPA" Type="bit" />
+          <Property Name="Loc_CDC" Type="bit" />
+          <Property Name="Loc_LINYI" Type="bit" />
+          <Property Name="Loc_PCE" Type="bit" />
+          <Property Name="Loc_FSK" Type="bit" />
+          <Property Name="Loc_FNL" Type="bit" />
+          <Property Name="Loc_FPC" Type="bit" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Inspection_Test.dbo.INS_Summary_VW' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="INS_Summary_VW">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="INStemplateID" />
+            <PropertyRef Name="ItemPassCount" />
+            <PropertyRef Name="ItemFailCount" />
+            <PropertyRef Name="Standard" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="JobType" Type="varchar" MaxLength="20" />
+          <Property Name="JobNumber" Type="varchar" MaxLength="30" />
+          <Property Name="INSDataNum" Type="nvarchar" MaxLength="50" />
+          <Property Name="LOCCID" Type="nchar" MaxLength="10" />
+          <Property Name="LOCName" Type="nchar" MaxLength="30" />
+          <Property Name="INStemplateID" Type="int" Nullable="false" />
+          <Property Name="TMPName" Type="varchar" MaxLength="50" />
+          <Property Name="ItemPassCount" Type="int" Nullable="false" />
+          <Property Name="ItemFailCount" Type="int" Nullable="false" />
+          <Property Name="WOQuantity" Type="int" />
+          <Property Name="WorkOrderPieces" Type="int" />
+          <Property Name="AQL_Level" Type="decimal" Precision="18" Scale="1" />
+          <Property Name="Standard" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="INSSampleSize" Type="int" />
+          <Property Name="TotalInspectedItems" Type="int" />
+          <Property Name="INSRejectLimiter" Type="int" />
+          <Property Name="Technical_PassFail" Type="bit" />
+          <Property Name="Technical_PassFail_Timestamp" Type="datetime" />
+          <Property Name="UserConfirm_PassFail" Type="bit" />
+          <Property Name="UserConfirm_PassFail_Timestamp" Type="datetime" />
+          <Property Name="Inspection_Started" Type="datetime" />
+          <Property Name="Inspection_Finished" Type="datetime" />
+          <Property Name="UnitCost" Type="float" />
+          <Property Name="UnitDesc" Type="varchar(max)" />
+          <Property Name="Comments" Type="varchar(max)" />
+          <Property Name="ProdMachineName" Type="varchar" MaxLength="50" />
+          <Property Name="MajorsCount" Type="int" />
+          <Property Name="MinorsCount" Type="int" />
+          <Property Name="RepairsCount" Type="int" />
+          <Property Name="ScrapCount" Type="int" />
+          <Property Name="DefectID" Type="int" />
+          <Property Name="DefectTime" Type="datetime" />
+          <Property Name="DefectDesc" Type="varchar" MaxLength="50" />
+          <Property Name="POnumber" Type="varchar" MaxLength="50" />
+          <Property Name="DataNo" Type="varchar" MaxLength="50" />
+          <Property Name="EmployeeNo" Type="varchar" MaxLength="50" />
+          <Property Name="ThisPieceNo" Type="varchar" MaxLength="50" />
+          <Property Name="SampleSize" Type="varchar" MaxLength="50" />
+          <Property Name="RejectLimiter" Type="int" />
+          <Property Name="TotalLotPieces" Type="varchar" MaxLength="50" />
+          <Property Name="Product" Type="varchar" MaxLength="50" />
+          <Property Name="DefectClass" Type="varchar" MaxLength="50" />
+          <Property Name="MergeDate" Type="datetime" />
+          <Property Name="Tablet" Type="varchar" MaxLength="50" />
+          <Property Name="WorkOrder" Type="varchar" MaxLength="50" />
+          <Property Name="LotNo" Type="varchar" MaxLength="50" />
+          <Property Name="Location" Type="varchar" MaxLength="50" />
+          <Property Name="DataType" Type="varchar" MaxLength="50" />
+          <Property Name="Dimensions" Type="varchar" MaxLength="50" />
+          <Property Name="Comment" Type="varchar" MaxLength="50" />
+          <Property Name="LoomNo" Type="varchar" MaxLength="50" />
+          <Property Name="DefectPoints" Type="varchar" MaxLength="50" />
+          <Property Name="GriegeNo" Type="varchar" MaxLength="50" />
+          <Property Name="RollNo" Type="varchar" MaxLength="50" />
+          <Property Name="Operation" Type="varchar" MaxLength="50" />
+          <Property Name="TemplateId" Type="int" />
+          <Property Name="InspectionId" Type="int" />
+          <Property Name="DefectImage" Type="varbinary(max)" />
+          <Property Name="DefectImage_Filename" Type="nvarchar" MaxLength="100" />
+          <Property Name="DefectImage_ContentType" Type="nvarchar" MaxLength="100" />
+          <Property Name="ButtonTemplateId" Type="int" />
+          <Property Name="Inspector" Type="varchar" MaxLength="50" />
+          <Property Name="ItemNumber" Type="varchar" MaxLength="50" />
+          <Property Name="InspectionState" Type="varchar" MaxLength="20" />
+          <Property Name="CasePackConv" Type="decimal" Precision="13" Scale="2" />
+          <Property Name="WorkRoom" Type="nchar" MaxLength="10" />
+          <Property Name="InspectionJobSummaryId" Type="int" />
+          <Property Name="TMPTemplateID" Type="int" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Owner" Type="varchar" MaxLength="50" />
+          <Property Name="DateCreated" Type="datetime" />
+          <Property Name="Active" Type="bit" />
+          <Property Name="LineType" Type="varchar" MaxLength="10" />
+          <Property Name="Ins_GriegeBatch" Type="bit" />
+          <Property Name="Ins_WorkOrderInspection" Type="bit" />
+          <Property Name="Loc_STT" Type="bit" />
+          <Property Name="Loc_CAR" Type="bit" />
+          <Property Name="Loc_STJ" Type="bit" />
+          <Property Name="Loc_SPA" Type="bit" />
+          <Property Name="Loc_CDC" Type="bit" />
+          <Property Name="Loc_LINYI" Type="bit" />
+          <Property Name="LOCID" Type="int" />
+          <Property Name="Abreviation" Type="varchar" MaxLength="10" />
+          <Property Name="DBname" Type="nchar" MaxLength="30" />
+          <Property Name="CID" Type="nchar" MaxLength="10" />
+          <Property Name="ConnectionString" Type="nchar" MaxLength="30" />
+          <Property Name="InspectionResults" Type="bit" />
+          <Property Name="ProductionResults" Type="bit" />
+          <Property Name="AS400_Connection" Type="bit" />
+          <Property Name="AS400_Abr" Type="nvarchar" MaxLength="50" />
+          <Property Name="Loc_PCE" Type="bit" />
+          <Property Name="Loc_FSK" Type="bit" />
+          <Property Name="Loc_FNL" Type="bit" />
+          <Property Name="Loc_FPC" Type="bit" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Inspection_Test.dbo.LocationMaster_VW' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="LocationMaster_VW">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="30" Nullable="false" />
+          <Property Name="Abreviation" Type="varchar" MaxLength="10" />
+          <Property Name="DBname" Type="nchar" MaxLength="30" />
+          <Property Name="CID" Type="nchar" MaxLength="10" />
+          <Property Name="ConnectionString" Type="nchar" MaxLength="30" />
+          <Property Name="InspectionResults" Type="bit" />
+          <Property Name="ProductionResults" Type="bit" />
+          <Property Name="AS400_Connection" Type="bit" />
+          <Property Name="AS400_Abr" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Inspection_Test.dbo.STT_VW' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="STT_VW">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="Machine" />
+            <PropertyRef Name="WorkOrder" />
+            <PropertyRef Name="HourID" />
+            <PropertyRef Name="ProductCount" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Machine" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="WorkOrder" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="OperatorNo" Type="varchar" MaxLength="50" />
+          <Property Name="StartTime" Type="datetime" />
+          <Property Name="FinishTime" Type="datetime" />
+          <Property Name="DataNo" Type="varchar" MaxLength="50" />
+          <Property Name="GreigeNo" Type="varchar" MaxLength="50" />
+          <Property Name="CutLengthSpec" Type="varchar" MaxLength="50" />
+          <Property Name="FinishLength" Type="decimal" Precision="13" Scale="2" />
+          <Property Name="JobYds" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="JobSheets" Type="int" />
+          <Property Name="JobOverLengthInches" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ScheduledTime" Type="decimal" Precision="13" Scale="2" />
+          <Property Name="DownTime" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="RunTime" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Efficiency" Type="decimal" Precision="13" Scale="3" />
+          <Property Name="AvgSheetsPerHour" Type="decimal" Precision="13" Scale="2" />
+          <Property Name="RunPass" Type="varchar" MaxLength="30" />
+          <Property Name="PH" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Whiteness" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ExitWidth" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Absorbency" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="RollTicketYds" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="YieldYds" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="WOQUANTITY" Type="int" />
+          <Property Name="JDECOMP" Type="int" />
+          <Property Name="JDESCRAP" Type="int" />
+          <Property Name="JDETOTREC" Type="int" />
+          <Property Name="DIFF_OVER_UNDER" Type="int" />
+          <Property Name="DIFF_PERC" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="TimeStamp_Trans" Type="datetime" />
+          <Property Name="Updated" Type="datetime" />
+          <Property Name="HourID" Type="int" Nullable="false" />
+          <Property Name="HourBegin" Type="datetime" />
+          <Property Name="ProductCount" Type="int" Nullable="false" />
+          <Property Name="OverLengthInches" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="HP_Cut_Length_Spec" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="AvgYdsPmin" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="HourlyYds" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Variance" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="HP_RunTime" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="HP_DownTime" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="WorkOrderID" Type="varchar" MaxLength="50" />
+          <Property Name="MaintenanceStatus" Type="bit" />
+          <Property Name="Location" Type="nchar" MaxLength="10" />
+          <Property Name="Last_Timestamp" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_ButtonTemplate_ButtonLibrary">
+          <End Role="ButtonLibrary" Type="Self.ButtonLibrary" Multiplicity="1" />
+          <End Role="ButtonTemplate" Type="Self.ButtonTemplate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ButtonLibrary">
+              <PropertyRef Name="ButtonId" />
+            </Principal>
+            <Dependent Role="ButtonTemplate">
+              <PropertyRef Name="ButtonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ButtonTemplate_TabTemplate">
+          <End Role="TabTemplate" Type="Self.TabTemplate" Multiplicity="1" />
+          <End Role="ButtonTemplate" Type="Self.ButtonTemplate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TabTemplate">
+              <PropertyRef Name="TabTemplateId" />
+            </Principal>
+            <Dependent Role="ButtonTemplate">
+              <PropertyRef Name="TabTemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DefectMaster_DefectMaster">
+          <End Role="TemplateName" Type="Self.TemplateName" Multiplicity="1" />
+          <End Role="DefectMaster" Type="Self.DefectMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TemplateName">
+              <PropertyRef Name="TemplateId" />
+            </Principal>
+            <Dependent Role="DefectMaster">
+              <PropertyRef Name="TemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DefectTimer_ButtonTemplate">
+          <End Role="ButtonTemplate" Type="Self.ButtonTemplate" Multiplicity="1" />
+          <End Role="DefectTimer" Type="Self.DefectTimer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ButtonTemplate">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="DefectTimer">
+              <PropertyRef Name="ButtonTemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DefectTimer_DefectMaster">
+          <End Role="DefectMaster" Type="Self.DefectMaster" Multiplicity="1" />
+          <End Role="DefectTimer" Type="Self.DefectTimer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DefectMaster">
+              <PropertyRef Name="DefectID" />
+            </Principal>
+            <Dependent Role="DefectTimer">
+              <PropertyRef Name="DefectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DefectTimer_InspectionJobSummary">
+          <End Role="InspectionJobSummary" Type="Self.InspectionJobSummary" Multiplicity="1" />
+          <End Role="DefectTimer" Type="Self.DefectTimer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InspectionJobSummary">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="DefectTimer">
+              <PropertyRef Name="InspectionJobSummaryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RollInspectionDetail_RollInspectionSummary">
+          <End Role="RollInspectionSummary" Type="Self.RollInspectionSummary" Multiplicity="1" />
+          <End Role="RollInspectionDetail" Type="Self.RollInspectionDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RollInspectionSummary">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RollInspectionDetail">
+              <PropertyRef Name="RollInspectionSummaryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RollInspectionDetail_TemplateName">
+          <End Role="TemplateName" Type="Self.TemplateName" Multiplicity="1" />
+          <End Role="RollInspectionDetail" Type="Self.RollInspectionDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TemplateName">
+              <PropertyRef Name="TemplateId" />
+            </Principal>
+            <Dependent Role="RollInspectionDetail">
+              <PropertyRef Name="TemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SpecMeasurements_InspectionJobSummary">
+          <End Role="InspectionJobSummary" Type="Self.InspectionJobSummary" Multiplicity="0..1" />
+          <End Role="SpecMeasurements" Type="Self.SpecMeasurements" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InspectionJobSummary">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="SpecMeasurements">
+              <PropertyRef Name="InspectionJobSummaryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SpecMeasurements_ProductSpecification">
+          <End Role="ProductSpecification" Type="Self.ProductSpecification" Multiplicity="1" />
+          <End Role="SpecMeasurements" Type="Self.SpecMeasurements" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductSpecification">
+              <PropertyRef Name="SpecId" />
+            </Principal>
+            <Dependent Role="SpecMeasurements">
+              <PropertyRef Name="SpecId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TabTemplate_TemplateName">
+          <End Role="TemplateName" Type="Self.TemplateName" Multiplicity="1" />
+          <End Role="TabTemplate" Type="Self.TabTemplate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TemplateName">
+              <PropertyRef Name="TemplateId" />
+            </Principal>
+            <Dependent Role="TabTemplate">
+              <PropertyRef Name="TemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TemplateActivator_TemplateName">
+          <End Role="TemplateName" Type="Self.TemplateName" Multiplicity="1" />
+          <End Role="TemplateActivator" Type="Self.TemplateActivator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TemplateName">
+              <PropertyRef Name="TemplateId" />
+            </Principal>
+            <Dependent Role="TemplateActivator">
+              <PropertyRef Name="TemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="Batch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetDefectBreakdownByLineType_Titles" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fromdate" Type="datetime" Mode="In" />
+          <Parameter Name="todate" Type="datetime" Mode="In" />
+          <Parameter Name="LOCFILTER" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DataNo" Type="varchar" Mode="In" />
+          <Parameter Name="AuditType" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="GetDefectBreakdownByLineType2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fromdate" Type="datetime" Mode="In" />
+          <Parameter Name="todate" Type="datetime" Mode="In" />
+          <Parameter Name="Location" Type="nchar" Mode="In" />
+        </Function>
+        <Function Name="GetDefectBreakdownByLineType3" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fromdate" Type="datetime" Mode="In" />
+          <Parameter Name="todate" Type="datetime" Mode="In" />
+          <Parameter Name="Location" Type="nchar" Mode="In" />
+          <Parameter Name="Datano" Type="varchar" Mode="In" />
+          <Parameter Name="AuditType" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="GetDefectBreakdownByLineType4" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fromdate" Type="datetime" Mode="In" />
+          <Parameter Name="todate" Type="datetime" Mode="In" />
+          <Parameter Name="LOCFILTER" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Datano" Type="varchar" Mode="In" />
+          <Parameter Name="AuditType" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="GetDHUByLocation" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TODATE" Type="datetime" Mode="In" />
+          <Parameter Name="FROMDATE" Type="datetime" Mode="In" />
+          <Parameter Name="DATANO" Type="varchar" Mode="In" />
+          <Parameter Name="AUDITTYPE" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="GetDHUByLocation2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TODATE" Type="datetime" Mode="In" />
+          <Parameter Name="FROMDATE" Type="datetime" Mode="In" />
+          <Parameter Name="DATANO" Type="varchar" Mode="In" />
+          <Parameter Name="AUDITTYPE" Type="varchar" Mode="In" />
+          <Parameter Name="LOCFILTER" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="GetDHUByTemplate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TODATE" Type="datetime" Mode="In" />
+          <Parameter Name="FROMDATE" Type="datetime" Mode="In" />
+          <Parameter Name="CID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="GetInspectionTypesBD" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fromdate" Type="datetime" Mode="In" />
+          <Parameter Name="todate" Type="datetime" Mode="In" />
+          <Parameter Name="LOCFILTER" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DataNo" Type="varchar" Mode="In" />
+          <Parameter Name="AuditType" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="GETPLANTSHIFT" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SHIFT" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="GetREJByLocation" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TODATE" Type="datetime" Mode="In" />
+          <Parameter Name="FROMDATE" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="MaintenanceStatusNow" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LOCATION" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_AS400_GetCasePackConv" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DATANUMBER" Type="varchar" Mode="In" />
+          <Parameter Name="CONV" Type="decimal" Mode="InOut" />
+        </Function>
+        <Function Name="SP_AS400_GetDataNoCnt" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DATANUMBER" Type="varchar" Mode="In" />
+          <Parameter Name="THECOUNT" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="SP_AS400_GetGreigeNumber" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ROLL" Type="varchar" Mode="In" />
+          <Parameter Name="AUTOMATED" Type="bit" Mode="In" />
+          <Parameter Name="GRIEGENUMBER" Type="varchar" Mode="InOut" />
+          <Parameter Name="TICKETYARDS" Type="decimal" Mode="InOut" />
+        </Function>
+        <Function Name="SP_AS400_GetHemLength" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="WORKORDER" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_AS400_GetInspectionCarton" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CARTONNUMBER" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_AS400_GetInteriorSpecs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="WORKORDER" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_AS400_GetItemInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DATANUMBER" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_AS400_GetMatchPerc" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FROMDATE" Type="datetime" Mode="In" />
+          <Parameter Name="TODATE" Type="datetime" Mode="In" />
+          <Parameter Name="BRANCH" Type="varchar" Mode="In" />
+          <Parameter Name="CID" Type="varchar" Mode="In" />
+          <Parameter Name="MATCHPERC" Type="float" Mode="InOut" />
+        </Function>
+        <Function Name="SP_AS400_GETPRPCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DATANO" Type="varchar" Mode="In" />
+          <Parameter Name="IMPRP1" Type="nvarchar" Mode="InOut" />
+        </Function>
+        <Function Name="SP_AS400_GETPRPCode_Ent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DATANO" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_AS400_GetPurchaseOrderNumber" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="WORKORDER" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_AS400_GetRollDataNumber" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="RollNo" Type="varchar" Mode="In" />
+          <Parameter Name="OUT" Type="varchar" Mode="InOut" />
+        </Function>
+        <Function Name="SP_AS400_GetRollStyleNumber" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="RollNo" Type="varchar" Mode="In" />
+          <Parameter Name="OUT" Type="varchar" Mode="InOut" />
+        </Function>
+        <Function Name="SP_AS400_GetUnitCost" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DATANUMBER" Type="varchar" Mode="In" />
+          <Parameter Name="CID" Type="varchar" Mode="In" />
+          <Parameter Name="UNITCOST" Type="float" Mode="InOut" />
+        </Function>
+        <Function Name="SP_AS400_GetUnitCost_2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DATANUMBER" Type="varchar" Mode="In" />
+          <Parameter Name="CID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_AS400_GetUnitCost_2_test" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DATANUMBER" Type="varchar" Mode="In" />
+          <Parameter Name="BRANCH" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_AS400_GetUnitCost_3" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DATANUMBER" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_AS400_GetUnitDesc" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DATANUMBER" Type="varchar" Mode="In" />
+          <Parameter Name="DESCRIPTION" Type="nvarchar(max)" Mode="InOut" />
+        </Function>
+        <Function Name="SP_AS400_GETWOBYBRANCH" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BRANCH" Type="varchar" Mode="In" />
+          <Parameter Name="FROMDATE" Type="datetime" Mode="In" />
+          <Parameter Name="TODATE" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="SP_AS400_GetWOMatchBranch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FROMDATE" Type="datetime" Mode="In" />
+          <Parameter Name="TODATE" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="SP_AS400_GetWOMatchBranch2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FROMDATE" Type="datetime" Mode="In" />
+          <Parameter Name="TODATE" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="SP_AS400_GetWOPieces" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="WONUMBER" Type="varchar" Mode="In" />
+          <Parameter Name="PIECESCOUNT" Type="int" Mode="InOut" />
+          <Parameter Name="DATAN" Type="nvarchar" Mode="InOut" />
+        </Function>
+        <Function Name="SP_AS400_GetWorkOrderData" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="WONUMBER" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_AS400_GetWorkOrderData_1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="WONUMBER" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_AS400_InspectionCompliance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FROMDATE" Type="datetime" Mode="In" />
+          <Parameter Name="TODATE" Type="datetime" Mode="In" />
+          <Parameter Name="location" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_AS400_WORKORDER_PRODCHECK" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="WONUMBER" Type="varchar" Mode="In" />
+          <Parameter Name="WOQUANTITY" Type="int" Mode="InOut" />
+          <Parameter Name="JDECOMP" Type="int" Mode="InOut" />
+          <Parameter Name="JDESCRAP" Type="int" Mode="InOut" />
+          <Parameter Name="JDETOTREC" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="SP_CountDefectMasterDataType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LOCATIONID" Type="varchar" Mode="In" />
+          <Parameter Name="fromdate" Type="datetime" Mode="In" />
+          <Parameter Name="todate" Type="datetime" Mode="In" />
+          <Parameter Name="DataType" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_CTX_CloseMSWO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MS_Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_CTX_CloseMSWO_CAR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MS_Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_CTX_GetQuery" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ctxquery" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="SP_CTX_InsertMSWO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MM_ID" Type="int" Mode="In" />
+          <Parameter Name="MT_ID" Type="int" Mode="In" />
+          <Parameter Name="MS_Next_Main_Date" Type="datetime" Mode="In" />
+          <Parameter Name="MS_Workorder" Type="nvarchar" Mode="In" />
+          <Parameter Name="MS_Frequency" Type="smallint" Mode="In" />
+          <Parameter Name="MS_Last_Main_Date" Type="datetime" Mode="In" />
+          <Parameter Name="MS_Main_Comp_Date" Type="datetime" Mode="In" />
+          <Parameter Name="EMP_ID" Type="int" Mode="In" />
+          <Parameter Name="MS_Maint_Code" Type="smallint" Mode="In" />
+          <Parameter Name="MS_Maint_Time_Alotted" Type="smallint" Mode="In" />
+          <Parameter Name="MS_Main_Time_Required" Type="smallint" Mode="In" />
+          <Parameter Name="MS_Machine_Hours" Type="int" Mode="In" />
+          <Parameter Name="MS_Unscheduled_Reason" Type="nvarchar" Mode="In" />
+          <Parameter Name="MS_Notes" Type="ntext" Mode="In" />
+          <Parameter Name="MS_Total_Machine_Downtime" Type="real" Mode="In" />
+          <Parameter Name="MS_Inventory_Decremented" Type="bit" Mode="In" />
+          <Parameter Name="MFB_Id" Type="int" Mode="In" />
+          <Parameter Name="WOCreate_Timestamp" Type="datetime" Mode="In" />
+          <Parameter Name="WOClosed_Timestamp" Type="datetime" Mode="In" />
+          <Parameter Name="IDENTITY" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="SP_CTX_InsertMSWO_CAR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MM_ID" Type="int" Mode="In" />
+          <Parameter Name="MT_ID" Type="int" Mode="In" />
+          <Parameter Name="MS_Next_Main_Date" Type="datetime" Mode="In" />
+          <Parameter Name="MS_Workorder" Type="nvarchar" Mode="In" />
+          <Parameter Name="MS_Frequency" Type="smallint" Mode="In" />
+          <Parameter Name="MS_Last_Main_Date" Type="datetime" Mode="In" />
+          <Parameter Name="MS_Main_Comp_Date" Type="datetime" Mode="In" />
+          <Parameter Name="EMP_ID" Type="int" Mode="In" />
+          <Parameter Name="MS_Maint_Code" Type="smallint" Mode="In" />
+          <Parameter Name="MS_Maint_Time_Alotted" Type="smallint" Mode="In" />
+          <Parameter Name="MS_Main_Time_Required" Type="smallint" Mode="In" />
+          <Parameter Name="MS_Machine_Hours" Type="int" Mode="In" />
+          <Parameter Name="MS_Unscheduled_Reason" Type="nvarchar" Mode="In" />
+          <Parameter Name="MS_Notes" Type="ntext" Mode="In" />
+          <Parameter Name="MS_Total_Machine_Downtime" Type="real" Mode="In" />
+          <Parameter Name="MS_Inventory_Decremented" Type="bit" Mode="In" />
+          <Parameter Name="MFB_Id" Type="int" Mode="In" />
+          <Parameter Name="WOCreate_Timestamp" Type="datetime" Mode="In" />
+          <Parameter Name="WOClosed_Timestamp" Type="datetime" Mode="In" />
+          <Parameter Name="IDENTITY" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="SP_CTX_ReasonUpdateMS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MS_Id" Type="int" Mode="In" />
+          <Parameter Name="MS_Unscheduled_Reason" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="SP_CTX_ReasonUpdateMS_CAR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MS_Id" Type="int" Mode="In" />
+          <Parameter Name="MS_Unscheduled_Reason" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="SP_DefectMasterHistogram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Location" Type="nchar" Mode="In" />
+          <Parameter Name="fromdate" Type="datetime" Mode="In" />
+          <Parameter Name="todate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="SP_DefectMasterMonthlySum" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Location" Type="nchar" Mode="In" />
+          <Parameter Name="fromdate" Type="datetime" Mode="In" />
+          <Parameter Name="todate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="SP_DefectMasterWorkOrderCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LOCATIONID" Type="varchar" Mode="In" />
+          <Parameter Name="fromdate" Type="datetime" Mode="In" />
+          <Parameter Name="todate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="SP_DefectPieChart" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Location" Type="nchar" Mode="In" />
+          <Parameter Name="fromdate" Type="datetime" Mode="In" />
+          <Parameter Name="todate" Type="datetime" Mode="In" />
+          <Parameter Name="GroupBy" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_GetDataNoStart" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DataNo" Type="varchar" Mode="In" />
+          <Parameter Name="cid" Type="varchar" Mode="In" />
+          <Parameter Name="ijsid" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_GetDBBubbleChart1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FROMDATE" Type="datetime" Mode="In" />
+          <Parameter Name="TODATE" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="SP_GetDBBubbleChart2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FROMDATE" Type="datetime" Mode="In" />
+          <Parameter Name="TODATE" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="SP_GetDefectsByTypeRange" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CID" Type="int" Mode="In" />
+          <Parameter Name="FROMDATE" Type="datetime" Mode="In" />
+          <Parameter Name="TODATE" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="SP_GetUpdatedDefectsByTypeRange" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LASTDATE" Type="datetime" Mode="In" />
+          <Parameter Name="LASTDEFECTID" Type="int" Mode="In" />
+          <Parameter Name="CID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_IncrementHourlyProduction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Machine" Type="varchar" Mode="In" />
+          <Parameter Name="CountValue" Type="int" Mode="In" />
+          <Parameter Name="OverLength" Type="decimal" Mode="In" />
+          <Parameter Name="CutLengthSpec" Type="decimal" Mode="In" />
+          <Parameter Name="RunTime" Type="decimal" Mode="In" />
+          <Parameter Name="DownTime" Type="decimal" Mode="In" />
+          <Parameter Name="WorkOrderID" Type="varchar" Mode="In" />
+          <Parameter Name="numRowAff" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="SP_IncrementHourlyProduction_1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Machine" Type="varchar" Mode="In" />
+          <Parameter Name="CountValue" Type="int" Mode="In" />
+          <Parameter Name="OverLength" Type="decimal" Mode="In" />
+          <Parameter Name="CutLengthSpec" Type="decimal" Mode="In" />
+          <Parameter Name="AvgYdsPmin" Type="decimal" Mode="In" />
+          <Parameter Name="HourlyYds" Type="decimal" Mode="In" />
+          <Parameter Name="Variance" Type="decimal" Mode="In" />
+          <Parameter Name="RunTime" Type="decimal" Mode="In" />
+          <Parameter Name="DownTime" Type="decimal" Mode="In" />
+          <Parameter Name="WorkOrderID" Type="varchar" Mode="In" />
+          <Parameter Name="MaintenanceStatus" Type="bit" Mode="In" />
+          <Parameter Name="Location" Type="nchar" Mode="In" />
+          <Parameter Name="numRowAff" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="SP_IncrementProduction_2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Machine" Type="varchar" Mode="In" />
+          <Parameter Name="CountValue" Type="int" Mode="In" />
+          <Parameter Name="OverLength" Type="decimal" Mode="In" />
+          <Parameter Name="CutLengthSpec" Type="decimal" Mode="In" />
+          <Parameter Name="AvgYdsPmin" Type="decimal" Mode="In" />
+          <Parameter Name="HourlyYds" Type="decimal" Mode="In" />
+          <Parameter Name="Variance" Type="decimal" Mode="In" />
+          <Parameter Name="RunTime" Type="decimal" Mode="In" />
+          <Parameter Name="DownTime" Type="decimal" Mode="In" />
+          <Parameter Name="WorkOrderID" Type="varchar" Mode="In" />
+          <Parameter Name="RollNo" Type="varchar" Mode="In" />
+          <Parameter Name="SheetLength" Type="decimal" Mode="In" />
+          <Parameter Name="MaintenanceStatus" Type="bit" Mode="In" />
+          <Parameter Name="Location" Type="nchar" Mode="In" />
+          <Parameter Name="numRowAff" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="SP_InsertOperatorRecord" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Machine" Type="varchar" Mode="In" />
+          <Parameter Name="Operator" Type="varchar" Mode="In" />
+          <Parameter Name="StartTime" Type="datetime" Mode="In" />
+          <Parameter Name="EndTime" Type="datetime" Mode="In" />
+          <Parameter Name="TotalYds" Type="decimal" Mode="In" />
+          <Parameter Name="TotalSheets" Type="int" Mode="In" />
+          <Parameter Name="ScheduledTime" Type="decimal" Mode="In" />
+          <Parameter Name="DownTime" Type="decimal" Mode="In" />
+          <Parameter Name="RunTime" Type="decimal" Mode="In" />
+          <Parameter Name="AvgYdsPerMin" Type="decimal" Mode="In" />
+          <Parameter Name="AvgSheetsPerMin" Type="decimal" Mode="In" />
+          <Parameter Name="OverLengthInches" Type="decimal" Mode="In" />
+          <Parameter Name="Efficiency" Type="decimal" Mode="In" />
+          <Parameter Name="numRowAff" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="SP_InsertRollProdRecord" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Machine" Type="varchar" Mode="In" />
+          <Parameter Name="Operator" Type="varchar" Mode="In" />
+          <Parameter Name="StartTime" Type="datetime" Mode="In" />
+          <Parameter Name="EndTime" Type="datetime" Mode="In" />
+          <Parameter Name="TotalYds" Type="decimal" Mode="In" />
+          <Parameter Name="TotalSheets" Type="int" Mode="In" />
+          <Parameter Name="TicketYds" Type="decimal" Mode="In" />
+          <Parameter Name="TicketOverYds" Type="decimal" Mode="In" />
+          <Parameter Name="RollNo" Type="varchar" Mode="In" />
+          <Parameter Name="WorkOrderID" Type="varchar" Mode="In" />
+          <Parameter Name="DataNo" Type="varchar" Mode="In" />
+          <Parameter Name="GreigeNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="RunPass" Type="varchar" Mode="In" />
+          <Parameter Name="PH" Type="decimal" Mode="In" />
+          <Parameter Name="Whiteness" Type="decimal" Mode="In" />
+          <Parameter Name="ExitWidth" Type="decimal" Mode="In" />
+          <Parameter Name="Absorbency" Type="decimal" Mode="In" />
+          <Parameter Name="numRowAff" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="SP_InsertWorkOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Machine" Type="varchar" Mode="In" />
+          <Parameter Name="WorkOrderID" Type="varchar" Mode="In" />
+          <Parameter Name="OperatorNo" Type="varchar" Mode="In" />
+          <Parameter Name="startTime" Type="datetime" Mode="In" />
+          <Parameter Name="finishtime" Type="datetime" Mode="In" />
+          <Parameter Name="DataNo" Type="varchar" Mode="In" />
+          <Parameter Name="GreigeNo" Type="varchar" Mode="In" />
+          <Parameter Name="CutLengthSpec" Type="varchar" Mode="In" />
+          <Parameter Name="JobYds" Type="decimal" Mode="In" />
+          <Parameter Name="Jobsheets" Type="int" Mode="In" />
+          <Parameter Name="JobOverLengthInches" Type="decimal" Mode="In" />
+          <Parameter Name="ScheduledTime" Type="decimal" Mode="In" />
+          <Parameter Name="DownTime" Type="decimal" Mode="In" />
+          <Parameter Name="RunTime" Type="decimal" Mode="In" />
+          <Parameter Name="Efficiency" Type="decimal" Mode="In" />
+          <Parameter Name="AvgSheetsPerHour" Type="decimal" Mode="In" />
+          <Parameter Name="numRowAff" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="SP_InsertWorkOrder_1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Machine" Type="varchar" Mode="In" />
+          <Parameter Name="WorkOrderID" Type="varchar" Mode="In" />
+          <Parameter Name="OperatorNo" Type="varchar" Mode="In" />
+          <Parameter Name="startTime" Type="datetime" Mode="In" />
+          <Parameter Name="finishtime" Type="datetime" Mode="In" />
+          <Parameter Name="DataNo" Type="varchar" Mode="In" />
+          <Parameter Name="GreigeNo" Type="varchar" Mode="In" />
+          <Parameter Name="CutLengthSpec" Type="varchar" Mode="In" />
+          <Parameter Name="FinishLength" Type="decimal" Mode="In" />
+          <Parameter Name="JobYds" Type="decimal" Mode="In" />
+          <Parameter Name="Jobsheets" Type="int" Mode="In" />
+          <Parameter Name="JobOverLengthInches" Type="decimal" Mode="In" />
+          <Parameter Name="ScheduledTime" Type="decimal" Mode="In" />
+          <Parameter Name="DownTime" Type="decimal" Mode="In" />
+          <Parameter Name="RunTime" Type="decimal" Mode="In" />
+          <Parameter Name="Efficiency" Type="decimal" Mode="In" />
+          <Parameter Name="AvgSheetsPerHour" Type="decimal" Mode="In" />
+          <Parameter Name="PH" Type="decimal" Mode="In" />
+          <Parameter Name="Whiteness" Type="decimal" Mode="In" />
+          <Parameter Name="ExitWidth" Type="decimal" Mode="In" />
+          <Parameter Name="Absorbency" Type="decimal" Mode="In" />
+          <Parameter Name="RollTicketYds" Type="decimal" Mode="In" />
+          <Parameter Name="YieldYds" Type="decimal" Mode="In" />
+          <Parameter Name="numRowAff" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="SP_RecordWorkOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Machine" Type="varchar" Mode="In" />
+          <Parameter Name="WorkOrderID" Type="varchar" Mode="In" />
+          <Parameter Name="OperatorNo" Type="varchar" Mode="In" />
+          <Parameter Name="StartTime" Type="datetime" Mode="In" />
+          <Parameter Name="FinishTime" Type="datetime" Mode="In" />
+          <Parameter Name="DataNo" Type="varchar" Mode="In" />
+          <Parameter Name="GreigeNo" Type="varchar" Mode="In" />
+          <Parameter Name="CutLengthSpec" Type="decimal" Mode="In" />
+          <Parameter Name="JobYds" Type="decimal" Mode="In" />
+          <Parameter Name="JobSheets" Type="int" Mode="In" />
+          <Parameter Name="JobOverLengthInches" Type="decimal" Mode="In" />
+          <Parameter Name="ScheduledTime" Type="decimal" Mode="In" />
+          <Parameter Name="DownTime" Type="decimal" Mode="In" />
+          <Parameter Name="RunTime" Type="decimal" Mode="In" />
+          <Parameter Name="Efficiency" Type="decimal" Mode="In" />
+          <Parameter Name="AvgSheetsPerHour" Type="decimal" Mode="In" />
+          <Parameter Name="EndState" Type="bit" Mode="In" />
+          <Parameter Name="numRowAff" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="SP_SPC_GetDefectGroups" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="workorder" Type="varchar" Mode="In" />
+          <Parameter Name="groupby" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_SPC_GetGreigeReportDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DATESTART" Type="datetime" Mode="In" />
+          <Parameter Name="DATEEND" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="SP_SPC_GetGriegeDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SHIFTNUMBER" Type="int" Mode="In" />
+          <Parameter Name="ID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_SPC_GetJobSummary" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fromdate" Type="datetime" Mode="In" />
+          <Parameter Name="todate" Type="datetime" Mode="In" />
+          <Parameter Name="filternumber" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_SPC_GetJobSummary_1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DAYSBACK" Type="int" Mode="In" />
+          <Parameter Name="TEMPLATEID" Type="int" Mode="In" />
+          <Parameter Name="TODATE" Type="datetime" Mode="In" />
+          <Parameter Name="LOCATION" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_SPC_GetJobsummary_2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DAYSBACK" Type="int" Mode="In" />
+          <Parameter Name="TEMPLATEID" Type="int" Mode="In" />
+          <Parameter Name="TODATE" Type="datetime" Mode="In" />
+          <Parameter Name="LOCATION" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_SPC_HourProd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FROMDATE" Type="datetime" Mode="In" />
+          <Parameter Name="TODATE" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="SP_SPC_HourProd_Yards" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FROMDATE" Type="datetime" Mode="In" />
+          <Parameter Name="TODATE" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="SP_SPC_JobSummaryReportJob" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ROWCOUNT" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="SP_SPC_Last24PROD" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_UpdateProduction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MachineName" Type="varchar" Mode="In" />
+          <Parameter Name="Roll_YardsProc" Type="decimal" Mode="In" />
+          <Parameter Name="Roll_SheetCnt" Type="int" Mode="In" />
+          <Parameter Name="Roll_OffSpec" Type="decimal" Mode="In" />
+          <Parameter Name="Roll_Start" Type="datetime" Mode="In" />
+          <Parameter Name="Roll_TicketYardsProc" Type="decimal" Mode="In" />
+          <Parameter Name="Work_YardsProc" Type="decimal" Mode="In" />
+          <Parameter Name="Work_SheetCnt" Type="int" Mode="In" />
+          <Parameter Name="Work_Offspec" Type="decimal" Mode="In" />
+          <Parameter Name="Work_Start" Type="datetime" Mode="In" />
+          <Parameter Name="Work_Sched" Type="decimal" Mode="In" />
+          <Parameter Name="Work_Down" Type="decimal" Mode="In" />
+          <Parameter Name="Work_Run" Type="decimal" Mode="In" />
+          <Parameter Name="Work_Eff" Type="decimal" Mode="In" />
+          <Parameter Name="Work_AvgSheets" Type="decimal" Mode="In" />
+          <Parameter Name="Opp_YardsProc" Type="decimal" Mode="In" />
+          <Parameter Name="Opp_SheetCnt" Type="int" Mode="In" />
+          <Parameter Name="Opp_Offspec" Type="decimal" Mode="In" />
+          <Parameter Name="Opp_Start" Type="datetime" Mode="In" />
+          <Parameter Name="Opp_Sched" Type="decimal" Mode="In" />
+          <Parameter Name="Opp_Down" Type="decimal" Mode="In" />
+          <Parameter Name="Opp_Run" Type="decimal" Mode="In" />
+          <Parameter Name="Opp_Eff" Type="decimal" Mode="In" />
+          <Parameter Name="Opp_AvgSheets" Type="decimal" Mode="In" />
+          <Parameter Name="Today_YardsProc" Type="decimal" Mode="In" />
+          <Parameter Name="Today_SheetCnt" Type="int" Mode="In" />
+          <Parameter Name="Today_Offspec" Type="decimal" Mode="In" />
+          <Parameter Name="Today_Sched" Type="decimal" Mode="In" />
+          <Parameter Name="Today_Down" Type="decimal" Mode="In" />
+          <Parameter Name="Today_Run" Type="decimal" Mode="In" />
+          <Parameter Name="Job_Work" Type="varchar" Mode="In" />
+          <Parameter Name="Job_Name" Type="varchar" Mode="In" />
+          <Parameter Name="Job_Roll" Type="varchar" Mode="In" />
+          <Parameter Name="Job_Spec" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="SPC_DefectCountBreakdown" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FROMDATE" Type="datetime" Mode="In" />
+          <Parameter Name="TODATE" Type="datetime" Mode="In" />
+          <Parameter Name="TEMPLATEID" Type="int" Mode="In" />
+          <Parameter Name="LOCATIONID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SPC_DefectCountBreakdown_2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FROMDATE" Type="datetime" Mode="In" />
+          <Parameter Name="TODATE" Type="datetime" Mode="In" />
+          <Parameter Name="TEMPLATEID" Type="int" Mode="In" />
+          <Parameter Name="LOCATIONID" Type="int" Mode="In" />
+          <Parameter Name="CID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SPC_GetWorkOrder_SP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="WO" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="TR_SPC_RollInspectionPop" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TotalLotPieces" Type="varchar" Mode="In" />
+          <Parameter Name="ROLLNO" Type="varchar" Mode="In" />
+          <Parameter Name="LOOMNO" Type="varchar" Mode="In" />
+          <Parameter Name="TEMPLATEID" Type="int" Mode="In" />
+          <Parameter Name="BUTTONTEMPLATEID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="UpdateUnitCost" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DataNo" Type="varchar" Mode="In" />
+          <Parameter Name="cid" Type="varchar" Mode="In" />
+          <Parameter Name="ijsid" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="Inspection_ModelStoreContainer">
+          <EntitySet Name="ButtonLibrary" EntityType="Self.ButtonLibrary" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ButtonTemplate" EntityType="Self.ButtonTemplate" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DefectMaster" EntityType="Self.DefectMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DefectTimer" EntityType="Self.DefectTimer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InspectionJobSummary" EntityType="Self.InspectionJobSummary" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InspectionTypes" EntityType="Self.InspectionTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductSpecification" EntityType="Self.ProductSpecification" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RollInspectionDetail" EntityType="Self.RollInspectionDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RollInspectionSummary" EntityType="Self.RollInspectionSummary" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SpecMeasurements" EntityType="Self.SpecMeasurements" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TabTemplate" EntityType="Self.TabTemplate" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TemplateActivator" EntityType="Self.TemplateActivator" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TemplateName" EntityType="Self.TemplateName" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="INS_Summary_VW" EntityType="Self.INS_Summary_VW" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [INS_Summary_VW].[id] AS [id], 
+    [INS_Summary_VW].[JobType] AS [JobType], 
+    [INS_Summary_VW].[JobNumber] AS [JobNumber], 
+    [INS_Summary_VW].[INSDataNum] AS [INSDataNum], 
+    [INS_Summary_VW].[LOCCID] AS [LOCCID], 
+    [INS_Summary_VW].[LOCName] AS [LOCName], 
+    [INS_Summary_VW].[INStemplateID] AS [INStemplateID], 
+    [INS_Summary_VW].[TMPName] AS [TMPName], 
+    [INS_Summary_VW].[ItemPassCount] AS [ItemPassCount], 
+    [INS_Summary_VW].[ItemFailCount] AS [ItemFailCount], 
+    [INS_Summary_VW].[WOQuantity] AS [WOQuantity], 
+    [INS_Summary_VW].[WorkOrderPieces] AS [WorkOrderPieces], 
+    [INS_Summary_VW].[AQL_Level] AS [AQL_Level], 
+    [INS_Summary_VW].[Standard] AS [Standard], 
+    [INS_Summary_VW].[INSSampleSize] AS [INSSampleSize], 
+    [INS_Summary_VW].[TotalInspectedItems] AS [TotalInspectedItems], 
+    [INS_Summary_VW].[INSRejectLimiter] AS [INSRejectLimiter], 
+    [INS_Summary_VW].[Technical_PassFail] AS [Technical_PassFail], 
+    [INS_Summary_VW].[Technical_PassFail_Timestamp] AS [Technical_PassFail_Timestamp], 
+    [INS_Summary_VW].[UserConfirm_PassFail] AS [UserConfirm_PassFail], 
+    [INS_Summary_VW].[UserConfirm_PassFail_Timestamp] AS [UserConfirm_PassFail_Timestamp], 
+    [INS_Summary_VW].[Inspection_Started] AS [Inspection_Started], 
+    [INS_Summary_VW].[Inspection_Finished] AS [Inspection_Finished], 
+    [INS_Summary_VW].[UnitCost] AS [UnitCost], 
+    [INS_Summary_VW].[UnitDesc] AS [UnitDesc], 
+    [INS_Summary_VW].[Comments] AS [Comments], 
+    [INS_Summary_VW].[ProdMachineName] AS [ProdMachineName], 
+    [INS_Summary_VW].[MajorsCount] AS [MajorsCount], 
+    [INS_Summary_VW].[MinorsCount] AS [MinorsCount], 
+    [INS_Summary_VW].[RepairsCount] AS [RepairsCount], 
+    [INS_Summary_VW].[ScrapCount] AS [ScrapCount], 
+    [INS_Summary_VW].[DefectID] AS [DefectID], 
+    [INS_Summary_VW].[DefectTime] AS [DefectTime], 
+    [INS_Summary_VW].[DefectDesc] AS [DefectDesc], 
+    [INS_Summary_VW].[POnumber] AS [POnumber], 
+    [INS_Summary_VW].[DataNo] AS [DataNo], 
+    [INS_Summary_VW].[EmployeeNo] AS [EmployeeNo], 
+    [INS_Summary_VW].[ThisPieceNo] AS [ThisPieceNo], 
+    [INS_Summary_VW].[SampleSize] AS [SampleSize], 
+    [INS_Summary_VW].[RejectLimiter] AS [RejectLimiter], 
+    [INS_Summary_VW].[TotalLotPieces] AS [TotalLotPieces], 
+    [INS_Summary_VW].[Product] AS [Product], 
+    [INS_Summary_VW].[DefectClass] AS [DefectClass], 
+    [INS_Summary_VW].[MergeDate] AS [MergeDate], 
+    [INS_Summary_VW].[Tablet] AS [Tablet], 
+    [INS_Summary_VW].[WorkOrder] AS [WorkOrder], 
+    [INS_Summary_VW].[LotNo] AS [LotNo], 
+    [INS_Summary_VW].[Location] AS [Location], 
+    [INS_Summary_VW].[DataType] AS [DataType], 
+    [INS_Summary_VW].[Dimensions] AS [Dimensions], 
+    [INS_Summary_VW].[Comment] AS [Comment], 
+    [INS_Summary_VW].[LoomNo] AS [LoomNo], 
+    [INS_Summary_VW].[DefectPoints] AS [DefectPoints], 
+    [INS_Summary_VW].[GriegeNo] AS [GriegeNo], 
+    [INS_Summary_VW].[RollNo] AS [RollNo], 
+    [INS_Summary_VW].[Operation] AS [Operation], 
+    [INS_Summary_VW].[TemplateId] AS [TemplateId], 
+    [INS_Summary_VW].[InspectionId] AS [InspectionId], 
+    [INS_Summary_VW].[DefectImage] AS [DefectImage], 
+    [INS_Summary_VW].[DefectImage_Filename] AS [DefectImage_Filename], 
+    [INS_Summary_VW].[DefectImage_ContentType] AS [DefectImage_ContentType], 
+    [INS_Summary_VW].[ButtonTemplateId] AS [ButtonTemplateId], 
+    [INS_Summary_VW].[Inspector] AS [Inspector], 
+    [INS_Summary_VW].[ItemNumber] AS [ItemNumber], 
+    [INS_Summary_VW].[InspectionState] AS [InspectionState], 
+    [INS_Summary_VW].[CasePackConv] AS [CasePackConv], 
+    [INS_Summary_VW].[WorkRoom] AS [WorkRoom], 
+    [INS_Summary_VW].[InspectionJobSummaryId] AS [InspectionJobSummaryId], 
+    [INS_Summary_VW].[TMPTemplateID] AS [TMPTemplateID], 
+    [INS_Summary_VW].[Name] AS [Name], 
+    [INS_Summary_VW].[Owner] AS [Owner], 
+    [INS_Summary_VW].[DateCreated] AS [DateCreated], 
+    [INS_Summary_VW].[Active] AS [Active], 
+    [INS_Summary_VW].[LineType] AS [LineType], 
+    [INS_Summary_VW].[Ins_GriegeBatch] AS [Ins_GriegeBatch], 
+    [INS_Summary_VW].[Ins_WorkOrderInspection] AS [Ins_WorkOrderInspection], 
+    [INS_Summary_VW].[Loc_STT] AS [Loc_STT], 
+    [INS_Summary_VW].[Loc_CAR] AS [Loc_CAR], 
+    [INS_Summary_VW].[Loc_STJ] AS [Loc_STJ], 
+    [INS_Summary_VW].[Loc_SPA] AS [Loc_SPA], 
+    [INS_Summary_VW].[Loc_CDC] AS [Loc_CDC], 
+    [INS_Summary_VW].[Loc_LINYI] AS [Loc_LINYI], 
+    [INS_Summary_VW].[LOCID] AS [LOCID], 
+    [INS_Summary_VW].[Abreviation] AS [Abreviation], 
+    [INS_Summary_VW].[DBname] AS [DBname], 
+    [INS_Summary_VW].[CID] AS [CID], 
+    [INS_Summary_VW].[ConnectionString] AS [ConnectionString], 
+    [INS_Summary_VW].[InspectionResults] AS [InspectionResults], 
+    [INS_Summary_VW].[ProductionResults] AS [ProductionResults], 
+    [INS_Summary_VW].[AS400_Connection] AS [AS400_Connection], 
+    [INS_Summary_VW].[AS400_Abr] AS [AS400_Abr], 
+    [INS_Summary_VW].[Loc_PCE] AS [Loc_PCE], 
+    [INS_Summary_VW].[Loc_FSK] AS [Loc_FSK], 
+    [INS_Summary_VW].[Loc_FNL] AS [Loc_FNL], 
+    [INS_Summary_VW].[Loc_FPC] AS [Loc_FPC]
+    FROM [dbo].[INS_Summary_VW] AS [INS_Summary_VW]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="LocationMaster_VW" EntityType="Self.LocationMaster_VW" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [LocationMaster_VW].[id] AS [id], 
+    [LocationMaster_VW].[Name] AS [Name], 
+    [LocationMaster_VW].[Abreviation] AS [Abreviation], 
+    [LocationMaster_VW].[DBname] AS [DBname], 
+    [LocationMaster_VW].[CID] AS [CID], 
+    [LocationMaster_VW].[ConnectionString] AS [ConnectionString], 
+    [LocationMaster_VW].[InspectionResults] AS [InspectionResults], 
+    [LocationMaster_VW].[ProductionResults] AS [ProductionResults], 
+    [LocationMaster_VW].[AS400_Connection] AS [AS400_Connection], 
+    [LocationMaster_VW].[AS400_Abr] AS [AS400_Abr]
+    FROM [dbo].[LocationMaster_VW] AS [LocationMaster_VW]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="STT_VW" EntityType="Self.STT_VW" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [STT_VW].[ID] AS [ID], 
+    [STT_VW].[Machine] AS [Machine], 
+    [STT_VW].[WorkOrder] AS [WorkOrder], 
+    [STT_VW].[OperatorNo] AS [OperatorNo], 
+    [STT_VW].[StartTime] AS [StartTime], 
+    [STT_VW].[FinishTime] AS [FinishTime], 
+    [STT_VW].[DataNo] AS [DataNo], 
+    [STT_VW].[GreigeNo] AS [GreigeNo], 
+    [STT_VW].[CutLengthSpec] AS [CutLengthSpec], 
+    [STT_VW].[FinishLength] AS [FinishLength], 
+    [STT_VW].[JobYds] AS [JobYds], 
+    [STT_VW].[JobSheets] AS [JobSheets], 
+    [STT_VW].[JobOverLengthInches] AS [JobOverLengthInches], 
+    [STT_VW].[ScheduledTime] AS [ScheduledTime], 
+    [STT_VW].[DownTime] AS [DownTime], 
+    [STT_VW].[RunTime] AS [RunTime], 
+    [STT_VW].[Efficiency] AS [Efficiency], 
+    [STT_VW].[AvgSheetsPerHour] AS [AvgSheetsPerHour], 
+    [STT_VW].[RunPass] AS [RunPass], 
+    [STT_VW].[PH] AS [PH], 
+    [STT_VW].[Whiteness] AS [Whiteness], 
+    [STT_VW].[ExitWidth] AS [ExitWidth], 
+    [STT_VW].[Absorbency] AS [Absorbency], 
+    [STT_VW].[RollTicketYds] AS [RollTicketYds], 
+    [STT_VW].[YieldYds] AS [YieldYds], 
+    [STT_VW].[WOQUANTITY] AS [WOQUANTITY], 
+    [STT_VW].[JDECOMP] AS [JDECOMP], 
+    [STT_VW].[JDESCRAP] AS [JDESCRAP], 
+    [STT_VW].[JDETOTREC] AS [JDETOTREC], 
+    [STT_VW].[DIFF_OVER_UNDER] AS [DIFF_OVER_UNDER], 
+    [STT_VW].[DIFF_PERC] AS [DIFF_PERC], 
+    [STT_VW].[TimeStamp_Trans] AS [TimeStamp_Trans], 
+    [STT_VW].[Updated] AS [Updated], 
+    [STT_VW].[HourID] AS [HourID], 
+    [STT_VW].[HourBegin] AS [HourBegin], 
+    [STT_VW].[ProductCount] AS [ProductCount], 
+    [STT_VW].[OverLengthInches] AS [OverLengthInches], 
+    [STT_VW].[HP_Cut_Length_Spec] AS [HP_Cut_Length_Spec], 
+    [STT_VW].[AvgYdsPmin] AS [AvgYdsPmin], 
+    [STT_VW].[HourlyYds] AS [HourlyYds], 
+    [STT_VW].[Variance] AS [Variance], 
+    [STT_VW].[HP_RunTime] AS [HP_RunTime], 
+    [STT_VW].[HP_DownTime] AS [HP_DownTime], 
+    [STT_VW].[WorkOrderID] AS [WorkOrderID], 
+    [STT_VW].[MaintenanceStatus] AS [MaintenanceStatus], 
+    [STT_VW].[Location] AS [Location], 
+    [STT_VW].[Last_Timestamp] AS [Last_Timestamp]
+    FROM [dbo].[STT_VW] AS [STT_VW]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_ButtonTemplate_ButtonLibrary" Association="Self.FK_ButtonTemplate_ButtonLibrary">
+            <End Role="ButtonLibrary" EntitySet="ButtonLibrary" />
+            <End Role="ButtonTemplate" EntitySet="ButtonTemplate" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ButtonTemplate_TabTemplate" Association="Self.FK_ButtonTemplate_TabTemplate">
+            <End Role="TabTemplate" EntitySet="TabTemplate" />
+            <End Role="ButtonTemplate" EntitySet="ButtonTemplate" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DefectMaster_DefectMaster" Association="Self.FK_DefectMaster_DefectMaster">
+            <End Role="TemplateName" EntitySet="TemplateName" />
+            <End Role="DefectMaster" EntitySet="DefectMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DefectTimer_ButtonTemplate" Association="Self.FK_DefectTimer_ButtonTemplate">
+            <End Role="ButtonTemplate" EntitySet="ButtonTemplate" />
+            <End Role="DefectTimer" EntitySet="DefectTimer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DefectTimer_DefectMaster" Association="Self.FK_DefectTimer_DefectMaster">
+            <End Role="DefectMaster" EntitySet="DefectMaster" />
+            <End Role="DefectTimer" EntitySet="DefectTimer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DefectTimer_InspectionJobSummary" Association="Self.FK_DefectTimer_InspectionJobSummary">
+            <End Role="InspectionJobSummary" EntitySet="InspectionJobSummary" />
+            <End Role="DefectTimer" EntitySet="DefectTimer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RollInspectionDetail_RollInspectionSummary" Association="Self.FK_RollInspectionDetail_RollInspectionSummary">
+            <End Role="RollInspectionSummary" EntitySet="RollInspectionSummary" />
+            <End Role="RollInspectionDetail" EntitySet="RollInspectionDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RollInspectionDetail_TemplateName" Association="Self.FK_RollInspectionDetail_TemplateName">
+            <End Role="TemplateName" EntitySet="TemplateName" />
+            <End Role="RollInspectionDetail" EntitySet="RollInspectionDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SpecMeasurements_InspectionJobSummary" Association="Self.FK_SpecMeasurements_InspectionJobSummary">
+            <End Role="InspectionJobSummary" EntitySet="InspectionJobSummary" />
+            <End Role="SpecMeasurements" EntitySet="SpecMeasurements" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SpecMeasurements_ProductSpecification" Association="Self.FK_SpecMeasurements_ProductSpecification">
+            <End Role="ProductSpecification" EntitySet="ProductSpecification" />
+            <End Role="SpecMeasurements" EntitySet="SpecMeasurements" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TabTemplate_TemplateName" Association="Self.FK_TabTemplate_TemplateName">
+            <End Role="TemplateName" EntitySet="TemplateName" />
+            <End Role="TabTemplate" EntitySet="TabTemplate" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TemplateActivator_TemplateName" Association="Self.FK_TemplateActivator_TemplateName">
+            <End Role="TemplateName" EntitySet="TemplateName" />
+            <End Role="TemplateActivator" EntitySet="TemplateActivator" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Inspection_Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ButtonLibrary">
+          <Key>
+            <PropertyRef Name="ButtonId" />
+          </Key>
+          <Property Name="ButtonId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Text" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DefectImage" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="DefectImage_Desc" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="DefectCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Hide" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ButtonTemplates" Relationship="Self.FK_ButtonTemplate_ButtonLibrary" FromRole="ButtonLibrary" ToRole="ButtonTemplate" />
+        </EntityType>
+        <EntityType Name="ButtonTemplate">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TabTemplateId" Type="Int32" Nullable="false" />
+          <Property Name="ButtonId" Type="Int32" Nullable="false" />
+          <Property Name="DefectType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Hide" Type="Boolean" Nullable="false" />
+          <Property Name="Timer" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ButtonLibrary" Relationship="Self.FK_ButtonTemplate_ButtonLibrary" FromRole="ButtonTemplate" ToRole="ButtonLibrary" />
+          <NavigationProperty Name="TabTemplate" Relationship="Self.FK_ButtonTemplate_TabTemplate" FromRole="ButtonTemplate" ToRole="TabTemplate" />
+          <NavigationProperty Name="DefectTimers" Relationship="Self.FK_DefectTimer_ButtonTemplate" FromRole="ButtonTemplate" ToRole="DefectTimer" />
+        </EntityType>
+        <EntityType Name="DefectMaster">
+          <Key>
+            <PropertyRef Name="DefectID" />
+          </Key>
+          <Property Name="DefectID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DefectTime" Type="DateTime" Precision="3" />
+          <Property Name="DefectDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="POnumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DataNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EmployeeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AQL" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ThisPieceNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SampleSize" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RejectLimiter" Type="Int32" />
+          <Property Name="TotalLotPieces" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Product" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DefectClass" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MergeDate" Type="DateTime" Precision="3" />
+          <Property Name="Tablet" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="WorkOrder" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LotNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Location" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DataType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Dimensions" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Comment" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LoomNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DefectPoints" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="GriegeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RollNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Operation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TemplateId" Type="Int32" Nullable="false" />
+          <Property Name="InspectionId" Type="Int32" Nullable="false" />
+          <Property Name="DefectImage" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="DefectImage_Filename" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DefectImage_ContentType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ButtonTemplateId" Type="Int32" />
+          <Property Name="Inspector" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ItemNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="InspectionState" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CasePackConv" Type="Decimal" Precision="13" Scale="2" />
+          <Property Name="WorkRoom" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="InspectionJobSummaryId" Type="Int32" />
+          <NavigationProperty Name="TemplateName" Relationship="Self.FK_DefectMaster_DefectMaster" FromRole="DefectMaster" ToRole="TemplateName" />
+          <NavigationProperty Name="DefectTimers" Relationship="Self.FK_DefectTimer_DefectMaster" FromRole="DefectMaster" ToRole="DefectTimer" />
+        </EntityType>
+        <EntityType Name="DefectTimer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StatusValue" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="InspectionJobSummaryId" Type="Int32" Nullable="false" />
+          <Property Name="ButtonTemplateId" Type="Int32" Nullable="false" />
+          <Property Name="DefectID" Type="Int32" Nullable="false" />
+          <Property Name="SessionId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ButtonTemplate" Relationship="Self.FK_DefectTimer_ButtonTemplate" FromRole="DefectTimer" ToRole="ButtonTemplate" />
+          <NavigationProperty Name="DefectMaster" Relationship="Self.FK_DefectTimer_DefectMaster" FromRole="DefectTimer" ToRole="DefectMaster" />
+          <NavigationProperty Name="InspectionJobSummary" Relationship="Self.FK_DefectTimer_InspectionJobSummary" FromRole="DefectTimer" ToRole="InspectionJobSummary" />
+          <Property Name="ButtonLocationId" Type="Int32" Nullable="false" />
+          <Property Name="StopTimestamp" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="InspectionJobSummary">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JobType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="JobNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="DataNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CID" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="TemplateId" Type="Int32" Nullable="false" />
+          <Property Name="ItemPassCount" Type="Int32" Nullable="false" />
+          <Property Name="ItemFailCount" Type="Int32" Nullable="false" />
+          <Property Name="WOQuantity" Type="Int32" />
+          <Property Name="WorkOrderPieces" Type="Int32" />
+          <Property Name="AQL_Level" Type="Decimal" Precision="18" Scale="1" />
+          <Property Name="Standard" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SampleSize" Type="Int32" />
+          <Property Name="TotalInspectedItems" Type="Int32" />
+          <Property Name="RejectLimiter" Type="Int32" />
+          <Property Name="Technical_PassFail" Type="Boolean" />
+          <Property Name="Technical_PassFail_Timestamp" Type="DateTime" Precision="3" />
+          <Property Name="UserConfirm_PassFail" Type="Boolean" />
+          <Property Name="UserConfirm_PassFail_Timestamp" Type="DateTime" Precision="3" />
+          <Property Name="Inspection_Started" Type="DateTime" Precision="3" />
+          <Property Name="Inspection_Finished" Type="DateTime" Precision="3" />
+          <Property Name="PRP_Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UnitCost" Type="Double" />
+          <Property Name="UnitDesc" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ProdMachineName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MajorsCount" Type="Int32" />
+          <Property Name="MinorsCount" Type="Int32" />
+          <Property Name="RepairsCount" Type="Int32" />
+          <Property Name="ScrapCount" Type="Int32" />
+          <NavigationProperty Name="DefectTimers" Relationship="Self.FK_DefectTimer_InspectionJobSummary" FromRole="InspectionJobSummary" ToRole="DefectTimer" />
+          <NavigationProperty Name="SpecMeasurements" Relationship="Self.FK_SpecMeasurements_InspectionJobSummary" FromRole="InspectionJobSummary" ToRole="SpecMeasurements" />
+        </EntityType>
+        <EntityType Name="InspectionType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Abreviation" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ProductSpecification">
+          <Key>
+            <PropertyRef Name="SpecId" />
+          </Key>
+          <Property Name="SpecId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="POM_Row" Type="Int32" />
+          <Property Name="TabTemplateId" Type="Int32" />
+          <Property Name="DataNo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProductType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Spec_Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="HowTo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="value" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Upper_Spec_Value" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Lower_Spec_Value" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="GlobalSpec" Type="Boolean" Nullable="false" />
+          <Property Name="ME_SessionID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="SpecSource" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="SpecMeasurements" Relationship="Self.FK_SpecMeasurements_ProductSpecification" FromRole="ProductSpecification" ToRole="SpecMeasurements" />
+        </EntityType>
+        <EntityType Name="RollInspectionDetail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RollInspectionSummaryId" Type="Int32" Nullable="false" />
+          <Property Name="TemplateId" Type="Int32" Nullable="false" />
+          <Property Name="ButtonTemplateId" Type="Int32" />
+          <Property Name="ShiftNumber" Type="Int32" Nullable="false" />
+          <Property Name="DHY" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="DefectCount" Type="Int32" />
+          <NavigationProperty Name="RollInspectionSummary" Relationship="Self.FK_RollInspectionDetail_RollInspectionSummary" FromRole="RollInspectionDetail" ToRole="RollInspectionSummary" />
+          <NavigationProperty Name="TemplateName" Relationship="Self.FK_RollInspectionDetail_TemplateName" FromRole="RollInspectionDetail" ToRole="TemplateName" />
+        </EntityType>
+        <EntityType Name="RollInspectionSummary">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LoomNo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RollNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Style" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Yards_Inspected" Type="Decimal" Precision="18" Scale="1" Nullable="false" />
+          <Property Name="DefectiveYards" Type="Int32" Nullable="false" />
+          <Property Name="DHY" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="RollStartTimestamp" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="RollInspectionDetails" Relationship="Self.FK_RollInspectionDetail_RollInspectionSummary" FromRole="RollInspectionSummary" ToRole="RollInspectionDetail" />
+        </EntityType>
+        <EntityType Name="SpecMeasurement">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TabTemplateId" Type="Int32" />
+          <Property Name="SpecId" Type="Int32" Nullable="false" />
+          <Property Name="DefectId" Type="Int32" />
+          <Property Name="ItemNumber" Type="Int32" />
+          <Property Name="InspectionJobSummaryId" Type="Int32" />
+          <Property Name="InspectionId" Type="Int32" />
+          <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="MeasureValue" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="SpecDelta" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="InspectionJobSummary" Relationship="Self.FK_SpecMeasurements_InspectionJobSummary" FromRole="SpecMeasurements" ToRole="InspectionJobSummary" />
+          <NavigationProperty Name="ProductSpecification" Relationship="Self.FK_SpecMeasurements_ProductSpecification" FromRole="SpecMeasurements" ToRole="ProductSpecification" />
+        </EntityType>
+        <EntityType Name="TabTemplate">
+          <Key>
+            <PropertyRef Name="TabTemplateId" />
+          </Key>
+          <Property Name="TabTemplateId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TemplateId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TabNumber" Type="Int32" Nullable="false" />
+          <Property Name="ProductSpecs" Type="Boolean" Nullable="false" />
+          <Property Name="Updated" Type="DateTime" Precision="3" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ButtonTemplates" Relationship="Self.FK_ButtonTemplate_TabTemplate" FromRole="TabTemplate" ToRole="ButtonTemplate" />
+          <NavigationProperty Name="TemplateName" Relationship="Self.FK_TabTemplate_TemplateName" FromRole="TabTemplate" ToRole="TemplateName" />
+        </EntityType>
+        <EntityType Name="TemplateActivator">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LocationMasterId" Type="Int32" Nullable="false" />
+          <Property Name="TemplateId" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Boolean" Nullable="false" />
+          <Property Name="Inserted_Timestamp" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="TemplateName" Relationship="Self.FK_TemplateActivator_TemplateName" FromRole="TemplateActivator" ToRole="TemplateName" />
+        </EntityType>
+        <EntityType Name="TemplateName">
+          <Key>
+            <PropertyRef Name="TemplateId" />
+          </Key>
+          <Property Name="TemplateId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Owner" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+          <Property Name="Active" Type="Boolean" />
+          <Property Name="LineTypeId" Type="Int32" />
+          <Property Name="LineType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Ins_GriegeBatch" Type="Boolean" />
+          <Property Name="Ins_WorkOrderInspection" Type="Boolean" />
+          <Property Name="Loc_STT" Type="Boolean" />
+          <Property Name="Loc_CAR" Type="Boolean" />
+          <Property Name="Loc_STJ" Type="Boolean" />
+          <Property Name="Loc_SPA" Type="Boolean" />
+          <Property Name="Loc_CDC" Type="Boolean" />
+          <Property Name="Loc_LINYI" Type="Boolean" />
+          <Property Name="Loc_PCE" Type="Boolean" />
+          <Property Name="Loc_FSK" Type="Boolean" />
+          <Property Name="Loc_FNL" Type="Boolean" />
+          <Property Name="Loc_FPC" Type="Boolean" />
+          <NavigationProperty Name="DefectMasters" Relationship="Self.FK_DefectMaster_DefectMaster" FromRole="TemplateName" ToRole="DefectMaster" />
+          <NavigationProperty Name="RollInspectionDetails" Relationship="Self.FK_RollInspectionDetail_TemplateName" FromRole="TemplateName" ToRole="RollInspectionDetail" />
+          <NavigationProperty Name="TabTemplates" Relationship="Self.FK_TabTemplate_TemplateName" FromRole="TemplateName" ToRole="TabTemplate" />
+          <NavigationProperty Name="TemplateActivators" Relationship="Self.FK_TemplateActivator_TemplateName" FromRole="TemplateName" ToRole="TemplateActivator" />
+        </EntityType>
+        <EntityType Name="INS_Summary_VW">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="INStemplateID" />
+            <PropertyRef Name="ItemPassCount" />
+            <PropertyRef Name="ItemFailCount" />
+            <PropertyRef Name="Standard" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="JobType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="JobNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="INSDataNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LOCCID" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="LOCName" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
+          <Property Name="INStemplateID" Type="Int32" Nullable="false" />
+          <Property Name="TMPName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ItemPassCount" Type="Int32" Nullable="false" />
+          <Property Name="ItemFailCount" Type="Int32" Nullable="false" />
+          <Property Name="WOQuantity" Type="Int32" />
+          <Property Name="WorkOrderPieces" Type="Int32" />
+          <Property Name="AQL_Level" Type="Decimal" Precision="18" Scale="1" />
+          <Property Name="Standard" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="INSSampleSize" Type="Int32" />
+          <Property Name="TotalInspectedItems" Type="Int32" />
+          <Property Name="INSRejectLimiter" Type="Int32" />
+          <Property Name="Technical_PassFail" Type="Boolean" />
+          <Property Name="Technical_PassFail_Timestamp" Type="DateTime" Precision="3" />
+          <Property Name="UserConfirm_PassFail" Type="Boolean" />
+          <Property Name="UserConfirm_PassFail_Timestamp" Type="DateTime" Precision="3" />
+          <Property Name="Inspection_Started" Type="DateTime" Precision="3" />
+          <Property Name="Inspection_Finished" Type="DateTime" Precision="3" />
+          <Property Name="UnitCost" Type="Double" />
+          <Property Name="UnitDesc" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ProdMachineName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MajorsCount" Type="Int32" />
+          <Property Name="MinorsCount" Type="Int32" />
+          <Property Name="RepairsCount" Type="Int32" />
+          <Property Name="ScrapCount" Type="Int32" />
+          <Property Name="DefectID" Type="Int32" />
+          <Property Name="DefectTime" Type="DateTime" Precision="3" />
+          <Property Name="DefectDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="POnumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DataNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EmployeeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ThisPieceNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SampleSize" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RejectLimiter" Type="Int32" />
+          <Property Name="TotalLotPieces" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Product" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DefectClass" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MergeDate" Type="DateTime" Precision="3" />
+          <Property Name="Tablet" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="WorkOrder" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LotNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Location" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DataType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Dimensions" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Comment" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LoomNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DefectPoints" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="GriegeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RollNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Operation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TemplateId" Type="Int32" />
+          <Property Name="InspectionId" Type="Int32" />
+          <Property Name="DefectImage" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="DefectImage_Filename" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DefectImage_ContentType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ButtonTemplateId" Type="Int32" />
+          <Property Name="Inspector" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ItemNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="InspectionState" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CasePackConv" Type="Decimal" Precision="13" Scale="2" />
+          <Property Name="WorkRoom" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="InspectionJobSummaryId" Type="Int32" />
+          <Property Name="TMPTemplateID" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Owner" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+          <Property Name="Active" Type="Boolean" />
+          <Property Name="LineType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Ins_GriegeBatch" Type="Boolean" />
+          <Property Name="Ins_WorkOrderInspection" Type="Boolean" />
+          <Property Name="Loc_STT" Type="Boolean" />
+          <Property Name="Loc_CAR" Type="Boolean" />
+          <Property Name="Loc_STJ" Type="Boolean" />
+          <Property Name="Loc_SPA" Type="Boolean" />
+          <Property Name="Loc_CDC" Type="Boolean" />
+          <Property Name="Loc_LINYI" Type="Boolean" />
+          <Property Name="LOCID" Type="Int32" />
+          <Property Name="Abreviation" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DBname" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
+          <Property Name="CID" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="ConnectionString" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
+          <Property Name="InspectionResults" Type="Boolean" />
+          <Property Name="ProductionResults" Type="Boolean" />
+          <Property Name="AS400_Connection" Type="Boolean" />
+          <Property Name="AS400_Abr" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Loc_PCE" Type="Boolean" />
+          <Property Name="Loc_FSK" Type="Boolean" />
+          <Property Name="Loc_FNL" Type="Boolean" />
+          <Property Name="Loc_FPC" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="LocationMaster_VW">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Abreviation" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DBname" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
+          <Property Name="CID" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="ConnectionString" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
+          <Property Name="InspectionResults" Type="Boolean" />
+          <Property Name="ProductionResults" Type="Boolean" />
+          <Property Name="AS400_Connection" Type="Boolean" />
+          <Property Name="AS400_Abr" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="STT_VW">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="Machine" />
+            <PropertyRef Name="WorkOrder" />
+            <PropertyRef Name="HourID" />
+            <PropertyRef Name="ProductCount" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Machine" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="WorkOrder" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="OperatorNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="StartTime" Type="DateTime" Precision="3" />
+          <Property Name="FinishTime" Type="DateTime" Precision="3" />
+          <Property Name="DataNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="GreigeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CutLengthSpec" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FinishLength" Type="Decimal" Precision="13" Scale="2" />
+          <Property Name="JobYds" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="JobSheets" Type="Int32" />
+          <Property Name="JobOverLengthInches" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ScheduledTime" Type="Decimal" Precision="13" Scale="2" />
+          <Property Name="DownTime" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="RunTime" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Efficiency" Type="Decimal" Precision="13" Scale="3" />
+          <Property Name="AvgSheetsPerHour" Type="Decimal" Precision="13" Scale="2" />
+          <Property Name="RunPass" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="PH" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Whiteness" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ExitWidth" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Absorbency" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="RollTicketYds" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="YieldYds" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="WOQUANTITY" Type="Int32" />
+          <Property Name="JDECOMP" Type="Int32" />
+          <Property Name="JDESCRAP" Type="Int32" />
+          <Property Name="JDETOTREC" Type="Int32" />
+          <Property Name="DIFF_OVER_UNDER" Type="Int32" />
+          <Property Name="DIFF_PERC" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="TimeStamp_Trans" Type="DateTime" Precision="3" />
+          <Property Name="Updated" Type="DateTime" Precision="3" />
+          <Property Name="HourID" Type="Int32" Nullable="false" />
+          <Property Name="HourBegin" Type="DateTime" Precision="3" />
+          <Property Name="ProductCount" Type="Int32" Nullable="false" />
+          <Property Name="OverLengthInches" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="HP_Cut_Length_Spec" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="AvgYdsPmin" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="HourlyYds" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Variance" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="HP_RunTime" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="HP_DownTime" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="WorkOrderID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MaintenanceStatus" Type="Boolean" />
+          <Property Name="Location" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Last_Timestamp" Type="DateTime" Precision="3" />
+        </EntityType>
+        <Association Name="FK_ButtonTemplate_ButtonLibrary">
+          <End Role="ButtonLibrary" Type="Self.ButtonLibrary" Multiplicity="1" />
+          <End Role="ButtonTemplate" Type="Self.ButtonTemplate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ButtonLibrary">
+              <PropertyRef Name="ButtonId" />
+            </Principal>
+            <Dependent Role="ButtonTemplate">
+              <PropertyRef Name="ButtonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ButtonTemplate_TabTemplate">
+          <End Role="TabTemplate" Type="Self.TabTemplate" Multiplicity="1" />
+          <End Role="ButtonTemplate" Type="Self.ButtonTemplate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TabTemplate">
+              <PropertyRef Name="TabTemplateId" />
+            </Principal>
+            <Dependent Role="ButtonTemplate">
+              <PropertyRef Name="TabTemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DefectTimer_ButtonTemplate">
+          <End Role="ButtonTemplate" Type="Self.ButtonTemplate" Multiplicity="1" />
+          <End Role="DefectTimer" Type="Self.DefectTimer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ButtonTemplate">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="DefectTimer">
+              <PropertyRef Name="ButtonTemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DefectMaster_DefectMaster">
+          <End Role="TemplateName" Type="Self.TemplateName" Multiplicity="1" />
+          <End Role="DefectMaster" Type="Self.DefectMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TemplateName">
+              <PropertyRef Name="TemplateId" />
+            </Principal>
+            <Dependent Role="DefectMaster">
+              <PropertyRef Name="TemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DefectTimer_DefectMaster">
+          <End Role="DefectMaster" Type="Self.DefectMaster" Multiplicity="1" />
+          <End Role="DefectTimer" Type="Self.DefectTimer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DefectMaster">
+              <PropertyRef Name="DefectID" />
+            </Principal>
+            <Dependent Role="DefectTimer">
+              <PropertyRef Name="DefectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DefectTimer_InspectionJobSummary">
+          <End Role="InspectionJobSummary" Type="Self.InspectionJobSummary" Multiplicity="1" />
+          <End Role="DefectTimer" Type="Self.DefectTimer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InspectionJobSummary">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="DefectTimer">
+              <PropertyRef Name="InspectionJobSummaryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SpecMeasurements_InspectionJobSummary">
+          <End Role="InspectionJobSummary" Type="Self.InspectionJobSummary" Multiplicity="0..1" />
+          <End Role="SpecMeasurements" Type="Self.SpecMeasurement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InspectionJobSummary">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="SpecMeasurements">
+              <PropertyRef Name="InspectionJobSummaryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SpecMeasurements_ProductSpecification">
+          <End Role="ProductSpecification" Type="Self.ProductSpecification" Multiplicity="1" />
+          <End Role="SpecMeasurements" Type="Self.SpecMeasurement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductSpecification">
+              <PropertyRef Name="SpecId" />
+            </Principal>
+            <Dependent Role="SpecMeasurements">
+              <PropertyRef Name="SpecId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RollInspectionDetail_RollInspectionSummary">
+          <End Role="RollInspectionSummary" Type="Self.RollInspectionSummary" Multiplicity="1" />
+          <End Role="RollInspectionDetail" Type="Self.RollInspectionDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RollInspectionSummary">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RollInspectionDetail">
+              <PropertyRef Name="RollInspectionSummaryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RollInspectionDetail_TemplateName">
+          <End Role="TemplateName" Type="Self.TemplateName" Multiplicity="1" />
+          <End Role="RollInspectionDetail" Type="Self.RollInspectionDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TemplateName">
+              <PropertyRef Name="TemplateId" />
+            </Principal>
+            <Dependent Role="RollInspectionDetail">
+              <PropertyRef Name="TemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TabTemplate_TemplateName">
+          <End Role="TemplateName" Type="Self.TemplateName" Multiplicity="1" />
+          <End Role="TabTemplate" Type="Self.TabTemplate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TemplateName">
+              <PropertyRef Name="TemplateId" />
+            </Principal>
+            <Dependent Role="TabTemplate">
+              <PropertyRef Name="TemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TemplateActivator_TemplateName">
+          <End Role="TemplateName" Type="Self.TemplateName" Multiplicity="1" />
+          <End Role="TemplateActivator" Type="Self.TemplateActivator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TemplateName">
+              <PropertyRef Name="TemplateId" />
+            </Principal>
+            <Dependent Role="TemplateActivator">
+              <PropertyRef Name="TemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Inspection_Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ButtonLibraries" EntityType="Self.ButtonLibrary" />
+          <EntitySet Name="ButtonTemplates" EntityType="Self.ButtonTemplate" />
+          <EntitySet Name="DefectMasters" EntityType="Self.DefectMaster" />
+          <EntitySet Name="DefectTimers" EntityType="Self.DefectTimer" />
+          <EntitySet Name="InspectionJobSummaries" EntityType="Self.InspectionJobSummary" />
+          <EntitySet Name="InspectionTypes" EntityType="Self.InspectionType" />
+          <EntitySet Name="ProductSpecifications" EntityType="Self.ProductSpecification" />
+          <EntitySet Name="RollInspectionDetails" EntityType="Self.RollInspectionDetail" />
+          <EntitySet Name="RollInspectionSummaries" EntityType="Self.RollInspectionSummary" />
+          <EntitySet Name="SpecMeasurements" EntityType="Self.SpecMeasurement" />
+          <EntitySet Name="TabTemplates" EntityType="Self.TabTemplate" />
+          <EntitySet Name="TemplateActivators" EntityType="Self.TemplateActivator" />
+          <EntitySet Name="TemplateNames" EntityType="Self.TemplateName" />
+          <EntitySet Name="INS_Summary_VW" EntityType="Self.INS_Summary_VW" />
+          <EntitySet Name="LocationMaster_VW" EntityType="Self.LocationMaster_VW" />
+          <EntitySet Name="STT_VW" EntityType="Self.STT_VW" />
+          <AssociationSet Name="FK_ButtonTemplate_ButtonLibrary" Association="Self.FK_ButtonTemplate_ButtonLibrary">
+            <End Role="ButtonLibrary" EntitySet="ButtonLibraries" />
+            <End Role="ButtonTemplate" EntitySet="ButtonTemplates" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ButtonTemplate_TabTemplate" Association="Self.FK_ButtonTemplate_TabTemplate">
+            <End Role="TabTemplate" EntitySet="TabTemplates" />
+            <End Role="ButtonTemplate" EntitySet="ButtonTemplates" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DefectTimer_ButtonTemplate" Association="Self.FK_DefectTimer_ButtonTemplate">
+            <End Role="ButtonTemplate" EntitySet="ButtonTemplates" />
+            <End Role="DefectTimer" EntitySet="DefectTimers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DefectMaster_DefectMaster" Association="Self.FK_DefectMaster_DefectMaster">
+            <End Role="TemplateName" EntitySet="TemplateNames" />
+            <End Role="DefectMaster" EntitySet="DefectMasters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DefectTimer_DefectMaster" Association="Self.FK_DefectTimer_DefectMaster">
+            <End Role="DefectMaster" EntitySet="DefectMasters" />
+            <End Role="DefectTimer" EntitySet="DefectTimers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DefectTimer_InspectionJobSummary" Association="Self.FK_DefectTimer_InspectionJobSummary">
+            <End Role="InspectionJobSummary" EntitySet="InspectionJobSummaries" />
+            <End Role="DefectTimer" EntitySet="DefectTimers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SpecMeasurements_InspectionJobSummary" Association="Self.FK_SpecMeasurements_InspectionJobSummary">
+            <End Role="InspectionJobSummary" EntitySet="InspectionJobSummaries" />
+            <End Role="SpecMeasurements" EntitySet="SpecMeasurements" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SpecMeasurements_ProductSpecification" Association="Self.FK_SpecMeasurements_ProductSpecification">
+            <End Role="ProductSpecification" EntitySet="ProductSpecifications" />
+            <End Role="SpecMeasurements" EntitySet="SpecMeasurements" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RollInspectionDetail_RollInspectionSummary" Association="Self.FK_RollInspectionDetail_RollInspectionSummary">
+            <End Role="RollInspectionSummary" EntitySet="RollInspectionSummaries" />
+            <End Role="RollInspectionDetail" EntitySet="RollInspectionDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RollInspectionDetail_TemplateName" Association="Self.FK_RollInspectionDetail_TemplateName">
+            <End Role="TemplateName" EntitySet="TemplateNames" />
+            <End Role="RollInspectionDetail" EntitySet="RollInspectionDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TabTemplate_TemplateName" Association="Self.FK_TabTemplate_TemplateName">
+            <End Role="TemplateName" EntitySet="TemplateNames" />
+            <End Role="TabTemplate" EntitySet="TabTemplates" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TemplateActivator_TemplateName" Association="Self.FK_TemplateActivator_TemplateName">
+            <End Role="TemplateName" EntitySet="TemplateNames" />
+            <End Role="TemplateActivator" EntitySet="TemplateActivators" />
+          </AssociationSet>
+          <FunctionImport Name="SP_AS400_GETPRPCode_Ent" ReturnType="Collection(String)">
+          <Parameter Name="DATANO" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Inspection_ModelStoreContainer" CdmEntityContainer="Inspection_Entities">
+          <EntitySetMapping Name="ButtonLibraries">
+            <EntityTypeMapping TypeName="Inspection_Model.ButtonLibrary">
+              <MappingFragment StoreEntitySet="ButtonLibrary">
+                <ScalarProperty Name="ButtonId" ColumnName="ButtonId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="DefectImage" ColumnName="DefectImage" />
+                <ScalarProperty Name="DefectImage_Desc" ColumnName="DefectImage_Desc" />
+                <ScalarProperty Name="DefectCode" ColumnName="DefectCode" />
+                <ScalarProperty Name="Hide" ColumnName="Hide" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ButtonTemplates">
+            <EntityTypeMapping TypeName="Inspection_Model.ButtonTemplate">
+              <MappingFragment StoreEntitySet="ButtonTemplate">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TabTemplateId" ColumnName="TabTemplateId" />
+                <ScalarProperty Name="ButtonId" ColumnName="ButtonId" />
+                <ScalarProperty Name="DefectType" ColumnName="DefectType" />
+                <ScalarProperty Name="Hide" ColumnName="Hide" />
+                <ScalarProperty Name="Timer" ColumnName="Timer" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DefectMasters">
+            <EntityTypeMapping TypeName="Inspection_Model.DefectMaster">
+              <MappingFragment StoreEntitySet="DefectMaster">
+                <ScalarProperty Name="DefectID" ColumnName="DefectID" />
+                <ScalarProperty Name="DefectTime" ColumnName="DefectTime" />
+                <ScalarProperty Name="DefectDesc" ColumnName="DefectDesc" />
+                <ScalarProperty Name="POnumber" ColumnName="POnumber" />
+                <ScalarProperty Name="DataNo" ColumnName="DataNo" />
+                <ScalarProperty Name="EmployeeNo" ColumnName="EmployeeNo" />
+                <ScalarProperty Name="AQL" ColumnName="AQL" />
+                <ScalarProperty Name="ThisPieceNo" ColumnName="ThisPieceNo" />
+                <ScalarProperty Name="SampleSize" ColumnName="SampleSize" />
+                <ScalarProperty Name="RejectLimiter" ColumnName="RejectLimiter" />
+                <ScalarProperty Name="TotalLotPieces" ColumnName="TotalLotPieces" />
+                <ScalarProperty Name="Product" ColumnName="Product" />
+                <ScalarProperty Name="DefectClass" ColumnName="DefectClass" />
+                <ScalarProperty Name="MergeDate" ColumnName="MergeDate" />
+                <ScalarProperty Name="Tablet" ColumnName="Tablet" />
+                <ScalarProperty Name="WorkOrder" ColumnName="WorkOrder" />
+                <ScalarProperty Name="LotNo" ColumnName="LotNo" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="DataType" ColumnName="DataType" />
+                <ScalarProperty Name="Dimensions" ColumnName="Dimensions" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="LoomNo" ColumnName="LoomNo" />
+                <ScalarProperty Name="DefectPoints" ColumnName="DefectPoints" />
+                <ScalarProperty Name="GriegeNo" ColumnName="GriegeNo" />
+                <ScalarProperty Name="RollNo" ColumnName="RollNo" />
+                <ScalarProperty Name="Operation" ColumnName="Operation" />
+                <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />
+                <ScalarProperty Name="InspectionId" ColumnName="InspectionId" />
+                <ScalarProperty Name="DefectImage" ColumnName="DefectImage" />
+                <ScalarProperty Name="DefectImage_Filename" ColumnName="DefectImage_Filename" />
+                <ScalarProperty Name="DefectImage_ContentType" ColumnName="DefectImage_ContentType" />
+                <ScalarProperty Name="ButtonTemplateId" ColumnName="ButtonTemplateId" />
+                <ScalarProperty Name="Inspector" ColumnName="Inspector" />
+                <ScalarProperty Name="ItemNumber" ColumnName="ItemNumber" />
+                <ScalarProperty Name="InspectionState" ColumnName="InspectionState" />
+                <ScalarProperty Name="CasePackConv" ColumnName="CasePackConv" />
+                <ScalarProperty Name="WorkRoom" ColumnName="WorkRoom" />
+                <ScalarProperty Name="InspectionJobSummaryId" ColumnName="InspectionJobSummaryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DefectTimers">
+            <EntityTypeMapping TypeName="Inspection_Model.DefectTimer">
+              <MappingFragment StoreEntitySet="DefectTimer">
+                <ScalarProperty Name="StopTimestamp" ColumnName="StopTimestamp" />
+                <ScalarProperty Name="ButtonLocationId" ColumnName="ButtonLocationId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="StatusValue" ColumnName="StatusValue" />
+                <ScalarProperty Name="InspectionJobSummaryId" ColumnName="InspectionJobSummaryId" />
+                <ScalarProperty Name="ButtonTemplateId" ColumnName="ButtonTemplateId" />
+                <ScalarProperty Name="DefectID" ColumnName="DefectID" />
+                <ScalarProperty Name="SessionId" ColumnName="SessionId" />
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InspectionJobSummaries">
+            <EntityTypeMapping TypeName="Inspection_Model.InspectionJobSummary">
+              <MappingFragment StoreEntitySet="InspectionJobSummary">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="JobType" ColumnName="JobType" />
+                <ScalarProperty Name="JobNumber" ColumnName="JobNumber" />
+                <ScalarProperty Name="DataNo" ColumnName="DataNo" />
+                <ScalarProperty Name="CID" ColumnName="CID" />
+                <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />
+                <ScalarProperty Name="ItemPassCount" ColumnName="ItemPassCount" />
+                <ScalarProperty Name="ItemFailCount" ColumnName="ItemFailCount" />
+                <ScalarProperty Name="WOQuantity" ColumnName="WOQuantity" />
+                <ScalarProperty Name="WorkOrderPieces" ColumnName="WorkOrderPieces" />
+                <ScalarProperty Name="AQL_Level" ColumnName="AQL_Level" />
+                <ScalarProperty Name="Standard" ColumnName="Standard" />
+                <ScalarProperty Name="SampleSize" ColumnName="SampleSize" />
+                <ScalarProperty Name="TotalInspectedItems" ColumnName="TotalInspectedItems" />
+                <ScalarProperty Name="RejectLimiter" ColumnName="RejectLimiter" />
+                <ScalarProperty Name="Technical_PassFail" ColumnName="Technical_PassFail" />
+                <ScalarProperty Name="Technical_PassFail_Timestamp" ColumnName="Technical_PassFail_Timestamp" />
+                <ScalarProperty Name="UserConfirm_PassFail" ColumnName="UserConfirm_PassFail" />
+                <ScalarProperty Name="UserConfirm_PassFail_Timestamp" ColumnName="UserConfirm_PassFail_Timestamp" />
+                <ScalarProperty Name="Inspection_Started" ColumnName="Inspection_Started" />
+                <ScalarProperty Name="Inspection_Finished" ColumnName="Inspection_Finished" />
+                <ScalarProperty Name="PRP_Code" ColumnName="PRP_Code" />
+                <ScalarProperty Name="UnitCost" ColumnName="UnitCost" />
+                <ScalarProperty Name="UnitDesc" ColumnName="UnitDesc" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="ProdMachineName" ColumnName="ProdMachineName" />
+                <ScalarProperty Name="MajorsCount" ColumnName="MajorsCount" />
+                <ScalarProperty Name="MinorsCount" ColumnName="MinorsCount" />
+                <ScalarProperty Name="RepairsCount" ColumnName="RepairsCount" />
+                <ScalarProperty Name="ScrapCount" ColumnName="ScrapCount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InspectionTypes">
+            <EntityTypeMapping TypeName="Inspection_Model.InspectionType">
+              <MappingFragment StoreEntitySet="InspectionTypes">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Abreviation" ColumnName="Abreviation" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductSpecifications">
+            <EntityTypeMapping TypeName="Inspection_Model.ProductSpecification">
+              <MappingFragment StoreEntitySet="ProductSpecification">
+                <ScalarProperty Name="SpecId" ColumnName="SpecId" />
+                <ScalarProperty Name="POM_Row" ColumnName="POM_Row" />
+                <ScalarProperty Name="TabTemplateId" ColumnName="TabTemplateId" />
+                <ScalarProperty Name="DataNo" ColumnName="DataNo" />
+                <ScalarProperty Name="ProductType" ColumnName="ProductType" />
+                <ScalarProperty Name="Spec_Description" ColumnName="Spec_Description" />
+                <ScalarProperty Name="HowTo" ColumnName="HowTo" />
+                <ScalarProperty Name="value" ColumnName="value" />
+                <ScalarProperty Name="Upper_Spec_Value" ColumnName="Upper_Spec_Value" />
+                <ScalarProperty Name="Lower_Spec_Value" ColumnName="Lower_Spec_Value" />
+                <ScalarProperty Name="GlobalSpec" ColumnName="GlobalSpec" />
+                <ScalarProperty Name="ME_SessionID" ColumnName="ME_SessionID" />
+                <ScalarProperty Name="SpecSource" ColumnName="SpecSource" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RollInspectionDetails">
+            <EntityTypeMapping TypeName="Inspection_Model.RollInspectionDetail">
+              <MappingFragment StoreEntitySet="RollInspectionDetail">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="RollInspectionSummaryId" ColumnName="RollInspectionSummaryId" />
+                <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />
+                <ScalarProperty Name="ButtonTemplateId" ColumnName="ButtonTemplateId" />
+                <ScalarProperty Name="ShiftNumber" ColumnName="ShiftNumber" />
+                <ScalarProperty Name="DHY" ColumnName="DHY" />
+                <ScalarProperty Name="DefectCount" ColumnName="DefectCount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RollInspectionSummaries">
+            <EntityTypeMapping TypeName="Inspection_Model.RollInspectionSummary">
+              <MappingFragment StoreEntitySet="RollInspectionSummary">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="LoomNo" ColumnName="LoomNo" />
+                <ScalarProperty Name="RollNumber" ColumnName="RollNumber" />
+                <ScalarProperty Name="Style" ColumnName="Style" />
+                <ScalarProperty Name="Yards_Inspected" ColumnName="Yards_Inspected" />
+                <ScalarProperty Name="DefectiveYards" ColumnName="DefectiveYards" />
+                <ScalarProperty Name="DHY" ColumnName="DHY" />
+                <ScalarProperty Name="RollStartTimestamp" ColumnName="RollStartTimestamp" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SpecMeasurements">
+            <EntityTypeMapping TypeName="Inspection_Model.SpecMeasurement">
+              <MappingFragment StoreEntitySet="SpecMeasurements">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TabTemplateId" ColumnName="TabTemplateId" />
+                <ScalarProperty Name="SpecId" ColumnName="SpecId" />
+                <ScalarProperty Name="DefectId" ColumnName="DefectId" />
+                <ScalarProperty Name="ItemNumber" ColumnName="ItemNumber" />
+                <ScalarProperty Name="InspectionJobSummaryId" ColumnName="InspectionJobSummaryId" />
+                <ScalarProperty Name="InspectionId" ColumnName="InspectionId" />
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="MeasureValue" ColumnName="MeasureValue" />
+                <ScalarProperty Name="SpecDelta" ColumnName="SpecDelta" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TabTemplates">
+            <EntityTypeMapping TypeName="Inspection_Model.TabTemplate">
+              <MappingFragment StoreEntitySet="TabTemplate">
+                <ScalarProperty Name="TabTemplateId" ColumnName="TabTemplateId" />
+                <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="TabNumber" ColumnName="TabNumber" />
+                <ScalarProperty Name="ProductSpecs" ColumnName="ProductSpecs" />
+                <ScalarProperty Name="Updated" ColumnName="Updated" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TemplateActivators">
+            <EntityTypeMapping TypeName="Inspection_Model.TemplateActivator">
+              <MappingFragment StoreEntitySet="TemplateActivator">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="LocationMasterId" ColumnName="LocationMasterId" />
+                <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Inserted_Timestamp" ColumnName="Inserted_Timestamp" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TemplateNames">
+            <EntityTypeMapping TypeName="Inspection_Model.TemplateName">
+              <MappingFragment StoreEntitySet="TemplateName">
+                <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="LineTypeId" ColumnName="LineTypeId" />
+                <ScalarProperty Name="LineType" ColumnName="LineType" />
+                <ScalarProperty Name="Ins_GriegeBatch" ColumnName="Ins_GriegeBatch" />
+                <ScalarProperty Name="Ins_WorkOrderInspection" ColumnName="Ins_WorkOrderInspection" />
+                <ScalarProperty Name="Loc_STT" ColumnName="Loc_STT" />
+                <ScalarProperty Name="Loc_CAR" ColumnName="Loc_CAR" />
+                <ScalarProperty Name="Loc_STJ" ColumnName="Loc_STJ" />
+                <ScalarProperty Name="Loc_SPA" ColumnName="Loc_SPA" />
+                <ScalarProperty Name="Loc_CDC" ColumnName="Loc_CDC" />
+                <ScalarProperty Name="Loc_LINYI" ColumnName="Loc_LINYI" />
+                <ScalarProperty Name="Loc_PCE" ColumnName="Loc_PCE" />
+                <ScalarProperty Name="Loc_FSK" ColumnName="Loc_FSK" />
+                <ScalarProperty Name="Loc_FNL" ColumnName="Loc_FNL" />
+                <ScalarProperty Name="Loc_FPC" ColumnName="Loc_FPC" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="INS_Summary_VW">
+            <EntityTypeMapping TypeName="Inspection_Model.INS_Summary_VW">
+              <MappingFragment StoreEntitySet="INS_Summary_VW">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="JobType" ColumnName="JobType" />
+                <ScalarProperty Name="JobNumber" ColumnName="JobNumber" />
+                <ScalarProperty Name="INSDataNum" ColumnName="INSDataNum" />
+                <ScalarProperty Name="LOCCID" ColumnName="LOCCID" />
+                <ScalarProperty Name="LOCName" ColumnName="LOCName" />
+                <ScalarProperty Name="INStemplateID" ColumnName="INStemplateID" />
+                <ScalarProperty Name="TMPName" ColumnName="TMPName" />
+                <ScalarProperty Name="ItemPassCount" ColumnName="ItemPassCount" />
+                <ScalarProperty Name="ItemFailCount" ColumnName="ItemFailCount" />
+                <ScalarProperty Name="WOQuantity" ColumnName="WOQuantity" />
+                <ScalarProperty Name="WorkOrderPieces" ColumnName="WorkOrderPieces" />
+                <ScalarProperty Name="AQL_Level" ColumnName="AQL_Level" />
+                <ScalarProperty Name="Standard" ColumnName="Standard" />
+                <ScalarProperty Name="INSSampleSize" ColumnName="INSSampleSize" />
+                <ScalarProperty Name="TotalInspectedItems" ColumnName="TotalInspectedItems" />
+                <ScalarProperty Name="INSRejectLimiter" ColumnName="INSRejectLimiter" />
+                <ScalarProperty Name="Technical_PassFail" ColumnName="Technical_PassFail" />
+                <ScalarProperty Name="Technical_PassFail_Timestamp" ColumnName="Technical_PassFail_Timestamp" />
+                <ScalarProperty Name="UserConfirm_PassFail" ColumnName="UserConfirm_PassFail" />
+                <ScalarProperty Name="UserConfirm_PassFail_Timestamp" ColumnName="UserConfirm_PassFail_Timestamp" />
+                <ScalarProperty Name="Inspection_Started" ColumnName="Inspection_Started" />
+                <ScalarProperty Name="Inspection_Finished" ColumnName="Inspection_Finished" />
+                <ScalarProperty Name="UnitCost" ColumnName="UnitCost" />
+                <ScalarProperty Name="UnitDesc" ColumnName="UnitDesc" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="ProdMachineName" ColumnName="ProdMachineName" />
+                <ScalarProperty Name="MajorsCount" ColumnName="MajorsCount" />
+                <ScalarProperty Name="MinorsCount" ColumnName="MinorsCount" />
+                <ScalarProperty Name="RepairsCount" ColumnName="RepairsCount" />
+                <ScalarProperty Name="ScrapCount" ColumnName="ScrapCount" />
+                <ScalarProperty Name="DefectID" ColumnName="DefectID" />
+                <ScalarProperty Name="DefectTime" ColumnName="DefectTime" />
+                <ScalarProperty Name="DefectDesc" ColumnName="DefectDesc" />
+                <ScalarProperty Name="POnumber" ColumnName="POnumber" />
+                <ScalarProperty Name="DataNo" ColumnName="DataNo" />
+                <ScalarProperty Name="EmployeeNo" ColumnName="EmployeeNo" />
+                <ScalarProperty Name="ThisPieceNo" ColumnName="ThisPieceNo" />
+                <ScalarProperty Name="SampleSize" ColumnName="SampleSize" />
+                <ScalarProperty Name="RejectLimiter" ColumnName="RejectLimiter" />
+                <ScalarProperty Name="TotalLotPieces" ColumnName="TotalLotPieces" />
+                <ScalarProperty Name="Product" ColumnName="Product" />
+                <ScalarProperty Name="DefectClass" ColumnName="DefectClass" />
+                <ScalarProperty Name="MergeDate" ColumnName="MergeDate" />
+                <ScalarProperty Name="Tablet" ColumnName="Tablet" />
+                <ScalarProperty Name="WorkOrder" ColumnName="WorkOrder" />
+                <ScalarProperty Name="LotNo" ColumnName="LotNo" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="DataType" ColumnName="DataType" />
+                <ScalarProperty Name="Dimensions" ColumnName="Dimensions" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="LoomNo" ColumnName="LoomNo" />
+                <ScalarProperty Name="DefectPoints" ColumnName="DefectPoints" />
+                <ScalarProperty Name="GriegeNo" ColumnName="GriegeNo" />
+                <ScalarProperty Name="RollNo" ColumnName="RollNo" />
+                <ScalarProperty Name="Operation" ColumnName="Operation" />
+                <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />
+                <ScalarProperty Name="InspectionId" ColumnName="InspectionId" />
+                <ScalarProperty Name="DefectImage" ColumnName="DefectImage" />
+                <ScalarProperty Name="DefectImage_Filename" ColumnName="DefectImage_Filename" />
+                <ScalarProperty Name="DefectImage_ContentType" ColumnName="DefectImage_ContentType" />
+                <ScalarProperty Name="ButtonTemplateId" ColumnName="ButtonTemplateId" />
+                <ScalarProperty Name="Inspector" ColumnName="Inspector" />
+                <ScalarProperty Name="ItemNumber" ColumnName="ItemNumber" />
+                <ScalarProperty Name="InspectionState" ColumnName="InspectionState" />
+                <ScalarProperty Name="CasePackConv" ColumnName="CasePackConv" />
+                <ScalarProperty Name="WorkRoom" ColumnName="WorkRoom" />
+                <ScalarProperty Name="InspectionJobSummaryId" ColumnName="InspectionJobSummaryId" />
+                <ScalarProperty Name="TMPTemplateID" ColumnName="TMPTemplateID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="LineType" ColumnName="LineType" />
+                <ScalarProperty Name="Ins_GriegeBatch" ColumnName="Ins_GriegeBatch" />
+                <ScalarProperty Name="Ins_WorkOrderInspection" ColumnName="Ins_WorkOrderInspection" />
+                <ScalarProperty Name="Loc_STT" ColumnName="Loc_STT" />
+                <ScalarProperty Name="Loc_CAR" ColumnName="Loc_CAR" />
+                <ScalarProperty Name="Loc_STJ" ColumnName="Loc_STJ" />
+                <ScalarProperty Name="Loc_SPA" ColumnName="Loc_SPA" />
+                <ScalarProperty Name="Loc_CDC" ColumnName="Loc_CDC" />
+                <ScalarProperty Name="Loc_LINYI" ColumnName="Loc_LINYI" />
+                <ScalarProperty Name="LOCID" ColumnName="LOCID" />
+                <ScalarProperty Name="Abreviation" ColumnName="Abreviation" />
+                <ScalarProperty Name="DBname" ColumnName="DBname" />
+                <ScalarProperty Name="CID" ColumnName="CID" />
+                <ScalarProperty Name="ConnectionString" ColumnName="ConnectionString" />
+                <ScalarProperty Name="InspectionResults" ColumnName="InspectionResults" />
+                <ScalarProperty Name="ProductionResults" ColumnName="ProductionResults" />
+                <ScalarProperty Name="AS400_Connection" ColumnName="AS400_Connection" />
+                <ScalarProperty Name="AS400_Abr" ColumnName="AS400_Abr" />
+                <ScalarProperty Name="Loc_PCE" ColumnName="Loc_PCE" />
+                <ScalarProperty Name="Loc_FSK" ColumnName="Loc_FSK" />
+                <ScalarProperty Name="Loc_FNL" ColumnName="Loc_FNL" />
+                <ScalarProperty Name="Loc_FPC" ColumnName="Loc_FPC" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LocationMaster_VW">
+            <EntityTypeMapping TypeName="Inspection_Model.LocationMaster_VW">
+              <MappingFragment StoreEntitySet="LocationMaster_VW">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Abreviation" ColumnName="Abreviation" />
+                <ScalarProperty Name="DBname" ColumnName="DBname" />
+                <ScalarProperty Name="CID" ColumnName="CID" />
+                <ScalarProperty Name="ConnectionString" ColumnName="ConnectionString" />
+                <ScalarProperty Name="InspectionResults" ColumnName="InspectionResults" />
+                <ScalarProperty Name="ProductionResults" ColumnName="ProductionResults" />
+                <ScalarProperty Name="AS400_Connection" ColumnName="AS400_Connection" />
+                <ScalarProperty Name="AS400_Abr" ColumnName="AS400_Abr" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="STT_VW">
+            <EntityTypeMapping TypeName="Inspection_Model.STT_VW">
+              <MappingFragment StoreEntitySet="STT_VW">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Machine" ColumnName="Machine" />
+                <ScalarProperty Name="WorkOrder" ColumnName="WorkOrder" />
+                <ScalarProperty Name="OperatorNo" ColumnName="OperatorNo" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="FinishTime" ColumnName="FinishTime" />
+                <ScalarProperty Name="DataNo" ColumnName="DataNo" />
+                <ScalarProperty Name="GreigeNo" ColumnName="GreigeNo" />
+                <ScalarProperty Name="CutLengthSpec" ColumnName="CutLengthSpec" />
+                <ScalarProperty Name="FinishLength" ColumnName="FinishLength" />
+                <ScalarProperty Name="JobYds" ColumnName="JobYds" />
+                <ScalarProperty Name="JobSheets" ColumnName="JobSheets" />
+                <ScalarProperty Name="JobOverLengthInches" ColumnName="JobOverLengthInches" />
+                <ScalarProperty Name="ScheduledTime" ColumnName="ScheduledTime" />
+                <ScalarProperty Name="DownTime" ColumnName="DownTime" />
+                <ScalarProperty Name="RunTime" ColumnName="RunTime" />
+                <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
+                <ScalarProperty Name="AvgSheetsPerHour" ColumnName="AvgSheetsPerHour" />
+                <ScalarProperty Name="RunPass" ColumnName="RunPass" />
+                <ScalarProperty Name="PH" ColumnName="PH" />
+                <ScalarProperty Name="Whiteness" ColumnName="Whiteness" />
+                <ScalarProperty Name="ExitWidth" ColumnName="ExitWidth" />
+                <ScalarProperty Name="Absorbency" ColumnName="Absorbency" />
+                <ScalarProperty Name="RollTicketYds" ColumnName="RollTicketYds" />
+                <ScalarProperty Name="YieldYds" ColumnName="YieldYds" />
+                <ScalarProperty Name="WOQUANTITY" ColumnName="WOQUANTITY" />
+                <ScalarProperty Name="JDECOMP" ColumnName="JDECOMP" />
+                <ScalarProperty Name="JDESCRAP" ColumnName="JDESCRAP" />
+                <ScalarProperty Name="JDETOTREC" ColumnName="JDETOTREC" />
+                <ScalarProperty Name="DIFF_OVER_UNDER" ColumnName="DIFF_OVER_UNDER" />
+                <ScalarProperty Name="DIFF_PERC" ColumnName="DIFF_PERC" />
+                <ScalarProperty Name="TimeStamp_Trans" ColumnName="TimeStamp_Trans" />
+                <ScalarProperty Name="Updated" ColumnName="Updated" />
+                <ScalarProperty Name="HourID" ColumnName="HourID" />
+                <ScalarProperty Name="HourBegin" ColumnName="HourBegin" />
+                <ScalarProperty Name="ProductCount" ColumnName="ProductCount" />
+                <ScalarProperty Name="OverLengthInches" ColumnName="OverLengthInches" />
+                <ScalarProperty Name="HP_Cut_Length_Spec" ColumnName="HP_Cut_Length_Spec" />
+                <ScalarProperty Name="AvgYdsPmin" ColumnName="AvgYdsPmin" />
+                <ScalarProperty Name="HourlyYds" ColumnName="HourlyYds" />
+                <ScalarProperty Name="Variance" ColumnName="Variance" />
+                <ScalarProperty Name="HP_RunTime" ColumnName="HP_RunTime" />
+                <ScalarProperty Name="HP_DownTime" ColumnName="HP_DownTime" />
+                <ScalarProperty Name="WorkOrderID" ColumnName="WorkOrderID" />
+                <ScalarProperty Name="MaintenanceStatus" ColumnName="MaintenanceStatus" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="Last_Timestamp" ColumnName="Last_Timestamp" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SP_AS400_GETPRPCode_Ent" FunctionName="Inspection_Model.Store.SP_AS400_GETPRPCode_Ent" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

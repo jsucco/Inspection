@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="84338114fdb8413eb69bf1d3c89ea075" Name="Diagram1">
+        <EntityTypeShape EntityType="Inspection_Model.ButtonLibrary" Width="1.5" PointX="3" PointY="32.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Inspection_Model.ButtonTemplate" Width="1.5" PointX="5.25" PointY="17.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Inspection_Model.DefectMaster" Width="1.5" PointX="3" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Inspection_Model.DefectTimer" Width="1.5" PointX="5.25" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Inspection_Model.InspectionJobSummary" Width="1.5" PointX="3" PointY="24.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Inspection_Model.InspectionType" Width="1.5" PointX="0.75" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Inspection_Model.ProductSpecification" Width="1.5" PointX="3" PointY="36.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Inspection_Model.RollInspectionDetail" Width="1.5" PointX="6" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Inspection_Model.RollInspectionSummary" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Inspection_Model.SpecMeasurement" Width="1.5" PointX="5.25" PointY="26.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Inspection_Model.TabTemplate" Width="1.5" PointX="3" PointY="17.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Inspection_Model.TemplateActivator" Width="1.5" PointX="3" PointY="21" IsExpanded="true" />
+        <EntityTypeShape EntityType="Inspection_Model.TemplateName" Width="1.5" PointX="0.75" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Inspection_Model.INS_Summary_VW" Width="1.5" PointX="8.75" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Inspection_Model.LocationMaster_VW" Width="1.5" PointX="5.75" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Inspection_Model.STT_VW" Width="1.5" PointX="10.75" PointY="1.75" IsExpanded="true" />
+        <AssociationConnector Association="Inspection_Model.FK_ButtonTemplate_ButtonLibrary" ManuallyRouted="false" />
+        <AssociationConnector Association="Inspection_Model.FK_ButtonTemplate_TabTemplate" ManuallyRouted="false" />
+        <AssociationConnector Association="Inspection_Model.FK_DefectTimer_ButtonTemplate" ManuallyRouted="false" />
+        <AssociationConnector Association="Inspection_Model.FK_DefectMaster_DefectMaster" ManuallyRouted="false" />
+        <AssociationConnector Association="Inspection_Model.FK_DefectTimer_DefectMaster" ManuallyRouted="false" />
+        <AssociationConnector Association="Inspection_Model.FK_DefectTimer_InspectionJobSummary" ManuallyRouted="false" />
+        <AssociationConnector Association="Inspection_Model.FK_SpecMeasurements_InspectionJobSummary" ManuallyRouted="false" />
+        <AssociationConnector Association="Inspection_Model.FK_SpecMeasurements_ProductSpecification" ManuallyRouted="false" />
+        <AssociationConnector Association="Inspection_Model.FK_RollInspectionDetail_RollInspectionSummary" ManuallyRouted="false" />
+        <AssociationConnector Association="Inspection_Model.FK_RollInspectionDetail_TemplateName" ManuallyRouted="false" />
+        <AssociationConnector Association="Inspection_Model.FK_TabTemplate_TemplateName" ManuallyRouted="false" />
+        <AssociationConnector Association="Inspection_Model.FK_TemplateActivator_TemplateName" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
