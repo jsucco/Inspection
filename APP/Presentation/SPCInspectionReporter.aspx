@@ -1,4 +1,4 @@
-﻿<%@ Page Title="APR" Language="VB" MasterPageFile="~/Site_2.master" AutoEventWireup="false" CodeFile="SPCInspectionReporter.aspx.vb" Inherits="core.APP_DataEntry_TemplateManager" %>
+﻿<%@ Page Title="APR" Language="VB" MasterPageFile="~/APP/MasterPage/Site_2.master" AutoEventWireup="false" CodeFile="SPCInspectionReporter.aspx.vb" Inherits="core.APP_DataEntry_TemplateManager" %>
 
 <%@ Import Namespace="System.Web.Optimization" %>
 <%@ OutputCache Location="Server" VaryByParam="*" Duration="2000" %>

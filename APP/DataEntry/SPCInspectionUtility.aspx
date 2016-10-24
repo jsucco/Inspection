@@ -1,4 +1,4 @@
-﻿<%@ Page Title="APR" Language="VB" MasterPageFile="~/Site_2.master" AutoEventWireup="false" CodeFile="SPCInspectionUtility.aspx.vb" Inherits="core.APP_DataEntry_SPCInspectionUtility" %>
+﻿<%@ Page Title="APR" Language="VB" MasterPageFile="~/APP/MasterPage/Site_2.master" AutoEventWireup="false" CodeFile="SPCInspectionUtility.aspx.vb" Inherits="core.APP_DataEntry_SPCInspectionUtility" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" Runat="Server">
 </asp:Content>

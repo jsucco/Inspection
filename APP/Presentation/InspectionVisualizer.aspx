@@ -1,4 +1,4 @@
-﻿<%@ Page Title="APR" Language="VB" MasterPageFile="~/Site_2.master" AutoEventWireup="false" CodeFile="InspectionVisualizer.aspx.vb" Inherits="core.APP_Presentation_InspectionVisualizer" %>
+﻿<%@ Page Title="APR" Language="VB" MasterPageFile="~/APP/MasterPage/Site_2.master" AutoEventWireup="false" CodeFile="InspectionVisualizer.aspx.vb" Inherits="core.APP_Presentation_InspectionVisualizer" %>
 
 <%@ Import Namespace="System.Web.Optimization" %>
 <%--<%@ OutputCache Location="Server" VaryByParam="*" Duration="2000" %>--%>
@@ -8,7 +8,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
     <div style="position:absolute; z-index:1000" id="backdiv">
-        <a href="<%=Session("BaseUri")%>/APR_SiteEntry.aspx" title="Back to MENU" id="menuLnkBack">M</a>
+        <a href="<%=Session("BaseUri")%>/APP/APR_SiteEntry.aspx" title="Back to MENU" id="menuLnkBack">M</a>
     </div>
   
     <div style="position:absolute; left:50px; width:75%; height:150px;">
@@ -1131,7 +1131,7 @@
             });
             $('#backdiv').on('click', function(event) { 
             
-                window.location.assign('../../APR_SiteEntry.aspx')
+                window.location.assign('../../APP/APR_SiteEntry.aspx')
             });
             $('#hideFilters').on('click', function(event) { 
                 $('#FilterDiv').animate({height: '-=95px'});
