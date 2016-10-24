@@ -36,7 +36,7 @@ Namespace core
                     End If
 
                 End If
-                    Response.Redirect("~/APR_SiteEntry.aspx?CID=" + strURLCustomer)
+                Response.Redirect("~/APP/APR_SiteEntry.aspx?CID=" + strURLCustomer)
                 'Response.Redirect("~/Login.aspx")
             End If
             'Application not available
