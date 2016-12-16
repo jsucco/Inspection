@@ -1190,7 +1190,7 @@
                             }
                         }) ).done(function ( v1) {
                             // v1 is undefined
-                            window.location.assign("<%=Session("BaseUri")%>" + '/APP/APR_SiteEntry.aspx?zrt=' + hash);
+                            window.location.assign("<%=Session("BaseUri")%>" + '/APR_SiteEntry.aspx?zrt=' + hash);
                         });
                         
                         break;

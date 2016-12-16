@@ -79,7 +79,7 @@ Namespace core
             End If
 
             If HasAuthorization = False Then
-                Response.Redirect("~/APP/APR_SiteEntry.aspx")
+                Response.Redirect("~/APR_SiteEntry.aspx")
             Else
                 'If IsNothing(Context.Cache("ProductSpecs")) = False Then
                 '    ProductSpecscache = Context.Cache("ProductSpecs")

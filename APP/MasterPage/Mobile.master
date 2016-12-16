@@ -110,7 +110,7 @@
 
         $(function () {
             $("#MainContent_Image1").on('click', function (e) {
-                window.location.assign("<%=Session("BaseUri")%>" + '/APP/APR_SiteEntry.aspx')
+                window.location.assign("<%=Session("BaseUri")%>" + '/APR_SiteEntry.aspx')
             });
         });
     </script>
