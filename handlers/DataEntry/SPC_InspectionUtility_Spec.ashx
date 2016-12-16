@@ -30,7 +30,7 @@ Namespace core
                     SpecObj.Upper_Spec_Value = util.ConvertType(RequestParams.GetValues("Upper_Spec_Value")(0), "Decimal")
                     SpecObj.Lower_Spec_Value = util.ConvertType(RequestParams.GetValues("Lower_Spec_Value")(0), "Decimal")
                     SpecObj.GlobalSpec = util.ConvertType(RequestParams.GetValues("GlobalSpec")(0), "Boolean")
-                    
+                    SpecObj.SpecSource = util.ConvertType(RequestParams.GetValues("SpecSource")(0), "String")
                     If SpecObj.Lower_Spec_Value > SpecObj.Upper_Spec_Value Or SpecObj.Lower_Spec_Value = SpecObj.Upper_Spec_Value Then
                         resultobj = "Upper Spec Value must be greater than Lower Spec Value"
                         GoTo 101
@@ -43,8 +43,8 @@ Namespace core
                 End If
                 Select Case _oper
                     Case "add"
-                        sqlstr = "INSERT INTO ProductSpecification (TabTemplateId, DataNo, ProductType, Spec_Description, HowTo, value, Upper_Spec_Value, Lower_Spec_Value, GlobalSpec)" & vbCrLf &
-                                    "VALUES (@TabTemplateId,@DataNo,@ProductType,@Spec_Description,@HowTo,@value,@Upper_Spec_Value,@Lower_Spec_Value, @GlobalSpec)"
+                        sqlstr = "INSERT INTO ProductSpecification (TabTemplateId, DataNo, ProductType, Spec_Description, HowTo, value, Upper_Spec_Value, Lower_Spec_Value, GlobalSpec, SpecSource)" & vbCrLf &
+                                    "VALUES (@TabTemplateId,@DataNo,@ProductType,@Spec_Description,@HowTo,@value,@Upper_Spec_Value,@Lower_Spec_Value, @GlobalSpec, @SpecSource)"
                         If SpecObj.value > 0 And SpecObj.DataNo.Length > 2 And SpecObj.ProductType.Length > 2 Then
                             resultobj = bmapps.InsertSpcObject(sqlstr, SpecObj)
                             If resultobj = True Then
