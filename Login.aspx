@@ -236,13 +236,20 @@
 
     var returnUrl = 'http://salesconnect.standardtextile.com/';
     returnUrl = returnUrl.replace(/&amp;/g, '&');
-    
+    var credsError = "<%=credsError%>"
     $(document).ready(function () {
-
+        if (credsError == "true") {
+            $("#errorDiv").css("display", "block");
+        }
         setTimeout(function () {
             $("#txtUserName").focus();
         }, 500);
         $('body').css('zoom', '75%');
+
+        //$("#btnSubmit").unbind("click").bind("click", function () {
+        //    submitLogin();
+        //    return false;
+        //});
 
         $(document).keypress(function (e) {
             if (e.which == "13") {
@@ -263,34 +270,33 @@
         if ($("#chkRememberMe").prop("checked")) {
             rememberme = true;
         }
-        
+
         if (!username || !password) {
             $(".validation-reqd-errors").show();
             return
         }
-        console.log(username, password);
+
         $.ajax({
-            url: '/handlers/Utility/UserLogin.ashx',
             type: "POST",
-            data: { method: 'Authenicate', args: { User: username, Password: password } },
-            success: function (data) {
-                if (data == "TRUE") {
-                    window.location.href = "/APR_SiteEntry.aspx";
-                }
-                
-                console.log(data);
+            url: login_server + '/Login',
+            data: JSON.stringify({ Username: username, Password: password, RememberMe: rememberme, returnUrl: returnUrl }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function () {
+                alert("success")
             },
             error: function (data) {
+                console.log(data);
                 var responseText = data["responseText"];
                 if (!responseText) {
-                    window.location.href = returnUrl;
+                    alert("Faulure");
                 }
                 else {
-                    console.log('error');
                     $(".validation-summary-errors").show();
-                }  
+                }
             }
         });
+        
     }
 
     var clicks = 0;
@@ -328,7 +334,7 @@
                     <asp:Button id="btnSubmit" OnClientClick="SubmitOnce()" runat="server" CssClass="button" Text="Log In" />
                     <%--<button id="btnSubmit" class="button">Log In</button>--%>
                
-                    <div class="validation-summary-errors" style="display: none">
+                    <div id="errorDiv" class="validation-summary-errors" style="display: none">
                         <h4>Login failed</h4>
                         <p class="error">The username or password provided is incorrect</p>
                     </div>

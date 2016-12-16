@@ -15,11 +15,12 @@ Namespace core
             Dim strURLCustomer As String = Nothing
 
             If Env.AppIsAvailable Then
-                strURLCustomer = "000114" ' Me.Request.QueryString("UC")
+                strURLCustomer = Me.Request.QueryString("UC")
 
                 If Not strURLCustomer Is Nothing Then
                     Me.Session("CID") = strURLCustomer
-
+                    Dim dao As New userDAO
+                    dao.LogUserActivity("", "WepApp_ENTRY", strURLCustomer)
                     If corp.IsAprContext(strURLCustomer) = True Then
                         Session("CID_Info") = corp.cidclass
                         Dim CIDArray = corp.cidclass.ToArray()
@@ -36,7 +37,7 @@ Namespace core
                     End If
 
                 End If
-                    Response.Redirect("~/APR_SiteEntry.aspx?CID=" + strURLCustomer)
+                Response.Redirect("~/APP/APR_SiteEntry.aspx?CID=" + strURLCustomer)
                 'Response.Redirect("~/Login.aspx")
             End If
             'Application not available

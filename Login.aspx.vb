@@ -8,7 +8,7 @@ Imports System.Web.Configuration
 
 Partial Class LoginTest
     Inherits System.Web.UI.Page
-
+    Public credsError = "false"
     Private Sub on_load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
 
@@ -16,12 +16,16 @@ Partial Class LoginTest
     Sub OnAuthenticate(ByVal sender As Object, ByVal e As EventArgs) Handles btnSubmit.Click
         Dim Authenticated As Boolean
         Dim User = AdjustUserNameForm(txtUserName.Value)
-        Using pc As New PrincipalContext(ContextType.Domain, "standardtextile.com", Nothing, ContextOptions.SimpleBind)
+        If User.Length = 0 Or txtPassword.Value.Length = 0 Then
+            Exit Sub
+        End If
+        Using pc As New PrincipalContext(ContextType.Domain, "standardtextile.com", Nothing, ContextOptions.Negotiate)
+            Dim perm As String = pc.ValidateCredentials(User, txtPassword.Value, ContextOptions.SimpleBind).ToString()
 
             If pc.ValidateCredentials(User, txtPassword.Value, ContextOptions.SimpleBind) Then
                 AddAuthCookie(User)
                 AddKeyForChildApps(User)
-                Response.Redirect("~/APR_SiteEntry.aspx")
+                Response.Redirect("~/APP/APR_SiteEntry.aspx?perm=" + perm)
             Else
                 Dim UDAO As New core.userDAO
                 If UDAO.AutenticateUser(txtUserName.Value, txtPassword.Value, 578) = True Then
@@ -29,10 +33,10 @@ Partial Class LoginTest
                     SetCookie("APR_Username", "Username", User)
                     AddAuthCookie(User)
                     AddKeyForChildApps(User)
-                    Response.Redirect("~/APR_SiteEntry.aspx")
+                    Response.Redirect("~/APP/APR_SiteEntry.aspx")
                 End If
             End If
-
+            credsError = "true"
         End Using
 
 
