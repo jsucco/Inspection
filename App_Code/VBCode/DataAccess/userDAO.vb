@@ -50,7 +50,7 @@ Namespace core
 
         End Function
 
-        Public Function LogUserActivity(ByVal Username As String, ByVal DeviceType As String, Optional ByVal CID As Integer = 0) As Integer
+        Public Function LogUserActivity(ByVal Username As String, ByVal DeviceType As String, Optional ByVal CID As String = "000000") As Integer
 
             Dim SQL As String
             Dim sqlcommand As SqlCommand
@@ -72,7 +72,7 @@ Namespace core
                 sqlcommand.Parameters.Add(_DAOFactory.Getparameter("@EntryTimestamp", DbType.DateTime))
                 sqlcommand.Parameters.Add(_DAOFactory.Getparameter("@DeviceType", DbType.String))
                 sqlcommand.Parameters.Add(_DAOFactory.Getparameter("@IPAddress", DbType.String))
-                sqlcommand.Parameters.Add(_DAOFactory.Getparameter("@CID", DbType.Int16))
+                sqlcommand.Parameters.Add(_DAOFactory.Getparameter("@CID", DbType.String))
                 ''    'Provide parameter values.                                                                    
                 sqlcommand.Parameters("@DBOrigin").Value = "APR"
                 sqlcommand.Parameters("@UserID").Value = Username

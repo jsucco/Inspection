@@ -44,6 +44,7 @@ Namespace core
                     IPaddress = APRWebApp.GetIPAddress()
                 Catch ex As Exception
                     IPaddress = "000.000.00"
+                    Elmah.ErrorSignal.FromCurrentContext.Raise(ex)
                 End Try
                 Try
                     While ctxmanReader.Read
@@ -60,7 +61,7 @@ Namespace core
 
                     End While
                 Catch ex As Exception
-
+                    Elmah.ErrorSignal.FromCurrentContext.Raise(ex)
                 End Try
 
             End Using
