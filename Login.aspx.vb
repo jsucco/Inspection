@@ -21,7 +21,7 @@ Partial Class LoginTest
             If pc.ValidateCredentials(User, txtPassword.Value, ContextOptions.SimpleBind) Then
                 AddAuthCookie(User)
                 AddKeyForChildApps(User)
-                Response.Redirect("~/APP/APR_SiteEntry.aspx")
+                Response.Redirect("~/APR_SiteEntry.aspx")
             Else
                 Dim UDAO As New core.userDAO
                 If UDAO.AutenticateUser(txtUserName.Value, txtPassword.Value, 578) = True Then
@@ -29,7 +29,7 @@ Partial Class LoginTest
                     SetCookie("APR_Username", "Username", User)
                     AddAuthCookie(User)
                     AddKeyForChildApps(User)
-                    Response.Redirect("~/APP/APR_SiteEntry.aspx")
+                    Response.Redirect("~/APR_SiteEntry.aspx")
                 End If
             End If
 

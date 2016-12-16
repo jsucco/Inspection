@@ -275,7 +275,7 @@
             data: { method: 'Authenicate', args: { User: username, Password: password } },
             success: function (data) {
                 if (data == "TRUE") {
-                    window.location.href = "/APP/APR_SiteEntry.aspx";
+                    window.location.href = "/APR_SiteEntry.aspx";
                 }
                 
                 console.log(data);
