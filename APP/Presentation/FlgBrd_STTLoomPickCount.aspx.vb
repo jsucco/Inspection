@@ -19,9 +19,6 @@ Namespace core
         Public Property DL As New dlayer
         Public Property LPC As New LoomPickCountDAO
 
-
-        Private CSE As New CSExample
-
         Protected Sub Page_Load(sender As Object, e As System.EventArgs) Handles Me.Load
 
 

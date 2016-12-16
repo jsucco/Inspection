@@ -616,7 +616,7 @@ Namespace core
                 Response.Cookies("SPCLocation").Expires = DateTime.Now.AddDays(60)
             End If
 
-            sql = "SELECT JobNumber, WOQuantity, AQL_Level, Standard, SampleSize, RejectLimiter FROM InspectionJobSummary WHERE id = " & InspectionJobSummaryId.ToString()
+            sql = "SELECT JobNumber, DataNo, WOQuantity, AQL_Level, Standard, SampleSize, RejectLimiter, WorkRoom, CasePack FROM InspectionJobSummary WHERE id = " & InspectionJobSummaryId.ToString()
 
             listijs = bmapijs.GetInspectObject(sql)
             If listijs.Count > 0 Then
@@ -626,31 +626,23 @@ Namespace core
                 Dim workorderarray As Array = as400.GetInspectionWorkOrder(wonumber).ToArray()
                 inspectionjobsummaryid_hidden.Value = InspectionJobSummaryId
                 CartonNumber.Value = ""
+                DataNumber.Value = listijs.ToArray()(0).DataNo
+                workorder_hidden.Value = listijs.ToArray()(0).WorkRoom
+                workroom.Value = listijs.ToArray()(0).WorkRoom
+                CPNumber.Value = listijs.ToArray()(0).CasePack
                 If workorderarray.Length > 0 Then
                     'Dim casepackCalc As Integer = workorderarray(0).CASEPACK / 10
                     'CPNumber.Value = workorderarray(0).CASEPACK.ToString.Trim()
-                    DataNumber.Value = workorderarray(0).DATAN.Trim()
-                    If workorderarray(0).DATAN.Trim().ToString.Length > 0 Then
-                        CPNumber.Value = as400.GetCasePackConv(workorderarray(0).DATAN.Trim().ToString)
-                    End If
-                    Location.Value = workorderarray(0).LOCATION.Trim()
-                    WOQuantityValue = workorderarray(0).WOQUANTITY
-                    workroom_hidden.Value = Trim(workorderarray(0).WORKROOM)
-                    workroom.Value = Trim(workorderarray(0).WORKROOM)
+                    'workroom_hidden.Value = Trim(workorderarray(0).WORKROOM)
+                    'workroom.Value = Trim(workorderarray(0).WORKROOM)
+                    'DataNumber.Value = workorderarray(0).DATAN.Trim()
+                    'If workorderarray(0).DATAN.Trim().ToString.Length > 0 Then
+                    '    CPNumber.Value = as400.GetCasePackConv(workorderarray(0).DATAN.Trim().ToString)
+                    'End If
+
                     wopieces_hidden.Value = workorderarray(0).WOPIECES
-                Else
-                    WOQuantityValue = listijs.ToArray()(0).WOQuantity
-
-
-                    Dim listso As New List(Of SingleObject)
-
-                    listso = bmapso.GetInspectObject("SELECT TOP(1) DataNo AS Object1 FROM DefectMaster WHERE WorkOrder = '" & wonumber & "' AND LEN(DataNo) > 2")
-                    If listso.Count > 0 Then
-                        DataNumber.Value = listso.ToArray()(0).Object1
-                    End If
                 End If
-
-
+                WOQuantityValue = listijs.ToArray()(0).WOQuantity
                 aqlstandard.Value = listijs.ToArray()(0).Standard
                 If CType(listijs.ToArray()(0).AQL_Level, Integer) = 100 Then
                     AQL = "100"

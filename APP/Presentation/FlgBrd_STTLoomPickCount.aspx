@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="VB" MasterPageFile="~/Site_2.master" AutoEventWireup="false" CodeFile="FlgBrd_STTLoomPickCount.aspx.vb" Inherits="core.APP_Presentation_FlgBrd_STTLoomPickCount" %>
+﻿<%@ Page Title="" Language="VB" MasterPageFile="~/APP/MasterPage/Site_2.master" AutoEventWireup="false" CodeFile="FlgBrd_STTLoomPickCount.aspx.vb" Inherits="core.APP_Presentation_FlgBrd_STTLoomPickCount" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" Runat="Server">
 </asp:Content>

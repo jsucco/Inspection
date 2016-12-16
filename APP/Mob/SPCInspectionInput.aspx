@@ -686,6 +686,7 @@
     var $itemnumber = $('#MainContent_ItemNumber');
     var $CartonNumber = $('#MainContent_CartonNumber');
     var $CPNumber = $('#MainContent_CPNumber');
+    var $WorkRoom = $('#MainContent_workroom');
     var $purchaseorder = $('#MainContent_CartonNumber');
     var $auditorname = $('#MainContent_AuditorName');
     var $auditornameSel = $('#Auditor_Name');
@@ -773,6 +774,8 @@
 
         RenderEngine.SizeChecker();
         eventshandler.UserKeyPress.Init();
+        dialogs.InitProductSpecEntry(); 
+        dialogs.InitStartDialog(); 
         if (InspectionConfirmFlag == 'true') { 
             alert(InspectionConfirmMessage);
         }
@@ -858,207 +861,28 @@
 
         html.length = 0 
         var machiename;
-        for(var i = 0; i < MachineNames.length; i++) { 
-            machinename = MachineNames[i];
-            html.push('<option value="' + machiename.id + '">' + name.text + '</option>');
-        }
-
-        $("#MachineNames_pop").html(html.join('')).bind("change", function(){
-
-            var selectedid = $(this).val();
-            var selectedtext = $(this).text();
-
-            Template.SetCookie("InspectionType", 0, 14);
-            if (selectedtext) { 
-                var querystring = "TemplateId=" + SelectedId.toString() + "&Username=" + $auditorname.val().toString() + "&SPCMachine=" + selectedtext + "&AQL=" + $aql.val() + "&AS400REQ=SPCMachine&LocationId=" + $("#MainContent_Location").val()
-                window.location.assign("<%=Session("BaseUri")%>" + "/APP/Mob/SPCInspectionInput.aspx?" + querystring)
+        if (machiename != null) { 
+            for(var i = 0; i < MachineNames.length; i++) { 
+                machinename = MachineNames[i];
+                html.push('<option value="' + machiename.id + '">' + name.text + '</option>');
             }
+            $("#MachineNames_pop").html(html.join('')).bind("change", function(){
+
+                var selectedid = $(this).val();
+                var selectedtext = $(this).text();
+
+                Template.SetCookie("InspectionType", 0, 14);
+                if (selectedtext) { 
+                    var querystring = "TemplateId=" + SelectedId.toString() + "&Username=" + $auditorname.val().toString() + "&SPCMachine=" + selectedtext + "&AQL=" + $aql.val() + "&AS400REQ=SPCMachine&LocationId=" + $("#MainContent_Location").val()
+                    window.location.assign("<%=Session("BaseUri")%>" + "/APP/Mob/SPCInspectionInput.aspx?" + querystring)
+                }
       
-        });
+            });
+        }
+        
         controlhandler.RenderProductSpecTable();
-        $("#ProductSpecEntrydialog").wijdialog({
-            buttons: { 
-                Confirm: function () { 
-
-                    var $prodType = $("#MS_ProductType"); 
-                    var $specDesc = $("#MS_ProductDesc"); 
-                    var $ErrorLbl = $("#MS_ErrorLbl");
-                    var Inputval = 0; 
-                    var InputUp = 0; 
-                    var InputLw = 0; 
-                    var ErrorFlag = false; 
-                    var i = 0; 
-                    var Inputarray = new Array({value: Inputval, Upper_Spec_Value: InputUp, Lower_Spec_Value:InputLw, ProductType: $prodType.val(), Spec_Description: $specDesc.val(), DataNo: $DataNo.val()});
-                    if ($prodType.val().trim().length < 2) { 
-                        ErrorFlag = true; 
-                        $prodType.css({"border-color":"red", "border-width": "medium"});
-                        $ErrorLbl.html("A Product Type is Required");
-                    }
-                    if ($specDesc.val().trim().length < 2) { 
-                        ErrorFlag = true; 
-                        $specDesc.css({"border-color":"red", "border-width": "medium"});
-                        $ErrorLbl.html("A Spec Description is Required");
-                    }
-
-                    $(this).find(".wijmo-wijinput").each(function() { 
-                        var input = $(this).find("input");
-                        
-                        var reformed;
-                        switch(input[0].id){
-                            case "MS_ProductValue": 
-                                if (input[0].value <= 0) { 
-                                    ErrorFlag = true; 
-                                    $(this).css({"border-color": "red", "border-width":"medium"});
-                                    $ErrorLbl.html("Value Must be Greater Than Zero");
-                                } else { 
-                                    $(this).css({"border-color": "black", "border-width":"thin"});
-                                    Inputarray[0].value = input[0].value;
-                                }
-                                break;
-                            case "MS_Upper_Spec_Value": 
-                                if (input[0].value <= 0) { 
-                                    ErrorFlag = true; 
-                                    Inputarray[0].Upper_Spec_Value = input[0].value;
-                                    $(this).css({"border-color": "red", "border-width":"medium"});
-                                    $ErrorLbl.html("Value Must be Greater Than Zero");
-                                } else { 
-                                    $(this).css({"border-color": "black", "border-width":"thin"});
-                                    Inputarray[0].Upper_Spec_Value = input[0].value;
-                                }
-                                break;
-                            case "MS_Lower_Spec_Value": 
-                                if (input[0].value >= 0) { 
-                                    ErrorFlag = true; 
-                                    Inputarray[0].Lower_Spec_Value = input[0].value;
-                                    $(this).css({"border-color": "red", "border-width":"medium"});
-                                    $ErrorLbl.html("Value Must be Less Than Zero");
-                                } else { 
-                                    $(this).css({"border-color": "black", "border-width":"thin"});
-                                    Inputarray[0].Lower_Spec_Value = input[0].value;
-                                }
-                                break;
-                        }
-                           
-                        i++;
-                        if (i==3 && ErrorFlag == false) { 
-                           
-                            datahandler.InsertProductSpec(Inputarray); 
-                        }
-                    });
-                    
-
-                    if (ErrorFlag == false) { 
-                        $(this).wijdialog("close");
-                    }
-                },
-                Cancel: function () { 
-                    $(this).wijdialog("close"); 
-                }
-            },
-            captionButtons: { 
-                pin: { visible: false }, 
-                refresh: { visible: false }, 
-                toggle: { visible: false }, 
-                minimize: { visible: false }, 
-                maximize: { visible: false } 
-            },
-            height: 594,
-            width: 450,
-            autoOpen: false, 
-            open: function (e) { 
-                if ($DataNo.val().length > 2 ) { 
-                    datahandler.GetItemInfo(); 
-                } else { 
-                    alert("No Data Number Entered"); 
-                    $(this).wijdialog("close"); 
-                }
-            }, 
-            close: function (e) {
-                var $prodType = $("#MS_ProductType"); 
-                var $specDesc = $("#MS_ProductDesc"); 
-                var $ErrorLbl = $("#MS_ErrorLbl");
-
-                $(this).find(".wijmo-wijinput").each(function() { 
-                    var input = $(this).find("input");
-                    
-                        
-                    switch(input[0].id){
-                        case "MS_ProductValue": 
-                            $("#MS_ProductValue").wijinputnumber("setValue", 0.00, true)
-                            break;
-                        case "MS_Upper_Spec_Value": 
-                            $("#MS_Upper_Spec_Value").wijinputnumber("setValue", 0.00, true)
-                            break;
-                        case "MS_Lower_Spec_Value": 
-                            $("#MS_Lower_Spec_Value").wijinputnumber("setValue", 0.00, true)
-                            break;
-                    }
-                    $ErrorLbl.html("");
-                });
-
-                $prodType.css({"border-color": "black", "border-width":"thin"});
-                $prodType.val("");
-                $specDesc.css({"border-color": "black", "border-width":"thin"});
-                $specDesc.val("");
-            }
-        });
-        $("#StartInspectiondialog").wijdialog({
-            buttons: { 
-                Confirm: function () { 
-                    var GoodCount = new Number($goodcount.val());
-                    var BadCount = new Number($badcount.val());
-                    var total = GoodCount + BadCount;
-                    var AQLDlevel = $('#AQL_Level_Dialog').val();
-                    var AQLDstandard = $('#AQL_Standard_Dialog').val();
-                    var AuditorName = $('#Auditor_Name').val();
-                    AQLValue = AQLDlevel;
-                   // Template.SetCookie("AQLLevel", AQLDlevel, 14);
-                    Template.SetCookie("AQLStandard", AQLDstandard, 14); 
-                    if (AuditorName.toString().trim() != 'New Name') { 
-                        $("#selectNames").prop("disabled", true);
-                        if (total == 0 && OpenOrderFlag == "False") { 
-                            $.when(datahandler.GetInspectionId()).done(function () { 
-                                if (InspectionJobSummaryIdPage == 0) { 
-                                    datahandler.GetInspectionJobSummaryId(TargetOrderInput.val(), buttonid, buttonvalue, buttonname, false); 
-                                }
-                                SpecItemCounter = 1;
-                                $("#ItemNumberLabel").text("Item #: " + SpecItemCounter.toString());
-                            });
-                            if (InspectionState == 0) { 
-                                datahandler.SetSampleSize();
-                            }
-                        } 
-
-                    } else { 
-                        togglevalidation("auditdiv")
-                    }
-                    $(this).wijdialog("close"); 
-                },
-                Cancel: function () { 
-                    $(this).wijdialog("close"); 
-                }
-            },
-            captionButtons: { 
-                pin: { visible: false }, 
-                refresh: { visible: false }, 
-                toggle: { visible: false }, 
-                minimize: { visible: false }, 
-                maximize: { visible: false } 
-            },
-            height: 294,
-            width: 450,
-            autoOpen: false, 
-            open: function (e) { 
-                $("#Skip").prop('checked', AutoConfirm);
-            }, 
-            create: function (e) {
-                $('#Skip').change(function(e) {
-          
-                    var value = e.currentTarget.checked;
-                    AutoConfirm = value;
-                });
-            }
-        });
+        
+        
         $("#dialog").wijdialog({
             buttons: { 
                 Confirm: function () { 
@@ -1190,7 +1014,7 @@
                             }
                         }) ).done(function ( v1) {
                             // v1 is undefined
-                            window.location.assign("<%=Session("BaseUri")%>" + '/APR_SiteEntry.aspx?zrt=' + hash);
+                            window.location.assign("<%=Session("BaseUri")%>" + '/APP/APR_SiteEntry.aspx?zrt=' + hash);
                         });
                         
                         break;
@@ -2053,7 +1877,7 @@
                             datahandler.UpdateRejectionCount(InspectionState, InspectionJobSummaryIdPage) }
                         , 10000);
                 if (IsSPCMachine == true) { 
-                    datahandler.GetInspectionJobSummaryId(TargetOrderInput.val(), buttonid, buttonvalue, buttonname, false);
+                    datahandler.GetInspectionJobSummaryId(TargetOrderInput.val(), false);
  
                     $("#MachineDiv").toggle(); 
                     $("#MachineLbl").text(SelectSPCMachineName);
@@ -2149,7 +1973,7 @@
                 $("#NewPageDiv").css("left", "230px");
                 $("#scorelabels").css({display: 'block', left: "340px"});
                 
-             //  if (TemplateCollection.length > 0) { Template.Load();}
+               if (TemplateCollection.length > 0) { Template.Load();}
             } else { 
                 $("#scorelabels").css({display: 'block', left: "69%"});
                 $("#menudiv").css("display", "block");
@@ -2158,6 +1982,195 @@
             }
         }
 
+    };
+
+    var dialogs = { 
+        InitProductSpecEntry: function() { 
+            $("#ProductSpecEntrydialog").wijdialog({
+                buttons: { 
+                    Confirm: function () { 
+
+                        var $prodType = $("#MS_ProductType"); 
+                        var $specDesc = $("#MS_ProductDesc"); 
+                        var $ErrorLbl = $("#MS_ErrorLbl");
+                        var Inputval = 0; 
+                        var InputUp = 0; 
+                        var InputLw = 0; 
+                        var ErrorFlag = false; 
+                        var i = 0; 
+                        var Inputarray = new Array({value: Inputval, Upper_Spec_Value: InputUp, Lower_Spec_Value:InputLw, ProductType: $prodType.val(), Spec_Description: $specDesc.val(), DataNo: $DataNo.val()});
+                        if ($prodType.val().trim().length < 2) { 
+                            ErrorFlag = true; 
+                            $prodType.css({"border-color":"red", "border-width": "medium"});
+                            $ErrorLbl.html("A Product Type is Required");
+                        }
+                        if ($specDesc.val().trim().length < 2) { 
+                            ErrorFlag = true; 
+                            $specDesc.css({"border-color":"red", "border-width": "medium"});
+                            $ErrorLbl.html("A Spec Description is Required");
+                        }
+
+                        $(this).find(".wijmo-wijinput").each(function() { 
+                            var input = $(this).find("input");
+                        
+                            var reformed;
+                            switch(input[0].id){
+                                case "MS_ProductValue": 
+                                    if (input[0].value <= 0) { 
+                                        ErrorFlag = true; 
+                                        $(this).css({"border-color": "red", "border-width":"medium"});
+                                        $ErrorLbl.html("Value Must be Greater Than Zero");
+                                    } else { 
+                                        $(this).css({"border-color": "black", "border-width":"thin"});
+                                        Inputarray[0].value = input[0].value;
+                                    }
+                                    break;
+                                case "MS_Upper_Spec_Value": 
+                                    if (input[0].value <= 0) { 
+                                        ErrorFlag = true; 
+                                        Inputarray[0].Upper_Spec_Value = input[0].value;
+                                        $(this).css({"border-color": "red", "border-width":"medium"});
+                                        $ErrorLbl.html("Value Must be Greater Than Zero");
+                                    } else { 
+                                        $(this).css({"border-color": "black", "border-width":"thin"});
+                                        Inputarray[0].Upper_Spec_Value = input[0].value;
+                                    }
+                                    break;
+                                case "MS_Lower_Spec_Value": 
+                                    if (input[0].value >= 0) { 
+                                        ErrorFlag = true; 
+                                        Inputarray[0].Lower_Spec_Value = input[0].value;
+                                        $(this).css({"border-color": "red", "border-width":"medium"});
+                                        $ErrorLbl.html("Value Must be Less Than Zero");
+                                    } else { 
+                                        $(this).css({"border-color": "black", "border-width":"thin"});
+                                        Inputarray[0].Lower_Spec_Value = input[0].value;
+                                    }
+                                    break;
+                            }
+                           
+                            i++;
+                            if (i==3 && ErrorFlag == false) { 
+                           
+                                datahandler.InsertProductSpec(Inputarray); 
+                            }
+                        });
+                    
+
+                        if (ErrorFlag == false) { 
+                            $(this).wijdialog("close");
+                        }
+                    },
+                    Cancel: function () { 
+                        $(this).wijdialog("close"); 
+                    }
+                },
+                captionButtons: { 
+                    pin: { visible: false }, 
+                    refresh: { visible: false }, 
+                    toggle: { visible: false }, 
+                    minimize: { visible: false }, 
+                    maximize: { visible: false } 
+                },
+                height: 594,
+                width: 450,
+                autoOpen: false, 
+                open: function (e) { 
+                    if ($DataNo.val().length > 2 ) { 
+                        datahandler.GetItemInfo(); 
+                    } else { 
+                        alert("No Data Number Entered"); 
+                        $(this).wijdialog("close"); 
+                    }
+                }, 
+                close: function (e) {
+                    var $prodType = $("#MS_ProductType"); 
+                    var $specDesc = $("#MS_ProductDesc"); 
+                    var $ErrorLbl = $("#MS_ErrorLbl");
+
+                    $(this).find(".wijmo-wijinput").each(function() { 
+                        var input = $(this).find("input");
+                    
+                        
+                        switch(input[0].id){
+                            case "MS_ProductValue": 
+                                $("#MS_ProductValue").wijinputnumber("setValue", 0.00, true)
+                                break;
+                            case "MS_Upper_Spec_Value": 
+                                $("#MS_Upper_Spec_Value").wijinputnumber("setValue", 0.00, true)
+                                break;
+                            case "MS_Lower_Spec_Value": 
+                                $("#MS_Lower_Spec_Value").wijinputnumber("setValue", 0.00, true)
+                                break;
+                        }
+                        $ErrorLbl.html("");
+                    });
+
+                    $prodType.css({"border-color": "black", "border-width":"thin"});
+                    $prodType.val("");
+                    $specDesc.css({"border-color": "black", "border-width":"thin"});
+                    $specDesc.val("");
+                }
+            });
+        }, 
+        InitStartDialog: function () { 
+            $("#StartInspectiondialog").wijdialog({
+                buttons: { 
+                    Confirm: function () { 
+                        var GoodCount = new Number($goodcount.val());
+                        var BadCount = new Number($badcount.val());
+                        var total = GoodCount + BadCount;
+                        var AQLDlevel = $('#AQL_Level_Dialog').val();
+                        var AQLDstandard = $('#AQL_Standard_Dialog').val();
+                        var AuditorName = $('#Auditor_Name').val();
+                        AQLValue = AQLDlevel;
+                        // Template.SetCookie("AQLLevel", AQLDlevel, 14);
+                        Template.SetCookie("AQLStandard", AQLDstandard, 14); 
+                        if (AuditorName.toString().trim() != 'New Name') { 
+                            $("#selectNames").prop("disabled", true);
+                            if (total == 0 && OpenOrderFlag == "False") { 
+                                $.when(datahandler.GetInspectionId()).done(function () { 
+                                    if (InspectionJobSummaryIdPage == 0) { 
+                                        datahandler.GetInspectionJobSummaryId(TargetOrderInput.val(), false); 
+                                    }
+                                    $("#ItemNumberLabel").text("Item #: 1");
+                                });
+                                if (InspectionState == 0) { 
+                                    datahandler.SetSampleSize();
+                                }
+                            } 
+
+                        } else { 
+                            togglevalidation("auditdiv")
+                        }
+                        $(this).wijdialog("close"); 
+                    },
+                    Cancel: function () { 
+                        $(this).wijdialog("close"); 
+                    }
+                },
+                captionButtons: { 
+                    pin: { visible: false }, 
+                    refresh: { visible: false }, 
+                    toggle: { visible: false }, 
+                    minimize: { visible: false }, 
+                    maximize: { visible: false } 
+                },
+                height: 294,
+                width: 450,
+                autoOpen: false, 
+                open: function (e) { 
+                    $("#Skip").prop('checked', AutoConfirm);
+                }, 
+                create: function (e) {
+                    $('#Skip').change(function(e) {
+          
+                        var value = e.currentTarget.checked;
+                        AutoConfirm = value;
+                    });
+                }
+            });
+        }
     };
     var controlhandler = {
         $tab_title_input: $('#tab_title'),
@@ -3022,7 +3035,7 @@
                 }
             });
         },
-        GetInspectionJobSummaryId: function (TargetNumberIn, buttonid, buttonvalue, buttonname, IsDefect) { 
+        GetInspectionJobSummaryId: function (TargetNumberIn, IsDefect) { 
             $("#jobIdSpinner").toggle();
             $.ajax({
                 url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput_JobDispatch.ashx',
@@ -3112,52 +3125,57 @@
             //    var Inputvars = JSON.stringify(elementarrayval);
             var JobNumber = ''; 
             var Datanumber = ''; 
+            var AuditorName = $('#Auditor_Name').val();
             if (InspectionTypeState == 'RollNumber') { 
                 JobNumber = $rollnumber.val(); 
             } else { 
                 JobNumber = $workorder.val();
             }
-                $.ajax({
-                    url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
-                    type: 'GET',
-                    data: { method: 'CreateJobSummaryId', args: { jobtype: InspectionTypeState,  AQLStandard: $("#MainContent_aqlstandard").val(), IsDefect: IsDefect, JobNumber: JobNumber, WOQuantity: $LotSize.val(), AQL: AQLValue, Location: $Location.val(), TemplateId: SelectedId, DataNo: $DataNo.val().trim(), CID: selectedCIDnum}},
-                    success: function (data) {
+            if (AuditorName == null || AuditorName.length == 0 || AuditorName.toString().trim() == "New Name" || AuditorName.toString().trim() == "SELECT OPTION") { 
+                togglevalidation("auditdiv"); 
+                return; 
+            }
+            $.ajax({
+                url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
+                type: 'GET',
+                data: { method: 'CreateJobSummaryId', args: { jobtype: InspectionTypeState,  AQLStandard: $("#MainContent_aqlstandard").val(), IsDefect: IsDefect, JobNumber: JobNumber, WOQuantity: $LotSize.val(), AQL: AQLValue, Location: $Location.val(), TemplateId: SelectedId, DataNo: $DataNo.val().trim(), CID: selectedCIDnum, Auditor: AuditorName, CasePack: $CPNumber.val(), WorkRoom: $WorkRoom.val() }},
+                success: function (data) {
 
-                        var returnnum = new Number(data);
+                    var returnnum = new Number(data);
  
-                        if (returnnum != -99) { 
-                            $("#<%=InspectionId.ClientID%>").val(returnnum);
-                            pageBehindInspectionStarted = "true";
-                            $("#AQ_Level").prop('disabled', true);
-                            InspectionJobSummaryIdPage = returnnum;
-                            $("#MainContent_inspectionjobsummaryid_hidden").val(InspectionJobSummaryIdPage);
-                            InspectionStartedVal = true; 
-                            if (IsPhoneSize == true) { 
-                                RenderEngine.ShowActiveInspectionMobile();
-                            }
-                            //if (IsDefect == true) { 
-                            //    datahandler.SubmitDefect(buttonid, buttonvalue, buttonname, returnnum, InspectionId);
-                            //}
+                    if (returnnum != -99) { 
+                        $("#<%=InspectionId.ClientID%>").val(returnnum);
+                        pageBehindInspectionStarted = "true";
+                        $("#AQ_Level").prop('disabled', true);
+                        InspectionJobSummaryIdPage = returnnum;
+                        $("#MainContent_inspectionjobsummaryid_hidden").val(InspectionJobSummaryIdPage);
+                        InspectionStartedVal = true; 
+                        if (IsPhoneSize == true) { 
+                            RenderEngine.ShowActiveInspectionMobile();
                         }
-                    
-                        
-                    
-                        if (data && returnnum !=-99 ) { 
-                        
-                            datahandler.UpdateRejectionCount(InspectionState, InspectionJobSummaryIdPage)
-                            setInterval(
-                            function () { 
-                                datahandler.UpdateRejectionCount(InspectionState, InspectionJobSummaryIdPage) }
-                            , 10000);
-                        }
-                        $("#jobIdSpinner").css('display', 'none');
-                    },
-                    error: function (a, b, c) {
-                        alert(c);
-                        console.log('failed');
-                        $("#jobIdSpinner").css('display', 'none');
+                        //if (IsDefect == true) { 
+                        //    datahandler.SubmitDefect(buttonid, buttonvalue, buttonname, returnnum, InspectionId);
+                        //}
                     }
-                });
+                    
+                        
+                    
+                    if (data && returnnum !=-99 ) { 
+                        
+                        datahandler.UpdateRejectionCount(InspectionState, InspectionJobSummaryIdPage)
+                        setInterval(
+                        function () { 
+                            datahandler.UpdateRejectionCount(InspectionState, InspectionJobSummaryIdPage) }
+                        , 10000);
+                    }
+                    $("#jobIdSpinner").css('display', 'none');
+                },
+                error: function (a, b, c) {
+                    alert(c);
+                    console.log('failed');
+                    $("#jobIdSpinner").css('display', 'none');
+                }
+            });
             //});
         },
         GetOpenTimers: function() { 

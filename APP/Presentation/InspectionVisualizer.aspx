@@ -1,4 +1,4 @@
-﻿<%@ Page Title="APR" Language="VB" MasterPageFile="~/Site_2.master" AutoEventWireup="false" CodeFile="InspectionVisualizer.aspx.vb" Inherits="core.APP_Presentation_InspectionVisualizer" %>
+﻿<%@ Page Title="APR" Language="VB" MasterPageFile="~/APP/MasterPage/Site_2.master" AutoEventWireup="false" CodeFile="InspectionVisualizer.aspx.vb" Inherits="core.APP_Presentation_InspectionVisualizer" %>
 
 <%@ Import Namespace="System.Web.Optimization" %>
 <%--<%@ OutputCache Location="Server" VaryByParam="*" Duration="2000" %>--%>
@@ -8,7 +8,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
     <div style="position:absolute; z-index:1000" id="backdiv">
-        <a href="<%=Session("BaseUri")%>/APR_SiteEntry.aspx" title="Back to MENU" id="menuLnkBack">M</a>
+        <a href="<%=Session("BaseUri")%>/APP/APR_SiteEntry.aspx" title="Back to MENU" id="menuLnkBack">M</a>
     </div>
   
     <div style="position:absolute; left:50px; width:75%; height:150px;">
@@ -23,6 +23,19 @@
             <div class="item"><h4>2</h4></div>
 
         </div>--%>
+    </div>
+    <div style="position:absolute; width: 130px; left: 85%; height:150px;">
+        <div id="actionbuttons" style="width: 110px;
+                margin: 0px;
+                position: relative;
+                float: right;
+                top: 8px;" >
+        <a href="#" style="color: white !important;" class="actionButton">
+            Export
+            <br />
+            Report
+        </a>
+    </div>
     </div>
     <div id="PageFilters">
     <div style="position:absolute; z-index:1000; left: 95.5%;" id="backdiv">
@@ -68,17 +81,7 @@
         </div>
     
         </div>
-    <div id="actionbuttons" style="width: 110px;
-                margin: 0px;
-                position: relative;
-                float: right;
-                left:-90px; top: -94px;" >
-        <a href="#" style="color: white !important;" class="actionButton">
-            Export
-            <br />
-            Report
-        </a>
-    </div>
+    
     <div id="reportOptions" style="left: 50%; display: none; Z-INDEX: 1000;">
         <div id="options">
         <div style="position: absolute; bottom: 3px; right: 3px"><span id="lblReport" style="font-size: 0.8em; font-weight: bold"></span></div>
@@ -188,10 +191,10 @@
 
             </div>
             <div id="GrapBorder" style ="position:absolute; left:20px; top:95px; width:60%; height:80%; border-style:outset;"></div>
-            <div id="Graph1Holder" style ="position:relative; left:20px; top:-15px;">
+            <div id="Graph1Holder" style ="position:relative; left:90px; top:45px;">
                 <div id="linegraph1" style="position:relative; left:-170px; top: -60px; width: 400px;"></div>
             </div>
-            <div id="Graph2Holder" style ="position:relative; left:20px; top:15px;">
+            <div id="Graph2Holder" style ="position:relative; left:20px; top:-25px;">
                 <div id="linegraph2" style="position:relative; left:1px; top: 70px; width: 400px;"></div>
             </div>
             <div id="loading" style="width: 400px; top:160px; height:520px; left:250px; position:absolute; background-color:white; z-index:1000; display:none;">
@@ -807,7 +810,7 @@
                 ithtml.push('<option value="ALL">ALL</option>');
                 $.each(InspectionTypesArray, function (k, value) { 
 
-                    ithtml.push('<option value="' + value.Name + '">' + value.Name + '</option>');
+                    ithtml.push('<option value="' + value.Abreviation + '">' + value.Name + '</option>');
                 });
                 $("#select-AuditType").html(ithtml.join(''));
             }
@@ -1123,15 +1126,16 @@
             //    });
             //});
             $('.actionButton').on('click', function(event) { 
-                if ($('#reportOptions').is(":visible")) { 
-                    $('#reportOptions').slideUp("slow");
-                } else {
-                    $('#reportOptions').slideDown("slow");
-                }
+                $('#MainContent_ReportCallBack').trigger('click');
+                //if ($('#reportOptions').is(":visible")) { 
+                //    $('#reportOptions').slideUp("slow");
+                //} else {
+                //    $('#reportOptions').slideDown("slow");
+                //}
             });
             $('#backdiv').on('click', function(event) { 
             
-                window.location.assign('../../APR_SiteEntry.aspx')
+                window.location.assign('../../APP/APR_SiteEntry.aspx')
             });
             $('#hideFilters').on('click', function(event) { 
                 $('#FilterDiv').animate({height: '-=95px'});
@@ -2396,16 +2400,16 @@
                 var grapwidt = $('#tabs').width() - $('#ovsholder').width() + 150;
 
                 var options = {
-                    title: 'DHU BY DAY AND LOCATION',
-                    subtitle: '(Includes All Types)',
+                    title: 'DHU BY DAY AND LOCATION (Completed Inspections Only)',
+                    subtitle: '(Includes All Types for Completed Inspections)',
                     titleTextStyle: {
                         color:'black',
                         fontName: 'Arial', 
                         fontSize: 26, 
                         bold: true
                     }, 
-                    width: grapwidt,
-                    height: $('#tabs').height() - 5,
+                    width: $("#GrapBorder").width() - 20,
+                    height: $("#GrapBorder").height() - 40,
                     colors: ['#6496c8','#B0B579','#FBB040', '#D31245'], 
                     backgroundColor: 'transparent',
                     titlePosition: 'out'
@@ -2483,7 +2487,8 @@
                 var newarray = [];
                 var data = new google.visualization.DataTable();
                 // Create the data table.
- 
+                console.log('jsondata', jsondata);
+                console.log('titleArr', titleArr);
                 $.each(jsondata, function(index, value) {  
                     var RowObject = new Object(); 
                     var Rowarray = [];
@@ -2504,6 +2509,7 @@
                     newarray.push(Rowarray)
                 });   
                 
+                console.log($("#GrapBorder").width(), $("#GrapBorder").height());
                 data.addColumn('string', 'DefectDesc');
                 $.each(titleArr, function(index, value) { 
                     data.addColumn('number', value.Object3);
@@ -2524,8 +2530,8 @@
                         fontSize: 26, 
                         bold: true
                     }, 
-                    width: $(window).width() * .62,
-                    height: $('#tabs').height()*.8, 
+                    width: $("#GrapBorder").width() - 20,
+                    height: $("#GrapBorder").height() - 40, 
                     bar: { groupWidth: '75%' },
                     isStacked: true,
                     colors: ['#6496c8','#FBB040', '#E0E033','#B0B579', 'green', '#385B38', '#333F6D', '#D42A38', '#CA8B90', '#FB8B94'], 

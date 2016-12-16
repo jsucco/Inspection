@@ -47,7 +47,7 @@ Namespace core
             Try
                 LoadTemplateNames()
                 LoadReportData()
-                InspectionTypesArray = jser.Serialize(II.GetInspectionTypes())
+                InspectionTypesArray = jser.Serialize(GetInspectionTypes())
                 SetDates()
                 SetUserPermissions()
                 LoadDropDowndata()
@@ -62,6 +62,19 @@ Namespace core
 
         End Sub
 
+        Public Function GetInspectionTypes() As List(Of SPCInspection.InspectionTypes)
+
+            Dim sql As String
+            Dim bmap_so As New BMappers(Of SPCInspection.InspectionTypes)
+            Dim listso As New List(Of SPCInspection.InspectionTypes)
+
+            sql = "select distinct it.Name as Name, tn.LineType as Abreviation from TemplateName tn INNER JOIN InspectionTypes it ON tn.LineType = it.Abreviation"
+
+            listso = bmap_so.GetInspectObject(sql)
+
+            Return listso
+        End Function
+
         Private Sub SetDates()
 
             mtdfromdate = New DateTime(Date.Now.Year, Date.Now.Month, 1).ToShortDateString()
@@ -69,75 +82,94 @@ Namespace core
             ytdfromdate = New DateTime(Date.Now.AddMonths(-1).Year, 1, 1, 0, 0, 0).ToShortDateString()
         End Sub
 
-        
+
         Private Sub SetUserPermissions()
-        Dim AprManager As New AprManager_Entities()
+            Using AprManager As New AprManager_Entities()
 
-            Dim UserCookie = GetCookie("APR_UserActivityLog", "PrimaryKey")
+                Dim UserCookie = GetCookie("APR_UserActivityLog", "PrimaryKey")
 
-            Dim listam As UserActivityLog
+                Dim listam As UserActivityLog
 
-            If UserCookie.Count > 0 Then
-                If IsNumeric(UserCookie.Item("APR_UserActivityLog")) Then
-                    UserActivityLogId = Convert.ToInt64(UserCookie.Item("APR_UserActivityLog"))
-                    listam = (From v In AprManager.UserActivityLogs Where v.id = UserActivityLogId).FirstOrDefault()
-                    If Not listam Is Nothing Then
-                        Dim listem = (From v In AprManager.EmailMasters Where v.Address = listam.UserID.ToString() + "@standardtextile.com" Select v).ToArray()
-                        If listem.Count > 0 Then
-                            If listem(0).ADMIN = True Then
-                                ADMINFLAG = "true"
+                If UserCookie.Count > 0 Then
+                    If IsNumeric(UserCookie.Item("APR_UserActivityLog")) Then
+                        UserActivityLogId = Convert.ToInt64(UserCookie.Item("APR_UserActivityLog"))
+                        listam = (From v In AprManager.UserActivityLogs Where v.id = UserActivityLogId).FirstOrDefault()
+                        If Not listam Is Nothing Then
+                            Dim userFormed = FormatUserName(listam.UserID.ToString())
+                            Dim listem = (From v In AprManager.EmailMasters Where v.Address = userFormed + "@standardtextile.com" Select v).ToArray()
+                            If listem.Count > 0 Then
+                                If listem(0).ADMIN = True Then
+                                    ADMINFLAG = "true"
+                                End If
                             End If
                         End If
                     End If
                 End If
-            End If
 
-
+            End Using
 
 
         End Sub
 
-        Protected Sub ReportCallBack_Click(sender As Object, e As System.EventArgs) Handles ReportCallBack.Click
-            Dim TemplateIdString = Request.Form("TemplateId")
+        Private Function FormatUserName(ByVal username As String) As String
 
-            If ActiveReportId.Value <> "none" Then
-                Dim exportedmem As New MemoryStream
-
-                Select Case ActiveReportId.Value
-                    Case "InsTimerReport"
-                        Response.Redirect("http://m.standardtextile.com/dataautomations/launch.aspx?ReportType=B&Database=Inspection")
-                        Exit Sub
-                    Case "InsSummary"
-                        Response.Redirect("http://m.standardtextile.com/dataautomations/launch.aspx?ReportType=B&Database=Inspection")
-                        Exit Sub
-                    Case "InsDefects"
-                        Response.Redirect("http://m.standardtextile.com/dataautomations/launch.aspx?ReportType=B&Database=Inspection")
-                        Exit Sub
-                    Case Else
-                        If reportFilePath Is Nothing Or reportFilePath.Name.Length = 0 Then
-                            Exit Sub
-                        End If
-                End Select
-
-                Response.Clear()
-                Response.ClearContent()
-                Response.ClearHeaders()
-                Response.Cookies.Clear()
-                Response.Cache.SetCacheability(HttpCacheability.Private)
-                Response.CacheControl = "private"
-                Response.ContentEncoding = System.Text.UTF8Encoding.UTF8
-                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                Response.AddHeader("Content-Disposition",
-                                   "attachment; filename=" + reportFilePath.Name)
-                Response.WriteFile(reportFilePath.FullName)
-                Response.Flush()
-                Response.End()
-                If reportFilePath.Exists Then
-                    reportFilePath.Delete()
-                    reportFilePath = Nothing
+            Dim userFormed As String = ""
+            Dim userSplit As String()
+            If IsNothing(username) = False Then
+                userSplit = username.Split("\").ToArray()
+                If userSplit.Count = 1 Then
+                    userFormed = username
+                ElseIf userSplit.Count > 1 Then
+                    userFormed = userSplit(1)
                 End If
-
             End If
+            Return userFormed
+        End Function
+
+        Protected Sub ReportCallBack_Click(sender As Object, e As System.EventArgs) Handles ReportCallBack.Click
+
+            Response.Redirect("http://m.standardtextile.com/dataautomations/launch.aspx?ReportType=A")
+            Exit Sub
+            'Dim TemplateIdString = Request.Form("TemplateId")
+
+            'If ActiveReportId.Value <> "none" Then
+            '    Dim exportedmem As New MemoryStream
+
+            '    Select Case ActiveReportId.Value
+            '        Case "InsTimerReport"
+
+            '            Exit Sub
+            '        Case "InsSummary"
+            '            Response.Redirect("http://m.standardtextile.com/dataautomations/launch.aspx?ReportType=B&Database=Inspection")
+            '            Exit Sub
+            '        Case "InsDefects"
+            '            Response.Redirect("http://m.standardtextile.com/dataautomations/launch.aspx?ReportType=B&Database=Inspection")
+            '            Exit Sub
+            '        Case Else
+            '            If reportFilePath Is Nothing Or reportFilePath.Name.Length = 0 Then
+            '                Exit Sub
+            '            End If
+            '    End Select
+
+            '    Response.Clear()
+            '    Response.ClearContent()
+            '    Response.ClearHeaders()
+            '    Response.Cookies.Clear()
+            '    Response.Cache.SetCacheability(HttpCacheability.Private)
+            '    Response.CacheControl = "private"
+            '    Response.ContentEncoding = System.Text.UTF8Encoding.UTF8
+            '    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            '    Response.AddHeader("Content-Disposition",
+            '                       "attachment; filename=" + reportFilePath.Name)
+            '    Response.WriteFile(reportFilePath.FullName)
+            '    Response.Flush()
+            '    Response.End()
+            '    If reportFilePath.Exists Then
+            '        reportFilePath.Delete()
+            '        reportFilePath = Nothing
+            '    End If
+
+            'End If
 
 
         End Sub

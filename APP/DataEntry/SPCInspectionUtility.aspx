@@ -1,4 +1,4 @@
-﻿<%@ Page Title="APR" Language="VB" MasterPageFile="~/Site_2.master" AutoEventWireup="false" CodeFile="SPCInspectionUtility.aspx.vb" Inherits="core.APP_DataEntry_SPCInspectionUtility" %>
+﻿<%@ Page Title="APR" Language="VB" MasterPageFile="~/APP/MasterPage/Site.master" AutoEventWireup="false" CodeFile="SPCInspectionUtility.aspx.vb" Inherits="core.APP_DataEntry_SPCInspectionUtility" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" Runat="Server">
 </asp:Content>
@@ -1980,7 +1980,7 @@
                         { name: 'Upper_Spec_Value', index: 'Upper_Spec_Value', sortable: false,  editable: true,editrules:{number:true},sorttype:'number',formatter:'number' },
                         { name: 'Lower_Spec_Value', index: 'Lower_Spec_Value', sortable: false,  editable: true,editrules:{number:true},sorttype:'number',formatter:'number' }, 
                         { name: 'GlobalSpec', index: 'GlobalSpec',  editable: true, sorttype:'text', edittype: 'checkbox', editoptions: { value:"1:0" } }, 
-                        { name: 'SpecSource', index: 'SpecSource', sortable: true, sorttype:'text',  editable: false }
+                        { name: 'SpecSource', index: 'SpecSource', sortable: true, sorttype:'text',  editable: true, edittype:'select', editoptions: { value: 'user:standard; Interiors:Interiors' } }
                 ],
                 pager: '#pSpecgrid',
                 caption: "Product Spec Entry",
@@ -1989,7 +1989,7 @@
                 rowNum: 30,
                 viewrecords: true,
                 sortorder: "desc",
-                width: new Number(875),
+                width: new Number($("#SectionRibbon").width() - 20),
                 gridview: true,
                 height: "100%",
                 ondblClickRow: function (id) {

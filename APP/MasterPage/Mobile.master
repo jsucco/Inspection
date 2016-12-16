@@ -27,9 +27,9 @@
             border-width: 3px;
             cursor: pointer;
             color: #696767;
-            position: relative;
-            top: -25px;
-            left: 180px;
+            position: absolute;
+            top: 105px;
+            left: 187px;
         }
     </style>
 </head>
@@ -110,7 +110,7 @@
 
         $(function () {
             $("#MainContent_Image1").on('click', function (e) {
-                window.location.assign("<%=Session("BaseUri")%>" + '/APR_SiteEntry.aspx')
+                window.location.assign("<%=Session("BaseUri")%>" + '/APP/APR_SiteEntry.aspx')
             });
         });
     </script>

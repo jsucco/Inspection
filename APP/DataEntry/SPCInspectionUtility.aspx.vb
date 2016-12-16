@@ -15,7 +15,7 @@ Namespace core
         Public PostedTemplateId As Integer = 0
         Public PostedName As String = "TitleError"
         Public DefectCodeList As String = "[0]"
-        Public HasAuthorization As Boolean = True
+        Public HasAuthorization As Boolean = False
         Public ProductSpecifications As String
         Dim ProductSpecscache As New List(Of SPCInspection.ProductSpecs)
         Dim jser As New JavaScriptSerializer
@@ -60,11 +60,11 @@ Namespace core
                     list_so = bmap_so.GetAprMangObject(sql)
                     If list_so.Count > 0 Then
                         Dim soarray = list_so.ToArray()
-
+                        Dim TicketUserName = FormatUserName(ticket.Name)
                         For Each item In soarray
                             Dim splitar = item.Object1.ToString().Split("@")
                             If splitar.Count > 1 Then
-                                If ticket.Name = splitar(0) Then
+                                If TicketUserName = splitar(0) Then
                                     HasAuthorization = True
                                 End If
                             End If
@@ -79,7 +79,7 @@ Namespace core
             End If
 
             If HasAuthorization = False Then
-                Response.Redirect("~/APR_SiteEntry.aspx")
+                Response.Redirect("~/APP/APR_SiteEntry.aspx")
             Else
                 'If IsNothing(Context.Cache("ProductSpecs")) = False Then
                 '    ProductSpecscache = Context.Cache("ProductSpecs")
@@ -89,6 +89,21 @@ Namespace core
                 'ProductSpecifications = jser.Serialize(ProductSpecscache)
             End If
         End Sub
+
+        Private Function FormatUserName(ByVal username As String) As String
+
+            Dim userFormed As String = ""
+            Dim userSplit As String()
+            If IsNothing(username) = False Then
+                userSplit = username.Split("\").ToArray()
+                If userSplit.Count = 1 Then
+                    userFormed = username
+                ElseIf userSplit.Count > 1 Then
+                    userFormed = userSplit(1)
+                End If
+            End If
+            Return userFormed
+        End Function
 
         Protected Sub TemplateSubmit_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles TemplateSubmit.Click
             If Page.IsPostBack = True Then

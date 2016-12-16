@@ -4,7 +4,7 @@ Imports System.Threading
 Imports core.Environment
 Imports System.Reflection
 Imports System.Net.NetworkInformation
-
+Imports System.DirectoryServices.AccountManagement
 
 Namespace core
 
@@ -15,7 +15,8 @@ Namespace core
 
         Public Property Util As New Utilities
         Public Shared companyname As String
-        Public Username As String
+        Public Shared Username As String
+
         Private Sub Page_PreInit(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Init
 
 
@@ -24,14 +25,12 @@ Namespace core
         End Sub
 
         Private Sub on_load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MainContent.Load
-
-            Dim load As String
-
-            load = Convert.ToString(Me.MainContent.Page.GetType())
-
-            Dim value As New List(Of MenuItem)
+            'Dim load As String
+            'load = Convert.ToString(Me.MainContent.Page.GetType())
+            'Dim value As New List(Of MenuItem)
             Dim path As String
-            Dim CID As New CID
+            Dim sitepaths As String()
+            'Dim CID As New CID
 
             path = HttpContext.Current.Request.Url.AbsolutePath
             Dim fullurl As String = HttpContext.Current.Request.Url.AbsoluteUri
@@ -46,26 +45,20 @@ Namespace core
                     End If
                 End If
             End If
-
+            sitepaths = path.Split(New Char() {"/"c})
             SetSessionVariables()
 
-            'Dim UserParse As Object = Request.UserAgent
-            'If Not Util.DetectDeviceType(UserParse) Then
-            '    Response.Redirect("../../ErrorPage.aspx")
-            'End If
-
-            Dim SessionUsername = Session("username")
-
-            If SessionUsername = "" Or SessionUsername Is Nothing Then
-                If Not Request.Cookies("APRUserName") Is Nothing Then
-                    Dim Usernamestring = Server.HtmlEncode(Request.Cookies("APRUserName")("Username"))
-                    'Username = Usernamestring
-                    Session("UserName") = Usernamestring
-                End If
-            Else
-                Username = SessionUsername
-
+            Dim authCookie = Request.Cookies(FormsAuthentication.FormsCookieName)
+            Dim ticket As FormsAuthenticationTicket
+            If Not authCookie Is Nothing Then
+                ticket = FormsAuthentication.Decrypt(authCookie.Value)
             End If
+
+            If IsNothing(ticket) = True Then
+                SignOut.Text = "Log In"
+            End If
+            'Dim upUser As UserPrincipal = UserPrincipal.FindByIdentity(context)
+
 
 
         End Sub
@@ -99,14 +92,11 @@ Namespace core
             Dim newCookie As New HttpCookie(FormsAuthentication.FormsCookieName, "")
             newCookie.Expires = DateTime.Now.AddYears(-1)
             Response.Cookies.Add(newCookie)
-            If LocationCookie.ContainsKey("APRKeepMeIn") Then
-                Response.Redirect("~\Login.aspx?UC=" + LocationCookie("APRKeepMeIn"))
-            Else
-                Response.Redirect("~\Login.aspx")
-            End If
+            Response.Redirect("~\Login.aspx?UC=" + LocationCookie("APRKeepMeIn"))
+
         End Sub
 
-        Public Function GetCookie(ByVal CookieName As String, ByVal SubKey As String) As Dictionary(Of String, String)
+        Private Function GetCookie(ByVal CookieName As String, ByVal SubKey As String) As Dictionary(Of String, String)
             Dim dictionary As New Dictionary(Of String, String)
 
             If Not HttpContext.Current Is Nothing And Not HttpContext.Current.Handler Is Nothing Then
