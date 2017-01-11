@@ -29,6 +29,124 @@ Public Class SPC_InspectionInput_JobDispatch
         Return returnMessage
     End Function
 
+    Public Function GetNewWeaverShiftId() As String
+        Return "1"
+    End Function
+
+    Public Function StartNewWeaverShift(ByVal shiftId As Integer, ByVal JobSummaryId As Integer, ByVal WeaverInfo As String, ByVal Yards As Integer, ByVal CurrentShiftNumber As Integer) As String
+        Dim response As String = "0"
+
+        Dim weavers As New core.SPCInspection.Weavers
+
+        If shiftId = 0 Then
+            Elmah.ErrorSignal.FromCurrentContext.Raise(New Exception("shiftId cannot be zero"))
+            Return response
+        End If
+
+        If JobSummaryId = 0 Then
+            Elmah.ErrorSignal.FromCurrentContext.Raise(New Exception("JobSummaryId cannot be zero"))
+            Return response
+        End If
+
+        If CurrentShiftNumber = 0 Then
+            Elmah.ErrorSignal.FromCurrentContext.Raise(New Exception("Current Shift cannot be zero."))
+        End If
+
+        EndPreviousShiftAsync(shiftId, Yards)
+
+        If WeaverInfo.Length > 0 Then
+            Try
+                weavers = jser.Deserialize(Of core.SPCInspection.Weavers)(WeaverInfo)
+
+                Dim NewShiftId = CreateNewShift(CurrentShiftNumber)
+
+                CreateWeaverProductionRecordsAsync(weavers, JobSummaryId, NewShiftId)
+
+                response = NewShiftId.ToString()
+
+            Catch ex As Exception
+                Elmah.ErrorSignal.FromCurrentContext.Raise(ex)
+            End Try
+
+        Else
+            Elmah.ErrorSignal.FromCurrentContext.Raise(New Exception("No WeaverInfo sent"))
+        End If
+
+        Return response
+    End Function
+
+    Private Sub CreateWeaverProductionRecordsAsync(ByVal weaverInfo As core.SPCInspection.Weavers, ByVal JobSummaryId As Integer, ByVal ShiftId As Integer)
+        System.Threading.Tasks.Task.Run(Sub() CreateWeaverProductionRecords(weaverInfo, JobSummaryId, ShiftId))
+    End Sub
+
+    Private Sub CreateWeaverProductionRecords(ByVal weaverInfo As core.SPCInspection.Weavers, ByVal JobSummaryId As Integer, ByVal ShiftId As Integer)
+
+        If weaverInfo Is Nothing Then
+            Return
+        End If
+        Using _db As New Inspection_Entities
+            Dim weaver1 As New WeaverProduction
+
+            If weaverInfo.Weaver1ID > 0 Then
+                weaver1.JobSummaryId = JobSummaryId
+                weaver1.ShiftId = ShiftId
+                weaver1.EmployeeNoId = weaverInfo.Weaver1ID
+
+                _db.WeaverProductions.Add(weaver1)
+            End If
+
+
+            If weaverInfo.Weaver2ID > 0 Then
+                Dim weaver2 As New WeaverProduction
+
+                weaver2.JobSummaryId = JobSummaryId
+                weaver2.ShiftId = ShiftId
+                weaver2.EmployeeNoId = weaverInfo.Weaver2ID
+
+                _db.WeaverProductions.Add(weaver2)
+            End If
+
+            _db.SaveChanges()
+        End Using
+    End Sub
+
+    Private Function CreateNewShift(ByVal shiftNumber As Integer) As Integer
+        Dim shiftId As Integer = 0
+
+        Using _db As New Inspection_Entities
+            Dim shift As New WeaverShift
+
+            shift.Start = DateTime.Now
+            shift.Shift = shiftNumber + 1
+            _db.WeaverShifts.Add(shift)
+            _db.SaveChanges()
+
+            shiftId = shift.Id
+        End Using
+
+        Return shiftId
+    End Function
+
+    Private Sub EndPreviousShiftAsync(ByVal shiftId As Integer, Yards As Integer)
+        System.Threading.Tasks.Task.Run(Sub() EndPreviousShift(shiftId, Yards))
+    End Sub
+
+    Public Sub EndPreviousShift(ByVal shiftId As Integer, ByVal Yards As Integer)
+
+        Using _db As New Inspection_Entities
+            Dim productionRecs = (From x In _db.WeaverProductions Where x.ShiftId = shiftId Select x).ToList()
+
+            For Each shift In productionRecs
+                shift.Yards = Yards
+            Next
+
+            Dim lastShift = (From x In _db.WeaverShifts Where x.Id = shiftId Select x).FirstOrDefault()
+
+            lastShift.Finish = DateTime.Now
+
+            _db.SaveChanges()
+        End Using
+    End Sub
     Private Sub loadQueWithJobs(TemplateId As Integer)
         Using _db As New Inspection_Entities
             Dim Summaries As New List(Of dispatchJob)

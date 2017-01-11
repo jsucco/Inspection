@@ -109,7 +109,7 @@ Namespace core
                     jsonData.page = objdm.FlagCnt
                     jsonData.userdata = jser.Serialize(GetFilterColumnNames(listdm))
                     jsonData.records = listdm.Count
-                    jsonData.rows = (From v In listret Select v Order By v.Inspection_Started Descending).ToList()
+                    jsonData.rows = (From v In listret Select v Order By v.id Descending).ToList()
                 End If
             End If
             Dim teststring As String = jser.Serialize(jsonData)
@@ -132,7 +132,7 @@ Namespace core
                     Case "gs_Specgrid_DataNo"
                         listijs = (From v In listijs Where v.DataNo = item.value Select v).ToList()
                     Case "pf_AuditType"
-                        listijs = (From v In listijs Where v.LineType = item.value Select v).ToList()
+                        listijs = (From v In listijs Where v.LineTypeVariable = item.value Select v).ToList()
                     Case "pf_DataNumber"
                         listijs = (From v In listijs Where v.DataNo = item.value Select v).ToList()
                 End Select

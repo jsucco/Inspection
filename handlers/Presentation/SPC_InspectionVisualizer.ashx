@@ -36,17 +36,13 @@ Namespace core
             Dim bampts As New BMappers(Of SingleObject)
             Dim AuditTypeString As String = ""
             Dim inputelementarray = jser.Deserialize(Of List(Of ActiveLocations))(LocArray)
-            'Dim dbAuditType As String = "ALL"
+            _todate = _todate.AddHours(23)
+            _todate = _todate.AddMinutes(58)
 
-            'If AuditType.ToUpper() = "INLINE" Then
-            '    dbAuditType = "IL"
-            'ElseIf AuditType.ToUpper() = "FINAL" Then
-            '    dbAuditType = "EOL"
-            'End If
             listds = Inspect.GetStackedDefectLineType2(_formdate, _todate, DataNo, AuditType.ToUpper(), inputelementarray)
 
             If AuditType <> "ALL" Then
-                AuditTypeString = " WHERE Name = '" & AuditType & "' "
+                AuditTypeString = " WHERE Abreviation = '" & AuditType & "' "
             End If
 
             listts = bampts.GetInspectObject("select Name as Object1, Abreviation as Object3 FROM InspectionTypes " & AuditTypeString & " order by id asc")
@@ -117,6 +113,8 @@ Namespace core
             Dim _formdate As DateTime = DateTime.Parse(fromdate)
             Dim LocationLineChartCache As New List(Of SPCInspection.LocationLineChart)
             Dim inputelementarray = jser.Deserialize(Of List(Of ActiveLocations))(LocArray)
+            _todate = _todate.AddHours(23)
+            _todate = _todate.AddMinutes(58)
 
             LocationLineChartCache = Inspect.GetDHUByLocation(_todate, _formdate, DataNo, AuditType.ToUpper(), inputelementarray)
 
@@ -174,11 +172,13 @@ Namespace core
                 filter1sql = " dm.DataNo = '" & DataNo & "' AND "
             End If
             If AuditType <> "ALL" Then
-                filter2sql = " it.Name = '" & AuditType & "' AND "
+                filter2sql = " tn.LineType = '" & AuditType & "' AND "
             End If
 
+            todate = todate.AddDays(1)
+
             sql = "SELECT  distinct lm.Abreviation as Object1, COUNT(dm.DefectID) as Object3 FROM AprManager.dbo.LocationMaster lm " & vbCrLf &
-                    "INNER JOIN dbo.DefectMaster dm ON dm.Location = SUBSTRING(lm.CID,4,3) INNER JOIN dbo.TemplateName tn ON dm.TemplateId = tn.TemplateId INNER JOIN dbo.InspectionTypes it ON it.id = tn.LineTypeId" & vbCrLf &
+                    "INNER JOIN dbo.DefectMaster dm ON dm.Location = SUBSTRING(lm.CID,4,3) INNER JOIN dbo.TemplateName tn ON dm.TemplateId = tn.TemplateId" & vbCrLf &
                     "WHERE dm.DefectTime > = '" & fromdate.ToString("yyyy-MM-dd") & "' and dm.DefectTime <= '" & todate.ToString("yyyy-MM-dd") & "' and " & filter1sql & filter2sql & Inspect.GetLocationMasterFilter(LocArray) & " lm.InspectionResults = 1" & vbCrLf &
                     "GROUP BY lm.Abreviation, SUBSTRING(lm.CID,4,3)" & vbCrLf &
                     "ORDER BY Object3 desc"
@@ -218,7 +218,7 @@ Namespace core
             Dim jser As New JavaScriptSerializer
             jser.MaxJsonLength = Int32.MaxValue
             Dim fromdatedt As DateTime = DateTime.Parse(fromdate)
-            Dim todatedt As DateTime = DateTime.Parse(todate)
+            Dim todatedt As DateTime = DateTime.Parse(todate).AddDays(1)
             Dim FilterList As New List(Of ActiveFilterObject)
             Dim LocationList As New List(Of ActiveLocations)
             Dim dmobj As New List(Of SPCInspection.DefectImageDisplay_)
@@ -244,6 +244,7 @@ Namespace core
                     If Not LastCacheDefectID Is Nothing Then
                         If LastCacheDefectID.Length > 0 Then
                             Dim LastDefectId As Integer = Convert.ToInt64(LastCacheDefectID(0))
+
                             Dim cntrecs = (From v In _db.DefectMasters Where v.DefectID > LastDefectId And v.DefectTime <= todatedt And Not v.DefectImage Is Nothing Select v.DefectID).Count()
                             If cntrecs Then
                                 Dim dmmiss = Inspect.GetDefectImageDisplay(fromdatedt, todatedt, LastDefectId)

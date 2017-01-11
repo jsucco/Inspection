@@ -10,6 +10,7 @@ Imports System.Globalization
 Imports System.Data.Entity
 Imports System.Object
 Imports System.Data.Objects
+Imports System.Threading
 Imports System.Threading.Tasks
 
 
@@ -28,11 +29,10 @@ Namespace core
         Dim jser As New JavaScriptSerializer()
         Dim dictionary As New Dictionary(Of String, String)
         Dim RollNumber As String = ""
-        Dim Inspector As String = ""
         Dim ItemNumber As String = ""
         Dim LoomNumber As Integer = 0
 
-        Public Function InsertDefect(ByVal id As String, ByVal text As String, ByVal JsonString As String, ByVal ButtonTemplateId As String, ByVal InspectionJobSummaryId As Integer, ByVal InspectionId As Integer) As String
+        Public Function InsertDefect(ByVal id As String, ByVal text As String, ByVal JsonString As String, ByVal ButtonTemplateId As String, ByVal InspectionJobSummaryId As Integer, ByVal InspectionId As Integer, ByVal WeaverShiftIdVal As Integer) As String
 
             Dim DefectArray As New List(Of SPCInspection.DefectMaster)()
 
@@ -51,7 +51,7 @@ Namespace core
             Dim bmapis As New BMappers(Of SPCInspection.InspectionJobSummary)
             Dim bmapso As New BMappers(Of SingleObject)
             Dim jsobj As New SPCInspection.InspectionJobSummary
-
+            Dim EmployeeNo As String = ""
             Try
                 inputelementarray = jser.Deserialize(Of List(Of InputArray))(JsonString)
             Catch ex As Exception
@@ -95,12 +95,15 @@ Namespace core
                         Case "WorkOrder"
                             TargetNumber = dictionary.Item("MainContent_WorkOrder")
                             TargetState = "WorkOrder"
+                            EmployeeNo = Convert.ToString(dictionary.Item("Auditor_Name"))
                         Case "WORKORDER"
                             TargetNumber = dictionary.Item("MainContent_WorkOrder")
                             TargetState = "WorkOrder"
+                            EmployeeNo = Convert.ToString(dictionary.Item("Auditor_Name"))
                         Case "RollNumber"
                             TargetNumber = RollNumber
                             TargetState = "RollNumber"
+                            EmployeeNo = Convert.ToString(dictionary.Item("MainContent_Inspector"))
                         Case "ItemNumber"
                             TargetNumber = ItemNumber
                             TargetState = "ItemNumber"
@@ -113,7 +116,7 @@ Namespace core
                     '    InspectionId = CType(dictionary.Item("MainContent_InspectionId").Split(".")(1), Integer)
                     'End If
 
-                    DefectArray.Add(New SPCInspection.DefectMaster With {.DefectTime = Convert.ToDateTime(Now), .MergeDate = Convert.ToDateTime(Now), .DefectDesc = text, .POnumber = Convert.ToString(dictionary.Item("MainContent_CPNumber")), .DataNo = Convert.ToString(dictionary.Item("MainContent_DataNumber")), .EmployeeNo = Convert.ToString(dictionary.Item("Auditor_Name")), .Product = Convert.ToString(dictionary.Item("Product")), .DefectClass = DefectType, .AQL = Convert.ToString(dictionary.Item("AQ_Level")), .ThisPieceNo = Convert.ToString(CType(dictionary.Item("MainContent_Good"), Long) + CType(dictionary.Item("MainContent_Bad_Local"), Long)), .TotalLotPieces = Convert.ToString(dictionary.Item("WOQuantity")), .SampleSize = Convert.ToString(dictionary.Item("MainContent_SampleSize")), .Tablet = "Browser", .WorkOrder = Convert.ToString(dictionary.Item("MainContent_WorkOrder")), .LotNo = Convert.ToString(dictionary.Item("MainContent_CartonNumber")), .Location = Convert.ToString(dictionary.Item("MainContent_Location")), .DataType = Convert.ToString("Defect"), .Dimensions = Convert.ToString(dictionary.Item("Dimensions")), .Comment = Convert.ToString(dictionary.Item("Comment")), .TemplateId = Convert.ToInt64(dictionary.Item("TemplateId")), .InspectionId = InspectionId, .RollNumber = RollNumber, .LoomNumber = LoomNumber, .ButtonTemplateId = Convert.ToInt64(ButtonTemplateId), .Inspector = Inspector, .ItemNumber = ItemNumber, .InspectionState = Convert.ToString(dictionary.Item("MainContent_InspectionState")), .WorkRoom = Convert.ToString(dictionary.Item("MainContent_workroom")), .RejectLimiter = Convert.ToInt64(dictionary.Item("MainContent_RE")), .InspectionJobSummaryId = InspectionJobSummaryIdret})
+                    DefectArray.Add(New SPCInspection.DefectMaster With {.DefectTime = Convert.ToDateTime(Now), .MergeDate = Convert.ToDateTime(Now), .DefectDesc = text, .POnumber = Convert.ToString(dictionary.Item("MainContent_CPNumber")), .DataNo = Convert.ToString(dictionary.Item("MainContent_DataNumber")), .EmployeeNo = EmployeeNo, .Product = Convert.ToString(dictionary.Item("Product")), .DefectClass = DefectType, .AQL = Convert.ToString(dictionary.Item("AQ_Level")), .ThisPieceNo = Convert.ToString(CType(dictionary.Item("MainContent_Good"), Long) + CType(dictionary.Item("MainContent_Bad_Local"), Long)), .TotalLotPieces = Convert.ToString(dictionary.Item("WOQuantity")), .SampleSize = Convert.ToString(dictionary.Item("MainContent_SampleSize")), .Tablet = "Browser", .WorkOrder = Convert.ToString(dictionary.Item("MainContent_WorkOrder")), .LotNo = Convert.ToString(dictionary.Item("MainContent_CartonNumber")), .Location = Convert.ToString(dictionary.Item("MainContent_Location")), .DataType = Convert.ToString("Defect"), .Dimensions = Convert.ToString(dictionary.Item("Dimensions")), .Comment = Convert.ToString(dictionary.Item("Comment")), .TemplateId = Convert.ToInt64(dictionary.Item("TemplateId")), .InspectionId = InspectionId, .RollNumber = RollNumber, .LoomNumber = LoomNumber, .ButtonTemplateId = Convert.ToInt64(ButtonTemplateId), .Inspector = dictionary.Item("MainContent_Inspector"), .ItemNumber = ItemNumber, .InspectionState = Convert.ToString(dictionary.Item("MainContent_InspectionState")), .WorkRoom = Convert.ToString(dictionary.Item("MainContent_workroom")), .RejectLimiter = Convert.ToInt64(dictionary.Item("MainContent_RE")), .InspectionJobSummaryId = InspectionJobSummaryIdret, .WeaverShiftId = WeaverShiftIdVal})
 
 
                 Catch ex As Exception
@@ -371,12 +374,12 @@ Namespace core
                 For Each item In listspcret
                     listis.Add(item)
                 Next
-                listis.AddRange(LoadClosedInline(PassCID))
+                'listis.AddRange(LoadClosedInline(PassCID))
                 listis.Add(New SPCInspection.InspectionJobSummary With {.id = 1000, .JobNumber = "SELECT OPTION"})
                 listret = (From x In listis Select x Order By x.id Descending).ToList()
             Else
                 listspcret = LoadOpenSPCMachine(PassCID)
-                listis.AddRange(LoadClosedInline(PassCID))
+                'listis.AddRange(LoadClosedInline(PassCID))
                 For Each item In listspcret
                     listis.Add(item)
                 Next
@@ -393,7 +396,7 @@ Namespace core
             Dim CutOff = DateTime.Now.AddDays(-7)
             Using _db As New Inspection_Entities
                 Dim closed = (From x In _db.InspectionJobSummaries Join t In _db.TemplateNames On x.TemplateId Equals t.TemplateId Where x.Inspection_Started >= CutOff And Not x.Technical_PassFail = Nothing And t.LineType.ToUpper() = "IL" And x.CID = CID).ToList()
-                closedInline = (From x In closed Select New SPCInspection.InspectionJobSummary With {.id = x.x.id, .JobNumber = x.x.JobNumber, .ItemFailCount = x.x.ItemFailCount, .TemplateId = x.x.TemplateId, .AQL_Level = x.x.AQL_Level, .Standard = x.x.Standard, .SampleSize = x.x.SampleSize, .RejectLimiter = x.x.RejectLimiter, .Inspection_StartedString = x.x.Inspection_Started.ToString()}).ToList()
+                closedInline = (From x In closed Select New SPCInspection.InspectionJobSummary With {.id = x.x.id, .JobNumber = x.x.JobNumber, .ItemFailCount = x.x.ItemFailCount, .TemplateId = x.x.TemplateId, .Name = x.t.Name, .AQL_Level = x.x.AQL_Level, .Standard = x.x.Standard, .SampleSize = x.x.SampleSize, .RejectLimiter = x.x.RejectLimiter, .Inspection_StartedString = x.x.Inspection_Started.ToString()}).ToList()
             End Using
 
             Return closedInline
@@ -503,53 +506,30 @@ Namespace core
 
             Return retstring
         End Function
-        Public Function CreateJobSummaryId(ByVal jobtype As String, ByVal AQLStandard As String, ByVal IsDefect As Boolean, ByVal JobNumber As String, ByVal WOQuantity As String, ByVal AQL As String, ByVal Location As String, ByVal TemplateId As Integer, ByVal DataNo As String, ByVal CID As String) As Integer
+        Public Function CreateJobSummaryId(ByVal jobtype As String, ByVal AQLStandard As String, ByVal IsDefect As Boolean, ByVal JobNumber As String, ByVal WOQuantity As String, ByVal AQL As String, ByVal Location As String, ByVal TemplateId As Integer, ByVal DataNo As String, ByVal CID As String, ByVal Auditor As String, ByVal CasePack As String, ByVal WorkRoom As String, ByVal WeaverNamesString As String) As String
             Dim jsobj As New SPCInspection.InspectionJobSummary
             'Dim inputelementarray = jser.Deserialize(Of List(Of InputArray))(JsonString)
-            Dim InspectionJobSummaryIdret As Integer = -99
             'Dim dictionary As New Dictionary(Of String, String)
             Dim listiv As New List(Of SPCInspection.InspectionVaribles)
             Dim as400 As New AS400DAO
-            'For Each element As InputArray In inputelementarray
-            '    Dim valuestring = Convert.ToString(element)
-            '    If Not String.IsNullOrEmpty(valuestring) Then
-            '        dictionary.Add(element.key, element.value)
-            '    Else
-            '        dictionary.Add(element.key, Nothing)
-            '    End If
-            'Next
+            Dim JobObj As New SPCInspection.StartJobInfo
 
             jsobj.JobType = jobtype.Trim
             jsobj.DataNo = DataNo
             jsobj.JobNumber = JobNumber
             jsobj.WOQuantity = CType(WOQuantity, Int32)
             jsobj.Standard = AQLStandard
-
-
+            jsobj.EmployeeNo = Auditor
             jsobj.UnitCost = 0 ' DA.GetLocalUnitCost(DataNo, CID)
             jsobj.UnitDesc = as400.Getas400UnitDesc(DataNo)
             jsobj.TemplateId = TemplateId
-
-            'Try
-            '    Using _db As New Inspection_Entities
-
-            '        Dim prpval = _db.SP_AS400_GETPRPCode_Ent(jsobj.DataNo).FirstOrDefault()
-
-            '        jsobj.PRP_Code = Convert.ToString(prpval)
-            '        If jsobj.PRP_Code Is Nothing Then
-            '            jsobj.PRP_Code = ""
-            '        End If
-            '    End Using
-            'Catch ex As Exception
-            '    Elmah.ErrorSignal.FromCurrentContext.Raise(ex)
-            '    jsobj.PRP_Code = ""
-            'End Try
             jsobj.PRP_Code = ""
             If Len(jsobj.JobNumber) > 2 And jsobj.WOQuantity > 0 And TemplateId > 0 Then
 
                 If jsobj.JobType = "WorkOrder" Then
                     jsobj.AQL_Level = CType(AQL, Decimal)
-
+                    jsobj.CasePack = CasePack
+                    jsobj.WorkRoom = WorkRoom
                     Try
 
                         If jsobj.UnitCost = 0 Then
@@ -608,6 +588,7 @@ Namespace core
                     jsobj.SampleSize = jsobj.WOQuantity
                     jsobj.ItemPassCount = -1
                     jsobj.UnitCost = 0
+
                 End If
 
 
@@ -621,12 +602,60 @@ Namespace core
                 jsobj.WorkOrderPieces = jsobj.WOQuantity
                 jsobj.CID = Location
 
-                InspectionJobSummaryIdret = DA.InsertJobSummaryRecord(jsobj)
+                JobObj.JobSummaryId = DA.InsertJobSummaryRecord(jsobj)
 
+                If jsobj.JobType <> "WorkOrder" Then
+                    JobObj.WeaverShiftId = RecordWeaverProduction(WeaverNamesString, JobObj.JobSummaryId)
+
+                End If
 
             End If
-            Return InspectionJobSummaryIdret
+            Return jser.Serialize(JobObj)
 
+        End Function
+
+        Public Function RecordWeaverProduction(ByVal WeaverString As String, ByVal JobSummaryId As Integer) As Integer
+            Dim ShiftId As Integer = 0
+
+            If WeaverString.Length > 0 Then
+                Dim weaverObj = jser.Deserialize(Of SPCInspection.Weavers)(WeaverString)
+                If IsNothing(weaverObj) = False Then
+                    Try
+                        Using _db As New Inspection_Entities
+                            Dim shiftRec = New WeaverShift()
+                            shiftRec.Shift = 1
+                            shiftRec.Start = DateTime.Now
+
+                            _db.WeaverShifts.Add(shiftRec)
+
+                            _db.SaveChanges()
+
+                            Dim obj1 As WeaverProduction = New WeaverProduction()
+                            Dim obj2 As WeaverProduction = New WeaverProduction()
+
+                            obj1.JobSummaryId = JobSummaryId
+                            obj2.JobSummaryId = JobSummaryId
+                            obj1.EmployeeNoId = weaverObj.Weaver1ID
+                            obj2.EmployeeNoId = weaverObj.Weaver2ID
+
+                            obj1.ShiftId = shiftRec.Id
+                            obj2.ShiftId = shiftRec.Id
+                            ShiftId = shiftRec.Id
+                            If obj1.EmployeeNoId > 0 Then
+                                _db.WeaverProductions.Add(obj1)
+                            End If
+                            If obj2.EmployeeNoId > 0 Then
+                                _db.WeaverProductions.Add(obj2)
+                            End If
+
+                            _db.SaveChanges()
+                        End Using
+                    Catch ex As Exception
+                        Elmah.ErrorSignal.FromCurrentContext.Raise(ex)
+                    End Try
+                End If
+            End If
+            Return ShiftId
         End Function
 
         Public Function InspectionEnd(ByVal JsonString As String) As Boolean
@@ -761,6 +790,22 @@ Namespace core
 
         End Function
 
+        Public Function GetWeaverNames(ByVal LocationId As String) As String
+            Dim WeaverNames As String = ""
+            Try
+                Using _db As New Inspection_Entities
+                    _db.Configuration.ProxyCreationEnabled = False
+                    Dim empList = (From x In _db.EmployeeNoes Where x.Type.ToUpper() = "WEAVER" Or x.Type = "ALL" Select x)
+                    Dim newEmps = (From x In empList Where x.CID = LocationId Or x.CID = "000999").ToList()
+                    WeaverNames = jser.Serialize(newEmps)
+                End Using
+            Catch ex As Exception
+                Dim message = ex.Message
+            End Try
+
+            Return WeaverNames
+        End Function
+
         Public Function GetRejectionCount(ByVal InspectionState As String, ByVal TargetOrder As String, ByVal InspectionJobSummaryId As Integer) As Integer
             Dim FilterField As String = ""
             Dim bmap_rc As New BMappers(Of core.SingleObject)
@@ -805,8 +850,6 @@ Namespace core
                             If IsNumeric(element.value) = True Then
                                 LoomNumber = element.value
                             End If
-                        Case "MainContent_Inspector"
-                            Inspector = element.value.ToString().ToUpper()
                         Case "MainContent_ItemNumber"
                             ItemNumber = element.value
                         Case Else

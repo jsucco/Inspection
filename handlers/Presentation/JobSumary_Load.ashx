@@ -148,7 +148,7 @@ Namespace core
                     Case "gs_ijsgrid_JobNumber"
                         listin = (From v In listin Where v.JobNumber = qvalue Select v).ToList()
                     Case "pf_AuditType"
-                        listin = (From v In listin Where v.LineType = qvalue Select v).ToList()
+                        listin = (From v In listin Where v.LineTypeVariable = qvalue Select v).ToList()
                     Case "gs_ijsgrid_ijsid"
                         listin = (From v In listin Where v.ijsid = qvalue Select v).ToList()
                     Case "gs_ijsgrid_UnitDesc"
@@ -182,7 +182,7 @@ Namespace core
                     Case "gs_ijsgrid_JobNumber"
                         listijs = (From v In listijs Where v.JobNumber = item.value Select v).ToList()
                     Case "pf_AuditType"
-                        listijs = (From v In listijs Where v.LineType = item.value Select v).ToList()
+                        listijs = (From v In listijs Where v.LineTypeVariable = item.value Select v).ToList()
                     Case "gs_ijsgrid_ijsid"
                         listijs = (From v In listijs Where v.ijsid = item.value Select v).ToList()
                     Case "gs_ijsgrid_UnitDesc"

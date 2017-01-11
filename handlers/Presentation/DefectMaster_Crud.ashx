@@ -22,12 +22,12 @@ Namespace core
 
     Public Class DefectMaster_Crud : Implements IHttpHandler, IRequiresSessionState
 
-        Private _db As Inspection_TestEntities
+        Private _db As Inspection_Entities
         Private InspectInput As New InspectionInputDAO
         Private _Manager As AprManager_Entities
 
         Public Sub New()
-            _db = New Inspection_TestEntities()
+            _db = New Inspection_Entities()
             _Manager = New AprManager_Entities()
 
         End Sub
