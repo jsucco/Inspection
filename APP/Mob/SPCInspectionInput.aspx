@@ -77,20 +77,26 @@
                         </div>
                     <div id="RollConfirmation">
                         <div id="RollInfoDiv">
-                            <input id="closeout3" type="button" class="export closebox" value="X" style="position:relative; float:right;TOP: 5px; width:30px;  height:30px;" />
+                            <input id="closeout5" type="button" class="export closebox" value="X" style="position:relative; float:right;TOP: 5px; width:30px;  height:30px;" />
                             <ASP:LABEL id="lblRollConfirmation" style="Z-INDEX: 104; POSITION: relative; float:right;left:-15px; TOP: 5px"
 					        runat="server" font-bold="True" Font-Size="Large">JOB CONFIRMATION</ASP:LABEL>
-                            
+                             <div id = "EmailAlertFlagRoll" style="position:absolute; top:-5px; left: 5px;">
+                                                <input id="AddEmailFlagRoll" type="checkbox" class=chkbox runat=server />Alert Email</div>
                                 <ASP:LABEL id="lblRollNumber" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: 40px"
 					        runat="server" Font-Size="medium">RollNumber:</ASP:LABEL>
                                 <label id="RollNumberValue" style="font-size:medium; position: absolute; top:42px; left:310px;">0</label>
                                 <ASP:LABEL id="lblRollFailureCount" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: 70px"
 					        runat="server" Font-Size="medium">Job Failure Count:</ASP:LABEL>
                                 <label id="FailRollValue" style="font-size:medium; position: absolute; top:70px; left:310px;">0</label>
-                            <ASP:LABEL id="lblRollTotalCount" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: 145px"
+                            <ASP:LABEL id="lblRollTotalCount" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: 105px"
 					        runat="server" Font-Size="medium">Total Yards Inspected:</ASP:LABEL>
-                            <div id="TotalYardValueDiv" style="position:absolute; top:130px; left:250px;">
+                            <div id="TotalYardValueDiv" style="position:absolute; top:100px; left:250px;">
                                 <input type="text" id="TotalYardValue" value=0 style="width: 157px; height: 57px; position:relative; top: -3px;" />
+                            </div>
+                            <asp:Label ID="lblWeaverShiftYards" style="z-index:104; left:10px; position:absolute; top: 155px"
+                            runat="server" Font-Size="Medium">Weaver Shift Yards:</asp:Label>
+                            <div style="position:absolute; top:150px; left: 250px;">
+                                <input type="text" id="WeaverShiftYards" value=0 style="width:157px; height:57px; position:relative; top:-3px;" />
                             </div>
                             </div>
                         <div id="RollAttachDiv" style="Z-INDEX: 105; LEFT: 0px; POSITION: relative; TOP: 150px">
@@ -98,8 +104,7 @@
                                 <ASP:LABEL id="lblcommentsRoll" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: -14px"
 					                    runat="server" font-bold="True" Font-Size="Small">JOB COMMENTS</ASP:LABEL>
                                 <textarea id="RollMessage" name="RollMessage" style="width:380px;height:55px; position: absolute; left:10px;" runat="server"></textarea>
-                                        <div id = "EmailAlertFlagRoll" style="position:absolute; top:-200px; left: 5px;">
-                                                <input id="AddEmailFlagRoll" type="checkbox" class=chkbox runat=server />Alert Email</div>
+                                       
                                         </div>
                                     </div>
                         <asp:Button ID="ConfirmRoll" runat="server" style="position:absolute; top:265px; left:300px; background:rgb(116,180, 116); color: white; text-align: center; width: 100px;" class="export" text="CONFIRM" />
@@ -113,7 +118,10 @@
     <input type="hidden" id="woquantity_hidden" runat="server"  class="inputelement" value="0" />
     <input type="hidden" id="wopieces_hidden" class="inputelement" runat="server" value="0" />
     <input type="hidden" id="inspectionjobsummaryid_hidden" class="inputelement" runat="server" value="0" />
+    <input type="hidden" id="WeaverShiftId_hidden" class="inputelement" runat="server" value="0" />
     <input type="hidden" id="jobconfirmation_hidden" class="inputelement" runat="server" value="0" />
+    <input type="hidden" id="Weaver_Names_hidden" class="inputelement" runat="server" value="0" />
+    <input type="hidden" id="WeaverShiftYards_hidden" runat="server" value="0" />
     <input id="_AQLevel" type="hidden" runat="server" value="2.5" class="inputelement" />
     <input id="aqlstandard" type="hidden" runat="server" value="regular" class="inputelement" />
     <input id="totalinspecteditems" type="hidden" runat="server" value="0" />
@@ -232,25 +240,23 @@
             <input id="LoadOpenWorkOrder" type="button" value="Open WorkOrders" class="export" style="position:relative;height: 35px; width:97%; left: 10px;"></input>
     </div>
     <div id="InputHolder" style="left: 0px; top: 295px; position: absolute; display: none;">
-        <div id="workdiv" class="inputpad leftsidepanel">
+        <div id="workdiv" class="inputpad leftsidepanel workorder-inspection">
             <label for="WorkOrderL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">WORK ORDER</label>
-            <label for="PullDataL" style="position:relative; top:11px; float:right; color:yellow; font-weight:800; font-size:small; z-index:100; color:white;max-width: 40px; word-wrap: break-word">Pull Data</label>
+            <label for="PullDataL" class="label-tab">Pull Data</label>
 
         </div>
-        <div id="rolldiv" class="inputpad leftsidepanel" style="display: none;">
+        <div id="rolldiv" class="inputpad leftsidepanel roll-inspection" style="display: none;">
             <label for="rollL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">ROLL NUMBER</label>
-            <label for="PullDataL" style="position:relative; top:11px; float:right; color:yellow; font-weight:800; font-size:small; z-index:100; color:white;max-width: 40px; word-wrap: break-word">Pull Data</label>
+            <label for="PullDataL" class="label-tab">Pull Data</label>
 
         </div>
         <div id="itemdiv" class="inputpad leftsidepanel" style="display: none;">
-            <label for="itemL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">ITEM NUMBER</label>
-            
-
+            <label for="itemL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">ITEM NUMBER</label>           
         </div>
-        <div id="workinputholder" style="position:absolute; left:0px; width: 250px" class="leftsidepanel">
+        <div id="workinputholder" style="position:absolute; left:0px; width: 250px" class="leftsidepanel workorder-inspection">
             <input id="WorkOrder" class="inputelement inputbox  leftsideobj" type="text" runat="server"  />
         </div>
-        <div id="rollnumberholder" style="position:absolute; left:0px; width: 250px; display:none;" class="leftsidepanel">
+        <div id="rollnumberholder" style="position:absolute; left:0px; width: 250px; display:none;" class="leftsidepanel roll-inspection">
             <input id="RollNumber" class="inputelement inputbox leftsideobj" type="text" runat="server"  />
         </div>
         <div id="itemnumberholder" style="position:absolute; left:0px; width: 250px; display:none;" class="leftsidepanel">
@@ -262,23 +268,23 @@
             <input id="CartonNumber" class="inputelement inputbox leftsideobj" type="text" runat="server"   />
 
         </div>
-        <div id="workroomdiv" class="inputpad leftsidepanel" style="position:absolute; top: 64px;">
+        <div id="workroomdiv" class="inputpad leftsidepanel workorder-inspection" style="position:absolute; top: 64px;">
             <label for="workroomL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">WORKROOM</label>
             <input id="workroom" class="inputelement inputbox leftsideobj" type="text" runat="server"   />
 
         </div>
-        <div id="loomdiv" class="inputpad leftsidepanel" style="position:absolute; top: 64px; display:none;">
+        <div id="loomdiv" class="inputpad leftsidepanel roll-inspection" style="position:absolute; top: 64px; display:none;">
             <label for="LoomNumberL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">LOOM NUMBER</label>
             <input id="LoomNumber" class="inputelement inputbox leftsideobj" type="text" runat="server"   />
 
         </div>
         
-        <div id="cpdiv" class="inputpad leftsidepanel" style="position:absolute; top: 128px;">
+        <div id="cpdiv" class="inputpad leftsidepanel workorder-inspection" style="position:absolute; top: 128px;">
             <label for="CPNumberL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">CASE PACK</label>
             <input id="CPNumber" class="inputelement inputbox leftsideobj" type="text" runat="server"   />
 
         </div>
-        <div id="inspectordiv" class="inputpad leftsidepanel" style="position:absolute; top: 128px; display:none;">
+        <div id="inspectordiv" class="inputpad leftsidepanel roll-inspection" style="position:absolute; top: 128px; display:none;">
             <label for="InspectorL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">INSPECTOR</label>
             <input id="Inspector" class="inputelement inputbox leftsideobj" type="text" runat="server" value=""  />
 
@@ -290,13 +296,19 @@
 
         </div>
         <div class="inputpad leftsidepanel" id="auditdiv" style="position:absolute; top: 256px;">
-            <label for="AuditorName" id="AuditorNameL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">AUDITOR NAME</label>
+            <label for="AuditorName" id="AuditorNameL" class="workorder-inspection" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">AUDITOR NAME</label>
             <input id="AuditorName" class="inputelement inputbox" type="hidden" runat="server"   />
-            <select id="Auditor_Name" class="inputelement inputbox leftsidedropobj" style="width: 185px;"></select>
+            <select id="Auditor_Name" class="inputelement inputbox leftsidedropobj  workorder-inspection" style="width: 185px;"></select>
+            <label for="Weaver_Names" id="WeaverNamesL" class="roll-inspection" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">WEAVER NAMES</label>
+            <input id="Weaver_Names" class="inputelement inputbox leftsideobj roll-inspection" runat="server" type="text" />
+            <div style="position:relative; top:20%; margin-right:10px;">
+                <label id="AddWeaverL" class="roll-inspection label-tab">Add</label>
+            </div>
+            
         </div>
         <div class="inputpad leftsidepanel" style="position:absolute; top: 320px;">
-            <label for="LocationL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">LOCATION</label>
-            <%--<input id="Location" class="inputelement inputbox" type="text" runat="server"   />--%>
+            <label for="LocationL" style="position:absolute; top:3px; left:10px; font-size:smaller; z-index:100; color:white;">LOCATION</label>
+
             <select id="Location" disabled runat="server" style="width:185px;"    class="inputelement inputbox leftsidedropobj"></select>
         </div>
         <div class="inputpad leftsidepanel" style="position:absolute; top: 385px;" id="LotSizeDiv">
@@ -310,12 +322,10 @@
                 <select id="AQ_Level" style="width:97%; height: 35px; " class="inputelement leftsidedropobj"></select>
                 
             </div>
-        <div id="ImageCapture" style="z-index: 102; left:-9px; position:absolute; top:490px; display:none;">
+        <div id="ImageCapture" style="z-index:102; left:-9px; position:absolute; top:490px; display:none;">
             <span class="fileUpload btn btn-primary">
                 <span class="uploadButton">Add Picture</span>
-                    <form action="" method="post" enctype="multipart/form-data" id="myImageForm">
-                    <%--  <input type="file" class="upload" id="flDoc" name="flDoc" />--%>
-                      <%--<input type="file" name="image" accept="image/*" capture id="flDoc" runat="server">--%>
+                    <form method="post" enctype="multipart/form-data" id="myImageForm">
                       <asp:FileUpload id="FileUploadControl" runat="server" />
                         <asp:Button runat="server" id="UploadButton" text="Upload" OnClientClick="setnavcop(true)"/>
                         <br /><br />
@@ -323,15 +333,11 @@
                     </form>
                      <%-- <input id="ImageSubmit" value="Upload" class="buttontemplate" style="width: 100px; height: 50px; font-size: 15px; margin: 4px 0px 0px; padding: 1px 1px; text-align:center;">--%>
                     <label id="StatusResult" runat="server" style="position:absolute; left:90px;"></label>
-                    <label id="DefectFlag" style="position:relative; top: 20px; float: left;" >[No Selection]</label>
+                    <label id="DefectFlag" style="position:relative; top:20px; float: left;" >[No Selection]</label>
 
                 </span>
         </div>
         
-        
-        
-
-
             <input type="hidden" runat="server" id="DefectID_Value" value ="0" />
         
         <div id="dialog" title="SPC Inspection">
@@ -357,7 +363,7 @@
                 </div>
                 
             </div>
-            <div id = "Chk1" style="position:absolute; top: 150px; left: 5px; padding: 0px;" class=SheetClass1>
+            <div id = "Chk1" style="position:absolute; top: 150px; left:5px; padding: 0px;" class=SheetClass1>
                                             <input id="Skip" name="ChkBx1" type="checkbox" class=chkbox2 />Skip All Confirmations.</div>
         </div>
         <div id="ProductSpecEntrydialog" title="Manual Spec Entry">
@@ -394,11 +400,30 @@
         </div>
        <div id="NewAuditorName" title="Add AuditorName" style="display:none" class="dialogdiv"> 
                     <fieldset class="ui-helper-reset"> 
-                        <label for="tab_title"> 
-                            Auditor Name</label> 
-                        <input id="Name" style="height:30px;"> 
-                            </input>
-                        
+                        <div class="Auditor-addname">
+                            <label id="AuditorLabel" class="Auditor-addname" > 
+                                Auditor Name</label> 
+                            <input id="Name" class="Auditor-addname" style="height:34px !important;"> 
+                        </div>
+                        <div class="Weaver-addname" style="display:none;"> 
+                            <div style="position:relative; height:100px; margin-bottom:20px; display: none;" class="Weaver-addyards"> 
+                                <label id="WeaverYardsLabel" for="input-weaveryards">
+                                previous Weaver Shift Yards: 
+                                </label>
+                                <input type="number" id="weaveryards" name="yards" min="1" style="height:34px !important; margin-left:30px; margin-top:10px;"/>
+                            </div>
+                            <div style="position:relative; height:170px; width:100%;">
+                                <label id="WeaverLabel" class="Weaver-addname Weaver-addname-label" for="select-weavername">
+                                Select New Weaver Name:</label>
+                                <select id="select-weavername" class="select-mobile" ></select>
+                                <div style="position:absolute; height:90px; top:75px; left: 30px;"> 
+                                    <label id="PreConfirmWeaver1Label" class="Weaver-addname-label" style="color:rgba(128,126, 126, 0.84); font-style:italic!important; margin-top:0px; position:absolute;"></label>
+                                    <label id="PreConfirmWeaver2Label" class="Weaver-addname-label" style="color:rgba(128,126, 126, 0.84); font-style:italic!important; margin-top:25px; position:absolute;"></label>
+                                </div>                            
+                            </div>
+                            
+                            
+                        </div>
                     </fieldset> 
                 </div> 
     </div>
@@ -476,6 +501,14 @@
     }.ui-jqgrid-view {
             background-color: #cccccc;
         }
+     .select-mobile {
+        height: 34px !important;
+        margin-left: 30px;
+        margin-top: 10px;
+        position: relative;
+        float: left;
+        top: 10px;
+    }
     </style>
 <script src="../../Scripts/jquery.layout.js" type="text/javascript"></script>
 <script src="../../Scripts/grid.locale-en.js" type="text/javascript"></script>
@@ -500,6 +533,7 @@
         .wijmo-wijinput {
             right:0%;
             position: relative;
+            height: 45px !important;
         }
         .wijmo-wijinput-wrapper {
             margin-right: 50%;
@@ -662,6 +696,32 @@
     .ui-pg-div {
         font-size: medium;
     }
+    .label-tab{
+        position: relative;
+        top: 11px;
+        float: right;
+        font-weight: 800;
+        font-size: small;
+        z-index: 100;
+        color: white;
+        max-width: 40px;
+        word-wrap: break-word;
+        display: block;
+    }
+    .Weaver-addname-label { 
+        width: 200px;
+        margin-right: 0px;
+        top: 10px;
+        position: relative;
+    }
+    .dialog-select { 
+        height: 30px;
+        width: 130px;
+        position: relative;
+        float: right;
+        top: -10px;
+    }
+
 </style>
 <script src="//oss.maxcdn.com/jquery.form/3.50/jquery.form.min.js"></script>
 <%--<script type="text/javascript" src="../../handlers/Utility/cypher.ashx"></script>--%>
@@ -671,7 +731,6 @@
     var TemplateCollection;
     var SpecCollection;
     var tabselect = 0;
-    var TemplateNames;
     var SelectedId;
     var SelectedName;
     var SelectedTab;
@@ -699,6 +758,7 @@
     var $DataNo = $('#MainContent_DataNumber');
     var $aql = $('#MainContent__AQLevel');
     var $loginfrm = $('#loginfrm');
+    var hiddenSection = $('div.hidden');
     var IsMobile;
     var IsSPCMachine; 
     var HasProductSpecs = [];
@@ -722,7 +782,6 @@
     var LastRemoteCount = 0; 
     var InspectionJobSummaryIdPage = 0;
     var OpenOrderFlag = "False";
-    var MachineNames;
     var SelectSPCMachineName = "";
     var lastsel2;
     var InspectionStartedVal = false;
@@ -730,7 +789,6 @@
     var SpecItemCounter = 1;
     var LineType = '<%=LineType%>';
     var SessionID = '<%=SessionId%>';
-    var InspectionTypeSelector = -1;
     var MS_ProductValue = 0;
     var MS_Lower_Spec_Value = 0;
     var MS_Upper_Spec_Value = 0;
@@ -740,23 +798,22 @@
     var IsTableSize = false;
     var InspectionConfirmFlag = '<%=InspectionConfirmFlag%>';
     var InspectionConfirmMessage = '<%=InspectionConfirmMessage%>';
+    var buttonid;
+    var buttonvalue;
+    var buttonname;
     function isOdd(num) { return num % 2; }
     $(function () {
         var screenwidth = screen.width - 200;
         var json = new Array();
-        var buttonid;
-        var buttonvalue;
-        var buttonname;
-        var hiddenSection = $('div.hidden');
+        
+        
         TargetOrderInput = $('#MainContent_WorkOrder');
         var $_aql = $('#MainContent__AQLevel');
         TemplateCollection = <%=TemplateCollection%>
         SpecCollection = <%=ProductSpecCollection%>
         SelectedId = <%=SelectedId%>
-        SelectedName = "<%=SelectedName%>"
-        TemplateNames = <%=TemplateNames%>
+        SelectedName = "<%=SelectedName%>" 
         LocationNames = <%=LocationNames%>
-        MachineNames = <%=MachineNames%>
         LastLocation = '<%=LastLocation%>'
         TemplateTabCount = <%=TemplateTabCount%>
         AQLValue = '<%=AQL%>';
@@ -774,368 +831,36 @@
 
         RenderEngine.SizeChecker();
         eventshandler.UserKeyPress.Init();
+        $(".scrollWrap, .wijmo-wijsuperpanel, .ui-widget, .ui-widget-content, .ui-corner-all").css("height", "60px");
         dialogs.InitProductSpecEntry(); 
         dialogs.InitStartDialog(); 
+        dialogs.InitDefectsEntry(); 
+        dialogs.InitAuditorName(); 
+        controls.InitTemplateDropDown(<%=TemplateNames%>);
+        controls.InitLocationDropDown(<%=LocationNames%>, selectedCIDnum, selectedCID);
+        controls.InitMachineNameDropdowns(<%=MachineNames%>);
+        controls.InitWeaversDropDown(pageData.WeaversList); 
+        controls.InitMenu();
+        controls.InitAqlDropDown(AQLValue);
+        controls.InitAqlStandardDropDown(); 
+        controls.SetAuditFromCookie();
+        controls.InitWOQuantity(); 
+        controls.InitNumbers(); 
+        eventshandler.InitPageEventHandlers();
+        
         if (InspectionConfirmFlag == 'true') { 
             alert(InspectionConfirmMessage);
         }
         
-        $(".scrollWrap, .wijmo-wijsuperpanel, .ui-widget, .ui-widget-content, .ui-corner-all").css("height", "60px");
         if (selectedCID) { datahandler.GetAuditorNames(); }
         
         if (IsSPCMachine == 'true') { 
             setInterval('window.location.reload()', 120000);
         }
-       
-        var NameCookie = Template.GetCookie("AuditorName");
-        if (NameCookie.length > 1) { 
             
-            if (NameCookie != "New Name" && NameCookie.toString().length > 0) {
-                $("#Auditor_Name").val(NameCookie);
-                $("#MainContent_AuditorName").val(NameCookie);
-                $("#Auditor_Name option[value='SELECT OPTION']").remove();
-                //$("#Auditor_Name option[value='New Name']").remove();
-            } else {
-                $('#Auditor_Name').val('SELECT OPTION');
-            }
-        }
-       
-       
-        //}
-        var html = [];
-        var name;
-        for(var i = 0; i < TemplateNames.length; i++){
-            name = TemplateNames[i];
-            html.push('<option value="'+name.id+'">'+name.text+'</option>');
-        }
-        $("#selectNames").html(html.join('')).bind("change", function(){
-           
-            var selectedid = $(this).val();
-            if (SelectedName == "") {
-                NavCop = true;
-            } else { 
-                NavCop = false;
-            }
-            $("#MainContent_Templatename").val($("#selectNames option:selected").text());
-            if (selectedid) {
-                var querystring = "TemplateId="+ selectedid.toString() + "&AQL=" + $aql.val()
-                var hash;
-                $.when( $.ajax({
-                    url: "<%=Session("BaseUri")%>" + '/handlers/Utility/cypher.ashx',
-                    type: 'POST',
-                    data: {"querystring": querystring},
-                    success: function (data) {
-                        
-                        hash = data;
-                    },
-                    error: function (a, b, c) {
-
-                    }
-                }) ).done(function ( v1) {
-              
-                    window.location.assign("<%=Session("BaseUri")%>" + "/APP/Mob/SPCInspectionInput.aspx?" + querystring + "&qtpval=" + hash.toString())
-                });
-            } 
-        })
-        .val(SelectedId);
-        $("#MainContent_Templatename").val($("#selectNames option:selected").text());
-
-        html.length = 0;
-        var name;
-        for(var i = 0; i < LocationNames.length; i++){
-            name = LocationNames[i];
-            html.push('<option value="'+name.CID+'">'+name.text+'</option>');
-        }
-      
-        $("#MainContent_Location").html(html.join('')).bind("change", function(){
-
-            var selectedid = $(this).val();
-
-            
-            $("#MainContent_LocationSelected_Hidden").val(selectedCID);
-        });
-        
-        $("#MainContent_Location").val(selectedCIDnum);
-        $('#MainContent_SampleSizeHidden').val($('#MainContent_SampleSize').val())
-        $("#MainContent_LocationSelected_Hidden").val($("#MainContent_Location").val());
-
-        html.length = 0 
-        var machiename;
-        if (machiename != null) { 
-            for(var i = 0; i < MachineNames.length; i++) { 
-                machinename = MachineNames[i];
-                html.push('<option value="' + machiename.id + '">' + name.text + '</option>');
-            }
-            $("#MachineNames_pop").html(html.join('')).bind("change", function(){
-
-                var selectedid = $(this).val();
-                var selectedtext = $(this).text();
-
-                Template.SetCookie("InspectionType", 0, 14);
-                if (selectedtext) { 
-                    var querystring = "TemplateId=" + SelectedId.toString() + "&Username=" + $auditorname.val().toString() + "&SPCMachine=" + selectedtext + "&AQL=" + $aql.val() + "&AS400REQ=SPCMachine&LocationId=" + $("#MainContent_Location").val()
-                    window.location.assign("<%=Session("BaseUri")%>" + "/APP/Mob/SPCInspectionInput.aspx?" + querystring)
-                }
-      
-            });
-        }
-        
         controlhandler.RenderProductSpecTable();
-        
-        
-        $("#dialog").wijdialog({
-            buttons: { 
-                Confirm: function () { 
-                    var GoodCount = new Number($goodcount.val());
-                    var BadCount = new Number($badcount.val());
-                    var total = GoodCount + BadCount;
-                    if (InspectionJobSummaryIdPage > 0 ) { 
-                        datahandler.SubmitDefect(buttonid, buttonvalue, buttonname, InspectionJobSummaryIdPage, InspectionId);
-                    } else { 
-                        alert("InspectionId must be greater than zero")
-                    }
-                    $(this).wijdialog("close"); 
-                },
-                Cancel: function () { 
-                    $(this).wijdialog("close"); 
-                }
-            },
-            captionButtons: { 
-                pin: { visible: false }, 
-                refresh: { visible: false }, 
-                toggle: { visible: false }, 
-                minimize: { visible: false }, 
-                maximize: { visible: false } 
-            },
-            height: 244,
-            autoOpen: false, 
-            open: function (e) { 
-                $("#Skip").prop('checked', AutoConfirm);
-            }, 
-            create: function (e) {
-                $('#Skip').change(function(e) {
-          
-                    var value = e.currentTarget.checked;
-                    AutoConfirm = value;
-                });
-            }
-        });
-        var $dialog4 = $('#NewAuditorName').wijdialog({
-            showStatus: false,
-            showControlBox: false,
-            autoOpen: false,
-            modal: true,
-            captionButtons: {
-                pin: { visible: false },
-                refresh: { visible: false },
-                toggle: { visible: false },
-                minimize: { visible: false },
-                maximize: { visible: false }
-            },
-            buttons: {
-                'Add': function () {
-                    var EnteredName = $('#Name').val()
-                
-                    if (EnteredName) {
-                        var x = document.getElementById("Auditor_Name");
-                        var option = document.createElement("option");
-                        option.text = EnteredName;
-                        option.value = EnteredName;
-                        x.add(option);
-                        $('#Auditor_Name').val(EnteredName)
-                    }
-                    $(this).wijdialog('close');
-
-                },
-                'Cancel': function () {
-
-                    $(this).wijdialog('close');
-                }
-            },
-            open: function () {
-                $('#Name').focus();
-                $('#Name').val('');
-
-            },
-            close: function () {
-                //$form.find('input').val("").end();
-
-            }
-        });
-        var WOQCookieVal = Template.GetCookie("WOQuantity")
-   
-        if (WOQuantity == "" || WOQuantity == 0 || WOQuantity == "0" || WOQuantity == null) { 
-            var cookiequantity = new Number(WOQCookieVal)
-            if (cookiequantity > 0) { 
-                WOQuantity = WOQCookieVal
-            }
-        }
-        $("#WOQuantity").wijinputnumber({ 
-            type: 'numeric', 
-            minValue: 0, 
-            maxValue: 10000000, 
-            decimalPlaces: 0, 
-            showSpinner: false,
-            value: new Number(WOQuantity)
-        });
-        if (WOQuantity) {
-            $("#MainContent_woquantity_hidden").val(WOQuantity);
-        }
-        $("#menu").wijmenu({
-            checkable: true,
-            maxHeight: new Number(50),
-            select: function (e, data) {
-                
-                var selectedtext = e.currentTarget.innerText;
-                //GetCypherHash("<%=Session("BaseUri")%>")
-         
-                switch (selectedtext) {
-                    case "INPUT DEFECTS":
-                        window.location.assign("<%=Session("BaseUri")%>" + '/APP/Mob/SPCInspectionInput.aspx');
-                        break;
-                    case "TEMPLATE UTILITY":
-                        window.location.assign("<%=Session("BaseUri")%>" + '/APP/DataEntry/SPCInspectionUtility.aspx');
-                        break;
-                    case "RESULTS":
-                        window.location.assign("<%=Session("BaseUri")%>" + '/APP/Presentation/InspectionVisualizer.aspx');
-                        break;
-                    case "MAIN MENU":
-                        var hash = 'aprtrue';
-                        $.when( $.ajax({
-                            url: "<%=Session("BaseUri")%>" + '/handlers/Utility/cypher.ashx',
-                            type: 'POST',
-                            data: {"querystring": 'aprtrue'},
-                            success: function (data) {
-                           
-                                hash = data;
-                            },
-                            error: function (a, b, c) {
-
-                            }
-                        }) ).done(function ( v1) {
-                            // v1 is undefined
-                            window.location.assign("<%=Session("BaseUri")%>" + '/APP/APR_SiteEntry.aspx?zrt=' + hash);
-                        });
-                        
-                        break;
-                    case "MAINTENANCE":
-                        window.location.assign("<%=Session("BaseUri")%>" + '/APRMaintenance/Default.aspx?CID=' + selectedCID);
-                        break;
-                    case "DASHBOARD":
-                        url = '/APRDashboard/Default.aspx';
-                        window.location.assign("<%=Session("BaseUri")%>" + url);
-                        Destination = "APRFlagboard";
-                        break;
-                }
-            }
-        });
-
-        var aqarray = [{ id: 4, text: 'AQL Level 4.0' },
-                       { id: 1, text: 'AQL Level 1.0' },
-                       { id: 1.5, text: 'AQL Level 1.5' },
-                       { id: 2.5, text: 'AQL Level 2.5' },
-                       { id: 100, text: '100% Inspection'}];
-        var html2 = [];
-        var aqstandardarray = [{ id: 'Reduced', text: 'Reduced' },
-                       { id: 'Regular', text: 'Regular' },
-                       { id: 'Tightened', text: 'Tightened' }];
-        var html3 = [];
-        var level;
-        var level1;
-        for(var i = 0; i < aqarray.length; i++){
-            level = aqarray[i];
-            html2.push('<option value="'+level.id+'">'+level.text+'</option>');
-        }
-        for(var i = 0; i < aqstandardarray.length; i++){
-            level1 = aqstandardarray[i];
-            html3.push('<option value="'+level1.id+'">'+level1.text+'</option>');
-        }
-        $("#AQ_Level").html(html2.join('')).bind("change", function(){
-            $("#AQL_Level_Dialog").val($(this).val());
-            $("#MainContent__AQLevel").val($(this).val());
-            AQLValue = $(this).val();
- 
-        });
-        $( "#MainContent_DataNumber" ).change(function() {
-            if ($DataNo.val().length > 2) { 
-                var mydata = $("#Specgrid").jqGrid('getGridParam','data');
-                if (mydata.length > 0) { 
-                    $("#EnterSpec").val("Specs (" + mydata.length + ")");
-                }
-            }
-        });
- 
-        $("#AQ_Level").val(AQLValue);
-  
-        $("#MainContent__AQLevel").val(AQLValue);
-        $("#AQL_Level_Dialog").html(html2.join('')).bind("change", function(){
-            $("#AQ_Level").val($(this).val());
-            $("#MainContent__AQLevel").val($(this).val());
-            AQLValue = $(this).val();
-             
-        });
-        $("#AQL_Level_Dialog").val(AQLValue);
-        $("#AQL_Standard_Dialog").html(html3.join('')).bind("change", function(){
-
-            $("#MainContent_aqlstandard").val($(this).val());
-        });
-        $("#AQL_Standard_Dialog").val('Regular');
-
-        switch(LineType) { 
-            case 'ROLL':
-                $("#AQdiv").css('display', 'none'); 
-                $("#AQ_Level").val('100');
-                $("#AQL_Level_Dialog").val('100');
-                AQLValue = '100';
-                $("#MainContent__AQLevel").val('100');
-                $("#AQL_Level_Dialog option:selected").attr('disabled', 'disabled');
-                $("#AQ_Level option:selected").attr('disabled', 'disabled');
-                $("#AQL_Standard_Dialog option:selected").attr('disabled', 'true');
-                InspectionTypeSelector = 1;
-                break;
-            case 'IL': 
-                $("#AQ_Level").val('100');
-                $("#AQL_Level_Dialog").val('100');
-                AQLValue = '100';
-                $("#MainContent__AQLevel").val('100');
-                $("#MainContent_aqlstandard").val('Regular');
-                $("#AQL_Standard_Dialog").val('Regular');
-                $("#AQL_Level_Dialog").prop('disabled', true);
-                $("#AQ_Level").prop('disabled', true);
-                $("#AQL_Standard_Dialog").prop('disabled', true);
-                InspectionTypeSelector = 0;
-                if (OpenOrderFlag == "False") { 
-                    //eventshandler.UserKeyPress.GetLastUserInputs();
-                }
-                break;
-            case 'EOL':
-                var NameCookie1 = '2.5' 
-                //Template.GetCookie("AQLLevel");
-                $("#AQL_Level_Dialog").prop('disabled', false);
-                $("#AQ_Level").prop('disabled', false);
-
-                $("#AQL_Standard_Dialog").prop('disabled', false);
-                if (OpenOrderFlag == "False") { 
-                //    eventshandler.UserKeyPress.GetLastUserInputs();
-                    var NameCookie2 = Template.GetCookie("AQLStandard");
-                    if (NameCookie2.length > 1 && NameCookie2 != null) { 
-                        $("#AQL_Standard_Dialog").val(NameCookie2);
-                        $("#MainContent_aqlstandard").val(NameCookie2);
-                    } else { 
-                        $("#MainContent_aqlstandard").val('Regular');
-                        $("#AQL_Standard_Dialog").val('Regular');
-                    }
-                } else {
-                    $("#AQL_Level_Dialog").prop('disabled', true);
-                    $("#AQ_Level").prop('disabled', true);
-                    $("#AQL_Standard_Dialog").prop('disabled', true);
-                }
-                InspectionTypeSelector = 0;
-                break;
-        }
-        
-
-
+        controlhandler.InitInspectionDisplay(LineType); 
+       
         var aqlstring = "AQL Level " + $_aql.val().toString()
         if (SelectedId != 0) {
             $("#TemplateId").select2("data", { id: SelectedId.toString(), text: SelectedName });
@@ -1159,106 +884,6 @@
             scrollable: true
         });
         
-       
-            switch (InspectionTypeSelector) {
-                case 0:
-                    InspectionTypeState = "WorkOrder";
-                    TargetOrderInput = $('#MainContent_WorkOrder');
-                    $("#MainContent_InspectionState").val(InspectionTypeState);
-                    $("#workdiv").css('display', 'block');
-                    $("#cpdiv").css('display', 'block');
-                    $("#inspectordiv").css('display', 'none');
-                    $("#workinputholder").css('display', 'block');
-                    $("#rolldiv").css('display', 'none');
-                    $("#rollnumberholder").css('display', 'none');
-                    $("#workroomdiv").css('display', 'block');
-                    $("#loomdiv").css('display', 'none');
-                    $("#MainContent_CPNumber").prop('disabled', false);
-                    $("#InspectionType").prop('innerText', "WORK ORDER");
-                    $("#WOQuantityL").text("WO QUANTITY");
-                    $("#DataNumberL").prop('innerText', "DATA NUMBER");
-                    $("#AuditorNameL").prop('innerText', "AUDITOR NAME");
-                    $("#InspectionType").css("top", "-7px");
-                    $("#SampleSizeLabel").text("SAMPLE SIZE");
-                    InspectionState = 0;
-                    break;
-                case 1:
-                    InspectionTypeState = "RollNumber";
-                    TargetOrderInput = $('#MainContent_RollNumber');
-                    $("#MainContent_InspectionState").val(InspectionTypeState);
-                    $("#workdiv").css('display', 'none');
-                    $("#cpdiv").css('display', 'none');
-                    $("#inspectordiv").css('display', 'block');
-                    $("#workinputholder").css('display', 'none');
-                    $("#rolldiv").css('display', 'block');
-                    $("#rollnumberholder").css('display', 'block');
-                    $("#workroomdiv").css('display', 'none');
-                    $("#loomdiv").css('display', 'block');
-                    $("#MainContent_CPNumber").prop('disabled', true);
-                    $("#InspectionType").prop('innerText', "ROLL");
-                    $("#WOQuantityL").text("YARDS");
-                    $("#DataNumberL").prop('innerText', "RM #");
-                    $("#AuditorNameL").prop('innerText', "OPERATOR");
-                    $("#InspectionType").css("top", "-1px");
-                    RollYards = new Number($("#WOQuantity").val());
-                    $("#WOQuantity").change(function () {
-                        RollYards = new Number($("#WOQuantity").val());
-                    });
-                    InspectionState = 1;
-                    $("#SampleSizeLabel").text("DHY");
-                    break;
-                //case 2:
-                //    InspectionTypeState = "ItemNumber";
-                //    TargetOrderInput = $('#MainContent_ItemNumber');
-                //    $("#MainContent_InspectionState").val(InspectionTypeState);
-                //    $("#workdiv").css("display", "none");
-                //    $("#cpdiv").css("display", "none");
-                //    $("#inspectordiv").css("display", "block");
-                //    $("#workinputholder").css("display", "none");
-                //    $("#rolldiv").css("display", "none");
-                //    $("#rollnumberholder").css("display", "none");
-                //    $("#cartondiv").css("display", "none");
-                //    $("#MainContent_LoomNumber").prop('disabled', true);
-                //    $("#itemdiv").css("display", "block");
-                //    $("#itemnumberholder").css("display", "block");
-                //    $("#AuditorNameL").prop('innerText', "ORG. INSPECTOR");
-                //    $("#WOQuantityL").text("QTY PER CARTON");
-                //    $("#InspectionType").prop('innerText', "CARTON");
-                //    $("#MainContent_DataNumber").prop('disabled', true);
-                //    $("#SampleSizeLabel").text("SAMPLE SIZE");
-                //    InspectionState = 2;
-                //    break;
-                default:
-                    InspectionTypeState = "WorkOrder";
-                    TargetOrderInput = $('#MainContent_WorkOrder');
-                    $("#MainContent_InspectionState").val(InspectionTypeState);
-                    $("#workdiv").css('display', 'block');
-                    $("#cpdiv").css('display', 'block');
-                    $("#inspectordiv").css('display', 'none');
-                    $("#workinputholder").css('display', 'block');
-                    $("#rolldiv").css('display', 'none');
-                    $("#rollnumberholder").css('display', 'none');
-                    $("#workroom").css('display', 'block');
-                    $("#loomdiv").css('display', 'none');
-                    $("#MainContent_CPNumber").prop('disabled', false);
-                    $("#InspectionType").prop('innerText', "WORK ORDER");
-                    $("#WOQuantityL").text("WO QUANTITY");
-                    $("#DataNumberL").prop('innerText', "DATA NUMBER");
-                    $("#AuditorNameL").prop('innerText', "AUDITOR NAME");
-                    $("#InspectionType").css("top", "-7px");
-                    $("#SampleSizeLabel").text("SAMPLE SIZE");
-                    InspectionState = 0;
-            }
-        
-        $("#MainContent_SpecAdd").click(function (e) {
-            var rowdata = $('#Specgrid').jqGrid('getLocalRow', SpecGridEditId);
-
-            jQuery("#Specgrid").jqGrid('saveRow', SpecGridEditId, null, "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput_SpecSave.ashx', { DefectId: DefectID, InspectionId: InspectionId, TemplateId: SelectedId, TabName: SelectedTab, TabNumber: UserSelectedTabNumber, SpecId: rowdata.SpecId }, null, null);
-        });
-        $("#GlobalSpecsImage").click(function (e) {
-            window.open("http://m.standardtextile.com/PDFSearch/Search.aspx"); 
-        });
-
         $(".ui-tabs-panel").on('click', '.timerbutton', function (e) {
             var buttonid_ = $(this).attr('id');
             var buttonvalue_ = $(this).text();
@@ -1360,102 +985,48 @@
                 return;
             }
             
-
-            if ( $auditornameSel.val() != "SELECT OPTION" && $auditornameSel.val() != "New Name") { 
-                if ($workorder.val().length > 1 && $DataNo.val().length > 1 && $LotSize.val().length > 0 && $Location.val().length > 1 && InspectionStartedVal == false && InspectionState == 0) { 
-                    var AuditorName = $("#MainContent_AuditorName").val();
-                    Template.SetCookie("AuditorName", AuditorName, 14);
-                    var InspectionType = InspectionTypeState
-                    Template.SetCookie("InspectionType", InspectionState, 14);
-                    $("#StartInspectionRollDiv").css('display', 'none');
-                    $("#StartInspectiondialog").wijdialog("open");
-                }else if (InspectionState == 0) { 
-                    alert("Work Order, DataNo, Location and Quantity Need to be greater than 1 digit.");
-                    return;
-                }
-
-                if ($rollnumber.val().length > 1 && $DataNo.val().length > 1 && $LotSize.val().length > 0 && $Location.val().length > 1 && InspectionStartedVal == false && InspectionState == 1) { 
-                    var AuditorName = $("#MainContent_AuditorName").val();
-                    Template.SetCookie("AuditorName", AuditorName, 14);
-                    var InspectionType = InspectionTypeState
-                    Template.SetCookie("InspectionType", InspectionState, 14);
-                    $("#StartInspectionWODiv").css('display', 'none');
-                    $("#StartInspectiondialog").wijdialog("open");
-                } else  if (InspectionState == 1) { 
-                    alert("Roll Number, RM#, Location and Yards Need to be greater than 1 digit.");
-                    return;
-                }
-            } else { 
-                alert("You are required to put in an Auditor Name");
-            }
-            
-            
-        });
-        $("#MobileDirector").click(function (e) { 
-            if (selectedCIDnum) { 
-                if (selectedCIDnum > 0) { 
-                    var JobNumber = ""
-                    if (InspectionState == 0) { 
-                        JobNumber = "JobNumber=" + $workorder.val();
-                    } else { 
-                        JobNumber = "JobNumber=" + $rollnumber.val();
+            switch (LineType) { 
+                case 'ROLL': 
+                    var Inspector = $("#MainContent_Inspector").val();
+                    if (Inspector.toString().trim().length == 0) { 
+                        alert("Inspector Name cannot be blank");
+                        return; 
                     }
-                    window.location.assign("<%=Session("BaseUri")%>" + "/Mobile/DataEntry/DefectImageEntry.aspx?DefectID=" + DefectID.toString() + "&InspectionID=" + InspectionJobSummaryIdPage.toString() + "&CID=" + selectedCIDnum.toString() + "&InspectionStarted=" + InspectionStartedVal.toString() + "&" +JobNumber);
-                }
-            }
-        });
-        $("#NewPage").click(function (e) { 
-            
-            if (SelectedId && SelectedId.toString().length > 0) { 
-                var r = confirm("This will clear out the current Inspection.  Are you Sure?");
-                if (r == true) { 
-                    window.location.assign("<%=Session("BaseUri")%>" + "/APP/Mob/SPCInspectionInput.aspx?TemplateId=" + SelectedId.toString());
-                }
-            } else { 
-                alert("Template Not Selected"); 
-            }
-            
-        });
-        
-        $("#EnterProductSpec").click(function (e) { 
-            
-            if (InspectionStartedVal == true && $DataNo.val().length > 2) { 
-                $("#ProductSpecEntrydialog").wijdialog("open");
-            } else { 
-                alert("Inspection Not Started and/or DataNo Not Set"); 
-            }
-            
-        });
-        $("#EnterSpec").click(function (e) { 
-            if (InspectionStartedVal == true) { 
-                $("#WorkOrderSelection").css("display","none");   
-                $("#LocationSelection").css("display","none");
-                $("#JobConfirmation").css("display","none");
-                $("#RollConfirmation").css("display","none");
-                $("#loginfrm").css("display","none");
-                $("#SpecTable").fadeIn();
-                hiddenSection.fadeIn()
-                    .css({ 'display':'block' })
-                    // set to full screen
-                    .css({ width: $(window).width() + 'px', height: '100%' })
-                    .css({ top:($(window).height() - hiddenSection.height())/2 + 'px',
-                        left:($(window).width() - hiddenSection.width())/2 + 'px' })
-                    // greyed out background
-                    .css({ 'background-color': 'rgba(0,0,0,0.5)' });
-            } else { 
-                alert('Please START an Inspection or Load an Open WorkOrder'); 
-            }
-            controlhandler.RenderProductSpecTable(); 
-        });
-        $("#NextItem").click(function (e) { 
-            var rowclass = $('#2');
+                    if ($rollnumber.val().length > 1 && $DataNo.val().length > 1 && $Location.val().length > 1 && InspectionStartedVal == false && InspectionState == 1) { 
+                        
+                        Template.SetCookie("InspectorName", Inspector, 14);
+                        var InspectionType = InspectionTypeState
+                        Template.SetCookie("InspectionType", InspectionState, 14);
+                        $("#StartInspectionWODiv").css('display', 'none');
+                        $("#StartInspectiondialog").wijdialog("open");
+                    } else  if (InspectionState == 1) { 
+                        alert("Roll Number, RM#, Location and Yards Need to be greater than 1 digit.");
+                        return;
+                    }
+                    break;
+                default: 
+                    if ( $auditornameSel.val() != "SELECT OPTION" && $auditornameSel.val() != "New Name") { 
+                        if ($workorder.val().length > 1 && $DataNo.val().length > 1 && $LotSize.val().length > 0 && $Location.val().length > 1 && InspectionStartedVal == false && InspectionState == 0) { 
+                            var AuditorName = $("#MainContent_AuditorName").val();
+                            Template.SetCookie("AuditorName", AuditorName, 14);
+                            var InspectionType = InspectionTypeState
+                            Template.SetCookie("InspectionType", InspectionState, 14);
+                            $("#StartInspectionRollDiv").css('display', 'none');
+                            $("#StartInspectiondialog").wijdialog("open");
+                        }else if (InspectionState == 0) { 
+                            alert("Work Order, DataNo, Location and Quantity Need to be greater than 1 digit.");
+                            return;
+                        }
 
-            rowclass.css('background','#FDF9F9 url(images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x !important;');
-            $("#Specgrid").jqGrid('setGridParam', 
-                         { datatype: 'json' }).trigger('reloadGrid');
-            SpecItemCounter++;
-            $("#ItemNumberLabel").text("Item #: " + SpecItemCounter.toString());
+                
+                    } else { 
+                        alert("You are required to put in an Auditor Name");
+                    }
+            }
+                   
         });
+       
+        
         $("#MachineLinkCheck").click(function (e) { 
             var WOArray = OpenWorkOrderArray; 
             var $Checkele = $("#MachineLinkCheck");
@@ -1488,144 +1059,138 @@
 
         });
         $("#LoadOpenWorkOrder").click(function (e) { 
+
             if (IsSPCMachine == true) { 
                 alert("This Page is currently Linked to an Machine. Click NEW or Exit the page to escape");
-            } else {
-                if ($auditornameSel.val() != 'New Name' && $auditornameSel.val() != "SELECT OPTION" ) { 
-                    var OpenWOArray = new Array(); 
-                    $.ajax({
-                        url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
-                        type: 'POST',
-                        data: { method: 'LoadOpenWorkOrders', args: { InspectionState: InspectionTypeState, PassCID: selectedCIDnum } },
-                        success: function (data) {
-                            var html3 = [];
-                            var name;
-                            var parsedata = JSON.parse(data);
-                            OpenWorkOrderArray = parsedata; 
-                             
-                            if (parsedata) { 
-                                for(var i = 0; i < parsedata.length; i++){
-                                    name = parsedata[i];
-                                    var TemplateName = name.Name;
-                                    if (!TemplateName) { 
-                                        TemplateName = "NoName"; 
-                                    }
-                                    // var date = new Date(JSON.parse(name.Inspection_Started));
-                         
-                                    var MachineCheckVal = $("#MachineLinkCheck").prop('checked');
-                           
-                                    // var str = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + " " +  date.getHours() + ":" + date.getMinutes();
+                return;
+            }
 
-                                    if (name.JobNumber == "SELECT OPTION") { 
-                                        html3.push('<option value="' + name.id + '">' + name.JobNumber + '</option>');
-                                    } else { 
-                                        if (name.IsSPC == true && MachineCheckVal == true) { 
-                                            html3.push('<option value="' + name.id + '">SPCMachine ' + name.ProdMachineName + ' ID: ' + name.id + ' WO: ' + name.JobNumber + ' -> ' + TemplateName + ' Started: ' + name.Inspection_StartedString +'</option>');
-                                        } 
-                                        if (name.IsSPC == false && MachineCheckVal == false){
-                                            html3.push('<option value="' + name.id + '">ID: ' + name.id + ' WO: ' + name.JobNumber + ' -> ' + TemplateName + ' Started: ' + name.Inspection_StartedString +'</option>');
-                                        }
+            var InspectionCanStart = false; 
+            var ErrorMessage = ""; 
+            var AuditorName = $('#Auditor_Name').val();
+
+            switch(LineType) { 
+                case 'ROLL': 
+                    if ($("#MainContent_Inspector").val().toString().trim().length > 0) { 
+                        InspectionCanStart = true;
+                    }
+                    ErrorMessage = "Inspection Must include an Inspector.";
+                    break; 
+                default: 
+                    if (AuditorName.toString().trim() != 'New Name' && AuditorName.toString().trim().length > 0 && $auditornameSel.val() != "SELECT OPTION") { 
+                        InspectionCanStart = true;
+                    }
+                    ErrorMessage = "Inspection Must include an Auditor.";
+            }
+
+            
+            if (InspectionCanStart == true) { 
+                var OpenWOArray = new Array(); 
+                $.ajax({
+                    url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
+                    type: 'POST',
+                    data: { method: 'LoadOpenWorkOrders', args: { InspectionState: InspectionTypeState, PassCID: selectedCIDnum } },
+                    success: function (data) {
+                        var html3 = [];
+                        var name;
+                        var parsedata = JSON.parse(data);
+                        OpenWorkOrderArray = parsedata; 
+                             
+                        if (parsedata) { 
+                            for(var i = 0; i < parsedata.length; i++){
+                                name = parsedata[i];
+                                var TemplateName = name.Name;
+                                if (!TemplateName) { 
+                                    TemplateName = "NoName"; 
+                                }
+                                // var date = new Date(JSON.parse(name.Inspection_Started));
+                         
+                                var MachineCheckVal = $("#MachineLinkCheck").prop('checked');
+                           
+                                // var str = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + " " +  date.getHours() + ":" + date.getMinutes();
+
+                                if (name.JobNumber == "SELECT OPTION") { 
+                                    html3.push('<option value="' + name.id + '">' + name.JobNumber + '</option>');
+                                } else { 
+                                    if (name.IsSPC == true && MachineCheckVal == true) { 
+                                        html3.push('<option value="' + name.id + '">SPCMachine ' + name.ProdMachineName + ' ID: ' + name.id + ' WO: ' + name.JobNumber + ' -> ' + TemplateName + ' Started: ' + name.Inspection_StartedString +'</option>');
+                                    } 
+                                    if (name.IsSPC == false && MachineCheckVal == false){
+                                        html3.push('<option value="' + name.id + '">ID: ' + name.id + ' WO: ' + name.JobNumber + ' -> ' + TemplateName + ' Started: ' + name.Inspection_StartedString +'</option>');
                                     }
                                 }
                             }
-                            $("#WorkOrder_pop").html(html3.join('')).bind("change", function(){
+                        }
+                        $("#WorkOrder_pop").html(html3.join('')).bind("change", function(){
 
-                                var selectedid = $(this).val();
-                                var selectedtext = $(this).text();
-                                var selectedIndex = 0;
-                                var SelectedTemplateId = 0; 
+                            var selectedid = $(this).val();
+                            var selectedtext = $(this).text();
+                            var selectedIndex = 0;
+                            var SelectedTemplateId = 0; 
  
-                                if (selectedid) { 
-                                    var selectId = new Number($(this).val());
-                                    for (var j = 0; j < OpenWorkOrderArray.length; j++) { 
+                            if (selectedid) { 
+                                var selectId = new Number($(this).val());
+                                for (var j = 0; j < OpenWorkOrderArray.length; j++) { 
   
-                                        if (selectId == OpenWorkOrderArray[j].id) {  
-                                            SelectedTemplateId = OpenWorkOrderArray[j].TemplateId;
+                                    if (selectId == OpenWorkOrderArray[j].id) {  
+                                        SelectedTemplateId = OpenWorkOrderArray[j].TemplateId;
 
-                                        }
-                                    }
-                                    if (SelectedTemplateId == 0) {
-                                        SelectedTemplateId = SelectedId.toString();
-                                    }
-                                
-                                    switch (InspectionTypeState) { 
-                                        case "WorkOrder": 
-                                        
-                                            var SelectedWorkOrder = "";
-                                            for(var i = 0; i < parsedata.length; i++) { 
-                                                if (parsedata[i].id == selectId) { 
-                                                    selectedWorkOrder = parsedata[i].JobNumber
-                                                }
-                                            }
-                                        
-                                            var querystring = "TemplateId=" +  SelectedTemplateId.toString() + "&IJS=" + selectedid.toString() + "&Username=" + $auditorname.val().toString() + "&400REQ=OPENWO&LocationId=" + $("#MainContent_Location").val() + "&OpenWO=True"
-                                            window.location.assign("<%=Session("BaseUri")%>" + "/APP/Mob/SPCInspectionInput.aspx?" + querystring)
-                                            
-                                            break;
-                                        case "RollNumber":
-                                            var querystring = "TemplateId=" +  SelectedTemplateId.toString() + "&IJS=" + selectedid.toString() + "&Username=" + $auditorname.val().toString() + "&400REQ=OPENRL&LocationId=" + $("#MainContent_Location").val() + "&OpenWO=True"
-                                            window.location.assign("<%=Session("BaseUri")%>" + "/APP/Mob/SPCInspectionInput.aspx?" + querystring)
-                                            break;
                                     }
                                 }
-                            });
-                            $("#WorkOrder_pop").val(1000);    
-                            $("#LocationSelection").css("display","none");
-                            $("#JobConfirmation").css("display","none");
-                            $("#MachineSelection").css("display", "none"); 
-                            $("#SpecTable").css("display", "none"); 
-                            $("#RollConfirmation").css("display", "none");
-                            $("#loginfrm").fadeIn();
-                            $("#WorkOrderSelection").fadeIn();
-                            hiddenSection.fadeIn()
-                                .css({ 'display':'block' })
-                                // set to full screen
-                                .css({ width: $(window).width() + 'px', height: '100%' })
-                                .css({ top:($(window).height() - hiddenSection.height())/2 + 'px',
-                                    left:($(window).width() - hiddenSection.width())/2 + 'px' })
-                                // greyed out background
-                                .css({ 'background-color': 'rgba(0,0,0,0.5)' });
-                        },
-                        error: function (a, b, c) {
-                            alert(c);
+                                if (SelectedTemplateId == 0) {
+                                    SelectedTemplateId = SelectedId.toString();
+                                }
+                                
+                                switch (InspectionTypeState) { 
+                                    case "WorkOrder": 
+                                        
+                                        var SelectedWorkOrder = "";
+                                        for(var i = 0; i < parsedata.length; i++) { 
+                                            if (parsedata[i].id == selectId) { 
+                                                selectedWorkOrder = parsedata[i].JobNumber
+                                            }
+                                        }
+                                        
+                                        var querystring = "TemplateId=" +  SelectedTemplateId.toString() + "&IJS=" + selectedid.toString() + "&Username=" + $auditorname.val().toString() + "&400REQ=OPENWO&LocationId=" + $("#MainContent_Location").val() + "&OpenWO=True"
+                                        window.location.assign("<%=Session("BaseUri")%>" + "/APP/Mob/SPCInspectionInput.aspx?" + querystring)
+                                            
+                                        break;
+                                    case "RollNumber":
+                                        var querystring = "TemplateId=" +  SelectedTemplateId.toString() + "&IJS=" + selectedid.toString() + "&Username=" + $auditorname.val().toString() + "&400REQ=OPENRL&LocationId=" + $("#MainContent_Location").val() + "&OpenWO=True"
+                                        window.location.assign("<%=Session("BaseUri")%>" + "/APP/Mob/SPCInspectionInput.aspx?" + querystring)
+                                        break;
+                                }
+                            }
+                        });
+                        $("#WorkOrder_pop").val(1000);    
+                        $("#LocationSelection").css("display","none");
+                        $("#JobConfirmation").css("display","none");
+                        $("#MachineSelection").css("display", "none"); 
+                        $("#SpecTable").css("display", "none"); 
+                        $("#RollConfirmation").css("display", "none");
+                        $("#loginfrm").fadeIn();
+                        $("#WorkOrderSelection").fadeIn();
+                        hiddenSection.fadeIn()
+                            .css({ 'display':'block' })
+                            // set to full screen
+                            .css({ width: $(window).width() + 'px', height: '100%' })
+                            .css({ top:($(window).height() - hiddenSection.height())/2 + 'px',
+                                left:($(window).width() - hiddenSection.width())/2 + 'px' })
+                            // greyed out background
+                            .css({ 'background-color': 'rgba(0,0,0,0.5)' });
+                    },
+                    error: function (a, b, c) {
+                        alert(c);
                         
-                        }
-                    });
-                } else { 
-                    togglevalidation("auditdiv");
-                }
+                    }
+                });
+            } else { 
+                alert(ErrorMessage);
             }
+            
         }); 
 
-        $("#TotalCountValue").wijinputnumber({ 
-            type: 'numeric', 
-            minValue: 0, 
-            maxValue: 10000000, 
-            decimalPlaces: 0, 
-            showSpinner: true, 
-            valueChanged : function (e, data) {
-                var rejcount = new Number($("#MainContent_Bad_Group").val()); 
-                var Inspected = new Number(data.value); 
-                var PassCount = new Number(Inspected - rejcount); 
-                $("#PassCountValue").text(PassCount);
-                $("#MainContent_Good").val(PassCount); 
-                $('#MainContent_totalinspecteditems').val(data.value);
-
-            }
-        });
-        $("#TotalCountValue").height(50);
-        $("#TotalYardValue").wijinputnumber({ 
-            type: 'numeric', 
-            minValue: 0, 
-            maxValue: 10000000, 
-            decimalPlaces: 0, 
-            showSpinner: true, 
-            valueChanged : function (e, data) {
-                $('#MainContent_totalinspectedyards').val(data.value);
-
-            }
-        });
-        $("#TotalYardValue").height(50);
+        
         //$('.ui-spinner-button').css('font-size','1px');
         $(".endjob").click(function (e) {
             var buttonid_ = $(this).attr('id');
@@ -1708,31 +1273,25 @@
                 });
             }
         });
-        $("#ImageSubmit").click(function (e) { 
-            e.preventDefault();
-           
-            $("#myImageForm").ajaxSubmit({ url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/DefectImage_handler.ashx?DefectID=' + DefectID.toString(), type: 'post', success: function (data) { alert(data); } })
-           // $("#myImageForm").ajaxSubmit({url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/DefectImage_handler.ashx', type: 'post' })
-          
-        });
+        
         $(".inputpad").click(function (e) {
             var selectedtarget = e.currentTarget.id;
   
             var classname = e.currentTarget.className
             var $auditorname = $('#MainContent_AuditorName');
             //var $lotsize = $('#WOQuantity'); 
-            
+            console.log(selectedtarget); 
             e.preventDefault();
             if (IsSPCMachine == true) { 
                 alert("This Page is currently Linked to an Machine.  Click NEW or Exit the page to escape");
-            } else if (InspectionJobSummaryIdPage != 0) { 
+            } else if (InspectionJobSummaryIdPage != 0 && selectedtarget != 'auditdiv' && LineType != 'ROLL') { 
                 alert("This Page has an Inspection in progress.  Click NEW or Exit the page to escape");
             } else {
                 NavCop = true;
                 switch (selectedtarget) { 
                     case "workroomdiv":
                         var querystring = "TemplateId=" + SelectedId.toString() + "&workroom=" + $("#MainContent_workroom").val().toString() + "&400REQ=WORKROOM&AQL=" + $_aql.val()
-                        if ($("#MainContent_workroom").val().val().length > 4) {
+                        if ($("#MainContent_workroom").val().length > 4) {
                             window.location.assign("<%=Session("BaseUri")%>" + "/APP/Mob/SPCInspectionInput.aspx?" + querystring)
                         }
                     
@@ -1761,20 +1320,17 @@
                             togglevalidation("rolldiv")
                         }
                         break;
+                    case "auditdiv": 
+                        if (LineType == "ROLL") { 
+                            $(".Weaver-addname").css('display', 'block');
+                            $(".Auditor-addname").css('display', 'none'); 
+                            $('#NewAuditorName').wijdialog('open');
+                        }
+                        break;
                 }
             }
         });
-        function togglevalidation(divname) { 
-            $("#" + divname).toggle(function () {
-                $("#" + divname).css({ 'background-color': 'red', 'display': 'inline' });
-            });
-            var timeo = setTimeout(function () {
-                $("#" + divname).toggle(function () {
-                    $("#" + divname).css({ 'background-color': 'RGB(93, 135, 161)', 'display': 'inline' });
-                });
-            }, 1200);
-
-        }
+        
         $(".export").click(function () {
             var buttonid = $(this).attr('id');
 
@@ -1790,19 +1346,7 @@
                     break;
             }
         });
-        $(".closebox").click(function (e) {
-
-            if (e.currentTarget.id == 'closeout2'){ 
-                $('#MainContent_Good').val(0); 
-            }
-            $("#loginfrm").fadeOut();
-            $("#LocationSelection").fadeOut();
-            $("#JobConfirmation").fadeOut();
-            $("#MachineSelection").fadeOut();
-            $("#SpecTable").fadeOut();
-            $("#RollConfirmation").fadeOut();
-            hiddenSection.fadeOut()
-        });
+        
         //$("#menudiv").toggle();
         $("#InputHolder").toggle();
 
@@ -1868,10 +1412,27 @@
                 $("#AQL_Standard_Dialog option").prop('disabled', true);
                 $("#selectNames").prop("disabled", true);
 
+                if (LineType == "ROLL") { 
+                    var weaverInfoObj = <%=OpenRollInfoString%>;
+                    console.log(weaverInfoObj);
+                    if (weaverInfoObj != null) { 
+                        Inspection.WeaverShiftId = weaverInfoObj[0].ShiftId
+                        if (weaverInfoObj.Length == 1 && weaverInfoObj[0].EmployeeNoId != null) { 
+                            Inspection.Weavers.Weaver1ID = weaverInfoObj[0].EmployeeNoId; 
+                            Inspection.Weavers.Weaver1Initials = weaverInfoObj[0].Initials; 
+                        }
+                        if (weaverInfoObj.Length == 2 && weaverInfoObj[1].EmployeeNoId != null && weaverInfoObj[0].ShiftId == weaverInfoObj[1].ShiftId) { 
+                            Inspection.Weavers.Weaver2ID = weaverInfoObj[1].EmployeeNoId; 
+                            Inspection.Weavers.Weaver2Initials = weaverInfoObj[1].Initials; 
+                        }
+                    }
+                    console.log(weaverInfoObj);
+                    console.log(Inspection.Weavers);
+                }
+
                 if (IsPhoneSize == true) { 
                     RenderEngine.ShowActiveInspectionMobile();
                 }
-
                 setInterval(
                         function () { 
                             datahandler.UpdateRejectionCount(InspectionState, InspectionJobSummaryIdPage) }
@@ -1981,9 +1542,30 @@
                 if (TemplateCollection.length > 0) { Template.Load();}
             }
         }
-
     };
-
+    var Inspection = { 
+        JobSummaryId: 0, 
+        Weavers: { Weaver1ID: 0, Weaver1Initials: "", Weaver2ID: 0, Weaver2Initials: "" },
+        PreConfirmWeavers: { Weaver1ID: 0, Weaver1Initials: "", Weaver2ID: 0, Weaver2Initials: "" },
+        SetWeaversHTML: function () { 
+                
+            if (Inspection.PreConfirmWeavers.Weaver1ID != 0) { 
+                $("#MainContent_Weaver_Names").val(Inspection.PreConfirmWeavers.Weaver1Initials); 
+            } 
+            if (Inspection.PreConfirmWeavers.Weaver2ID != 0) { 
+                $("#MainContent_Weaver_Names").val($("#MainContent_Weaver_Names").val() + ", " + Inspection.PreConfirmWeavers.Weaver2Initials); 
+            }
+            $("#PreConfirmWeaver1Label").text(''); 
+            $("#PreConfirmWeaver2Label").text('');
+            Inspection.Weavers = Inspection.PreConfirmWeavers;
+            Inspection.PreConfirmWeavers = { Weaver1ID: 0, Weaver1Initials: "", Weaver2ID: 0, Weaver2Initials: "" }; 
+        },
+        WeaverShiftNumber: 1, 
+        WeaverShiftId: 0
+    };
+    var pageData = { 
+        WeaversList: new Object()
+    };
     var dialogs = { 
         InitProductSpecEntry: function() { 
             $("#ProductSpecEntrydialog").wijdialog({
@@ -2124,9 +1706,28 @@
                         var AQLDstandard = $('#AQL_Standard_Dialog').val();
                         var AuditorName = $('#Auditor_Name').val();
                         AQLValue = AQLDlevel;
+                        var ErrorMessage = "";
                         // Template.SetCookie("AQLLevel", AQLDlevel, 14);
                         Template.SetCookie("AQLStandard", AQLDstandard, 14); 
-                        if (AuditorName.toString().trim() != 'New Name') { 
+
+                        var InspectionCanStart = false; 
+
+                        switch(LineType) { 
+                            case 'ROLL': 
+                                if ((Inspection.Weavers.Weaver1ID > 0 || Inspection.Weavers.Weaver2ID > 0) && $("#MainContent_Inspector").val().toString().trim().length > 0) { 
+                                    InspectionCanStart = true;
+                                }
+                                ErrorMessage = "Inspection Must include an Inspector and at least 1 weaver";
+                                break; 
+                            default: 
+                                if (AuditorName.toString().trim() != 'New Name' && AuditorName.toString().trim().length > 0) { 
+                                    InspectionCanStart = true;
+                                }
+                                ErrorMessage = "Inspection Must include an Auditor.";
+                        }
+
+
+                        if (InspectionCanStart == true) { 
                             $("#selectNames").prop("disabled", true);
                             if (total == 0 && OpenOrderFlag == "False") { 
                                 $.when(datahandler.GetInspectionId()).done(function () { 
@@ -2141,7 +1742,7 @@
                             } 
 
                         } else { 
-                            togglevalidation("auditdiv")
+                            alert(ErrorMessage);
                         }
                         $(this).wijdialog("close"); 
                     },
@@ -2168,6 +1769,136 @@
                         var value = e.currentTarget.checked;
                         AutoConfirm = value;
                     });
+                }
+            });
+        }, 
+        InitDefectsEntry: function () { 
+            $("#dialog").wijdialog({
+                buttons: { 
+                    Confirm: function () { 
+                        var GoodCount = new Number($goodcount.val());
+                        var BadCount = new Number($badcount.val());
+                        var total = GoodCount + BadCount;
+                        if (InspectionJobSummaryIdPage > 0 ) { 
+                            datahandler.SubmitDefect(buttonid, buttonvalue, buttonname, InspectionJobSummaryIdPage, InspectionId);
+                        } else { 
+                            alert("InspectionId must be greater than zero")
+                        }
+                        $(this).wijdialog("close"); 
+                    },
+                    Cancel: function () { 
+                        $(this).wijdialog("close"); 
+                    }
+                },
+                captionButtons: { 
+                    pin: { visible: false }, 
+                    refresh: { visible: false }, 
+                    toggle: { visible: false }, 
+                    minimize: { visible: false }, 
+                    maximize: { visible: false } 
+                },
+                height: 244,
+                autoOpen: false, 
+                open: function (e) { 
+                    $("#Skip").prop('checked', AutoConfirm);
+                }, 
+                create: function (e) {
+                    $('#Skip').change(function(e) {
+          
+                        var value = e.currentTarget.checked;
+                        AutoConfirm = value;
+                    });
+                }
+            });
+        }, 
+        InitAuditorName: function () { 
+            var $dialog4 = $('#NewAuditorName').wijdialog({
+                showStatus: false,
+                showControlBox: false,
+                autoOpen: false,
+                modal: true,
+                captionButtons: {
+                    pin: { visible: false },
+                    refresh: { visible: false },
+                    toggle: { visible: false },
+                    minimize: { visible: false },
+                    maximize: { visible: false }
+                },
+                buttons: {
+                    'Add': function () {
+                        
+                        var AuditorDisplay = $(".Auditor-addname").css('display'); 
+                        console.log(AuditorDisplay); 
+                        switch (AuditorDisplay) { 
+                            case 'none': 
+                                var WeaverId = $("#select-weavername").val();
+                                var existingName = $("#MainContent_Weaver_Names").val().toString().trim();
+                                var WeaverInitial = "";
+
+                                $.each(pageData.WeaversList, function (index, value) { 
+                                    if (value.Id == WeaverId) { 
+                                        WeaverInitial = value.Initials;
+                                    }
+                                });
+                                if (existingName.length > 0) {existingName = existingName + ", "};
+                                if (Inspection.PreConfirmWeavers.Weaver1ID == 0) { 
+                                    Inspection.PreConfirmWeavers.Weaver1ID = WeaverId; 
+                                    Inspection.PreConfirmWeavers.Weaver1Initials = WeaverInitial;
+                                    $("#PreConfirmWeaver1Label").text( "New Weaver 1: " + WeaverInitial);
+                                } else if (Inspection.PreConfirmWeavers.Weaver2ID == 0) { 
+                                    Inspection.PreConfirmWeavers.Weaver2ID = WeaverId; 
+                                    Inspection.PreConfirmWeavers.Weaver2Initials = WeaverInitial;
+                                    $("#PreConfirmWeaver2Label").text( "New Weaver 2: " + WeaverInitial);
+                                } else { 
+                                    alert('Only two weavers allowed'); 
+                                }                             
+                                break; 
+                            case 'block': 
+                                if (EnteredName) {                        
+                                    var x = document.getElementById("Auditor_Name");
+                                    var option = document.createElement("option");
+                                    option.text = EnteredName;
+                                    option.value = EnteredName;
+                                    x.add(option);
+                                    $('#Auditor_Name').val(EnteredName);
+                            
+                                }
+                                break;
+                        }
+                        var EnteredName = $('#Name').val();                    
+                    },
+                    'Update/Close': function () {
+                        var Enteredyards = new Number($("#weaveryards").val());
+                        if (InspectionStartedVal == true && Enteredyards == 0) { 
+                            alert("Enter Previous Weaver(s) Yards");
+                        } else if (InspectionStartedVal == true && Inspection.PreConfirmWeavers.Weaver1ID == 0 &&  Inspection.PreConfirmWeavers.Weaver2ID == 0) {
+                            alert("Please enter at least one weaver");
+                        } else if (InspectionStartedVal == true && Enteredyards > 0) { 
+                            datahandler.StartNewWeaverShift(); 
+                        } else { 
+                            Inspection.SetWeaversHTML(); 
+                            $(this).wijdialog('close');
+                            
+                        }        
+                    }
+                },
+                open: function () {
+                    $('#Name').focus();
+                    $('#Name').val('');
+
+                    if (InspectionStartedVal == true) { 
+                        $(".Weaver-addyards").css('display', 'block');
+                    } else { 
+                        $(".Weaver-addyards").css('display', 'none');
+                    }
+
+                },
+                close: function () {
+                    //$form.find('input').val("").end();
+                    $("#PreConfirmWeaver1Label").text('');
+                    $("#PreConfirmWeaver2Label").text('');
+
+                    Inspection.PreConfirmWeavers = { Weaver1ID: 0, Weaver1Initials: "", Weaver2ID: 0, Weaver2Initials: "" };
                 }
             });
         }
@@ -2627,8 +2358,389 @@
             if (SpecCount == 0) {
                 $('#SpecTable').css('display', 'none');
             }
+        }, 
+        InitInspectionDisplay: function (LineType) { 
+            var InspectionTypeSelector = -1;
+            switch(LineType) { 
+                case 'ROLL':
+                    $("#AQdiv").css('display', 'none'); 
+                    $("#AQ_Level").val('100');
+                    $("#AQL_Level_Dialog").val('100');
+                    AQLValue = '100';
+                    $("#MainContent__AQLevel").val('100');
+                    $("#AQL_Level_Dialog option:selected").attr('disabled', 'disabled');
+                    $("#AQ_Level option:selected").attr('disabled', 'disabled');
+                    $("#AQL_Standard_Dialog option:selected").attr('disabled', 'true');
+                    InspectionTypeSelector = 1;
+                    datahandler.GetWeaverNames(); 
+                    break;
+                case 'IL': 
+                    $("#AQ_Level").val('100');
+                    $("#AQL_Level_Dialog").val('100');
+                    AQLValue = '100';
+                    $("#MainContent__AQLevel").val('100');
+                    $("#MainContent_aqlstandard").val('Regular');
+                    $("#AQL_Standard_Dialog").val('Regular');
+                    $("#AQL_Level_Dialog").prop('disabled', true);
+                    $("#AQ_Level").prop('disabled', true);
+                    $("#AQL_Standard_Dialog").prop('disabled', true);
+                    InspectionTypeSelector = 0;
+                    if (OpenOrderFlag == "False") { 
+                        //eventshandler.UserKeyPress.GetLastUserInputs();
+                    }
+                    break;
+                case 'EOL':
+                    var NameCookie1 = '2.5' 
+                    //Template.GetCookie("AQLLevel");
+                    $("#AQL_Level_Dialog").prop('disabled', false);
+                    $("#AQ_Level").prop('disabled', false);
+
+                    $("#AQL_Standard_Dialog").prop('disabled', false);
+                    if (OpenOrderFlag == "False") { 
+                        //    eventshandler.UserKeyPress.GetLastUserInputs();
+                        var NameCookie2 = Template.GetCookie("AQLStandard");
+                        if (NameCookie2.length > 1 && NameCookie2 != null) { 
+                            $("#AQL_Standard_Dialog").val(NameCookie2);
+                            $("#MainContent_aqlstandard").val(NameCookie2);
+                        } else { 
+                            $("#MainContent_aqlstandard").val('Regular');
+                            $("#AQL_Standard_Dialog").val('Regular');
+                        }
+                    } else {
+                        $("#AQL_Level_Dialog").prop('disabled', true);
+                        $("#AQ_Level").prop('disabled', true);
+                        $("#AQL_Standard_Dialog").prop('disabled', true);
+                    }
+                    InspectionTypeSelector = 0;
+                    break;
+            };
+            controlhandler.setInspectionType(InspectionTypeSelector);
+        },
+        setInspectionType: function(InspectionTypeSelector) { 
+            switch (InspectionTypeSelector) {
+                case 0:
+                    InspectionTypeState = "WorkOrder";
+                    TargetOrderInput = $('#MainContent_WorkOrder');            
+                    $(".workorder-inspection").css('display', 'block'); 
+                    $(".roll-inspection").css('display', 'none'); 
+                    $("#MainContent_CPNumber").prop('disabled', false);
+                    $("#InspectionType").prop('innerText', "WORK ORDER");
+                    $("#WOQuantityL").text("WO QUANTITY");
+                    $("#DataNumberL").prop('innerText', "DATA NUMBER");
+                    $("#AuditorNameL").prop('innerText', "AUDITOR NAME");
+                    $("#InspectionType").css("top", "-7px");
+                    $("#SampleSizeLabel").text("SAMPLE SIZE");
+                    InspectionState = 0;
+                    break;
+                case 1:
+                    InspectionTypeState = "RollNumber";
+                    TargetOrderInput = $('#MainContent_RollNumber');
+                    $(".roll-inspection").css('display', 'block'); 
+                    $(".workorder-inspection").css('display', 'none'); 
+                    $("#MainContent_CPNumber").prop('disabled', true);
+                    $("#InspectionType").prop('innerText', "ROLL");
+                    $("#WOQuantityL").text("YARDS");
+                    $("#DataNumberL").prop('innerText', "RM #");
+                    $("#AuditorNameL").prop('innerText', "OPERATOR");
+                    $("#InspectionType").css("top", "-1px");
+                    RollYards = new Number($("#WOQuantity").val());
+                    $("#WOQuantity").change(function () {
+                        RollYards = new Number($("#WOQuantity").val());
+                    });
+                    InspectionState = 1;
+                    $("#SampleSizeLabel").text("DHY");
+                    break;
+                default:
+                    InspectionTypeState = "WorkOrder";
+                    TargetOrderInput = $('#MainContent_WorkOrder');
+                    $(".workorder-inspection").css('display', 'block'); 
+                    $(".roll-inspection").css('display', 'none'); 
+                    $("#MainContent_CPNumber").prop('disabled', false);
+                    $("#InspectionType").prop('innerText', "WORK ORDER");
+                    $("#WOQuantityL").text("WO QUANTITY");
+                    $("#DataNumberL").prop('innerText', "DATA NUMBER");
+                    $("#AuditorNameL").prop('innerText', "AUDITOR NAME");
+                    $("#InspectionType").css("top", "-7px");
+                    $("#SampleSizeLabel").text("SAMPLE SIZE");
+                    InspectionState = 0;
+            };
+            $("#MainContent_InspectionState").val(InspectionTypeState);
         }
 
+
+    };
+
+    var controls = { 
+        InitTemplateDropDown: function (TemplateNames) { 
+            var html = [];
+            var name;
+            for(var i = 0; i < TemplateNames.length; i++){
+                name = TemplateNames[i];
+                html.push('<option value="'+name.id+'">'+name.text+'</option>');
+            }
+            $("#selectNames").html(html.join('')).bind("change", function(){
+           
+                var selectedid = $(this).val();
+                if (SelectedName == "") {
+                    NavCop = true;
+                } else { 
+                    NavCop = false;
+                }
+                $("#MainContent_Templatename").val($("#selectNames option:selected").text());
+                if (selectedid) {
+                    var querystring = "TemplateId="+ selectedid.toString() + "&AQL=" + $aql.val()
+                    var hash;
+                    $.when( $.ajax({
+                        url: "<%=Session("BaseUri")%>" + '/handlers/Utility/cypher.ashx',
+                        type: 'POST',
+                        data: {"querystring": querystring},
+                        success: function (data) {
+                        
+                            hash = data;
+                        },
+                        error: function (a, b, c) {
+
+                        }
+                    }) ).done(function ( v1) {
+              
+                        window.location.assign("<%=Session("BaseUri")%>" + "/APP/Mob/SPCInspectionInput.aspx?" + querystring + "&qtpval=" + hash.toString())
+                    });
+                } 
+            })
+            .val(SelectedId);
+            $("#MainContent_Templatename").val($("#selectNames option:selected").text());
+        }, 
+        InitLocationDropDown: function (LocationNames, selectedCIDnum, selectedCID) { 
+            var html = [];
+            html.length = 0;
+            var name;
+            for(var i = 0; i < LocationNames.length; i++){
+                name = LocationNames[i];
+                html.push('<option value="'+name.CID+'">'+name.text+'</option>');
+            }
+      
+            $("#MainContent_Location").html(html.join('')).bind("change", function(){
+
+                var selectedid = $(this).val();
+
+            
+                $("#MainContent_LocationSelected_Hidden").val(selectedCID);
+            });
+        
+            $("#MainContent_Location").val(selectedCIDnum);
+            $('#MainContent_SampleSizeHidden').val($('#MainContent_SampleSize').val())
+            $("#MainContent_LocationSelected_Hidden").val($("#MainContent_Location").val());
+        }, 
+        InitWeaversDropDown: function (WeaverNames) { 
+            var html = []; 
+            html.length = 0; 
+            console.log(WeaverNames);
+            if (WeaverNames != null) { 
+                for (var i = 0; i < WeaverNames.length; i++) { 
+                    html.push('<option value="'+ WeaverNames[i].Id+'">'+ WeaverNames[i].FirstName + ' ' + WeaverNames[i].LastName + '</option>');
+                }
+                $("#select-weavername").html(html.join(''));            
+            }
+        },
+        InitMachineNameDropdowns: function (MachineNames) { 
+            var html = [];
+            html.length = 0 
+            var machiename;
+            if (machiename != null) { 
+                for(var i = 0; i < MachineNames.length; i++) { 
+                    machinename = MachineNames[i];
+                    html.push('<option value="' + machiename.id + '">' + name.text + '</option>');
+                }
+                $("#MachineNames_pop").html(html.join('')).bind("change", function(){
+
+                    var selectedid = $(this).val();
+                    var selectedtext = $(this).text();
+
+                    Template.SetCookie("InspectionType", 0, 14);
+                    if (selectedtext) { 
+                        var querystring = "TemplateId=" + SelectedId.toString() + "&Username=" + $auditorname.val().toString() + "&SPCMachine=" + selectedtext + "&AQL=" + $aql.val() + "&AS400REQ=SPCMachine&LocationId=" + $("#MainContent_Location").val()
+                        window.location.assign("<%=Session("BaseUri")%>" + "/APP/Mob/SPCInspectionInput.aspx?" + querystring)
+                    }
+      
+                });
+            }
+        }, 
+        InitMenu: function () { 
+            $("#menu").wijmenu({
+                checkable: true,
+                maxHeight: new Number(50),
+                select: function (e, data) {
+                
+                    var selectedtext = e.currentTarget.innerText;
+                    //GetCypherHash("<%=Session("BaseUri")%>")
+         
+                    switch (selectedtext) {
+                        case "INPUT DEFECTS":
+                            window.location.assign("<%=Session("BaseUri")%>" + '/APP/Mob/SPCInspectionInput.aspx');
+                            break;
+                        case "TEMPLATE UTILITY":
+                            window.location.assign("<%=Session("BaseUri")%>" + '/APP/DataEntry/SPCInspectionUtility.aspx');
+                            break;
+                        case "RESULTS":
+                            window.location.assign("<%=Session("BaseUri")%>" + '/APP/Presentation/InspectionVisualizer.aspx');
+                            break;
+                        case "MAIN MENU":
+                            var hash = 'aprtrue';
+                            $.when( $.ajax({
+                                url: "<%=Session("BaseUri")%>" + '/handlers/Utility/cypher.ashx',
+                                type: 'POST',
+                                data: {"querystring": 'aprtrue'},
+                                success: function (data) {
+                           
+                                    hash = data;
+                                },
+                                error: function (a, b, c) {
+
+                                }
+                            }) ).done(function ( v1) {
+                                // v1 is undefined
+                                window.location.assign("<%=Session("BaseUri")%>" + '/APP/APR_SiteEntry.aspx?zrt=' + hash);
+                            });
+                        
+                            break;
+                        case "MAINTENANCE":
+                            window.location.assign("<%=Session("BaseUri")%>" + '/APRMaintenance/Default.aspx?CID=' + selectedCID);
+                            break;
+                        case "DASHBOARD":
+                            url = '/APRDashboard/Default.aspx';
+                            window.location.assign("<%=Session("BaseUri")%>" + url);
+                            Destination = "APRFlagboard";
+                            break;
+                    }
+                }
+            });
+        }, 
+        InitAqlDropDown: function (AQLValue) { 
+            var aqarray = [{ id: 4, text: 'AQL Level 4.0' },
+                       { id: 1, text: 'AQL Level 1.0' },
+                       { id: 1.5, text: 'AQL Level 1.5' },
+                       { id: 2.5, text: 'AQL Level 2.5' },
+                       { id: 100, text: '100% Inspection'}];
+            var html2 = [];
+            var level;
+        
+            for(var i = 0; i < aqarray.length; i++){
+                level = aqarray[i];
+                html2.push('<option value="'+level.id+'">'+level.text+'</option>');
+            }
+ 
+            $("#AQ_Level").html(html2.join('')).bind("change", function(){
+                $("#AQL_Level_Dialog").val($(this).val());
+                $("#MainContent__AQLevel").val($(this).val());
+                AQLValue = $(this).val();
+ 
+            });
+            $("#AQ_Level").val(AQLValue);
+            $("#MainContent__AQLevel").val(AQLValue);
+            console.log("InitDROPDOWN", AQLValue); 
+            console.log($aql.val());
+            $("#AQL_Level_Dialog").html(html2.join('')).bind("change", function(){
+                $("#AQ_Level").val($(this).val());
+                $("#MainContent__AQLevel").val($(this).val());
+                AQLValue = $(this).val();
+             
+            });
+            $("#AQL_Level_Dialog").val(AQLValue);
+
+        }, 
+        InitAqlStandardDropDown: function () { 
+            var aqstandardarray = [{ id: 'Reduced', text: 'Reduced' },
+                       { id: 'Regular', text: 'Regular' },
+                       { id: 'Tightened', text: 'Tightened' }];
+            var html3 = [];
+            var level1;
+            for(var i = 0; i < aqstandardarray.length; i++){
+                level1 = aqstandardarray[i];
+                html3.push('<option value="'+level1.id+'">'+level1.text+'</option>');
+            }
+            $("#AQL_Standard_Dialog").html(html3.join('')).bind("change", function(){
+                $("#MainContent_aqlstandard").val($(this).val());
+            });
+            $("#AQL_Standard_Dialog").val('Regular');
+        }, 
+        InitWOQuantity: function () { 
+            var WOQCookieVal = Template.GetCookie("WOQuantity")
+   
+            if (WOQuantity == "" || WOQuantity == 0 || WOQuantity == "0" || WOQuantity == null) { 
+                var cookiequantity = new Number(WOQCookieVal)
+                if (cookiequantity > 0) { 
+                    WOQuantity = WOQCookieVal
+                }
+            }
+            $("#WOQuantity").wijinputnumber({ 
+                type: 'numeric', 
+                minValue: 0, 
+                maxValue: 10000000, 
+                decimalPlaces: 0, 
+                showSpinner: false,
+                value: new Number(WOQuantity)
+            });
+            if (WOQuantity) {
+                $("#MainContent_woquantity_hidden").val(WOQuantity);
+            }
+        }, 
+        SetAuditFromCookie: function () { 
+            var NameCookie = Template.GetCookie("AuditorName");
+            if (NameCookie.length > 1) { 
+            
+                if (NameCookie != "New Name" && NameCookie.toString().length > 0) {
+                    $("#Auditor_Name").val(NameCookie);
+                    $("#MainContent_AuditorName").val(NameCookie);
+                    $("#Auditor_Name option[value='SELECT OPTION']").remove();
+                    //$("#Auditor_Name option[value='New Name']").remove();
+                } else {
+                    $('#Auditor_Name').val('SELECT OPTION');
+                }
+            }
+        }, 
+        InitNumbers: function () { 
+            $("#TotalCountValue").wijinputnumber({ 
+                type: 'numeric', 
+                minValue: 0, 
+                maxValue: 10000000, 
+                decimalPlaces: 0, 
+                showSpinner: true, 
+                valueChanged : function (e, data) {
+                    var rejcount = new Number($("#MainContent_Bad_Group").val()); 
+                    var Inspected = new Number(data.value); 
+                    var PassCount = new Number(Inspected - rejcount); 
+                    $("#PassCountValue").text(PassCount);
+                    $("#MainContent_Good").val(PassCount); 
+                    $('#MainContent_totalinspecteditems').val(data.value);
+
+                }
+            });
+            $("#TotalCountValue").height(50);
+            $("#TotalYardValue").wijinputnumber({ 
+                type: 'numeric', 
+                minValue: 0, 
+                maxValue: 10000000, 
+                decimalPlaces: 0, 
+                showSpinner: true, 
+                valueChanged : function (e, data) {
+                    $('#MainContent_totalinspectedyards').val(data.value);
+
+                }
+            });
+            $("#TotalYardValue").height(30);
+            $("#WeaverShiftYards").wijinputnumber({ 
+                type: 'numeric', 
+                minValue: 0, 
+                maxValue: 10000000, 
+                decimalPlaces: 0, 
+                showSpinner: true, 
+                valueChanged : function (e, data) {
+                    $('#MainContent_WeaverShiftYards_hidden').val(data.value);
+
+                }
+            });
+            $("#WeaverShiftYards").height(30);
+        }
 
     };
     var Template = {
@@ -2730,7 +2842,7 @@
                 $.ajax({
                     url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
                     type: 'POST',
-                    data: { method: 'InsertDefect', args: { id: ButtonId, text: ButtonValue, JsonString: JsonString, ButtonTemplateId: ButtonName, InspectionJobSummaryId: InspectionJobSummaryId, InspectionId: InspectionId } },
+                    data: { method: 'InsertDefect', args: { id: ButtonId, text: ButtonValue, JsonString: JsonString, ButtonTemplateId: ButtonName, InspectionJobSummaryId: InspectionJobSummaryId, InspectionId: InspectionId, WeaverShiftIdVal: Inspection.WeaverShiftId  } },
                     success: function (data) {
                         
                         returnnum = new Number(data[0].DefectId);
@@ -2809,7 +2921,7 @@
             $.ajax({
                 url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
                 type: 'POST',
-                data: { method: 'InsertDefect', args: { id: ButtonId, text: ButtonValue, JsonString: JsonString, ButtonTemplateId: ButtonName, InspectionJobSummaryId: InspectionJobSummaryId, InspectionId: InspectionId } },
+                data: { method: 'InsertDefect', args: { id: ButtonId, text: ButtonValue, JsonString: JsonString, ButtonTemplateId: ButtonName, InspectionJobSummaryId: InspectionJobSummaryId, InspectionId: InspectionId} },
                 success: function (data) {
                         
                     returnnum = new Number(data[0].DefectId);
@@ -3126,41 +3238,40 @@
             var JobNumber = ''; 
             var Datanumber = ''; 
             var AuditorName = $('#Auditor_Name').val();
-            if (InspectionTypeState == 'RollNumber') { 
+            if (LineType == 'ROLL') { 
                 JobNumber = $rollnumber.val(); 
+                AuditorName = $("#MainContent_Inspector").val().toString().trim();
             } else { 
                 JobNumber = $workorder.val();
-            }
-            if (AuditorName == null || AuditorName.length == 0 || AuditorName.toString().trim() == "New Name" || AuditorName.toString().trim() == "SELECT OPTION") { 
-                togglevalidation("auditdiv"); 
-                return; 
             }
             $.ajax({
                 url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
                 type: 'GET',
-                data: { method: 'CreateJobSummaryId', args: { jobtype: InspectionTypeState,  AQLStandard: $("#MainContent_aqlstandard").val(), IsDefect: IsDefect, JobNumber: JobNumber, WOQuantity: $LotSize.val(), AQL: AQLValue, Location: $Location.val(), TemplateId: SelectedId, DataNo: $DataNo.val().trim(), CID: selectedCIDnum, Auditor: AuditorName, CasePack: $CPNumber.val(), WorkRoom: $WorkRoom.val() }},
+                data: { method: 'CreateJobSummaryId', 
+                    args: { jobtype: InspectionTypeState,  AQLStandard: $("#MainContent_aqlstandard").val(), IsDefect: IsDefect, JobNumber: JobNumber, WOQuantity: $LotSize.val(), AQL: AQLValue, Location: $Location.val(), TemplateId: SelectedId, DataNo: $DataNo.val().trim(), CID: selectedCIDnum, Auditor: AuditorName, CasePack: $CPNumber.val(), WorkRoom: $WorkRoom.val(), WeaverNamesString: JSON.stringify(Inspection.Weavers) }},
                 success: function (data) {
-
-                    var returnnum = new Number(data);
- 
-                    if (returnnum != -99) { 
-                        $("#<%=InspectionId.ClientID%>").val(returnnum);
+                    var JobObj = JSON.parse(data);
+                    //var returnnum = new Number(data);
+                    console.log(JobObj);
+                    if (JobObj.JobSummaryId != -99) { 
+                        $("#<%=InspectionId.ClientID%>").val(JobObj.JobSummaryId);
                         pageBehindInspectionStarted = "true";
                         $("#AQ_Level").prop('disabled', true);
-                        InspectionJobSummaryIdPage = returnnum;
+                        InspectionJobSummaryIdPage = JobObj.JobSummaryId;
                         $("#MainContent_inspectionjobsummaryid_hidden").val(InspectionJobSummaryIdPage);
                         InspectionStartedVal = true; 
                         if (IsPhoneSize == true) { 
                             RenderEngine.ShowActiveInspectionMobile();
                         }
-                        //if (IsDefect == true) { 
-                        //    datahandler.SubmitDefect(buttonid, buttonvalue, buttonname, returnnum, InspectionId);
-                        //}
+                        Inspection.WeaverShiftId = JobObj.WeaverShiftId;
+                        $("#MainContent_WeaverShiftId_hidden").val(JobObj.WeaverShiftId);
+                        console.log(JobObj.WeaverShiftId);
+                        console.log(Inspection.WeaverShiftId);
                     }
                     
-                        
                     
-                    if (data && returnnum !=-99 ) { 
+                                     
+                    if (data && JobObj.JobSummaryId !=-99 ) { 
                         
                         datahandler.UpdateRejectionCount(InspectionState, InspectionJobSummaryIdPage)
                         setInterval(
@@ -3249,6 +3360,21 @@
 
             return true;
         },
+        GetWeaverNames: function () { 
+            $.ajax({
+                url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
+                type: 'POST',
+                data: { method: 'GetWeaverNames', args: { LocationId: selectedCID } },
+                success: function (data) { 
+                    var json = $.parseJSON(data); 
+                    pageData.WeaversList = json; 
+                    controls.InitWeaversDropDown(pageData.WeaversList)
+                }, 
+                error: function (a, b , c) { 
+
+                }
+            });
+        },
         GetAuditorNames: function () {
  
             if (selectedCID.length > 0) { 
@@ -3280,6 +3406,8 @@
                             var selectedval = $(this).val();
                     
                             if (selectedval == "New Name") {
+                                $(".Weaver-addname").css('display', 'none');
+                                $(".Auditor-addname").css('display', 'block'); 
                                 $('#NewAuditorName').wijdialog('open');
                             }
                             $('#MainContent_AuditorName').val(selectedval);
@@ -3445,6 +3573,21 @@
             } else { 
                 alert("Product Spec entry failed"); 
             }
+        }, 
+        StartNewWeaverShift: function () { 
+            if (Inspection.WeaverShiftId != null && Inspection.WeaverShiftId > 0) { 
+                $.ajax({
+                    url: "<%=Session("BaseUri")%>" + "/handlers/DataEntry/SPC_InspectionInput_JobDispatch.ashx", 
+                    type: 'POST', 
+                    data: { method: 'StartNewWeaverShift', args: {shiftId: Inspection.WeaverShiftId, JobSummaryId: InspectionJobSummaryIdPage, WeaverInfo: JSON.stringify(Inspection.PreConfirmWeavers), Yards: $("#weaveryards").val(), CurrentShiftNumber: Inspection.WeaverShiftNumber}}
+                }).done(function (data) { 
+                    Inspection.WeaverShiftId = new Number(data);  
+                    Inspection.WeaverShiftNumber++; 
+                    $("#MainContent_WeaverShiftId_hidden").val(Inspection.WeaverShiftId);
+                    Inspection.SetWeaversHTML(); 
+                    $('#NewAuditorName').wijdialog('close');
+                });
+            }
         }
     };
     var eventshandler = { 
@@ -3511,10 +3654,119 @@
                     }
               });
             },
-            ExistingUserInputs: {MainContent_WorkOrder: "", MainContent_workroom: "", MainContent_CPNumber: "", MainContent_DataNumber: "", MainContent_AuditorName: "", MainContent_Location: "", WOQuantity: ""},
+            ExistingUserInputs: {MainContent_WorkOrder: "", MainContent_workroom: "", MainContent_CPNumber: "", MainContent_DataNumber: "", MainContent_AuditorName: "", MainContent_Location: "", WOQuantity: "", MainContent_RollNumber: "", MainContent_LoomNumber: "", MainContent_Inspector: ""},
             Timeout_id: 0
 
-        }
+        }, 
+        InitPageEventHandlers: function() { 
+
+                $( "#MainContent_DataNumber" ).change(function() {
+                    if ($DataNo.val().length > 2) { 
+                        var mydata = $("#Specgrid").jqGrid('getGridParam','data');
+                        if (mydata.length > 0) { 
+                            $("#EnterSpec").val("Specs (" + mydata.length + ")");
+                        }
+                    }
+                });
+
+                $("#MainContent_SpecAdd").click(function (e) {
+                    var rowdata = $('#Specgrid').jqGrid('getLocalRow', SpecGridEditId);
+
+                    jQuery("#Specgrid").jqGrid('saveRow', SpecGridEditId, null, "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput_SpecSave.ashx', { DefectId: DefectID, InspectionId: InspectionId, TemplateId: SelectedId, TabName: SelectedTab, TabNumber: UserSelectedTabNumber, SpecId: rowdata.SpecId }, null, null);
+                });
+                $("#GlobalSpecsImage").click(function (e) {
+                    window.open("http://m.standardtextile.com/PDFSearch/Search.aspx"); 
+                });
+
+                 $("#MobileDirector").click(function (e) { 
+                    if (selectedCIDnum) { 
+                        if (selectedCIDnum > 0) { 
+                            var JobNumber = ""
+                            if (InspectionState == 0) { 
+                                JobNumber = "JobNumber=" + $workorder.val();
+                            } else { 
+                                JobNumber = "JobNumber=" + $rollnumber.val();
+                            }
+                            window.location.assign("<%=Session("BaseUri")%>" + "/Mobile/DataEntry/DefectImageEntry.aspx?DefectID=" + DefectID.toString() + "&InspectionID=" + InspectionJobSummaryIdPage.toString() + "&CID=" + selectedCIDnum.toString() + "&InspectionStarted=" + InspectionStartedVal.toString() + "&" +JobNumber);
+                        }
+                    }
+                });
+                $("#NewPage").click(function (e) { 
+            
+                    if (SelectedId && SelectedId.toString().length > 0) { 
+                        var r = confirm("This will clear out the current Inspection.  Are you Sure?");
+                        if (r == true) { 
+                            window.location.assign("<%=Session("BaseUri")%>" + "/APP/Mob/SPCInspectionInput.aspx?TemplateId=" + SelectedId.toString());
+                        }
+                    } else { 
+                        alert("Template Not Selected"); 
+                    }
+            
+                });
+        
+                $("#EnterProductSpec").click(function (e) { 
+            
+                    if (InspectionStartedVal == true && $DataNo.val().length > 2) { 
+                        $("#ProductSpecEntrydialog").wijdialog("open");
+                    } else { 
+                        alert("Inspection Not Started and/or DataNo Not Set"); 
+                    }
+            
+                });
+
+                $("#EnterSpec").click(function (e) { 
+                    if (InspectionStartedVal == true) { 
+                        $("#WorkOrderSelection").css("display","none");   
+                        $("#LocationSelection").css("display","none");
+                        $("#JobConfirmation").css("display","none");
+                        $("#RollConfirmation").css("display","none");
+                        $("#loginfrm").css("display","none");
+                        $("#SpecTable").fadeIn();
+                        hiddenSection.fadeIn()
+                            .css({ 'display':'block' })
+                            // set to full screen
+                            .css({ width: $(window).width() + 'px', height: '100%' })
+                            .css({ top:($(window).height() - hiddenSection.height())/2 + 'px',
+                                left:($(window).width() - hiddenSection.width())/2 + 'px' })
+                            // greyed out background
+                            .css({ 'background-color': 'rgba(0,0,0,0.5)' });
+                    } else { 
+                        alert('Please START an Inspection or Load an Open WorkOrder'); 
+                    }
+                    controlhandler.RenderProductSpecTable(); 
+                });
+                $("#NextItem").click(function (e) { 
+                    var rowclass = $('#2');
+
+                    rowclass.css('background','#FDF9F9 url(images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x !important;');
+                    $("#Specgrid").jqGrid('setGridParam', 
+                                 { datatype: 'json' }).trigger('reloadGrid');
+                    SpecItemCounter++;
+                    $("#ItemNumberLabel").text("Item #: " + SpecItemCounter.toString());
+                });
+
+                $("#ImageSubmit").click(function (e) { 
+                    e.preventDefault();
+           
+                    $("#myImageForm").ajaxSubmit({ url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/DefectImage_handler.ashx?DefectID=' + DefectID.toString(), type: 'post', success: function (data) { alert(data); } })
+                   // $("#myImageForm").ajaxSubmit({url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/DefectImage_handler.ashx', type: 'post' })
+          
+                });
+
+                $(".closebox").click(function (e) {
+
+                    if (e.currentTarget.id == 'closeout2'){ 
+                        $('#MainContent_Good').val(0); 
+                    }
+                    $("#loginfrm").fadeOut();
+                    $("#LocationSelection").fadeOut();
+                    $("#JobConfirmation").fadeOut();
+                    $("#MachineSelection").fadeOut();
+                    $("#SpecTable").fadeOut();
+                    $("#RollConfirmation").fadeOut();
+                    hiddenSection.fadeOut()
+                });
+            }
     };
     function setnavcop(setvalue) { 
         NavCop = setvalue;
@@ -3543,6 +3795,17 @@
             ( d.getHours() < 12 ? ' AM' : ' PM' )
         );
 	
+    }
+    function togglevalidation(divname) { 
+        $("#" + divname).toggle(function () {
+            $("#" + divname).css({ 'background-color': 'red', 'display': 'inline' });
+        });
+        var timeo = setTimeout(function () {
+            $("#" + divname).toggle(function () {
+                $("#" + divname).css({ 'background-color': 'RGB(93, 135, 161)', 'display': 'inline' });
+            });
+        }, 1200);
+
     }
 </script>
 
