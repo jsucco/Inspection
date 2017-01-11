@@ -236,8 +236,6 @@ Namespace core
                     Spcconnection = "SpcSTCSKconnectionstring"
                 Case Is = 572
                     Ctxconnection = "CtxSTCTDCconnectionstring"
-                Case Is = 643
-                    Ctxconnection = "CtxSTCACDCconnectionstring"
                 Case Is = 590
                     Ctxconnection = "CtxSTCJordanconnectionstring"
                     Spcconnection = "SpcSTCSTJconnectionstring"
@@ -258,9 +256,15 @@ Namespace core
                 Case Is = 633
                     Ctxconnection = "CtxSTCITconnectionstring"
                     Spcconnection = "SpcSTCITconnectionstring"
+                Case Is = 643
+                    Ctxconnection = "CtxSTCACDCconnectionstring"
                 Case Is = 645
                     Ctxconnection = "CtxSTCCASconnectionstring"
                     Spcconnection = "SpcSTCASconnectionstring"
+                Case Is = 661
+                    Ctxconnection = "CtxSTCSATconnectionstring"
+                Case Is = 662
+                    Ctxconnection = "CtxSTCSTMconnectionstring"
                 Case Else
 
                     Dim CID_Print As Dictionary(Of String, String) = GetCookie("APRKeepMeIn", "CID_Print")

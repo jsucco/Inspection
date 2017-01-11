@@ -1,0 +1,530 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="AprManager_Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="EmailMaster">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SPC_CAR_RPT" Type="bit" Nullable="false" />
+          <Property Name="MCS_CAR_RPT" Type="bit" Nullable="false" />
+          <Property Name="SPC_STT_RPT" Type="bit" Nullable="false" />
+          <Property Name="ADMIN" Type="bit" Nullable="false" />
+          <Property Name="INS_ALERT_EMAIL" Type="bit" />
+          <Property Name="SPEC_ALERT_EMAIL" Type="bit" />
+          <Property Name="HomeLocation" Type="char" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="LinkedServerMaster">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DSN_Type" Type="varchar" MaxLength="30" />
+          <Property Name="DSN_Identifier" Type="nvarchar" MaxLength="50" />
+          <Property Name="LocationId" Type="int" Nullable="false" />
+          <Property Name="LinkedServerName" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="LocationMaster">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="30" Nullable="false" />
+          <Property Name="Abreviation" Type="varchar" MaxLength="10" />
+          <Property Name="DBname" Type="nchar" MaxLength="30" />
+          <Property Name="CID" Type="nchar" MaxLength="10" />
+          <Property Name="ConnectionString" Type="nchar" MaxLength="30" />
+          <Property Name="InspectionResults" Type="bit" />
+          <Property Name="ProductionResults" Type="bit" />
+          <Property Name="AS400_Connection" Type="bit" />
+          <Property Name="AS400_Abr" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="OPCMaster">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="IPaddress" Type="nvarchar" MaxLength="20" />
+          <Property Name="LocationId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SPC_ApplicationLog">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="date_added" Type="datetime" Nullable="false" />
+          <Property Name="type" Type="varchar" MaxLength="50" />
+          <Property Name="Target" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Message" Type="nvarchar(max)" />
+          <Property Name="application_name" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="UserPK" Type="int" />
+          <Property Name="Error_Number" Type="int" />
+        </EntityType>
+        <EntityType Name="UserActivityLog">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DBOrigin" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="UserID" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="EntryTimestamp" Type="datetime" Nullable="false" />
+          <Property Name="DeviceType" Type="varchar" MaxLength="100" />
+          <Property Name="IPAddress" Type="nvarchar" MaxLength="20" />
+          <Property Name="CID" Type="varchar" MaxLength="10" />
+          <Property Name="ActivityType" Type="nvarchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserCrudActivityLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="oper" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="UserActivityLogId" Type="int" Nullable="false" />
+          <Property Name="Timestamp" Type="datetime" Nullable="false" />
+          <Property Name="OriginalObject" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="FinalObject" Type="nvarchar(max)" />
+          <Property Name="DataBase" Type="nvarchar" MaxLength="50" />
+          <Property Name="Table" Type="nvarchar" MaxLength="50" />
+          <Property Name="PrimaryKeyTarget" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_LinkedServerMaster_LocationMaster">
+          <End Role="LocationMaster" Type="Self.LocationMaster" Multiplicity="1" />
+          <End Role="LinkedServerMaster" Type="Self.LinkedServerMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LocationMaster">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="LinkedServerMaster">
+              <PropertyRef Name="LocationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OPCMaster_LocationMaster">
+          <End Role="LocationMaster" Type="Self.LocationMaster" Multiplicity="1" />
+          <End Role="OPCMaster" Type="Self.OPCMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LocationMaster">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="OPCMaster">
+              <PropertyRef Name="LocationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserCrudActivityLog_ToTable">
+          <End Role="UserActivityLog" Type="Self.UserActivityLog" Multiplicity="1" />
+          <End Role="UserCrudActivityLog" Type="Self.UserCrudActivityLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserActivityLog">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserCrudActivityLog">
+              <PropertyRef Name="UserActivityLogId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="EmailTest1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="returnmsg" Type="nvarchar(max)" Mode="InOut" />
+          <Parameter Name="EmailAddress" Type="nvarchar" Mode="In" />
+          <Parameter Name="Subject" Type="nvarchar" Mode="In" />
+          <Parameter Name="Body" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="Get400Locations" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="RETSTRG" Type="varchar(max)" Mode="InOut" />
+        </Function>
+        <Function Name="SearchAllTables" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SearchStr" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="SP_ApplicationLogInsert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="type" Type="varchar" Mode="In" />
+          <Parameter Name="target" Type="varchar" Mode="In" />
+          <Parameter Name="message" Type="varchar(max)" Mode="In" />
+          <Parameter Name="numRowAff" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="SP_ApplicationLogInsert_1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="type" Type="varchar" Mode="In" />
+          <Parameter Name="target" Type="varchar" Mode="In" />
+          <Parameter Name="message" Type="varchar(max)" Mode="In" />
+          <Parameter Name="UserPK" Type="int" Mode="In" />
+          <Parameter Name="numRowAff" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="SP_SPC_GetTemplateLocationStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TemplateId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="usp_InsertErrorToLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="type" Type="varchar" Mode="In" />
+          <Parameter Name="target" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="AprManager_ModelStoreContainer">
+          <EntitySet Name="EmailMaster" EntityType="Self.EmailMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LinkedServerMaster" EntityType="Self.LinkedServerMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LocationMaster" EntityType="Self.LocationMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OPCMaster" EntityType="Self.OPCMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SPC_ApplicationLog" EntityType="Self.SPC_ApplicationLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserActivityLog" EntityType="Self.UserActivityLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserCrudActivityLog" EntityType="Self.UserCrudActivityLog" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_LinkedServerMaster_LocationMaster" Association="Self.FK_LinkedServerMaster_LocationMaster">
+            <End Role="LocationMaster" EntitySet="LocationMaster" />
+            <End Role="LinkedServerMaster" EntitySet="LinkedServerMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OPCMaster_LocationMaster" Association="Self.FK_OPCMaster_LocationMaster">
+            <End Role="LocationMaster" EntitySet="LocationMaster" />
+            <End Role="OPCMaster" EntitySet="OPCMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserCrudActivityLog_ToTable" Association="Self.FK_UserCrudActivityLog_ToTable">
+            <End Role="UserActivityLog" EntitySet="UserActivityLog" />
+            <End Role="UserCrudActivityLog" EntitySet="UserCrudActivityLog" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AprManager_Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="EmailMaster">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SPC_CAR_RPT" Type="Boolean" Nullable="false" />
+          <Property Name="MCS_CAR_RPT" Type="Boolean" Nullable="false" />
+          <Property Name="SPC_STT_RPT" Type="Boolean" Nullable="false" />
+          <Property Name="ADMIN" Type="Boolean" Nullable="false" />
+          <Property Name="INS_ALERT_EMAIL" Type="Boolean" />
+          <Property Name="SPEC_ALERT_EMAIL" Type="Boolean" />
+          <Property Name="HomeLocation" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="LinkedServerMaster">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DSN_Type" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="DSN_Identifier" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LocationId" Type="Int32" Nullable="false" />
+          <Property Name="LinkedServerName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="LocationMaster" Relationship="Self.FK_LinkedServerMaster_LocationMaster" FromRole="LinkedServerMaster" ToRole="LocationMaster" />
+        </EntityType>
+        <EntityType Name="LocationMaster">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Abreviation" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DBname" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
+          <Property Name="CID" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="ConnectionString" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
+          <Property Name="InspectionResults" Type="Boolean" />
+          <Property Name="ProductionResults" Type="Boolean" />
+          <Property Name="AS400_Connection" Type="Boolean" />
+          <Property Name="AS400_Abr" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="LinkedServerMasters" Relationship="Self.FK_LinkedServerMaster_LocationMaster" FromRole="LocationMaster" ToRole="LinkedServerMaster" />
+          <NavigationProperty Name="OPCMasters" Relationship="Self.FK_OPCMaster_LocationMaster" FromRole="LocationMaster" ToRole="OPCMaster" />
+        </EntityType>
+        <EntityType Name="OPCMaster">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IPaddress" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="LocationId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="LocationMaster" Relationship="Self.FK_OPCMaster_LocationMaster" FromRole="OPCMaster" ToRole="LocationMaster" />
+        </EntityType>
+        <EntityType Name="SPC_ApplicationLog">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_added" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Target" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="application_name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UserPK" Type="Int32" />
+          <Property Name="Error_Number" Type="Int32" />
+        </EntityType>
+        <EntityType Name="UserActivityLog">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DBOrigin" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EntryTimestamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DeviceType" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IPAddress" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="ActivityType" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="UserCrudActivityLogs" Relationship="Self.FK_UserCrudActivityLog_ToTable" FromRole="UserActivityLog" ToRole="UserCrudActivityLog" />
+        </EntityType>
+        <EntityType Name="UserCrudActivityLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="oper" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserActivityLogId" Type="Int32" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="OriginalObject" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FinalObject" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DataBase" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Table" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PrimaryKeyTarget" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="UserActivityLog" Relationship="Self.FK_UserCrudActivityLog_ToTable" FromRole="UserCrudActivityLog" ToRole="UserActivityLog" />
+        </EntityType>
+        <Association Name="FK_LinkedServerMaster_LocationMaster">
+          <End Role="LocationMaster" Type="Self.LocationMaster" Multiplicity="1" />
+          <End Role="LinkedServerMaster" Type="Self.LinkedServerMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LocationMaster">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="LinkedServerMaster">
+              <PropertyRef Name="LocationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OPCMaster_LocationMaster">
+          <End Role="LocationMaster" Type="Self.LocationMaster" Multiplicity="1" />
+          <End Role="OPCMaster" Type="Self.OPCMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LocationMaster">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="OPCMaster">
+              <PropertyRef Name="LocationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserCrudActivityLog_ToTable">
+          <End Role="UserActivityLog" Type="Self.UserActivityLog" Multiplicity="1" />
+          <End Role="UserCrudActivityLog" Type="Self.UserCrudActivityLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserActivityLog">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserCrudActivityLog">
+              <PropertyRef Name="UserActivityLogId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AprManager_Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="EmailMasters" EntityType="Self.EmailMaster" />
+          <EntitySet Name="LinkedServerMasters" EntityType="Self.LinkedServerMaster" />
+          <EntitySet Name="LocationMasters" EntityType="Self.LocationMaster" />
+          <EntitySet Name="OPCMasters" EntityType="Self.OPCMaster" />
+          <EntitySet Name="SPC_ApplicationLog" EntityType="Self.SPC_ApplicationLog" />
+          <EntitySet Name="UserActivityLogs" EntityType="Self.UserActivityLog" />
+          <EntitySet Name="UserCrudActivityLogs" EntityType="Self.UserCrudActivityLog" />
+          <AssociationSet Name="FK_LinkedServerMaster_LocationMaster" Association="Self.FK_LinkedServerMaster_LocationMaster">
+            <End Role="LocationMaster" EntitySet="LocationMasters" />
+            <End Role="LinkedServerMaster" EntitySet="LinkedServerMasters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OPCMaster_LocationMaster" Association="Self.FK_OPCMaster_LocationMaster">
+            <End Role="LocationMaster" EntitySet="LocationMasters" />
+            <End Role="OPCMaster" EntitySet="OPCMasters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserCrudActivityLog_ToTable" Association="Self.FK_UserCrudActivityLog_ToTable">
+            <End Role="UserActivityLog" EntitySet="UserActivityLogs" />
+            <End Role="UserCrudActivityLog" EntitySet="UserCrudActivityLogs" />
+          </AssociationSet>
+          <FunctionImport Name="EmailTest1">
+            <Parameter Name="returnmsg" Mode="InOut" Type="String" />
+            <Parameter Name="EmailAddress" Mode="In" Type="String" />
+            <Parameter Name="Subject" Mode="In" Type="String" />
+            <Parameter Name="Body" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Get400Locations">
+            <Parameter Name="RETSTRG" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SearchAllTables" ReturnType="Collection(AprManager_Model.SearchAllTables_Result)">
+            <Parameter Name="SearchStr" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ApplicationLogInsert">
+            <Parameter Name="type" Mode="In" Type="String" />
+            <Parameter Name="target" Mode="In" Type="String" />
+            <Parameter Name="message" Mode="In" Type="String" />
+            <Parameter Name="numRowAff" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ApplicationLogInsert_1">
+            <Parameter Name="type" Mode="In" Type="String" />
+            <Parameter Name="target" Mode="In" Type="String" />
+            <Parameter Name="message" Mode="In" Type="String" />
+            <Parameter Name="UserPK" Mode="In" Type="Int32" />
+            <Parameter Name="numRowAff" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_SPC_GetTemplateLocationStatus" ReturnType="Collection(AprManager_Model.SP_SPC_GetTemplateLocationStatus_Result)">
+            <Parameter Name="TemplateId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="usp_InsertErrorToLog">
+            <Parameter Name="type" Mode="In" Type="String" />
+            <Parameter Name="target" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="SearchAllTables_Result">
+          <Property Type="String" Name="ColumnName" Nullable="true" MaxLength="370" />
+          <Property Type="String" Name="ColumnValue" Nullable="true" MaxLength="3630" />
+        </ComplexType>
+        <ComplexType Name="SP_SPC_GetTemplateLocationStatus_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Abr" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="30" />
+          <Property Type="Boolean" Name="Status" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="AprManager_ModelStoreContainer" CdmEntityContainer="AprManager_Entities">
+          <EntitySetMapping Name="EmailMasters">
+            <EntityTypeMapping TypeName="AprManager_Model.EmailMaster">
+              <MappingFragment StoreEntitySet="EmailMaster">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="SPC_CAR_RPT" ColumnName="SPC_CAR_RPT" />
+                <ScalarProperty Name="MCS_CAR_RPT" ColumnName="MCS_CAR_RPT" />
+                <ScalarProperty Name="SPC_STT_RPT" ColumnName="SPC_STT_RPT" />
+                <ScalarProperty Name="ADMIN" ColumnName="ADMIN" />
+                <ScalarProperty Name="INS_ALERT_EMAIL" ColumnName="INS_ALERT_EMAIL" />
+                <ScalarProperty Name="SPEC_ALERT_EMAIL" ColumnName="SPEC_ALERT_EMAIL" />
+                <ScalarProperty Name="HomeLocation" ColumnName="HomeLocation" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LinkedServerMasters">
+            <EntityTypeMapping TypeName="AprManager_Model.LinkedServerMaster">
+              <MappingFragment StoreEntitySet="LinkedServerMaster">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="DSN_Type" ColumnName="DSN_Type" />
+                <ScalarProperty Name="DSN_Identifier" ColumnName="DSN_Identifier" />
+                <ScalarProperty Name="LocationId" ColumnName="LocationId" />
+                <ScalarProperty Name="LinkedServerName" ColumnName="LinkedServerName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LocationMasters">
+            <EntityTypeMapping TypeName="AprManager_Model.LocationMaster">
+              <MappingFragment StoreEntitySet="LocationMaster">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Abreviation" ColumnName="Abreviation" />
+                <ScalarProperty Name="DBname" ColumnName="DBname" />
+                <ScalarProperty Name="CID" ColumnName="CID" />
+                <ScalarProperty Name="ConnectionString" ColumnName="ConnectionString" />
+                <ScalarProperty Name="InspectionResults" ColumnName="InspectionResults" />
+                <ScalarProperty Name="ProductionResults" ColumnName="ProductionResults" />
+                <ScalarProperty Name="AS400_Connection" ColumnName="AS400_Connection" />
+                <ScalarProperty Name="AS400_Abr" ColumnName="AS400_Abr" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OPCMasters">
+            <EntityTypeMapping TypeName="AprManager_Model.OPCMaster">
+              <MappingFragment StoreEntitySet="OPCMaster">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IPaddress" ColumnName="IPaddress" />
+                <ScalarProperty Name="LocationId" ColumnName="LocationId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SPC_ApplicationLog">
+            <EntityTypeMapping TypeName="AprManager_Model.SPC_ApplicationLog">
+              <MappingFragment StoreEntitySet="SPC_ApplicationLog">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="date_added" ColumnName="date_added" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="Target" ColumnName="Target" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="application_name" ColumnName="application_name" />
+                <ScalarProperty Name="UserPK" ColumnName="UserPK" />
+                <ScalarProperty Name="Error_Number" ColumnName="Error_Number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserActivityLogs">
+            <EntityTypeMapping TypeName="AprManager_Model.UserActivityLog">
+              <MappingFragment StoreEntitySet="UserActivityLog">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="DBOrigin" ColumnName="DBOrigin" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="EntryTimestamp" ColumnName="EntryTimestamp" />
+                <ScalarProperty Name="DeviceType" ColumnName="DeviceType" />
+                <ScalarProperty Name="IPAddress" ColumnName="IPAddress" />
+                <ScalarProperty Name="CID" ColumnName="CID" />
+                <ScalarProperty Name="ActivityType" ColumnName="ActivityType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserCrudActivityLogs">
+            <EntityTypeMapping TypeName="AprManager_Model.UserCrudActivityLog">
+              <MappingFragment StoreEntitySet="UserCrudActivityLog">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="oper" ColumnName="oper" />
+                <ScalarProperty Name="UserActivityLogId" ColumnName="UserActivityLogId" />
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="OriginalObject" ColumnName="OriginalObject" />
+                <ScalarProperty Name="FinalObject" ColumnName="FinalObject" />
+                <ScalarProperty Name="DataBase" ColumnName="DataBase" />
+                <ScalarProperty Name="Table" ColumnName="Table" />
+                <ScalarProperty Name="PrimaryKeyTarget" ColumnName="PrimaryKeyTarget" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="EmailTest1" FunctionName="AprManager_Model.Store.EmailTest1" />
+          <FunctionImportMapping FunctionImportName="Get400Locations" FunctionName="AprManager_Model.Store.Get400Locations" />
+          <FunctionImportMapping FunctionImportName="SearchAllTables" FunctionName="AprManager_Model.Store.SearchAllTables">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprManager_Model.SearchAllTables_Result">
+                <ScalarProperty Name="ColumnName" ColumnName="ColumnName" />
+                <ScalarProperty Name="ColumnValue" ColumnName="ColumnValue" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ApplicationLogInsert" FunctionName="AprManager_Model.Store.SP_ApplicationLogInsert" />
+          <FunctionImportMapping FunctionImportName="SP_ApplicationLogInsert_1" FunctionName="AprManager_Model.Store.SP_ApplicationLogInsert_1" />
+          <FunctionImportMapping FunctionImportName="SP_SPC_GetTemplateLocationStatus" FunctionName="AprManager_Model.Store.SP_SPC_GetTemplateLocationStatus">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprManager_Model.SP_SPC_GetTemplateLocationStatus_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Abr" ColumnName="Abr" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_InsertErrorToLog" FunctionName="AprManager_Model.Store.usp_InsertErrorToLog" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

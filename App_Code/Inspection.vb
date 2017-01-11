@@ -74,6 +74,7 @@ Partial Public Class DefectMaster
     Public Property CasePackConv As Nullable(Of Decimal)
     Public Property WorkRoom As String
     Public Property InspectionJobSummaryId As Nullable(Of Integer)
+    Public Property WeaverShiftId As Nullable(Of Integer)
 
     Public Overridable Property TemplateName As TemplateName
     Public Overridable Property DefectTimers As ICollection(Of DefectTimer) = New HashSet(Of DefectTimer)
@@ -93,6 +94,17 @@ Partial Public Class DefectTimer
     Public Overridable Property ButtonTemplate As ButtonTemplate
     Public Overridable Property DefectMaster As DefectMaster
     Public Overridable Property InspectionJobSummary As InspectionJobSummary
+
+End Class
+Partial Public Class EmployeeNo
+    Public Property Id As Integer
+    Public Property FirstName As String
+    Public Property LastName As String
+    Public Property Initials As String
+    Public Property CID As String
+    Public Property Type As String
+
+    Public Overridable Property WeaverProductions As ICollection(Of WeaverProduction) = New HashSet(Of WeaverProduction)
 
 End Class
 Partial Public Class INS_Summary_VW
@@ -224,9 +236,13 @@ Partial Public Class InspectionJobSummary
     Public Property MinorsCount As Nullable(Of Integer)
     Public Property RepairsCount As Nullable(Of Integer)
     Public Property ScrapCount As Nullable(Of Integer)
+    Public Property EmployeeNo As String
+    Public Property CasePack As String
+    Public Property WorkRoom As String
 
     Public Overridable Property DefectTimers As ICollection(Of DefectTimer) = New HashSet(Of DefectTimer)
     Public Overridable Property SpecMeasurements As ICollection(Of SpecMeasurement) = New HashSet(Of SpecMeasurement)
+    Public Overridable Property WeaverProductions As ICollection(Of WeaverProduction) = New HashSet(Of WeaverProduction)
 
 End Class
 Partial Public Class InspectionType
@@ -407,5 +423,26 @@ Partial Public Class TemplateName
     Public Overridable Property RollInspectionDetails As ICollection(Of RollInspectionDetail) = New HashSet(Of RollInspectionDetail)
     Public Overridable Property TabTemplates As ICollection(Of TabTemplate) = New HashSet(Of TabTemplate)
     Public Overridable Property TemplateActivators As ICollection(Of TemplateActivator) = New HashSet(Of TemplateActivator)
+
+End Class
+Partial Public Class WeaverProduction
+    Public Property Id As Integer
+    Public Property EmployeeNoId As Integer
+    Public Property JobSummaryId As Integer
+    Public Property Yards As Decimal
+    Public Property ShiftId As Integer
+
+    Public Overridable Property EmployeeNo As EmployeeNo
+    Public Overridable Property InspectionJobSummary As InspectionJobSummary
+    Public Overridable Property WeaverShift As WeaverShift
+
+End Class
+Partial Public Class WeaverShift
+    Public Property Id As Integer
+    Public Property Shift As Integer
+    Public Property Start As Date
+    Public Property Finish As Nullable(Of Date)
+
+    Public Overridable Property WeaverProductions As ICollection(Of WeaverProduction) = New HashSet(Of WeaverProduction)
 
 End Class

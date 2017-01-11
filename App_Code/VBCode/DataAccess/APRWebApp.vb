@@ -64,13 +64,17 @@ Namespace core
 
         Public Sub SetCookie(ByVal CookieName As String, ByVal SubKey As String, ByVal Value As Object)
             If Not Request.Cookies(CookieName) Is Nothing Then
-                Dim CurrentCookie As String = Server.HtmlEncode(Request.Cookies(CookieName)(SubKey)).ToString()
-
-                If Value <> CurrentCookie Then
-                    Response.Cookies(CookieName)(SubKey) = Value
-                    Response.Cookies(CookieName)("lastVisit") = DateTime.Now.ToString()
-                    Response.Cookies(CookieName).Expires = DateTime.Now.AddDays(365)
-                End If
+                Try
+                    Dim CurrentCookie As String = Server.HtmlEncode(Request.Cookies(CookieName)(SubKey)).ToString()
+                    Dim valuestring As String = Convert.ToString(Value)
+                    If valuestring <> CurrentCookie Then
+                        Response.Cookies(CookieName)(SubKey) = Value
+                        Response.Cookies(CookieName)("lastVisit") = DateTime.Now.ToString()
+                        Response.Cookies(CookieName).Expires = DateTime.Now.AddDays(365)
+                    End If
+                Catch ex As Exception
+                    Elmah.ErrorSignal.FromCurrentContext.Raise(ex)
+                End Try
 
             Else
                 Response.Cookies(CookieName)(SubKey) = Value

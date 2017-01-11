@@ -30,10 +30,10 @@ Namespace core
             End If
             SQL = "INSERT INTO DefectMaster (DefectTime, DefectDesc, POnumber, DataNo, EmployeeNo, ThisPieceNo," & vbCrLf &
                     "SampleSize, RejectLimiter, TotalLotPieces, Product, DefectClass, MergeDate, Tablet, WorkOrder, LotNo, " & vbCrLf &
-                    "Location, DataType, Dimensions, Comment, LoomNo, DefectPoints, GriegeNo, RollNo, Operation, TemplateId, InspectionId, ButtonTemplateId, Inspector, ItemNumber, InspectionState, WorkRoom, InspectionJobSummaryId)" & vbCrLf &
+                    "Location, DataType, Dimensions, Comment, LoomNo, DefectPoints, GriegeNo, RollNo, Operation, TemplateId, InspectionId, ButtonTemplateId, Inspector, ItemNumber, InspectionState, WorkRoom, InspectionJobSummaryId, WeaverShiftId)" & vbCrLf &
                     "VALUES (@DefectTime, @DefectDesc, @CPNumber, @DataNo,@EmployeeNo, @ThisPieceNo,@SampleSize, @RejectLimiter, @TotalLotPieces, " & vbCrLf &
                     " @Product, @DefectClass, @MergeDate, @Tablet,@WorkOrder,@LotNo,@Location,@DataType,@Dimensions,@Comment,@LoomNo,@DefectPoints,@GreigeNo,@RollNo," & vbCrLf &
-                    "@Operation,@TemplateId, @InspectionId, @ButtonTemplateId, @Inspector, @ItemNumber, @InspectionState, @WorkRoom, @InspectionJobSummaryId);" & vbCrLf &
+                    "@Operation,@TemplateId, @InspectionId, @ButtonTemplateId, @Inspector, @ItemNumber, @InspectionState, @WorkRoom, @InspectionJobSummaryId, @WeaverShiftId);" & vbCrLf &
                     "SELECT SCOPE_IDENTITY();"
 
             Using connection As New SqlConnection(dlayer.InspectConnectionString())
@@ -72,6 +72,7 @@ Namespace core
                 Internalcmd.Parameters.Add(_DAOFactory.Getparameter("@InspectionState", DbType.String))
                 Internalcmd.Parameters.Add(_DAOFactory.Getparameter("@WorkRoom", DbType.String))
                 Internalcmd.Parameters.Add(_DAOFactory.Getparameter("@InspectionJobSummaryId", DbType.Int32))
+                Internalcmd.Parameters.Add(_DAOFactory.Getparameter("@WeaverShiftId", DbType.Int32))
                 Internalcmd.Parameters("@DefectTime").Value = inputarray(0).DefectTime
                 Internalcmd.Parameters("@DefectDesc").Value = inputarray(0).DefectDesc
                 Internalcmd.Parameters("@CPNumber").Value = inputarray(0).POnumber
@@ -126,6 +127,8 @@ Namespace core
                 Internalcmd.Parameters("@InspectionState").Value = inputarray(0).InspectionState
                 Internalcmd.Parameters("@WorkRoom").Value = inputarray(0).WorkRoom
                 Internalcmd.Parameters("@InspectionJobSummaryId").Value = inputarray(0).InspectionJobSummaryId
+                Internalcmd.Parameters("@WeaverShiftId").Value = inputarray(0).WeaverShiftId
+
                 If inputarray(0).TemplateId <> Nothing Then
                     Internalcmd.Parameters("@TemplateId").Value = inputarray(0).TemplateId
                 Else
@@ -278,8 +281,8 @@ Namespace core
             If IsNothing(jslist) = False Then
 
                 ' returnid = bmapjs.InsertSpcObject()
-                Dim sql As String = "INSERT INTO InspectionJobSummary (JobType, JobNumber, Standard, CID, TemplateId, ItemPassCount, ItemFailCount, WOQuantity, WorkOrderPieces, AQL_Level, SampleSize, RejectLimiter, Inspection_Started, DataNo, UnitCost, UnitDesc, PRP_Code )" & vbCrLf &
-                                        "VALUES (@JobType,@JobNumber, @Standard, @CID, @TemplateId, @ItemPassCount,@ItemFailCount,@WOQuantity, @WorkOrderPieces, @AQL_Level,@SampleSize,@RejectLimiter, @Inspection_Started, @DataNo, @UnitCost, @UnitDesc, @PRP_Code )"
+                Dim sql As String = "INSERT INTO InspectionJobSummary (JobType, JobNumber, Standard, CID, TemplateId, ItemPassCount, ItemFailCount, WOQuantity, WorkOrderPieces, AQL_Level, SampleSize, RejectLimiter, Inspection_Started, DataNo, UnitCost, UnitDesc, PRP_Code, EmployeeNo, CasePack, WorkRoom )" & vbCrLf &
+                                        "VALUES (@JobType,@JobNumber, @Standard, @CID, @TemplateId, @ItemPassCount,@ItemFailCount,@WOQuantity, @WorkOrderPieces, @AQL_Level,@SampleSize,@RejectLimiter, @Inspection_Started, @DataNo, @UnitCost, @UnitDesc, @PRP_Code, @EmployeeNo, @CasePack, @WorkRoom )"
                 returnid = bmapjs.InsertSpcObject_RetNum(sql, jslist, True)
 
             End If

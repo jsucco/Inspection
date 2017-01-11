@@ -248,6 +248,7 @@ Namespace core
             Public Property InspectionState As String
             Public Property WorkRoom As String
             Public Property InspectionJobSummaryId As Long
+            Public Property WeaverShiftId As Integer
         End Class
 
         Public Class DefectTimers
@@ -296,6 +297,24 @@ Namespace core
             Public Property MinorsCount As Integer
             Public Property RepairsCount As Integer
             Public Property ScrapCount As Integer
+            Public Property EmployeeNo As String
+            Public Property CasePack As String
+            Public Property WorkRoom As String
+        End Class
+
+        Public Class OpenRollInfo
+            Public Property JobNumber As String
+            Public Property WOQuantity As Integer
+            Public Property AQL_Level As Decimal
+            Public Property Standard As String
+            Public Property EmployeeNoId As Integer
+            Public Property Initials As String
+            Public Property EmployeeNo As String
+            Public Property ShiftId As Integer
+        End Class
+        Public Class StartJobInfo
+            Public Property JobSummaryId As Integer = -99
+            Public Property WeaverShiftId As Integer
         End Class
         Public Class DefectTimer
             Public Property id As Integer
@@ -583,7 +602,12 @@ Namespace core
             Public Property RE As String
             Public Property LotSize As String
         End Class
-
+        Public Class Weavers
+            Public Property Weaver1ID As Integer
+            Public Property Weaver1Initials As String
+            Public Property Weaver2ID As Integer
+            Public Property Weaver2Initials As String
+        End Class
         Public Class RollLoom
             Public Property LoomNo As String
             Public Property RollNo As String
@@ -672,6 +696,7 @@ Namespace core
             Public Property TemplateId As Integer
             Public Property Name As String
             Public Property LineType As String
+            Public Property LineTypeVariable As String
             Public Property TotalInspectedItems As Integer
             Public Property ItemPassCount As Integer
             Public Property ItemFailCount As Integer
@@ -702,6 +727,7 @@ Namespace core
             Public Property DataNo As String
             Public Property ProductType As String
             Public Property LineType As String
+            Public Property LineTypeVariable As String
             Public Property UnitDesc As String
             Public Property Inspection_Started As String
             Public Property Inspection_Finished As String
@@ -1015,6 +1041,9 @@ Namespace core
             Public Property MainContent_AuditorName As String
             Public Property MainContent_Location As String
             Public Property WOQuantity As String
+            Public Property MainContent_RollNumber As String
+            Public Property MainContent_LoomNumber As String
+            Public Property MainContent_Inspector As String
         End Class
     End Namespace
 

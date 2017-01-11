@@ -70,6 +70,7 @@
           <Property Name="CasePackConv" Type="decimal" Precision="13" Scale="2" />
           <Property Name="WorkRoom" Type="nchar" MaxLength="10" />
           <Property Name="InspectionJobSummaryId" Type="int" />
+          <Property Name="WeaverShiftId" Type="int" />
         </EntityType>
         <EntityType Name="DefectTimer">
           <Key>
@@ -84,6 +85,17 @@
           <Property Name="ButtonLocationId" Type="int" Nullable="false" />
           <Property Name="Timestamp" Type="datetime" Nullable="false" />
           <Property Name="StopTimestamp" Type="datetime" />
+        </EntityType>
+        <EntityType Name="EmployeeNo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Initials" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="CID" Type="nchar" MaxLength="6" Nullable="false" />
+          <Property Name="Type" Type="nchar" MaxLength="10" Nullable="false" />
         </EntityType>
         <EntityType Name="InspectionJobSummary">
           <Key>
@@ -119,6 +131,9 @@
           <Property Name="MinorsCount" Type="int" />
           <Property Name="RepairsCount" Type="int" />
           <Property Name="ScrapCount" Type="int" />
+          <Property Name="EmployeeNo" Type="varchar" MaxLength="50" />
+          <Property Name="CasePack" Type="varchar" MaxLength="50" />
+          <Property Name="WorkRoom" Type="nchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="InspectionTypes">
           <Key>
@@ -233,8 +248,27 @@
           <Property Name="Loc_FNL" Type="bit" />
           <Property Name="Loc_FPC" Type="bit" />
         </EntityType>
+        <EntityType Name="WeaverProduction">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeeNoId" Type="int" Nullable="false" />
+          <Property Name="JobSummaryId" Type="int" Nullable="false" />
+          <Property Name="Yards" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="ShiftId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WeaverShifts">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Shift" Type="int" Nullable="false" />
+          <Property Name="Start" Type="datetime" Nullable="false" />
+          <Property Name="Finish" Type="datetime" />
+        </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'Inspection_Test.dbo.INS_Summary_VW' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'Inspection_Test_102016.dbo.INS_Summary_VW' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="INS_Summary_VW">
           <Key>
             <PropertyRef Name="id" />
@@ -340,7 +374,7 @@ warning 6002: The table/view 'Inspection_Test.dbo.INS_Summary_VW' does not have 
           <Property Name="Loc_FPC" Type="bit" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'Inspection_Test.dbo.LocationMaster_VW' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'Inspection_Test_102016.dbo.LocationMaster_VW' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="LocationMaster_VW">
           <Key>
             <PropertyRef Name="id" />
@@ -358,7 +392,7 @@ warning 6002: The table/view 'Inspection_Test.dbo.LocationMaster_VW' does not ha
           <Property Name="AS400_Abr" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'Inspection_Test.dbo.STT_VW' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'Inspection_Test_102016.dbo.STT_VW' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="STT_VW">
           <Key>
             <PropertyRef Name="ID" />
@@ -556,6 +590,42 @@ warning 6002: The table/view 'Inspection_Test.dbo.STT_VW' does not have a primar
             </Principal>
             <Dependent Role="TemplateActivator">
               <PropertyRef Name="TemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WeaverProduction_EmployeeNo">
+          <End Role="EmployeeNo" Type="Self.EmployeeNo" Multiplicity="1" />
+          <End Role="WeaverProduction" Type="Self.WeaverProduction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EmployeeNo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="WeaverProduction">
+              <PropertyRef Name="EmployeeNoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WeaverProduction_InspectionJobSummary">
+          <End Role="InspectionJobSummary" Type="Self.InspectionJobSummary" Multiplicity="1" />
+          <End Role="WeaverProduction" Type="Self.WeaverProduction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InspectionJobSummary">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="WeaverProduction">
+              <PropertyRef Name="JobSummaryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WeaverProduction_WeaverShifts">
+          <End Role="WeaverShifts" Type="Self.WeaverShifts" Multiplicity="1" />
+          <End Role="WeaverProduction" Type="Self.WeaverProduction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WeaverShifts">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="WeaverProduction">
+              <PropertyRef Name="ShiftId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1092,6 +1162,7 @@ warning 6002: The table/view 'Inspection_Test.dbo.STT_VW' does not have a primar
           <EntitySet Name="ButtonTemplate" EntityType="Self.ButtonTemplate" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DefectMaster" EntityType="Self.DefectMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DefectTimer" EntityType="Self.DefectTimer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmployeeNo" EntityType="Self.EmployeeNo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InspectionJobSummary" EntityType="Self.InspectionJobSummary" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InspectionTypes" EntityType="Self.InspectionTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductSpecification" EntityType="Self.ProductSpecification" Schema="dbo" store:Type="Tables" />
@@ -1101,6 +1172,8 @@ warning 6002: The table/view 'Inspection_Test.dbo.STT_VW' does not have a primar
           <EntitySet Name="TabTemplate" EntityType="Self.TabTemplate" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TemplateActivator" EntityType="Self.TemplateActivator" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TemplateName" EntityType="Self.TemplateName" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WeaverProduction" EntityType="Self.WeaverProduction" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WeaverShifts" EntityType="Self.WeaverShifts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="INS_Summary_VW" EntityType="Self.INS_Summary_VW" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [INS_Summary_VW].[id] AS [id], 
@@ -1313,6 +1386,18 @@ warning 6002: The table/view 'Inspection_Test.dbo.STT_VW' does not have a primar
             <End Role="TemplateName" EntitySet="TemplateName" />
             <End Role="TemplateActivator" EntitySet="TemplateActivator" />
           </AssociationSet>
+          <AssociationSet Name="FK_WeaverProduction_EmployeeNo" Association="Self.FK_WeaverProduction_EmployeeNo">
+            <End Role="EmployeeNo" EntitySet="EmployeeNo" />
+            <End Role="WeaverProduction" EntitySet="WeaverProduction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WeaverProduction_InspectionJobSummary" Association="Self.FK_WeaverProduction_InspectionJobSummary">
+            <End Role="InspectionJobSummary" EntitySet="InspectionJobSummary" />
+            <End Role="WeaverProduction" EntitySet="WeaverProduction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WeaverProduction_WeaverShifts" Association="Self.FK_WeaverProduction_WeaverShifts">
+            <End Role="WeaverShifts" EntitySet="WeaverShifts" />
+            <End Role="WeaverProduction" EntitySet="WeaverProduction" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -1389,6 +1474,7 @@ warning 6002: The table/view 'Inspection_Test.dbo.STT_VW' does not have a primar
           <Property Name="InspectionJobSummaryId" Type="Int32" />
           <NavigationProperty Name="TemplateName" Relationship="Self.FK_DefectMaster_DefectMaster" FromRole="DefectMaster" ToRole="TemplateName" />
           <NavigationProperty Name="DefectTimers" Relationship="Self.FK_DefectTimer_DefectMaster" FromRole="DefectMaster" ToRole="DefectTimer" />
+          <Property Name="WeaverShiftId" Type="Int32" />
         </EntityType>
         <EntityType Name="DefectTimer">
           <Key>
@@ -1443,6 +1529,10 @@ warning 6002: The table/view 'Inspection_Test.dbo.STT_VW' does not have a primar
           <Property Name="ScrapCount" Type="Int32" />
           <NavigationProperty Name="DefectTimers" Relationship="Self.FK_DefectTimer_InspectionJobSummary" FromRole="InspectionJobSummary" ToRole="DefectTimer" />
           <NavigationProperty Name="SpecMeasurements" Relationship="Self.FK_SpecMeasurements_InspectionJobSummary" FromRole="InspectionJobSummary" ToRole="SpecMeasurements" />
+          <Property Name="EmployeeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CasePack" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="WorkRoom" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="WeaverProductions" Relationship="Inspection_Model.FK_WeaverProduction_InspectionJobSummary" FromRole="InspectionJobSummary" ToRole="WeaverProduction" />
         </EntityType>
         <EntityType Name="InspectionType">
           <Key>
@@ -1958,7 +2048,93 @@ warning 6002: The table/view 'Inspection_Test.dbo.STT_VW' does not have a primar
           <FunctionImport Name="SP_AS400_GETPRPCode_Ent" ReturnType="Collection(String)">
           <Parameter Name="DATANO" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="EmployeeNoes" EntityType="Inspection_Model.EmployeeNo" />
+          <EntitySet Name="WeaverProductions" EntityType="Inspection_Model.WeaverProduction" />
+          <AssociationSet Name="FK_WeaverProduction_EmployeeNo" Association="Inspection_Model.FK_WeaverProduction_EmployeeNo">
+            <End Role="EmployeeNo" EntitySet="EmployeeNoes" />
+            <End Role="WeaverProduction" EntitySet="WeaverProductions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WeaverProduction_InspectionJobSummary" Association="Inspection_Model.FK_WeaverProduction_InspectionJobSummary">
+            <End Role="InspectionJobSummary" EntitySet="InspectionJobSummaries" />
+            <End Role="WeaverProduction" EntitySet="WeaverProductions" />
+          </AssociationSet>
+          <EntitySet Name="WeaverShifts" EntityType="Inspection_Model.WeaverShift" />
+          <AssociationSet Name="FK_WeaverProduction_WeaverShifts" Association="Inspection_Model.FK_WeaverProduction_WeaverShifts">
+            <End Role="WeaverShift" EntitySet="WeaverShifts" />
+            <End Role="WeaverProduction" EntitySet="WeaverProductions" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="EmployeeNo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Initials" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="CID" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="true" />
+          <Property Name="Type" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="WeaverProductions" Relationship="Inspection_Model.FK_WeaverProduction_EmployeeNo" FromRole="EmployeeNo" ToRole="WeaverProduction" />
+        </EntityType>
+        <EntityType Name="WeaverProduction">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeeNoId" Type="Int32" Nullable="false" />
+          <Property Name="JobSummaryId" Type="Int32" Nullable="false" />
+          <Property Name="Yards" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <NavigationProperty Name="EmployeeNo" Relationship="Inspection_Model.FK_WeaverProduction_EmployeeNo" FromRole="WeaverProduction" ToRole="EmployeeNo" />
+          <NavigationProperty Name="InspectionJobSummary" Relationship="Inspection_Model.FK_WeaverProduction_InspectionJobSummary" FromRole="WeaverProduction" ToRole="InspectionJobSummary" />
+          <Property Name="ShiftId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="WeaverShift" Relationship="Inspection_Model.FK_WeaverProduction_WeaverShifts" FromRole="WeaverProduction" ToRole="WeaverShift" />
+        </EntityType>
+        <Association Name="FK_WeaverProduction_EmployeeNo">
+          <End Type="Inspection_Model.EmployeeNo" Role="EmployeeNo" Multiplicity="1" />
+          <End Type="Inspection_Model.WeaverProduction" Role="WeaverProduction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EmployeeNo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="WeaverProduction">
+              <PropertyRef Name="EmployeeNoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WeaverProduction_InspectionJobSummary">
+          <End Type="Inspection_Model.InspectionJobSummary" Role="InspectionJobSummary" Multiplicity="1" />
+          <End Type="Inspection_Model.WeaverProduction" Role="WeaverProduction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InspectionJobSummary">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="WeaverProduction">
+              <PropertyRef Name="JobSummaryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="WeaverShift">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Shift" Type="Int32" Nullable="false" />
+          <Property Name="Start" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Finish" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="WeaverProductions" Relationship="Inspection_Model.FK_WeaverProduction_WeaverShifts" FromRole="WeaverShift" ToRole="WeaverProduction" />
+        </EntityType>
+        <Association Name="FK_WeaverProduction_WeaverShifts">
+          <End Type="Inspection_Model.WeaverShift" Role="WeaverShift" Multiplicity="1" />
+          <End Type="Inspection_Model.WeaverProduction" Role="WeaverProduction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WeaverShift">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="WeaverProduction">
+              <PropertyRef Name="ShiftId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1993,6 +2169,7 @@ warning 6002: The table/view 'Inspection_Test.dbo.STT_VW' does not have a primar
           <EntitySetMapping Name="DefectMasters">
             <EntityTypeMapping TypeName="Inspection_Model.DefectMaster">
               <MappingFragment StoreEntitySet="DefectMaster">
+                <ScalarProperty Name="WeaverShiftId" ColumnName="WeaverShiftId" />
                 <ScalarProperty Name="DefectID" ColumnName="DefectID" />
                 <ScalarProperty Name="DefectTime" ColumnName="DefectTime" />
                 <ScalarProperty Name="DefectDesc" ColumnName="DefectDesc" />
@@ -2052,6 +2229,9 @@ warning 6002: The table/view 'Inspection_Test.dbo.STT_VW' does not have a primar
           <EntitySetMapping Name="InspectionJobSummaries">
             <EntityTypeMapping TypeName="Inspection_Model.InspectionJobSummary">
               <MappingFragment StoreEntitySet="InspectionJobSummary">
+                <ScalarProperty Name="WorkRoom" ColumnName="WorkRoom" />
+                <ScalarProperty Name="CasePack" ColumnName="CasePack" />
+                <ScalarProperty Name="EmployeeNo" ColumnName="EmployeeNo" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="JobType" ColumnName="JobType" />
                 <ScalarProperty Name="JobNumber" ColumnName="JobNumber" />
@@ -2377,6 +2557,39 @@ warning 6002: The table/view 'Inspection_Test.dbo.STT_VW' does not have a primar
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="SP_AS400_GETPRPCode_Ent" FunctionName="Inspection_Model.Store.SP_AS400_GETPRPCode_Ent" />
+          <EntitySetMapping Name="EmployeeNoes">
+            <EntityTypeMapping TypeName="Inspection_Model.EmployeeNo">
+              <MappingFragment StoreEntitySet="EmployeeNo">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="CID" ColumnName="CID" />
+                <ScalarProperty Name="Initials" ColumnName="Initials" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WeaverProductions">
+            <EntityTypeMapping TypeName="Inspection_Model.WeaverProduction">
+              <MappingFragment StoreEntitySet="WeaverProduction">
+                <ScalarProperty Name="ShiftId" ColumnName="ShiftId" />
+                <ScalarProperty Name="Yards" ColumnName="Yards" />
+                <ScalarProperty Name="JobSummaryId" ColumnName="JobSummaryId" />
+                <ScalarProperty Name="EmployeeNoId" ColumnName="EmployeeNoId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WeaverShifts">
+            <EntityTypeMapping TypeName="Inspection_Model.WeaverShift">
+              <MappingFragment StoreEntitySet="WeaverShifts">
+                <ScalarProperty Name="Finish" ColumnName="Finish" />
+                <ScalarProperty Name="Start" ColumnName="Start" />
+                <ScalarProperty Name="Shift" ColumnName="Shift" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -40,6 +40,9 @@ Partial Public Class Inspection_Entities
     Public Overridable Property INS_Summary_VW() As DbSet(Of INS_Summary_VW)
     Public Overridable Property LocationMaster_VW() As DbSet(Of LocationMaster_VW)
     Public Overridable Property STT_VW() As DbSet(Of STT_VW)
+    Public Overridable Property EmployeeNoes() As DbSet(Of EmployeeNo)
+    Public Overridable Property WeaverProductions() As DbSet(Of WeaverProduction)
+    Public Overridable Property WeaverShifts() As DbSet(Of WeaverShift)
 
     Public Overridable Function SP_AS400_GETPRPCode_Ent(dATANO As String) As ObjectResult(Of String)
         Dim dATANOParameter As ObjectParameter = If(dATANO IsNot Nothing, New ObjectParameter("DATANO", dATANO), New ObjectParameter("DATANO", GetType(String)))

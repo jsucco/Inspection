@@ -12,6 +12,7 @@ Namespace core
         Sub New()
             Dim obj As New t()
             Properties = obj.GetType().GetProperties()
+
         End Sub
         Private Property dl As New dlayer
         Private Property dreader As SqlDataReader
