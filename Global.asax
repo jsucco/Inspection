@@ -13,18 +13,18 @@
         'Dim config As HttpConfiguration = GlobalConfiguration.Configuration
 
         'config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-
+        'ignore this 
         BundleTable.Bundles.Add(New ScriptBundle("~/bundles/SPCInspectReporter").Include(
-            "~/Scripts/jquery.layout.js",
-            "~/Scripts/grid.locale-en.js",
-            "~/Scripts/jquery.jqGrid.min.js",
-            "~/Scripts/jquery.jqGrid.js",
-            "~/Scripts/wijmo/jquery.wijmo-open.all.3.20141.34.min.js",
-            "~/Scripts/D3/d3.v3.min.js",
-            "~/Scripts/D3/d3.v3.js",
-            "~/Scripts/wijmo/jquery.wijmo-pro.all.3.20141.34.min.js",
-            "~/Scripts/wijmo/wijmo.data.ajax.3.20141.34.js",
-            "~/Scripts/Gcharts/jsapi.js"))
+        "~/Scripts/jquery.layout.js",
+        "~/Scripts/grid.locale-en.js",
+        "~/Scripts/jquery.jqGrid.min.js",
+        "~/Scripts/jquery.jqGrid.js",
+        "~/Scripts/wijmo/jquery.wijmo-open.all.3.20141.34.min.js",
+        "~/Scripts/D3/d3.v3.min.js",
+        "~/Scripts/D3/d3.v3.js",
+        "~/Scripts/wijmo/jquery.wijmo-pro.all.3.20141.34.min.js",
+        "~/Scripts/wijmo/wijmo.data.ajax.3.20141.34.js",
+        "~/Scripts/Gcharts/jsapi.js"))
         BundleTable.Bundles.Add(New ScriptBundle("~/bundles/InspectionVisualizer").Include(
                 "~/Scripts/wijmo/jquery.wijmo-open.all.3.20153.83.min.js",
                 "~/Scripts/wijmo/jquery.wijmo-pro.all.3.20153.83.min.js",
