@@ -38,7 +38,6 @@ Namespace core
                 End If
                 Response.Redirect("~/APP/APR_SiteEntry.aspx?CID=" + strURLCustomer)
             End If
-
             Response.Redirect("~/ErrorPage.aspx?UC=" + strURLCustomer)
         End Sub
 
