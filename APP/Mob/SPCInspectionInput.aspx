@@ -354,14 +354,14 @@
             </div>
             <div id="StartInspectionWODiv">
                 <p>TO START AN INSPECTION CHOOSE AN AQL LEVEL AND STANDARD.</p>
-                <div style="position:relative; float:right; left:-20%">
+                <div style="position:absolute; right:50px;">
                     <label style="position:absolute; left: -80px;" for="AQL_Level_Dialog">AQL Level</label>  
                                 <select id="AQL_Level_Dialog" name="AQL_Level_Dialog">
                                 </select>
                 </div>
-                <div style="position:relative; float:right; top:35px; left: 7%">
-                    <label style="position:absolute; left: -80px;" for="AQL_Level_Dialog">AQL Standard</label>  
-                                <select id="AQL_Standard_Dialog" name="AQL_Standard_Dialog" style="position: relative; left:34px;">
+                <div style="position:absolute; top:95px; right:50px;">
+                    <label style="position:absolute; left: -110px;" for="AQL_Level_Dialog">AQL Standard</label>  
+                                <select id="AQL_Standard_Dialog" name="AQL_Standard_Dialog" style="position: relative;">
                                 </select>
                 </div>
                 
@@ -916,7 +916,7 @@
                 var  Antibuttonid = AntiButton + "_" + stopbuttonidAr[1] + "_" + stopbuttonidAr[2];
                 $.when(datahandler.GetSelectElements()).done(function (elementarrayval) { 
                     var JsonString = JSON.stringify(elementarrayval);
-                    console.log('JsonString', JsonString);
+                    
                     datahandler.SubmitDefect_2(Defectbutton.attr('id'), Defectbutton.text(), Defectbutton.attr('name'), InspectionJobSummaryIdPage, InspectionId, JsonString, true, buttonname_,buttonvalue_ , stopbuttonidAr[2], $(this), $("#" + Antibuttonid));
                 });
             } else { 
@@ -1275,19 +1275,29 @@
                 });
             }
         });
-        
+        var InspectionStartedAlertFlag = false; 
+        $(".inputelement.inputbox.leftsideobj").on( "keydown", function (e) { 
+            
+            if (InspectionJobSummaryIdPage != 0 && LineType != 'ROLL') { 
+                alert("There is an inspection in progress! Are you trying to open another Inspection? If yes please use the OPEN WORK ORDER or NEW button to navigate away from the current active inspection. Click OK to continue the current active inspection.");
+                e.preventDefault();
+                return false;
+            }
+            
+        });
         $(".inputpad").click(function (e) {
             var selectedtarget = e.currentTarget.id;
   
             var classname = e.currentTarget.className
             var $auditorname = $('#MainContent_AuditorName');
             //var $lotsize = $('#WOQuantity'); 
-            console.log(selectedtarget); 
+          
             e.preventDefault();
             if (IsSPCMachine == true) { 
                 alert("This Page is currently Linked to an Machine.  Click NEW or Exit the page to escape");
             } else if (InspectionJobSummaryIdPage != 0 && selectedtarget != 'auditdiv' && LineType != 'ROLL') { 
-                alert("This Page has an Inspection in progress.  Click NEW or Exit the page to escape");
+           
+                //alert("There is an inspection in progress! Are you trying to open another Inspection? If yes please use the OPEN WORK ORDER or NEW button to navigate away from the current active inspection. Click OK to continue the current active inspection.");
             } else {
                 NavCop = true;
                 switch (selectedtarget) { 
@@ -1416,7 +1426,7 @@
 
                 if (LineType == "ROLL") { 
                     var weaverInfoObj = <%=OpenRollInfoString%>;
-                    console.log(weaverInfoObj);
+          
                     if (weaverInfoObj != null) { 
                         Inspection.WeaverShiftId = weaverInfoObj[0].ShiftId
                         if (weaverInfoObj.Length == 1 && weaverInfoObj[0].EmployeeNoId != null) { 
@@ -1428,8 +1438,7 @@
                             Inspection.Weavers.Weaver2Initials = weaverInfoObj[1].Initials; 
                         }
                     }
-                    console.log(weaverInfoObj);
-                    console.log(Inspection.Weavers);
+                    
                 } else { 
                     $("#Auditor_Name").prop('disabled', true); 
                 }
@@ -1504,7 +1513,7 @@
             $("#NewPageDiv").css({display:'none'});
         },
         SizeChecker: function () { 
-            console.log(screen.width);
+            
             if (screen.width < 740) {
                 IsPhoneSize = true;
                 var $body = $(document);
@@ -1834,7 +1843,7 @@
                         
                         var AuditorDisplay = $(".Auditor-addname").css('display'); 
                         var EnteredName = $('#Name').val();
-                        console.log(AuditorDisplay); 
+                         
                         switch (AuditorDisplay) { 
                             case 'none': 
                                 var WeaverId = $("#select-weavername").val();
@@ -1871,7 +1880,7 @@
                                 }
                                 break;
                         }
-                                            
+                        $(this).wijdialog('close');               
                     },
                     'Close': function () {
                         var Enteredyards = new Number($("#weaveryards").val());
@@ -2540,7 +2549,7 @@
         InitWeaversDropDown: function (WeaverNames) { 
             var html = []; 
             html.length = 0; 
-            console.log(WeaverNames);
+           
             if (WeaverNames != null) { 
                 for (var i = 0; i < WeaverNames.length; i++) { 
                     html.push('<option value="'+ WeaverNames[i].Id+'">'+ WeaverNames[i].FirstName + ' ' + WeaverNames[i].LastName + '</option>');
@@ -2643,8 +2652,7 @@
             });
             $("#AQ_Level").val(AQLValue);
             $("#MainContent__AQLevel").val(AQLValue);
-            console.log("InitDROPDOWN", AQLValue); 
-            console.log($aql.val());
+            
             $("#AQL_Level_Dialog").html(html2.join('')).bind("change", function(){
                 $("#AQ_Level").val($(this).val());
                 $("#MainContent__AQLevel").val($(this).val());
@@ -2868,7 +2876,7 @@
                                         datahandler.UpdateRejectionCount(InspectionState, InspectionJobSummaryIdPage) }
                                     , 10000);
                             }
-                            console.log(datarray[0]);
+                            
                             if (returnnum != -1 || returnnum != 0) { 
                                 var $bad = $('#MainContent_Bad_Local');
                                 var $bad_Group = $('#MainContent_Bad_Group');
@@ -3161,17 +3169,17 @@
                 type: 'GET',
                 data: { method: 'OpenJobIfExists', args: { TargetNumber: TargetNumberIn, TemplateId: SelectedId, InspectionType: LineType, AQLVAL: AQLValue}},
                 success: function (data) {
-                    console.log(data); 
+                    
                     if (data != 'NOJOBS' && data.length > 0) { 
                         var InspectionArray = $.parseJSON(data);
                         datahandler.InspectionArray = InspectionArray; 
-                        console.log(InspectionArray); 
+                         
                         var returnnum = InspectionArray[0].id;
                         $("#<%=InspectionId.ClientID%>").val(InspectionArray[0].id);
                         var woq = InspectionArray[0].WOQuantity;
                         var userconfirm = true;
                         if (IsSPCMachine == false && InspectionJobSummaryIdPage == 0) { 
-                            console.log(AQLValue, "UserSetting");
+                            
                             if (InspectionArray[0].AQL_Level.trim() == "100.0" && AQLValue == '100')
                             { 
                                 userconfirm = true; 
@@ -3266,7 +3274,7 @@
         },
         LoadExistingJob: function() {
             var InspectionArray = datahandler.InspectionArray;
-            console.log(InspectionArray); 
+             
             if (InspectionArray == null || InspectionArray.Length == 0) 
                 alert("Failed loading existing job.  Error loading job info."); 
             
@@ -3410,7 +3418,7 @@
                             console.log(err);
                         }
                     });
-                    console.log(data);
+                    
                 },
                 error: function (a,b,c) {
 
@@ -3512,7 +3520,8 @@
                             //$("#Auditor_Name option[value='New Name']").remove();
                         } else {
                             var tempstring = Template.GetCookie("AuditorName");
-                            if (tempstring != "null" && tempstring.toString().length > 0) { 
+                            
+                            if (tempstring != "null" && tempstring.toString().trim().length > 0 && tempstring.trim() != "New Name" && tempstring.trim() != "SELECT OPTION") { 
                                 $('#Auditor_Name').val(tempstring);
                                 $("#Auditor_Name option[value='SELECT OPTION']").remove();
                                 //$("#Auditor_Name option[value='New Name']").remove();
@@ -3699,7 +3708,6 @@
                     eventshandler.UserKeyPress.Timeout_id = setTimeout(function() {   
                         eventshandler.UserKeyPress.UpdateUserInputs(parsedElementName); 
                         eventshandler.UserKeyPress.PostInputsToServer();
-                        console.log(eventshandler.UserKeyPress.ExistingUserInputs);
                     }, 3000);
                 }
             },
@@ -3729,18 +3737,18 @@
                 });
             },
             GetLastUserInputs: function() { 
-                console.log('xxxxx');
+                
                 $.ajax({
                     url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput_UserInputs.ashx',
                     type: 'GET',
                     data: { method: 'getLastUserInputs', args: { SessionId: SessionID}},
                     success: function (data) {
-                        console.log(data);
+                        
                         if (data.length > 0) { 
                             var InputObject = $.parseJSON(data);
                             eventshandler.UserKeyPress.ExistingUserInputs = InputObject;
                             eventshandler.UserKeyPress.SetUserInputs();
-                            console.log(InputObject);
+                          
                         }
                     },
                     error: function (a, b, c) {

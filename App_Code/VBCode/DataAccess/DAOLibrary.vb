@@ -707,7 +707,7 @@ Namespace core
             Public Property RejectLimiter As Integer
             Public Property Technical_PassFail As String
             Public Property STARTED As DateTime
-            Public Property FINISHED As DateTime
+            Public Property FINISHED As DateTime?
             Public Property MajorsCount As Double
             Public Property MinorsCount As Double
             Public Property RepairsCount As Double

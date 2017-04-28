@@ -15,7 +15,7 @@ Namespace core
         Public PostedTemplateId As Integer = 0
         Public PostedName As String = "TitleError"
         Public DefectCodeList As String = "[0]"
-        Public HasAuthorization As Boolean = True
+        Public HasAuthorization As Boolean = False
         Public ProductSpecifications As String
         Dim ProductSpecscache As New List(Of SPCInspection.ProductSpecs)
         Dim jser As New JavaScriptSerializer

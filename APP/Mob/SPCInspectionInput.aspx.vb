@@ -209,8 +209,13 @@ Namespace core
 
                 End Try
             End If
+            If Not QueryUsername Is Nothing Then
+                If QueryUsername.Trim.Length > 0 And QueryUsername <> "New Name" And QueryUsername <> "SELECT OPTION" Then
+                    RegisterUserCookie(QueryUsername, "InspectionUser")
+                End If
+            End If
 
-            RegisterUserCookie(QueryUsername, "InspectionUser")
+
 
         End Sub
         Private Function getLastUserInputs(SessionId As String) As core.SPCInspection.UserInputs
@@ -536,9 +541,10 @@ Namespace core
         End Sub
 
         Private Sub SendEmailAlertsAsync(ByVal curijs As InspectionJobSummary, ByVal ijsnum As Integer, ByVal JobPassFail As String, Optional ByVal DHY As Decimal = 0)
-            Dim t As System.Threading.Tasks.Task = System.Threading.Tasks.Task.Run(Sub()
-                                                                                       sendEmailAlerts(curijs, ijsnum, JobPassFail, DHY)
-                                                                                   End Sub)
+            sendEmailAlerts(curijs, ijsnum, JobPassFail, DHY)
+            'Dim t As System.Threading.Tasks.Task = System.Threading.Tasks.Task.Run(Sub()
+            '                                                                           sendEmailAlerts(curijs, ijsnum, JobPassFail, DHY)
+            '                                                                       End Sub)
         End Sub
 
         Private Sub sendEmailAlerts(ByVal curijs As InspectionJobSummary, ByVal ijsnum As Integer, ByVal JobPassFail As String, Optional ByVal DHY As Decimal = 0)
@@ -549,8 +555,8 @@ Namespace core
             Dim listemex As New List(Of Emails)
             Dim bmapem As New BMappers(Of Emails)
 
-            'emaillist = bmapem.GetAprMangObject("SELECT Address, INS_ALERT_EMAIL, ADMIN, HomeLocation FROM EmailMaster")
-            emaillist.Add(New Emails With {.Address = "jsucco@standardtextile.com", .INS_ALERT_EMAIL = 1, .HomeLocation = "ALL"})
+            emaillist = bmapem.GetAprMangObject("SELECT Address, INS_ALERT_EMAIL, ADMIN, HomeLocation FROM EmailMaster")
+            'emaillist.Add(New Emails With {.Address = "jsucco@standardtextile.com", .INS_ALERT_EMAIL = 1, .HomeLocation = "ALL"})
             'emaillist.Add(New Emails With {.Address = "John.Succo@gmail.com", .INS_ALERT_EMAIL = 1, .HomeLocation = "EX"})
             Try
                 If IsNothing(curijs) = True Then

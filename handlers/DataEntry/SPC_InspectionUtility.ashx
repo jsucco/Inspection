@@ -305,16 +305,16 @@ Namespace core
 
                 Dim var As Boolean = IU.DeleteButtonTemplate(TabTemplateId)
 
-                If var = True Then
-                    If IU.DeleteTabTemplate(TabTemplateId, TemplateId) Then
-                        IU.UpdateTemplateCollectionCache(TemplateId)
-                        Return True
-                    Else
-                        Return False
-                    End If
+                '
+                If IU.DeleteTabTemplate(TabTemplateId, TemplateId) Then
+                    IU.UpdateTemplateCollectionCache(TemplateId)
+                    Return True
                 Else
                     Return False
                 End If
+                'Else
+                '    Return False
+                'End If
 
             Else
                 Return False

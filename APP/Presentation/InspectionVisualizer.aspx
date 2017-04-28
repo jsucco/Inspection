@@ -653,34 +653,22 @@
     <link href="http://cdn.wijmo.com/themes/aristo/jquery-wijmo.css" rel="stylesheet" type="text/css" />
     <link href="../../Styles/owl/owl.carousel.css" rel="stylesheet" type="text/css" />
 
-    <script src="http://code.jquery.com/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.min.js" type="text/javascript"></script>
 <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.min.js" type="text/javascript"></script>
-<%--    <script src="../../Scripts/jquery-1.11.1.js" type="text/javascript"></script>--%>
-
-    <link href="../../Styles/ui.jqgrid.css" rel="stylesheet" type="text/css" />
-    <%--<script src="http://cdn.wijmo.com/jquery.wijmo-open.all.3.20141.34.min.js" type="text/javascript"></script>
-    <script src="http://cdn.wijmo.com/jquery.wijmo-pro.all.3.20141.34.min.js" type="text/javascript"></script>
-    <script src="http://cdn.wijmo.com/interop/wijmo.data.ajax.3.20141.34.js" type="text/javascript"></script>
-    <link href="http://cdn.wijmo.com/themes/arctic/jquery-wijmo.css" rel="stylesheet" type="text/css" />
-    <link href="http://cdn.wijmo.com/jquery.wijmo-pro.all.3.20141.34.min.css" rel="stylesheet" type="text/css" /> --%>
-
-    <link href="http://cdn.wijmo.com/jquery.wijmo-pro.all.3.20153.83.min.css" rel="stylesheet" type="text/css" />
-
-<!--Wijmo Widgets JavaScript-->
+<link href="../../Styles/ui.jqgrid.css" rel="stylesheet" type="text/css" />
+<link href="http://cdn.wijmo.com/jquery.wijmo-pro.all.3.20153.83.min.css" rel="stylesheet" type="text/css" />
 <%--<script src="http://cdn.wijmo.com/jquery.wijmo-open.all.3.20153.83.min.js" type="text/javascript"></script>
 <script src="http://cdn.wijmo.com/jquery.wijmo-pro.all.3.20153.83.min.js" type="text/javascript"></script>
 <script src="http://cdn.wijmo.com/interop/wijmo.data.ajax.3.20153.83.js" type="text/javascript"></script>--%>
-
-<%--<script src="../../Scripts/grid.locale-en.js" type="text/javascript"></script>
-<script src="../../Scripts/jquery.jqGrid.min.js" type="text/javascript"></script>
-
-    <script src="../../Scripts/select2/select2.js" type="text/javascript" ></script>--%>
-    <link href="../../Styles/select2/select2.css" rel="stylesheet" />
-
-<%--    <script src="../../Scripts/Gcharts/jsapi.js"></script>--%>
-    <asp:PlaceHolder runat="server">
+       <asp:PlaceHolder runat="server">
         <%: Scripts.Render("~/bundles/InspectionVisualizer") %>
     </asp:PlaceHolder>
+<%--<script src="../../Scripts/grid.locale-en.js" type="text/javascript"></script>
+<script src="../../Scripts/jquery.jqGrid.min.js" type="text/javascript"></script>--%>
+<%--<script src="../../Scripts/select2/select2.min.js" type="text/javascript" ></script>--%>
+<link href="../../Styles/select2/select2.css" rel="stylesheet" />
+<script src="../../Scripts/Gcharts/jsapi.js"></script>
+
     <script type="text/javascript">
         var ScatterPlotJson;
         var DefectMasterHistogram;
@@ -771,7 +759,7 @@
             
             $.each(LocationNames, function (index, value) { 
                 FullLocationsArray.push({value:value.Abreviation.trim(), status: true, CID: value.CID, ProdAbreviation: value.ProdAbreviation});
-                fchtml.push('<option value = "' + value.CID.trim() + '">' + value.Abreviation.trim() + '</option>');
+                fchtml.push('<option value = "' + value.CID.trim() + '">' + value.text.trim() + ' (' + value.Abreviation.trim() + ')</option>');
             });
             
             LocationsStringArray = JSON.stringify(FullLocationsArray);

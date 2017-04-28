@@ -965,7 +965,7 @@
         $tabs.on('click', 'span.ui-icon-close', function (e) {
   
             var index = $('li', $tabs).index($(this).parent());
-
+             
             var cfm = confirm("Confirm to Delete Tab");
 
             if (cfm == true) {
@@ -1371,7 +1371,7 @@
                         }
                         controlhandler.tabarray.length = 0;
                         datahandler.tabbuttonarray.length = 0;
-
+                        dbtrans.GetTemplateCollection(); 
                     }
                     
                 },
@@ -1510,6 +1510,7 @@
         DeleteTemplate: function (TabNumber) {
 
             var TabTemplateId = controlhandler.tabarray[TabNumber].TabTemplateid;
+            
             if (TabTemplateId) {
                 $.ajax({
                     url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionUtility.ashx',
@@ -1531,7 +1532,6 @@
                                     controlhandler.tabarray.splice(i,1)
                                 }
                             }
-
                         }
                     },
                     error: function (a, b, c) {
