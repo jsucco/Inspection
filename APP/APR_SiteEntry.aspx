@@ -113,9 +113,10 @@ div.hidden {
  
     }
 </STYLE>
-<script type="text/javascript" language="javascript">
+<script type="text/javascript">
         var ctxlinks = ["http://STCSTT.controltex.com", "http://STCCAR.controltex.com/", "http://STCCORETEST.controltex.com"];
         var CorpID = "<%=CID%>";
+        var CtxCID = "<%=CtxCID%>"
         var UserID = "<%=UserID%>";
         var NavPerms = <%=NavPerms%>;
         var Authenticated;
@@ -132,7 +133,7 @@ div.hidden {
             $('#MenuButtonContainer3').fadeIn(2500);
             $('#MenuButtonContainer4').fadeIn(3000);
             BaseURI = "<%=Session("BaseUri")%>";
-            console.log(BaseURI);
+            console.log("LocationObject", CtxCID);
             Authenticated = $("#MainContent_Authenticated_hidden").val();
             var hiddenSection = $('div.hidden');
             //if (Authenticated == "True") { 
@@ -194,9 +195,6 @@ div.hidden {
                     }
                     break;
             }
-            console.log(permission);
-            console.log(url);
-            console.log(Authenticated);
             if (permission == true) {
                 fadeoutContainers();
                 window.location.assign(url)
@@ -215,7 +213,6 @@ div.hidden {
             var url;
             var permission = false;
             
-            console.log(BaseURI);
             switch (elementname) { 
                 case "loom":
                    
@@ -227,7 +224,7 @@ div.hidden {
                 case "flagboard":
                    
                         permission = true;
-                        window.location.href = 'http://maintenance.standardtextile.com?CID=' + CorpID;
+                        window.location.href = 'http://maintenance.standardtextile.com?CID=' + CtxCID;
                         return;
                         Destination = "APRFlagboard";
                     

@@ -30,7 +30,6 @@ Namespace core
                 Return "nodata"
             End If
 
-
         End Function
 
         Public Function GetButtonLibraryGrid() As String
@@ -86,7 +85,7 @@ Namespace core
             Dim rownumber As Integer = TemplateList.IndexOf(matches(0))
             If rownumber >= 0 Then
                 TemplateList.RemoveAt(rownumber)
-                TemplateList.Insert(0, New SPCInspection.InspectionTemplateManagement With {.Name = "New Template", .Owner = "Len", .Loc_CAR = False, .Loc_STT = False, .Loc_STJ = False, .Loc_SPA = False, .Loc_CDC = False, .Loc_LINYI = False, .Loc_FSK = False, .Loc_PCE = False, .Loc_FPC = False, .Loc_FNL = False, .DateCreated = DateTime.Now.ToString(), .Active = "True"})
+                TemplateList.Insert(0, New SPCInspection.InspectionTemplateManagement With {.Name = "New Template", .Owner = "Len", .Loc_CAR = False, .Loc_STT = False, .Loc_STJ = False, .Loc_SPA = False, .Loc_CDC = False, .Loc_LINYI = False, .Loc_FSK = False, .Loc_PCE = False, .Loc_FPC = False, .Loc_FNL = False, .DateCreated = DateTime.Now.ToString(), .Active = "True", .ColumnCount = 2})
             End If
             If TemplateList.Count > 0 Then
                 Return jser.Serialize(TemplateList.ToArray())
@@ -139,11 +138,12 @@ Namespace core
                     Dim bmapso As New BMappers(Of SingleObject)
                     Dim listso As New List(Of SingleObject)
 
-                    listso = bmapso.GetInspectObject("SELECT it.Name AS Object1 FROM TemplateName tn INNER JOIN InspectionTypes it ON it.id = tn.LineTypeId WHERE TemplateId = " & TemplateId.ToString() & "")
+                    listso = bmapso.GetInspectObject("SELECT it.Name AS Object1, tn.ColumnCount AS Object2 FROM TemplateName tn INNER JOIN InspectionTypes it ON it.id = tn.LineTypeId WHERE TemplateId = " & TemplateId.ToString() & "")
 
                     If listso.Count > 0 Then
                         For Each item As SPCInspection.TemplateCollection In asc
                             item.LineType = listso.ToArray()(0).Object1
+                            item.ColumnCount = listso.ToArray()(0).Object2
                         Next
                     End If
                     Return jser.Serialize(asc)

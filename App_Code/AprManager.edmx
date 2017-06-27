@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="AprManager_Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="AprManager_Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="EmailMaster">
           <Key>
             <PropertyRef Name="id" />
@@ -43,6 +43,7 @@
           <Property Name="ProductionResults" Type="bit" />
           <Property Name="AS400_Connection" Type="bit" />
           <Property Name="AS400_Abr" Type="nvarchar" MaxLength="50" />
+          <Property Name="CtxCID" Type="nchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="OPCMaster">
           <Key>
@@ -182,8 +183,7 @@
             <End Role="UserCrudActivityLog" EntitySet="UserCrudActivityLog" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="AprManager_Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -228,6 +228,7 @@
           <Property Name="AS400_Abr" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="LinkedServerMasters" Relationship="Self.FK_LinkedServerMaster_LocationMaster" FromRole="LocationMaster" ToRole="LinkedServerMaster" />
           <NavigationProperty Name="OPCMasters" Relationship="Self.FK_OPCMaster_LocationMaster" FromRole="LocationMaster" ToRole="OPCMaster" />
+          <Property Name="CtxCID" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="OPCMaster">
           <Key>
@@ -344,10 +345,10 @@
             <Parameter Name="Body" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="Get400Locations">
-            <Parameter Name="RETSTRG" Mode="InOut" Type="String" />
+          <Parameter Name="RETSTRG" Mode="InOut" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SearchAllTables" ReturnType="Collection(AprManager_Model.SearchAllTables_Result)">
-            <Parameter Name="SearchStr" Mode="In" Type="String" />
+          <Parameter Name="SearchStr" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_ApplicationLogInsert">
             <Parameter Name="type" Mode="In" Type="String" />
@@ -363,7 +364,7 @@
             <Parameter Name="numRowAff" Mode="InOut" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_SPC_GetTemplateLocationStatus" ReturnType="Collection(AprManager_Model.SP_SPC_GetTemplateLocationStatus_Result)">
-            <Parameter Name="TemplateId" Mode="In" Type="Int32" />
+          <Parameter Name="TemplateId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="usp_InsertErrorToLog">
             <Parameter Name="type" Mode="In" Type="String" />
@@ -415,6 +416,7 @@
           <EntitySetMapping Name="LocationMasters">
             <EntityTypeMapping TypeName="AprManager_Model.LocationMaster">
               <MappingFragment StoreEntitySet="LocationMaster">
+                <ScalarProperty Name="CtxCID" ColumnName="CtxCID" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Abreviation" ColumnName="Abreviation" />

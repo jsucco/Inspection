@@ -357,7 +357,7 @@ Namespace core
             Dim jser As New JavaScriptSerializer()
             Dim DefaultId As Integer = 1
             Dim sql As String = "SELECT ijs.id, ijs.JobNumber, ijs.ItemFailCount, ijs.TemplateId, tn.Name, ijs.AQL_Level, ijs.Standard, ijs.SampleSize, ijs.RejectLimiter, convert(varchar(25), ijs.Inspection_Started, 100) as Inspection_StartedString FROM InspectionJobSummary ijs LEFT OUTER JOIN TemplateName tn ON ijs.TemplateId = tn.TemplateId " & vbCrLf &
-                                    "WHERE (Technical_PassFail IS NULL) AND (JobType = '" & InspectionState & "') AND (Inspection_Started >= GETDATE() - 3) AND (LEN(JobNumber) > 3) AND (CID = '" & PassCID & "')"
+                                    "WHERE (Technical_PassFail IS NULL) AND (JobType = '" & InspectionState & "') AND (Inspection_Started >= GETDATE() - 3) AND (LEN(JobNumber) > 0) AND (CID = '" & PassCID & "')"
             listis = bmapis.GetInspectObject(sql)
 
             If listis.Count > 0 Then
@@ -599,10 +599,10 @@ Namespace core
 
                 JobObj.JobSummaryId = DA.InsertJobSummaryRecord(jsobj)
 
-                If jsobj.JobType <> "WorkOrder" Then
-                    JobObj.WeaverShiftId = RecordWeaverProduction(WeaverNamesString, JobObj.JobSummaryId)
+                'If jsobj.JobType <> "WorkOrder" Then
+                '    JobObj.WeaverShiftId = RecordWeaverProduction(WeaverNamesString, JobObj.JobSummaryId)
 
-                End If
+                'End If
 
             End If
             Return jser.Serialize(JobObj)

@@ -124,6 +124,7 @@ Namespace core
 
         Public Class tabarray
             Public Property title As String
+            Public Property TabNumber As Integer
             Public Property TabTemplateId As Integer
         End Class
         Public Class buttonarray
@@ -171,6 +172,7 @@ Namespace core
             Public Property Hide As Boolean
             Public Property ButtonLibraryId As Integer
             Public Property Timer As Boolean
+            Public Property ColumnCount As Integer
         End Class
 
         Public Class ProductSpecCollection
@@ -532,6 +534,7 @@ Namespace core
             Public Property Loc_PCE As Boolean
             Public Property DateCreated As DateTime
             Public Property Active As Boolean
+            Public Property ColumnCount As Integer
         End Class
         Public Class TemplateDirectory
             Public Property TemplateId As Integer

@@ -111,6 +111,7 @@ Namespace core
                 Dim TabArrayString As String = TabArray_Hidden.Value
                 Dim ButtonArrayStirng As String = ButtonArray_Hidden.Value
                 Dim TemplateId As Integer = Convert.ToInt64(TemplateId_Hidden.Value.Trim())
+                Dim ColumnCount As Integer = Convert.ToInt32(ColumnCount_Hidden.Value)
                 Dim LineType As String = LineType_Hidden.Value
                 Dim jser As New JavaScriptSerializer
                 Dim returnmessage As String = "Nothing"
@@ -145,7 +146,7 @@ Namespace core
                                 returnmessage = "Failed"
                             End If
                         End If
-                        IU.SetLineType(TemplateId, LineType)
+                        IU.SetLineType(TemplateId, LineType, ColumnCount)
                     Else
                         returnmessage = "Failed"
                     End If

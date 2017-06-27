@@ -3,7 +3,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
-    <div id="SectionRibbon" style="position:absolute; left:385px; width:68%; height:100%;">
+    <div id="SectionRibbon" style="position:absolute; left:385px; width:78%; height:100%;">
         <ul>
             <li><a href="#ButtonManagerTab">Button Manager</a></li>
             <li><a href="#SpecManagerTab">Spec Manager</a></li>
@@ -20,20 +20,28 @@
                             <p> 
                                 </p> 
                         </div> 
-
             </div>
-            <div style="left: 30px; top: 80px; position:absolute; border-style: solid; border-bottom-color: #869EB1; width: 66%; border-top-color: white; border-right-color: white; border-left-color: white; height: 60px;">
+            <div style="left: 30px; top: 80px; position:absolute; border-style: solid; border-bottom-color: #869EB1; width: 68%; border-top-color: white; border-right-color: white; border-left-color: white; height: 70px;">
                 <input id="add" type="button" class="export" style="height: 40px; width:110px" value="ADD TAB" />
                 <input id="addbutton" type="button" class="export" style="height: 40px; width:110px; position: absolute; top: 0px; left: 140px" value="ADD BUTTON" />
-                <div id = "LineTypeDiv" class=SheetClass1 style="position:absolute; top:-9px; left: 270px; width:300px">LineType: 
-                                        <select id="LineType_pop" name="LineType_pop" style="width: 162px; height: 35px; ">
-                                            <option value="EOL">End Of Line</option>
-                                            <option value="IL">InLine</option>
-                                            <option value="ROLL">Roll</option>
-                                        </select></div>
+                <div id = "LineTypeDiv" class=SheetClass1 style="position:absolute; top:-20px; left: 270px; width:300px">LineType: 
+                        <select id="LineType_pop" name="LineType_pop" style="width: 162px; height: 35px; ">
+                            <option value="EOL">End Of Line</option>
+                            <option value="IL">InLine</option>
+                            <option value="ROLL">Roll</option>
+                        </select>
+
+                </div>
+                <div id="ColCountdiv" style="position:absolute; top:28px; left:265px; width:300px;">Column Count:
+                        <select id="ColumnCount" name="ColCount" style="width:162px; height:35px;">
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select>
+                </div>
                 <div style="position:relative; float:right; top:-30px; right:200px;">
-                <input id="ActiveTemplateTitle" type="text" style="height: 40px; width:200px; position: absolute; top: -10px; border: none; left: 100px; font-family: initial;font-size: large;font-weight: 700;/* border: gray; */" value="">
-               <asp:Button ID="TemplateSubmit" CssClass="export" style="position:absolute; left:320px; height: 40px; width:110px" Text ="SAVE" runat="server" />
+                <input id="ActiveTemplateTitle" type="text" style="height: 40px; width:200px; position: absolute; top: -80px; border: none; left: 100px; font-family: initial;font-size: large;font-weight: 700;/* border: gray; */" value="">
+               <asp:Button ID="TemplateSubmit" CssClass="export" style="position:absolute; left:300px; height: 40px; width:110px" Text ="SAVE" runat="server" />
                      </div>
             </div>
             <div id="loading" style="width:80%; top:170px; height:550px; left:48px; position:absolute;">
@@ -127,10 +135,9 @@
                     </fieldset> 
                 </div> 
     <div id="dialog2" title="Add Button" style="display:none" class="dialogdiv"> 
-            <div style="position:relative; float:right; border:2px solid #8f8f8f; border-radius:3px; left:-10px; width:140px; height: 31px;">
+            <div style="position:relative; float:right; border:2px solid #8f8f8f; border-radius:3px; left:-10px; width:150px; height: 37px;">
                 <label style="position:absolute; left: 0px; top:4px;" for="DefectType">DefectType: </label> 
-                   
-                            <select id="DefectType" name="DefectType" style="position:absolute; left:70px; top:4px;">
+                            <select id="DefectType" name="DefectType" style="position:absolute; left:70px; top:4px; height:25px; z-index:1000;">
                               <option value="Major">Major</option>
                               <option value="Minor">Minor</option>
                               <option value="Repairs">Repairs</option>
@@ -140,7 +147,7 @@
                               <option value="Fix">Fix</option>
                             </select>
             </div>
-            <div style="position:relative; float:right; left:-20px; border:2px solid #8f8f8f; border-radius:3px; width: 110px; height: 31px;">
+            <div style="position:relative; float:right; left:-20px; border:2px solid #8f8f8f; border-radius:3px; width: 110px; height: 37px;">
                  <input type="checkbox" id="dialog2_Timer" name="Timer"> Enable Timer<br>
             </div>
                     <fieldset class="ui-helper-reset"> 
@@ -197,7 +204,7 @@
     <input id="ButtonArray_Hidden" type="hidden" value="0" runat="server" />
     <input id="TemplateId_Hidden" type ="hidden" value="0" runat="server" />
     <input id="LineType_Hidden" type ="hidden" value="FINAL AUDIT" runat="server" />
-
+    <input id="ColumnCount_Hidden" type="hidden" value="2" runat="server" />
     </asp:Content>
     <asp:Content ID="Content3" ContentPlaceHolderID="ControlOptions" Runat="Server">
         <script src="http://code.jquery.com/jquery-1.9.1.min.js" type="text/javascript"></script>
@@ -276,6 +283,11 @@
         outline: none;
     }
 
+     .ui-icon-close {
+        margin-left: auto;
+        display: none;
+    }
+
 </style>
 <style>
     .nooutlineclass {
@@ -302,8 +314,7 @@
     var InspectionTypesArray = <%=InspectionTypesArray%>;
     var UnsavedButtonCount = 0;
     $(document).ready(function () {
-        var screenheight = $(window).width() - 64;
-     
+        var screenheight = $(window).width() - 64; 
 
         $("a").addClass("nooutlineclass")
         $('.dialogdiv').css({ display: "inline" });
@@ -331,6 +342,15 @@
                     dbtrans.RenderProductSpecGrid();
                 } 
             }
+        });
+
+        $("#ColumnCount").change(function(e) { 
+            var cnt = $(this).val(); 
+            datahandler.ColumnCount = new Number(cnt); 
+            $("#MainContent_ColumnCount_Hidden").val(cnt); 
+            dbtrans.GetTemplateCollection(true); 
+            $("#ColumnCount").prop('disabled', 'disabled'); 
+            setTimeout(function(e) { $("#ColumnCount").prop('disabled', false); }, 3000);
         });
 
         if (InspectionTypesArray) { 
@@ -382,7 +402,7 @@
             GlobalTemplateId = PostedTemplateId;
             datahandler.selectedtemplateid = Number(PostedTemplateId)
             $("#MainContent_TemplateId_Hidden").val(PostedTemplateId);
-            dbtrans.GetTemplateCollection()
+            dbtrans.GetTemplateCollection(false)
         }
         datahandler.GetButtonLibrary();
         list.wijlist({
@@ -439,7 +459,7 @@
                         var UserDiv = $('#UserDirections');
                         
                         if (UserDiv.is(':visible') == true) { UserDiv.toggle() }
-                        controlhandler.tabarray.push({ title: $tab_title_input.val() });
+                        controlhandler.tabarray.push({ title: $tab_title_input.val(), TabNumber: controlhandler.tabarray.length });
                         controlhandler.addTab($tab_title_input.val());
                         var idarray = $('#Specgrid').jqGrid('getDataIDs');
                         $.each(idarray, function (index, value) {
@@ -660,6 +680,7 @@
             showControlBox: false,
             autoOpen: false,
             modal: true,
+            width: "335",
             captionButtons: {
                 pin: { visible: false },
                 refresh: { visible: false },
@@ -671,6 +692,27 @@
                 'Add': function () {
                     if (controlhandler.tabarray.length > 0) {
                         var editdefectypeval = $("#DefectType").val();
+
+                        if (datahandler.selectedList == null || datahandler.selectedList.length == 0) { 
+                            alert("error selected defect is null or cannot be found.");
+                            return; 
+                        }
+
+                        if (datahandler.selectedList[0].label.length == 0) { 
+                            alert("error button must have a label."); 
+                            return; 
+                        }
+
+                        if (datahandler.selectedList[0].id == 0) { 
+                            alert("error button id cannot be zero."); 
+                            return; 
+                        }
+
+                        if (editdefectypeval.toString().trim().length == 0) { 
+                            alert("error defect type cannot be null.");
+                            return; 
+                        }
+
                         var TimerFlag = $("#dialog2_Timer").prop('checked');
                         GlobalTimerFlag = TimerFlag; 
                         var arrayval = "1";
@@ -692,8 +734,7 @@
                         UtilityOperation = "ButtonAddition";
                         var height = $(window).height()
                         $('.main').css({ height: height + 210 + "px" });
-                        $('#SectionRibbon').css({ height: height + 210 + "px" });
-                       
+                        $('#SectionRibbon').css({ height: height + 210 + "px" });                  
 
                         controlhandler.addbutton();
                     } else {
@@ -927,7 +968,7 @@
             $dialog2.wijdialog('open');
         });
         $('#sData').click(function () {
-            setTimeout(function () { dbtrans.GetTemplateCollection() }, 1000);
+            setTimeout(function () { dbtrans.GetTemplateCollection(false) }, 1000);
         });
         $('#DefectType_add').click(function () {
             
@@ -963,7 +1004,9 @@
             $dialog3.wijdialog('open');
         });
         $tabs.on('click', 'span.ui-icon-close', function (e) {
-  
+            alert("delete functionality disabled;");
+            return; 
+
             var index = $('li', $tabs).index($(this).parent());
              
             var cfm = confirm("Confirm to Delete Tab");
@@ -986,17 +1029,17 @@
                     break;
                 default:
                     datahandler.selectedtemplateid = Number(selectedid)
-                    dbtrans.GetTemplateCollection()
+                    dbtrans.GetTemplateCollection(false)
             }
         });
-        $('#submit').on('click', function (e) {
+        //$('#submit').on('click', function (e) {
            
-            if (datahandler.selectedtemplateid) {
-                dbtrans.SubmitTemplate()
-            } else {
-                alert("Please Select a Template")
-            }
-        });
+        //    if (datahandler.selectedtemplateid) {
+        //        dbtrans.SubmitTemplate()
+        //    } else {
+        //        alert("Please Select a Template")
+        //    }
+        //});
 
     });
     function isOdd(num) { return num % 2; }
@@ -1069,6 +1112,7 @@
                 }
             });
         },
+        ColumnCount: 2, 
         buttonarray: Array(),
         tabbuttonarray: Array(),
         selectedbutton: Object,
@@ -1104,13 +1148,13 @@
                                 datahandler.tabbuttonarray[i].DefectType = editdefectypeval;
                             }
                             if (datahandler.tabbuttonarray[i].DefectType == "0") { 
-                                $('#' + buttonid).css("background-color", "#93C2FF");
+                                $('#' + buttonid).css("background-color", "#B7B328");
                             } else if (datahandler.tabbuttonarray[i].DefectType == "1") { 
-                                $('#' + buttonid).css("background-color", "#4875AE");
+                                $('#' + buttonid).css("background-color", "#CF0D39");
                             } else if (datahandler.tabbuttonarray[i].DefectType == "repairs") { 
-                                $('#' + buttonid).css("background-color", "#B78B28");
-                            } else if (datahandler.tabbuttonarray[i].DefectType == "scrap") { 
                                 $('#' + buttonid).css("background-color", "rgba(0,0,0,0.5)");
+                            } else if (datahandler.tabbuttonarray[i].DefectType == "scrap") { 
+                                $('#' + buttonid).css("background-color", "#0C0D0C");
                             } else if (datahandler.tabbuttonarray[i].DefectType == "Time") { 
                                 $('#' + buttonid).css("background-color", "#33ccd2");
                             } else if (datahandler.tabbuttonarray[i].DefectType == "Upgrade") { 
@@ -1182,7 +1226,19 @@
             var totalcountnum = new Number(totalcount) - 1;
             var localarray = new Array(datahandler.tabbuttonarray);
             var tabbuttoncount = controlhandler.gettabbuttoncount(tabselect, localarray);
-            var buttonsize = controlhandler.sizebutton(tabbuttoncount)
+            var buttonsize;
+            
+            if (datahandler.ColumnCount == 3) { 
+                buttonsize = controlhandler.sizebutton3R(tabbuttoncount);
+            } else { 
+                buttonsize = controlhandler.sizebutton(tabbuttoncount); 
+            }
+
+            if (buttonsize == null || localarray.length == 0) { 
+                alert("fatal error loading template."); 
+                return; 
+            }
+
             var counter = 0;
             var placementstring;
             var buttoncolor = "#CF0D39";
@@ -1190,7 +1246,6 @@
             for (i = 0; i < localarray[0].length; i++) {
                 try
                 {
-
                     if (datahandler.tabbuttonarray[i].tabindex.toString() == tabselect.toString() && datahandler.newtabflag == false) {
               
                         if (localarray[0][i]) { 
@@ -1213,19 +1268,24 @@
                             if (localarray[0][i].Hide == true) { 
                                 buttoncolor = "#9C9C9C";
                             }
-
-         
+       
                             if (buttonsize[0].height < 100) {buttonsize[0].height = 100}
 
-                    
-                            placementstring = controlhandler.placebutton(counter, buttonsize[0].height, buttonsize[0].width)
-                            timerplacementstring = controlhandler.placetimerbutton(counter, buttonsize[0].height, buttonsize[0].width, "START");
-                            timerstopplacementstring = controlhandler.placetimerbutton(counter, buttonsize[0].height, buttonsize[0].width, "STOP");
+                            if (datahandler.ColumnCount == 3) { 
+                                placementstring = controlhandler.placebutton3R(counter, buttonsize[0].height, buttonsize[0].width)
+                                timerplacementstring = controlhandler.placetimerbutton3R(counter, buttonsize[0].height, buttonsize[0].width, "START");
+                                timerstopplacementstring = controlhandler.placetimerbutton3R(counter, buttonsize[0].height, buttonsize[0].width, "STOP");
+                            } else { 
+                                placementstring = controlhandler.placebutton(counter, buttonsize[0].height, buttonsize[0].width)
+                                timerplacementstring = controlhandler.placetimerbutton(counter, buttonsize[0].height, buttonsize[0].width, "START");
+                                timerstopplacementstring = controlhandler.placetimerbutton(counter, buttonsize[0].height, buttonsize[0].width, "STOP");
+                            }
+                            
                             if (localarray[0][i].Timer == true) { 
                                 TimerStringhtml = '<button id="start_button_' + localarray[0][i].id.toString() + ' type="button" style="width:' + (buttonsize[0].width * .15).toString() + 'px;height:' + (buttonsize[0].height * .85).toString() + 'px; z-index: 1000; position:absolute; ' + timerplacementstring + '; font-size:1.2em; background-color:#85b2cb;">START</button><button id="stop_button_' + localarray[0][i].id.toString() + ' type="button" style="width:' + (buttonsize[0].width * .15).toString() + 'px;height:' + (buttonsize[0].height * .85).toString() + 'px; z-index: 1000; position:absolute; ' + timerstopplacementstring + '; font-size:1.2em; background-color:rgba(111, 106, 107, 0.68);">STOP</button>';
                             }
                             var appendstring = '<input id="button' + localarray[0][i].id.toString() + '" type = "button" class="buttontemplate" value="' + localarray[0][i].text + '&#13;&#10;' + localarray[0][i].DefectCode + '" style="width:' + buttonsize[0].width + 'px;height:' + buttonsize[0].height + 'px; position:absolute; ' + placementstring + '; font-size:1.5em; background-color:' + buttoncolor + ';"></input>';
-                            $(ui.panel).append(TimerStringhtml + '<button id="button' + localarray[0][i].id.toString() + '" type="button" class="buttontemplate" style="width:' + buttonsize[0].width + 'px;height:' + buttonsize[0].height + 'px; position:absolute; ' + placementstring + '; font-size:1.2em; background-color:' + buttoncolor + ';">' + localarray[0][i].ButtonLibraryId.toString() + '.<br />' + localarray[0][i].text + '</button>');
+                            $(ui.panel).append('<div style="display:block; overflow:auto;"><input id="ButtonLibraryId_' + localarray[0][i].id.toString() + '" type="hidden" value="' + localarray[0][i].ButtonLibraryId.toString() + '" /><input id="button' + localarray[0][i].id.toString() + '_hidden" type="hidden" value="' + localarray[0][i].id.toString() + '" />' + TimerStringhtml + '<button id="button' + localarray[0][i].id.toString() + '" type="button" class="buttontemplate" style="width:' + buttonsize[0].width + 'px;height:' + buttonsize[0].height + 'px; position:absolute; ' + placementstring + '; font-size:1.2em; background-color:' + buttoncolor + ';">' + localarray[0][i].text + '</button></div>');
                             //
                             counter = counter + 1;
                             datahandler.buttoncount = datahandler.buttoncount + 1;
@@ -1291,6 +1351,25 @@
 
             return 'left: ' + left.toString() + 'px; top: ' + top.toString() + 'px;'
         },
+        placebutton3R: function (count, buttonheight, buttonwidth) { 
+            var height = controlhandler.$tabs.height()
+            var width = controlhandler.$tabs.width()
+            var left;
+            var top;
+            var countnumber = new Number(count);
+            var butheight = new Number(buttonheight);
+            var butwidth = new Number(buttonwidth);
+            var HeaderBuffer = 42 + $(".ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all").height();
+            if (countnumber % 3 == 0) {
+                left = 5;
+            } else if (countnumber % 3 == 1) {
+                left = 12 + butwidth;
+            } else if (countnumber % 3 == 2) {
+                left = 17 + butwidth * 2;
+            }
+            top = HeaderBuffer + Math.floor(count / 3) * buttonheight + 5;
+            return 'left: ' + left.toString() + 'px; top: ' + top.toString() + 'px;'
+        },
         placetimerbutton: function (count, buttonheight, buttonwidth, type) { 
             var height = controlhandler.$tabs.height()
             var width = controlhandler.$tabs.width()
@@ -1320,6 +1399,35 @@
 
             return 'left: ' + left.toString() + 'px; top: ' + top.toString() + 'px;'
         },
+        placetimerbutton3R: function(count, buttonheight, buttonwidth, type) { 
+            var left;
+            var top;
+            var countnumber = new Number(count + 1);
+            var butheight = new Number(buttonheight);
+            var butwidth = new Number(buttonwidth);
+
+            if (count % 3 == 0) { 
+                if (type == "STOP") { 
+                    left = 15 + butwidth  - (butwidth * .18);
+                } else { 
+                    left = 15;
+                }
+            } else if (count % 3 == 1) { 
+                if (type == "STOP") { 
+                    left = 35 + (butwidth * 2) - (butwidth * .18);
+                } else { 
+                    left = 18 + butwidth;
+                }
+            } else if (count % 3 == 2) { 
+                if (type == "STOP") { 
+                    left = 55 + (butwidth * 3) - (butwidth * .18);
+                } else { 
+                    left = 21 + butwidth * 2;
+                }
+            }
+            top = 86 + Math.floor(count / 3) * butheight + 5;
+            return 'left: ' + left.toString() + 'px; top: ' + top.toString() + 'px;'
+        },
         sizebutton: function (totalcount) { 
             var height = controlhandler.$tabs.height()
             var width = controlhandler.$tabs.width()
@@ -1338,6 +1446,22 @@
 
             return returnarray
 
+        },
+        sizebutton3R: function (buttonCount) { 
+            var returnarray = new Array(); 
+            if (controlhandler.$tabs) { 
+                var bCount = new Number(buttonCount); 
+                if (bCount > 0) { 
+                    var DistanceToCenter = Math.ceil(bCount/3); 
+                    var ButtonHeight = (controlhandler.$tabs.height() - 10) / DistanceToCenter; 
+                    var ButtonWidth = (controlhandler.$tabs.width() - 5) / 3; 
+                    if (ButtonHeight > 250) {ButtonHeight = 250}
+                    returnarray.push({width: ButtonWidth, height: ButtonHeight}); 
+                } else { 
+                    returnarray.push({width: 200, height: 200})
+                }
+            }
+            return returnarray; 
         },
         format_created: function (cellvalue, options, rowobject) {
 
@@ -1371,7 +1495,7 @@
                         }
                         controlhandler.tabarray.length = 0;
                         datahandler.tabbuttonarray.length = 0;
-                        dbtrans.GetTemplateCollection(); 
+                        dbtrans.GetTemplateCollection(false); 
                     }
                     
                 },
@@ -1416,7 +1540,7 @@
        //     }
 
         },
-        GetTemplateCollection: function () {
+        GetTemplateCollection: function (UseLocalColumnCount) {
             var UserDiv = $('#UserDirections');
             var buttonarray = new Array();
             var tabarray = new Array();
@@ -1432,10 +1556,20 @@
                 type: 'GET',   // I'm doing a POST here just to show it can handle it too... 
                 data: { method: 'GetTemplateCollection_Admin', args: { TemplateId: datahandler.selectedtemplateid} },
                 success: function (data) {
-       
+                    
                     var selectedtab = tabselect;
                     if (data != "false" && data != "empty") {
-                        var json = $.parseJSON(data)
+
+                        while(controlhandler.tabarray.length > 0) { 
+                            controlhandler.tabarray.pop(); 
+                        }
+
+                        while(datahandler.tabbuttonarray.length > 0) { 
+                            datahandelr.tabbuttonarray.pop(); 
+                        }
+
+                        var json = $.parseJSON(data);
+                        console.log('TemplateColl', json); 
                         var length = json.length - 1;
                         var tabnumber = 99;
                         var returnsValue;
@@ -1446,10 +1580,16 @@
                         $('#loading').toggle();
                         $('.export').attr("disabled", "disabled");
                         $('.inputelement').attr("disabled", "disabled");
+
+                        if (UseLocalColumnCount != true) { 
+                            datahandler.ColumnCount = json[0].ColumnCount;
+                            $("#ColumnCount").val(datahandler.ColumnCount);
+                        }
+                            
                         var originaltabvalue = tabselect;
                         var refreshId = setInterval(function () {
                        
-                            if (counter == length || counter > 100) {
+                            if (counter == length || length < 1) {
                                 clearInterval(refreshId);
                             }
                             if (tabnumber != json[counter].TabNumber) {
@@ -1459,12 +1599,7 @@
                                     if (json[i].TabNumber == json[counter].TabNumber) {
                                         if (json[i].ButtonId != 0 && json[i].ButtonName != "NaN") {
                                             datahandler.tabbuttonarray.push({ text: json[i].ButtonName, tabindex: json[counter].TabNumber, id: buttoncounter, ButtonId: json[i].ButtonId, DefectType: json[i].DefectType, ButtonTemplateId: json[i].id, DefectCode: json[i].DefectCode, id: json[i].id, Hide: json[i].Hide, ButtonLibraryId: json[i].ButtonLibraryId, Timer: json[i].Timer  });
-
-                                            var ButtonJsonString = JSON.stringify(datahandler.tabbuttonarray);
-                                            if (ButtonJsonString.length > 0) {
-                                                $("#MainContent_ButtonArray_Hidden").val(ButtonJsonString);
-                                            }        
-                                           
+                     
                                         }
                                         buttoncounter++;
                                     }
@@ -1475,14 +1610,18 @@
                                 var TabJsonString = JSON.stringify(controlhandler.tabarray);
                                 if (TabJsonString.length > 0) {
                                     $("#MainContent_TabArray_Hidden").val(TabJsonString);
-                                }      
+                                }
+                                var ButtonJsonString = JSON.stringify(datahandler.tabbuttonarray);
+                                if (ButtonJsonString.length > 0) {
+                                    $("#MainContent_ButtonArray_Hidden").val(ButtonJsonString);
+                                }  
                             }
 
                             counter++;
 
                         }, 70);
                         tabselect = 0;
-                        
+                        console.log('tabarray', datahandler.tabbuttonarray); 
                         $("#MainContent_LineType_Hidden").val(json[0].LineType);
                         $("#LineType_pop").val(json[0].LineType);
                         var loaderswitch = setTimeout(function () {
@@ -1667,7 +1806,7 @@
                                     $('#ActiveTemplateTitle').val("  Template: " + name);
                                     datahandler.selectedtemplateid = Number(TemplateId)
                                     $("#MainContent_TemplateId_Hidden").val(TemplateId);
-                                    dbtrans.GetTemplateCollection()
+                                    dbtrans.GetTemplateCollection(false)
                             }
 
                         },
@@ -1744,11 +1883,12 @@
                     $("#wijgrid").jqGrid({
                         datatype: "local",
                         editurl: "<%=Session("BaseUri")%>" + '/handlers/JqGrid_Edit.ashx',
-                        colNames: ['TemplateId', 'Name', 'Owner', 'STT', 'CAR', 'STJ', 'SPA' , 'CDC', 'LINYI', 'FSK', 'FNL','FPC', 'PCE', 'DateCreated', 'Active'],
+                        colNames: ['TemplateId', 'Name', 'Owner', 'ColumnCount', 'STT', 'CAR', 'STJ', 'SPA' , 'CDC', 'LINYI', 'FSK', 'FNL','FPC', 'PCE', 'DateCreated', 'Active'],
                         colModel: [
                                 { name: 'TemplateId', index: 'TemplateId', hidden: true, editable: true },
                                 { name: 'Name', index: 'name', sortable: false, width: 25, formatter: controlhandler.format_created },
                                 { name: 'Owner', index: 'owner', hidden:false, sortable: false, width: 16, formatter: controlhandler.format_created },
+                                { name: 'ColumnCount', index: 'ColumnCount', hidden:true, editable: false },
                                 { name: 'Loc_STT', index: 'Loc_STT', sortable: false, width: 7, hidden:true,formatter: controlhandler.format_created, editable: true,edittype:"checkbox",editoptions: {value:"Yes:No"} },
                                 { name: 'Loc_CAR', index: 'Loc_CAR', sortable: false, width: 7, hidden:true,formatter: controlhandler.format_created, editable: true,edittype:"checkbox",editoptions: {value:"Yes:No"} },
                                 { name: 'Loc_STJ', index: 'Loc_STJ', sortable: false, width: 7, hidden:true,editrules: {edithidden:true}, formatter: controlhandler.format_created, editable: true,edittype:"checkbox",editoptions: {value:"Yes:No"} },
@@ -1778,12 +1918,14 @@
                             var rowind = $("#wijgrid").jqGrid('getInd', rowid);
                             var rowdata = $("#wijgrid").find("td[aria-describedby='wijgrid_TemplateId']");
                             var namedata = $("#wijgrid").find("td[aria-describedby='wijgrid_Name']");
-
+                            console.log('rowdata', rowdata); 
+                            
                             var TemplateId = rowdata[rowid - 1].title;
                             GlobalTemplateId = TemplateId;
                             var name = namedata[rowid - 1].title;
                             var pageNumber = $("#wijgrid").getGridParam('page');
-         
+                            datahandler.ColumnCount = rowdata[rowid - 1].ColumnCount; 
+                            
                             switch (name) {
                                 case "New Template":
                                     if (pageNumber == 1) { 
@@ -1802,7 +1944,7 @@
                                     $('#ActiveTemplateTitle').val(  "Template: " + name)
                                     datahandler.selectedtemplateid = Number(TemplateId)
                                     $("#MainContent_TemplateId_Hidden").val(TemplateId);
-                                    dbtrans.GetTemplateCollection()
+                                    dbtrans.GetTemplateCollection(false)
                             }
 
                         },

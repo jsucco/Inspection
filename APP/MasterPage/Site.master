@@ -149,12 +149,9 @@
 
     $(function () { 
         if(menuflag == 1) { 
-            console.log("asdf");
             $('.level1').css("display", "none")
             $('.menu').css("height", "50px");
         }
-
-        console.log(menuflag);
 
     });
 </script>

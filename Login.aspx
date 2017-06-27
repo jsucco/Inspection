@@ -318,6 +318,7 @@
         <div id="login">
             <h1>Welcome</h1>
             <p>Please enter your network login</p>
+            
             <div>
                 <form runat="server">
                     <div class="tile-login">
@@ -343,7 +344,12 @@
                         <h4>Login failed</h4>
                         <p class="error">Username and password are required</p>
                     </div>
-
+                    <div style="display:block; overflow:auto; margin-bottom:20px;"> 
+                        <p for="location-select">Select Ctx Location:</p>
+                        <select id="location-select"> 
+                        </select>
+                        <p style="font-size:11px;">*Indiciates which Ctx Location to varify credentials against <br> in addition to Active Directory.</p>
+                    </div>
                 </form>
                 </div> 
         </div>
@@ -357,7 +363,38 @@
             </footer>
         </div>
     </div>
+<script type="text/javascript"> 
+    $(function () {
+        var locations_arr = <%=loc_array%>
+        var cid = '<%=selected_cid%>';
 
+        LocationCtxLoc(locations_arr, cid);
 
-</body></html>
+    });
+    function LocationCtxLoc(Locations, selected_cid) {
+        var html = [];
+        html.length = 0;
+        html.push('<option value="">NO SELELECTION</option>');
+        if (Locations != null && Locations.length > 0) {
+            var rec;
+            for (var i = 0; i < Locations.length; i++) {
+                rec = Locations[i];
+                var sel_str = ''; 
+                if (rec.CID == selected_cid)
+                    sel_str = 'selected'; 
+
+                html.push('<option ' + sel_str + ' value="' + rec.CID + '">' + rec.text + '</option>');
+            }
+        } else {
+            html.push('<option value="NA">ERR-NA</option>');
+        }
+        $("#location-select").html(html.join('')).bind("change", function(){
+            var selected = $(this).val();
+            window.location.assign('/Login.aspx?UC=' + selected);
+        });
+    }
+
+</script>
+</body>
+</html>
 

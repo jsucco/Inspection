@@ -4,116 +4,108 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
     <div class="hidden">
-            <input type="hidden" value ="False" id="Authenticated_hidden" runat="server" />
-           </div> 
-                <div id="loginfrm" style="Z-INDEX: 110; height: 320px; width: 425px; position: absolute; top:125px; left:38%; display:none" >
-				    <div id="LocationSelection">
-                    <ASP:LABEL id="lblUserID" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: 30px"
-					runat="server" font-bold="True" Font-Size="Large">CORPORATE NAME:</ASP:LABEL>
-                <div style="Z-INDEX: 105; LEFT: 100px; POSITION: relative; TOP: 30px">
-                    <div style="Z-INDEX: 102; LEFT: 100px; POSITION: relative; TOP: -5px">
-                        <select id="LocationNames_pop" name="LocationNames_pop" style="width: 162px; height: 55px; "></select>
-               
-                                </div>
-                            </div>
-                        </div>
-                    <div id="MachineSelection">
-                    <ASP:LABEL id="lblMachineName" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: 30px"
-					runat="server" font-bold="True" Font-Size="Large">MACHINE NAME:</ASP:LABEL>
-                <div style="Z-INDEX: 105; LEFT: 100px; POSITION: relative; TOP: 30px">
-                    <div style="Z-INDEX: 102; LEFT: 100px; POSITION: relative; TOP: -5px">
-                <%--<input name="select-2" id="TemplateId" style="display:none; width: 162px; height: 20px; " class="inputelement" ></input>--%>
-                        <select id="MachineNames_pop" name="MachineNames_pop" style="width: 162px; height: 55px; "></select>
-               
-                                </div>
-                            </div>
-                        
-                        </div>
-                    <div id="WorkOrderSelection">
-                        <input id="closeout1" type="button" class="export closebox" value="X" style="position:relative; float:right;TOP: 5px; width:30px; height:30px;" />
-                    <ASP:LABEL id="lblWorkOrderID" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: 30px"
-					runat="server" font-bold="True" Font-Size="Large">OPEN WORK ORDERS:</ASP:LABEL>
-                <div style="Z-INDEX: 105; LEFT: 100px; POSITION: relative; TOP: 70px">
-                    <div style="Z-INDEX: 102; LEFT: -70px; POSITION: relative; TOP: -5px">
-                <%--<input name="select-2" id="TemplateId" style="display:none; width: 162px; height: 20px; " class="inputelement" ></input>--%>
-                        <select id="WorkOrder_pop" name="WorkOrder_pop" style="width: 325px; height: 55px; "></select>
-                                
-                                </div>
-                            <label style="left: -40px; position: relative;-webkit-appearance: none; width: 70px;height: 70px;background: white;border-radius: 5px;zoom: 1.7;border: 1.5px solid #555;"><input id="MachineLinkCheck" type="checkbox" name="checkbox" value="value" >Link To Machine</label>
-                    <ASP:LABEL runat="server" Width="280px" Style="word-wrap: normal; position:relative; left:-46px; word-break: break-all;" > Linking a Machine will automatically set the WorkOrder Information Per Machine Continuously.  click NEW or Exit Page to Exit.</ASP:LABEL>
-                            </div>
-                        </div>
-                    <div id="JobConfirmation">
-                        <div id="JobInfoDiv">
-                            <input id="closeout2" type="button" class="export closebox" value="X" style="position:relative; float:right;TOP: 5px; width:30px;  height:30px;" />
-                            <ASP:LABEL id="lblConfirmation" style="Z-INDEX: 104; POSITION: relative; float:right;left:-15px; TOP: 5px"
-					        runat="server" font-bold="True" Font-Size="Large">JOB CONFIRMATION</ASP:LABEL>
-                            
-                                <ASP:LABEL id="lblJobNumber" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: 40px"
-					        runat="server" Font-Size="medium">JobNumberID:</ASP:LABEL>
-                                <label id="JobNumberValue" style="font-size:medium; position: absolute; top:42px; left:340px;">0</label>
-                                <ASP:LABEL id="lblJobFailureCount" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: 70px"
-					        runat="server" Font-Size="medium">Job Failure Count:</ASP:LABEL>
-                                <label id="FailCountValue" style="font-size:medium; position: absolute; top:70px; left:340px;">0</label>
-                            <ASP:LABEL id="lblJobPassCount" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: 100px"
-					        runat="server" Font-Size="medium">Job Pass Count:</ASP:LABEL>
-                                <label id="PassCountValue" style="font-size:medium; position: absolute; top:100px; left:340px;">0</label>
-                            <ASP:LABEL id="lblJobTotalCount" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: 145px"
-					        runat="server" Font-Size="medium">Total Items Inspected:</ASP:LABEL>
-                            <div id="TotalCountValueDiv" style="position:absolute; top:130px; left:50%;">
-                                <input type="text" id="TotalCountValue" value=0 style="width: 157px; height: 57px; position:relative; top: -3px;" />
-                            </div>
-                            </div>
-                        <div id="JobAttachDiv" style="Z-INDEX: 105; LEFT: 0px; POSITION: relative; TOP: 150px; width:100%;">
-                            <div style="Z-INDEX: 102; LEFT: 10px; POSITION: relative; TOP: 55px">
-                                <ASP:LABEL id="lblcomments" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: -14px"
-					                    runat="server" font-bold="True" Font-Size="Small">JOB COMMENTS</ASP:LABEL>
-                                <textarea id="JobMessage" name="JobMessage" style="width:90%;height:55px; position: absolute; left:1%;" runat="server"></textarea>
-                                        <div id = "EmailAlertFlag" style="position:absolute; top:-200px; left: 5px;">
-                                                <input id="AddEmailFlag" type="checkbox" class=chkbox runat=server />Alert Email</div>
-                                        </div>
-                                    </div>
-                        <asp:Button ID="Confirm" runat="server" OnClientClick="SubmitOnce()" style="position:absolute; top:265px; left:50%; background:rgb(116,180, 116); color: white; text-align: center; width: 100px;" class="export" text="CONFIRM" />
-                        </div>
-                    <div id="RollConfirmation">
-                        <div id="RollInfoDiv">
-                            <input id="closeout5" type="button" class="export closebox" value="X" style="position:relative; float:right;TOP: 5px; width:30px;  height:30px;" />
-                            <ASP:LABEL id="lblRollConfirmation" style="Z-INDEX: 104; POSITION: relative; float:right;left:-15px; TOP: 5px"
-					        runat="server" font-bold="True" Font-Size="Large">JOB CONFIRMATION</ASP:LABEL>
-                             <div id = "EmailAlertFlagRoll" style="position:absolute; top:-5px; left: 5px;">
-                                                <input id="AddEmailFlagRoll" type="checkbox" class=chkbox runat=server />Alert Email</div>
-                                <ASP:LABEL id="lblRollNumber" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: 40px"
-					        runat="server" Font-Size="medium">RollNumber:</ASP:LABEL>
-                                <label id="RollNumberValue" style="font-size:medium; position: absolute; top:42px; left:310px;">0</label>
-                                <ASP:LABEL id="lblRollFailureCount" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: 70px"
-					        runat="server" Font-Size="medium">Job Failure Count:</ASP:LABEL>
-                                <label id="FailRollValue" style="font-size:medium; position: absolute; top:70px; left:310px;">0</label>
-                            <ASP:LABEL id="lblRollTotalCount" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: 105px"
-					        runat="server" Font-Size="medium">Total Yards Inspected:</ASP:LABEL>
-                            <div id="TotalYardValueDiv" style="position:absolute; top:100px; left:250px;">
-                                <input type="text" id="TotalYardValue" value=0 style="width: 157px; height: 57px; position:relative; top: -3px;" />
-                            </div>
-                            <asp:Label ID="lblWeaverShiftYards" style="z-index:104; left:10px; position:absolute; top: 155px"
-                            runat="server" Font-Size="Medium">Weaver Shift Yards:</asp:Label>
-                            <div style="position:absolute; top:150px; left: 250px;">
-                                <input type="text" id="WeaverShiftYards" value=0 style="width:157px; height:57px; position:relative; top:-3px;" />
-                            </div>
-                            </div>
-                        <div id="RollAttachDiv" style="Z-INDEX: 105; LEFT: 0px; POSITION: relative; TOP: 150px">
-                            <div style="Z-INDEX: 102; LEFT: 10px; POSITION: relative; TOP: 55px">
-                                <ASP:LABEL id="lblcommentsRoll" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: -14px"
-					                    runat="server" font-bold="True" Font-Size="Small">JOB COMMENTS</ASP:LABEL>
-                                <textarea id="RollMessage" name="RollMessage" style="width:380px;height:55px; position: absolute; left:10px;" runat="server"></textarea>
-                                       
-                                        </div>
-                                    </div>
-                        <asp:Button ID="ConfirmRoll" runat="server" style="position:absolute; top:265px; left:300px; background:rgb(116,180, 116); color: white; text-align: center; width: 100px;" class="export" text="CONFIRM" />
-                        </div>
-                    &nbsp;&nbsp;
-                  </div>
-                  <div id="JobStart-confirm" style="display:none;" title="Existing Job Found.">
-                  <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>This WorkOrder is already open and has the ID <label id="JobStart-confirm-jobid"></label>, AQL <label id="JobStart-confirm-aql"></label> Would you like to continue the previous or begin a new AQL. Please select an option below.</p>
+        <input type="hidden" value ="False" id="Authenticated_hidden" runat="server" />
+    </div> 
+    <div id="loginfrm" style="Z-INDEX: 110; height: 320px; width: 425px; position: absolute; top:125px; left:38%; display:none" >
+	<div id="LocationSelection">
+        <ASP:LABEL id="lblUserID" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: 30px"
+		runat="server" font-bold="True" Font-Size="Large">CORPORATE NAME:</ASP:LABEL>
+        <div style="Z-INDEX: 105; LEFT: 100px; POSITION: relative; TOP: 30px">
+            <div style="Z-INDEX: 102; LEFT: 100px; POSITION: relative; TOP: -5px">
+                <select id="LocationNames_pop" name="LocationNames_pop" style="width: 162px; height: 55px; "></select>              
+            </div>
+        </div>
+    </div>
+    <div id="MachineSelection">
+        <ASP:LABEL id="lblMachineName" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: 30px"
+		runat="server" font-bold="True" Font-Size="Large">MACHINE NAME:</ASP:LABEL>
+        <div style="Z-INDEX: 105; LEFT: 100px; POSITION: relative; TOP: 30px">
+            <div style="Z-INDEX: 102; LEFT: 100px; POSITION: relative; TOP: -5px">
+                <select id="MachineNames_pop" name="MachineNames_pop" style="width: 162px; height: 55px; "></select>              
+            </div>
+        </div>                       
+    </div>
+    <div id="WorkOrderSelection">
+        <input id="closeout1" type="button" class="export closebox" value="X" style="position:relative; float:right;TOP: 5px; width:30px; height:30px;" />
+        <ASP:LABEL id="lblWorkOrderID" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: 30px"
+		runat="server" font-bold="True" Font-Size="Large">OPEN WORK ORDERS:</ASP:LABEL>
+        <div style="Z-INDEX: 105; LEFT: 100px; POSITION: relative; TOP: 70px">
+            <div style="Z-INDEX: 102; LEFT: -70px; POSITION: relative; TOP: -5px">
+                <select id="WorkOrder_pop" name="WorkOrder_pop" style="width: 325px; height: 55px; "></select>                              
+            </div>
+            <label style="left: -40px; position: relative;-webkit-appearance: none; width: 70px;height: 70px;background: white;border-radius: 5px;zoom: 1.7;border: 1.5px solid #555;"><input id="MachineLinkCheck" type="checkbox" name="checkbox" value="value" >Link To Machine</label>
+            <ASP:LABEL runat="server" Width="280px" Style="word-wrap: normal; position:relative; left:-46px; word-break: break-all;" > Linking a Machine will automatically set the WorkOrder Information Per Machine Continuously.  click NEW or Exit Page to Exit.</ASP:LABEL>
+        </div>
+    </div>
+    <div id="JobConfirmation">
+        <div id="JobInfoDiv">
+            <input id="closeout2" type="button" class="export closebox" value="X" style="position:relative; float:right;TOP: 5px; width:30px;  height:30px;" />
+            <ASP:LABEL id="lblConfirmation" style="Z-INDEX: 104; POSITION: relative; float:right;left:-15px; TOP: 5px"
+			runat="server" font-bold="True" Font-Size="Large">JOB CONFIRMATION</ASP:LABEL>                           
+                <ASP:LABEL id="lblJobNumber" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: 40px"
+			runat="server" Font-Size="medium">JobNumberID:</ASP:LABEL>
+                <label id="JobNumberValue" style="font-size:medium; position: absolute; top:42px; left:340px;">0</label>
+                <ASP:LABEL id="lblJobFailureCount" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: 70px"
+			runat="server" Font-Size="medium">Job Failure Count:</ASP:LABEL>
+                <label id="FailCountValue" style="font-size:medium; position: absolute; top:70px; left:340px;">0</label>
+            <ASP:LABEL id="lblJobPassCount" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: 100px"
+			runat="server" Font-Size="medium">Job Pass Count:</ASP:LABEL>
+                <label id="PassCountValue" style="font-size:medium; position: absolute; top:100px; left:340px;">0</label>
+            <ASP:LABEL id="lblJobTotalCount" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: 145px"
+			runat="server" Font-Size="medium">Total Items Inspected:</ASP:LABEL>
+            <div id="TotalCountValueDiv" style="position:absolute; top:130px; left:50%;">
+                <input type="text" id="TotalCountValue" value=0 style="width: 157px; height: 57px; position:relative; top: -3px;" />
+            </div>
+        </div>
+        <div id="JobAttachDiv" style="Z-INDEX: 105; LEFT: 0px; POSITION: relative; TOP: 150px; width:100%;">
+            <div style="Z-INDEX: 102; LEFT: 10px; POSITION: relative; TOP: 55px">
+                <ASP:LABEL id="lblcomments" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: -14px"
+					    runat="server" font-bold="True" Font-Size="Small">JOB COMMENTS</ASP:LABEL>
+                <textarea id="JobMessage" name="JobMessage" style="width:90%;height:55px; position: absolute; left:1%;" runat="server"></textarea>
+                <div id = "EmailAlertFlag" style="position:absolute; top:-200px; left: 5px;">
+                        <input id="AddEmailFlag" type="checkbox" class=chkbox runat=server />Alert Email</div>
+            </div>
+        </div>
+        <asp:Button ID="Confirm" runat="server" OnClientClick="SubmitOnce()" style="position:absolute; top:265px; left:50%; background:rgb(116,180, 116); color: white; text-align: center; width: 100px;" class="export" text="CONFIRM" />
+        </div>
+        <div id="RollConfirmation">
+            <div id="RollInfoDiv">
+                <input id="closeout5" type="button" class="export closebox" value="X" style="position:relative; float:right;TOP: 5px; width:30px;  height:30px;" />
+                <ASP:LABEL id="lblRollConfirmation" style="Z-INDEX: 104; POSITION: relative; float:right;left:-15px; TOP: 5px"
+				runat="server" font-bold="True" Font-Size="Large">JOB CONFIRMATION</ASP:LABEL>
+                    <div id = "EmailAlertFlagRoll" style="position:absolute; top:-5px; left: 5px;">
+                                    <input id="AddEmailFlagRoll" type="checkbox" class=chkbox runat=server />Alert Email</div>
+                    <ASP:LABEL id="lblRollNumber" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: 40px"
+				runat="server" Font-Size="medium">RollNumber:</ASP:LABEL>
+                    <label id="RollNumberValue" style="font-size:medium; position: absolute; top:42px; left:310px;">0</label>
+                    <ASP:LABEL id="lblRollFailureCount" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: 70px"
+				runat="server" Font-Size="medium">Job Failure Count:</ASP:LABEL>
+                    <label id="FailRollValue" style="font-size:medium; position: absolute; top:70px; left:310px;">0</label>
+                <ASP:LABEL id="lblRollTotalCount" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: 105px"
+				runat="server" Font-Size="medium">Total Yards Inspected:</ASP:LABEL>
+                <div id="TotalYardValueDiv" style="position:absolute; top:100px; left:250px;">
+                    <input type="text" id="TotalYardValue" value=0 style="width: 157px; height: 57px; position:relative; top: -3px;" />
                 </div>
+                <asp:Label ID="lblWeaverShiftYards" style="z-index:104; left:10px; position:absolute; top: 155px"
+                runat="server" Font-Size="Medium">Weaver Shift Yards:</asp:Label>
+                <div style="position:absolute; top:150px; left: 250px;">
+                    <input type="text" id="WeaverShiftYards" value=0 style="width:157px; height:57px; position:relative; top:-3px;" />
+                </div>
+                </div>
+            <div id="RollAttachDiv" style="Z-INDEX: 105; LEFT: 0px; POSITION: relative; TOP: 150px">
+                <div style="Z-INDEX: 102; LEFT: 10px; POSITION: relative; TOP: 55px">
+                    <ASP:LABEL id="lblcommentsRoll" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: -14px"
+					        runat="server" font-bold="True" Font-Size="Small">JOB COMMENTS</ASP:LABEL>
+                    <textarea id="RollMessage" name="RollMessage" style="width:380px;height:55px; position: absolute; left:10px;" runat="server"></textarea>                                     
+                </div>
+            </div>
+            <asp:Button ID="ConfirmRoll" runat="server" style="position:absolute; top:265px; left:300px; background:rgb(116,180, 116); color: white; text-align: center; width: 100px;" class="export" text="CONFIRM" />
+            </div>
+        &nbsp;&nbsp;
+        </div>
+        <div id="JobStart-confirm" style="display:none;" title="Existing Job Found.">
+            <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>This WorkOrder is already open and has the ID <label id="JobStart-confirm-jobid"></label>, AQL <label id="JobStart-confirm-aql"></label> Would you like to continue the previous or begin a new AQL. Please select an option below.</p>
+        </div>
     <input type="hidden" id="HiddenProduct" runat="server" />
     <input type="hidden" id="InspectionState" class="inputelement" runat="server" />
     <input type="hidden" id="workorder_hidden" runat="server" />
@@ -135,22 +127,18 @@
     <input id="DHYHidden" type="hidden" runat="server" value="0" />
     <input id="REHidden" type="hidden" runat="server" value="0" />
     <div id="CompleteDiv" style="position:absolute; left: 360px; top: -10px; width: 350px;">
-        <%--<asp:Button ID="Pass" runat="server" style="position:absolute; top: 25px; background:rgb(116,180, 116); color: white; text-align: center; width: 100px;" class="export" text="PASS" />--%>
         <input id="completeInspec" type="button" style="position:relative; top: 25px; background:rgb(116,180, 116); color: white; text-align: center; width: 180px;" class="export endjob leftsidedropobj" value="INSPECTION COMPLETE"></input>
     </div>
-        <div id="NewPageDiv" style="position:absolute; left: 560px; top: 15px; width: 350px;" class="">
-            <input id="NewPage" type="button" value="NEW" class="export" style="position:relative;height: 35px; width:90px; height: 52px; ""></input>
-        </div>
-        
-             <%--<input id="Fail" style="position:relative; top: -27px; left:120px; background:rgb(227, 10, 10); color: white; text-align: center; width: 100px;" class="export endjob" value="FAIL JOB"/>--%>
-       <%-- <asp:Button ID="NewJob" runat="server" style="position:absolute; top: 25px; left: 120px; width: 100px; color: white; text-align: center;" class="export" text="NEW INS."/>
-        <asp:Button ID="NewSample" runat="server" style="position:absolute; top: 25px; left: 240px; width: 105px; color: white; text-align: center;" class="export" text="NEW SAMPLE" OnClick="NewJob_Click"/>--%>
-        
-    
+    <div style="position:absolute; width: 90px; height: 35px;font-size: .85em; left: 60%; top:5px;">
+        <img src="../../Images/global-technical-specs.jpg" id="GlobalSpecsImage" style="height:80px; z-index: 1000;" />
+    </div>
+    <div id="NewPageDiv" style="position:absolute; left: 560px; top: 15px; width: 350px;" class="">
+        <input id="NewPage" type="button" value="NEW" class="export" style="position:relative;height: 35px; width:90px; height: 52px; ""></input>
+    </div>    
     <div id="scorelabels" style="position:absolute; left:69%; top:-5px; width: 400px; height: 100px; display:none;">
         <label id="DHULabel" style="position:absolute; top:3px; left: 0px; font-size:medium; z-index:100; color:black; width: 150px;">DHU</label>
         <input id="DHU" readonly  class="inputelement inputbox" type="text" style="top:25px; left: 0px; width: 60px; height: 53px;" value="0" runat="server"  />
-        <label id="SampleSizeLabel" style="position:absolute; top:3px; left: 130px; font-size:medium; z-index:100; color:black; width: 150px;">SAMPLE SIZE</label>
+        <label id="SampleSizeLabel" style="position:absolute; top:3px; left: 100px; font-size:medium; z-index:100; color:black; width: 150px;">SAMPLE SIZE</label>
         <input id="SampleSize" readonly  class="inputelement inputbox" type="text" style="top:25px; left: 100px; width: 60px; height: 53px;" runat="server"  />
         <label style="position:absolute; top:3px; left: 230px; font-size:medium; z-index:100; color:black; width: 150px;">AC</label>
         <input id="AC" readonly  class="inputelement inputbox" type="text" style="top:25px; left: 220px; width: 40px; height: 16px;" runat="server"  />
@@ -163,11 +151,9 @@
         <input id="Bad_Group" readonly  class="inputelement inputbox" type="text" style="top:65px; width: 20px; padding-left: 10px; height: 16px; left: 345px" runat="server" value="0"   />
     </div>
     <div style="Z-INDEX: 102; LEFT: 10px; POSITION: absolute; TOP: 100px">
-                <%--<input name="select-2" id="TemplateId" style="display:none; width: 162px; height: 20px; " class="inputelement" ></input>--%>
-        
         <button id="InspectionType" type="button" style="background-color: rgb(149, 187, 210); display:none; height: 35px; width: 75px; position: absolute; left:170px; top: 0px;">WORK ORDER</button>   
-            </div>
-    <div id="menudiv" style="display: none; position: relative; top: 55px;left: 2px; width: 99.9%; height:50px; ">
+    </div>
+    <div id="menudiv" style="display: none; position: relative; top: 55px;left: 2px; width: 99.9%; height:36px; ">
     <ul id="menu" style="position:relative; top:-45px;" >
             <li><a>MAIN MENU</a>
             </li>
@@ -177,47 +163,41 @@
                    <li><a>TEMPLATE UTILITY</a></li>
                    <li><a>RESULTS</a></li>
                 </ul>
-            </li>
-           
+            </li>       
             <li><a>DASHBOARD</a></li>
         </ul>
         <div id="MachineDiv" style="position:relative; top: -47px;width: 170px;float:right;border-right-style: solid;border-color: rgb(123, 122, 122);border-width: thick;z-index: 200;height: 34px; display:none;">
-            <label id="MachineLbl" style="position: relative; top: 4px; left: 5px; font-size:medium; font-weight:700; z-index:100; color:black; width: 150px;border-left-width: think;/* border-color: rgb(131, 134, 136); *//* border-right-style: solid; *//* border-left-style: solid; */height: 34px;">  </label>
+            <label id="MachineLbl" style="position: relative; top: 4px; left: 5px; font-size:medium; font-weight:700; z-index:100; color:black; width: 150px;height: 34px;">  </label>
             
         </div>
-        <div style="position:relative;top: -47px;width: 170px;float:right;border-right-style: solid;border-left-style: solid;border-color: rgb(123, 122, 122);border-width: thick;z-index: 200;height: 34px;">
-            <label style="position: relative; top: 4px; left: 5px; font-size:medium; font-weight:700; z-index:100; color:black; width: 150px;border-left-width: think;/* border-color: rgb(131, 134, 136); *//* border-right-style: solid; *//* border-left-style: solid; */height: 34px;">   Inspection ID: </label>
-            <input id="InspectionId" class="inputelement" runat="server" style="position:relative; top:4px; left: 4px; font-size:medium; font-weight:700; z-index:100; color:black; width: 50px; border:none; background-color: transparent;" value="0" />
+        <div>
+
+        </div>
+        <div id="jobnumber_stat_tag" class="menu-stat-tag" style="right:182px !important;display:none;">
+            <label class="menu-stat-tag-label" style="top:5px;" for="">JB#</label>
+            <input id="jobnumber_label" style="width:130px;" class="menu-stat-tag-input" value="" readonly />
+        </div>
+        <div class="menu-stat-tag">
+            <label class="menu-stat-tag-label">   Inspection ID: </label>
+            <input id="InspectionId" class="inputelement menu-stat-tag-input" runat="server" value="0" />
             <span id="jobIdSpinner" style="position:relative; float:right; top:-30px; right:170px; display: none">
                 <img style="position:relative; float:right; width:75px;" src="../../Images/load-indicator.gif" />
-            </span>
-            
+            </span>         
         </div>
         <div id="CountToTargetDiv" style="position: relative;display:none;top: -47px;float:right; width: 150px;border-right-style: solid; border-left-style: solid;border-color: rgb(123, 122, 122);border-width: thick;z-index: 200;height: 34px;">
-            <label style="position: relative; top: 4px; left: 5px; font-size:medium; font-weight:700; z-index:100; color:black; width: 150px;border-left-width: think;/* border-color: rgb(131, 134, 136); *//* border-right-style: solid; *//* border-left-style: solid; */height: 34px;">   Ins. To Target: </label>
+            <label style="position: relative; top: 4px; left: 5px; font-size:medium; font-weight:700; z-index:100; color:black; width: 150px;height: 34px;">   Ins. To Target: </label>
             <input id="CountToTarget_Input" class="inputelement" runat="server" style="position:relative; top:4px; left: 4px; font-size:medium; font-weight:700; z-index:100; color:black; width: 30px; border:none; background-color: transparent;" value="0" />
         </div>
-        <input id="EnterSpec" type="button" value="Enter Spec" class="export" style="position:absolute; width: 90px; height: 35px;font-size: .85em; left: 91%; top:60px;"></input>
         
-        <input id="EnterProductSpec" type="button" value="REPORT SPEC" class="export" style="position:absolute; width: 90px; height: 35px;font-size: .85em; left: 91%; top:150px;"></input>
-
-        <div style="position:absolute; width: 90px; height: 35px;font-size: .85em; left: 91%; top:260px;">
-            <img src="../../Images/global-technical-specs.jpg" id="GlobalSpecsImage" style="height:80px; z-index: 1000;" />
+    </div>
+    <div id="tabs_holder" style="width:83%; height:95%; left:260px; position:absolute; top:135px;"> 
+        <div id="tabs" style="width:100%; top:0px; height:100%; left:0px; position:relative;">
+            <ul> </ul>
         </div>
-
-    </div>
-    <div id="tabs" style="width:63%; top:135px; height:75%; left:260px; position:absolute;">
-        <ul> </ul>
-
-
-    </div>
-    <div id="loading" style="width:74%; top:137px; height:75%; left:264px; position:absolute; display: none;">
-        <div style="width:100%; top:7px; height:100%; position:absolute;z-index:0; background-color:lightgray; opacity:.4;"></div>
-        <input type="image" src="../../Images/load-indicator.gif" style="z-index:3; margin-left: 41%; margin-top:20%; position:absolute;" />
-    </div>
-    <div id="Default" style="width:74%; top:137px; height:75%; left:264px; position:absolute; display: none;">
-        <div style="width:100%; top:7px; height:100%; position:absolute;z-index:0; background-color:lightgray; opacity:.4;"></div>
-        <input type="image" src="../../Images/TemplateInspection.jpg" style="z-index:3; margin-left: 8%; margin-top:8%; height: 75%; position:absolute;" />
+        <div id="loading" style="width:100%; top:-97%; height:100%; left:4px; position:relative; display: none;">
+            <div style="width:100%; top:7px; height:100%; position:absolute;z-index:0; background-color:lightgray; opacity:.4;"></div>
+            <input type="image" src="../../Images/load-indicator.gif" style="z-index:3; margin-left: 41%; margin-top:20%; position:absolute;" />
+        </div>
     </div>
     <div id="SpecTable" style="display:none; z-index:210; position:absolute; float:left; width:19.7%; height:1100px; top:40px; left:5%; background: transparent !important;">
         <div style="position:absolute; top:0px;">
@@ -228,121 +208,110 @@
             <label id="ItemNumberLabel" for="NextItem" style="color:white; font-size:xx-large; position: relative;left: 50px; top: 30px;">Item #: 1</label>
             <div id="pSpecgrid" ></div>
         </div>
-        <%--<div id="SpecButton" style="position:relative; top:95px; left:295px; width: 360px;">
-                            <input id="SpecAdd" type="button" class="export" style="height: 30px; width:70px" value="SAVE" runat="server" />
-                            <input type="text" id="SpecErrorText" style="position:relative; top: -25px; left: 80px;border: none;font-weight: 800;color: red;display: none; width:300px;">
-                        </div>--%>
     </div>
-    <div id="LoadWorkOrderDiv" class="leftsidedropobj" style="left: 0px;width: 250px;height: 100px;top:180px;position:absolute;">
-        <select id="selectNames" style="width: 97%; top: -40px; height: 35px; position: absolute; left: 10px; "></select>
-        <%--<input id="LoadSPCMachine" type="button" value="SPCMachine" class="export" style="position:absolute; width: 90px; height: 35px;font-size: .85em; left: 150px;"></input>--%>
-        <input id="StartInspection" type="button" value="START" class="export" style="position:absolute; width: 97%; height: 35px;font-size: .85em; left: 10px;"></input>
+    <div class="de_container" style="display:none;"> 
+        <div class="minimize_pad">
+            <img id="pad_b_icon" style="width:40px;" src="../../Images/icons8-Minimize Window-64.png"/>
+            <input id="pad_open_flag" type="hidden" value="1" />
+        </div>
+        <div id="LoadWorkOrderDiv" class="leftsidedropobj">
+            <select id="selectNames" style="width: 97%; height: 35px; position: relative; top:-30px; left: 2px; "></select>
+            <input id="StartInspection" type="button" value="START" class="export" style="position:relative; width: 97%; top:-15px; height: 35px;font-size: .85em; left: 2px;" />
+            <input id="LoadOpenWorkOrder" type="button" value="Open WorkOrders" class="export" style="position:relative; margin-top:20px; top:-15px; height: 35px; width:97%; left: 2px;" />
+            <div id="workdiv" style="position:relative; margin-top:10px;" class="inputpad leftsidepanel workorder-inspection">
+                    <label for="WorkOrderL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">WORK ORDER</label>
+                    <label class="label-tab PullDataL" style="left:-2px; height:50px; width:53px; text-align:center;">Pull Data</label>
+                    <input id="WorkOrder" class="inputelement inputbox  leftsideobj" type="text" runat="server"  />
+                </div>
+            <div id="rolldiv" style="position:relative; margin-top:10px; display: none;" class="inputpad leftsidepanel roll-inspection">
+                <label for="rollL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">ROLL NUMBER</label>
+                <label class="label-tab PullDataL">Pull Data</label>
+                <input id="RollNumber" class="inputelement inputbox leftsideobj" type="text" runat="server"  />
+            </div>
+            <div id="cartondiv" class="inputpad leftsidepanel" style="position:relative; margin-top:5px; display:none;">
+                <label for="CartonNumberL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">CARTON NUMBER</label>
+                <input id="CartonNumber" class="inputelement inputbox leftsideobj" type="text" runat="server"   />
+            </div>
+            <div id="workroomdiv" class="inputpad leftsidepanel workorder-inspection" style="position:relative; margin-top: 5px;">
+                <label for="workroomL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">WORKROOM</label>
+                <input id="workroom" class="inputelement inputbox leftsideobj" type="text" runat="server"   />
+            </div>
+            <div id="loomdiv" class="inputpad leftsidepanel roll-inspection" style="position:relative; margin-top:5px; display:none;">
+                <label for="LoomNumberL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">LOOM NUMBER</label>
+                <input id="LoomNumber" class="inputelement inputbox leftsideobj" type="text" runat="server"   />
+            </div>
+            <div id="cpdiv" class="inputpad leftsidepanel workorder-inspection" style="position:relative; margin-top:5px;">
+                <label for="CPNumberL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">CASE PACK</label>
+                <input id="CPNumber" class="inputelement inputbox leftsideobj" type="text" runat="server"   />
+            </div>
+            <div id="inspectordiv" class="inputpad leftsidepanel roll-inspection" style="position:relative; margin-top:5px; display:none;">
+                <label for="InspectorL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">INSPECTOR</label>
+                <input id="Inspector" class="inputelement inputbox leftsideobj" type="text" runat="server" value=""  />
+            </div>
+            <div id="datanumberdiv" class="inputpad leftsidepanel" style="position:relative; margin-top:5px;">
+                <label for="DataNumber" id="DataNumberL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">DATA NUMBER</label>
+                <input id="DataNumber" class="inputelement inputbox leftsideobj" type="text" runat="server"   />
+
+            </div>
+            <div class="inputpad leftsidepanel" id="auditdiv" style="position:relative; margin-top:5px;">
+                <label for="AuditorName" id="AuditorNameL" class="workorder-inspection" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">AUDITOR NAME</label>
+                <input id="AuditorName" class="inputelement inputbox" type="hidden" runat="server"   />
+                <select id="Auditor_Name" class="inputelement inputbox leftsidedropobj  workorder-inspection" style="width: 185px;"></select>
+                <label for="Weaver_Names" id="WeaverNamesL" class="roll-inspection" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">WEAVER NAMES</label>
+                <input id="Weaver_Names" class="inputelement inputbox leftsideobj roll-inspection" runat="server" type="text" />
+                <div style="position:relative; top:20%; margin-right:10px;">
+                    <label id="AddWeaverL" class="roll-inspection label-tab">Add</label>
+                </div>          
+            </div>
+            <div id="itemnumberholder" style="position:relative; left:0px; width: 250px; margin-top:5px; display:none;" class="leftsidepanel">
+                <input id="ItemNumber" class="inputelement inputbox leftsideobj" type="text" runat="server"  />
+            </div>        
+            <div class="inputpad leftsidepanel" style="position:relative; margin-top:5px;">
+                <label for="LocationL" style="position:absolute; top:3px; left:10px; font-size:smaller; z-index:100; color:white;">LOCATION</label>
+                <select id="Location" disabled runat="server" style="width:185px;"    class="inputelement inputbox leftsidedropobj"></select>
+            </div>
+            <div class="inputpad leftsidepanel" style="position:relative; margin-top:5px;" id="LotSizeDiv">
+                <label for="WOQuantity" id="WOQuantityL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">WO QUANTITY</label>
+                <div style="position: relative; top:15px; left:10px;">
+                    <input id="WOQuantity" class="inputelement leftsidedropobj" style="height:30px; width:149px; padding-left: 30px; text-align: left;" type="text" value ="0"   />
+                </div>
+            </div>
+            <div id="AQdiv" style="Z-INDEX: 102; LEFT: 10px; POSITION: relative; height:62px; margin-top: 5px; width:250px;" class="leftsidepanel">
+                    <input name="select-3" id="AQLevel" style="width: 162px; height: 20px; display:none;" class="inputelement " />
+                    <select id="AQ_Level" style="width:97%; height: 35px; " class="inputelement leftsidedropobj"></select>            
+            </div>
+            <div id="ImageCapture" style="z-index:102; left:-9px; position:relative; margin-top: 20px; display:none;">
+                <span class="fileUpload btn btn-primary">
+                    <span class="uploadButton">Add Picture</span>
+                        <form method="post" enctype="multipart/form-data" id="myImageForm">
+                          <asp:FileUpload id="FileUploadControl" runat="server" />
+                            <asp:Button runat="server" id="UploadButton" text="Upload" OnClientClick="setnavcop(true)"/>
+                            <br /><br />
+                            <asp:Label runat="server" id="StatusLabel" text="Upload status: " style="position:absolute; left:0px;" />
+                        </form>
+                        <label id="StatusResult" runat="server" style="position:absolute; left:90px;"></label>
+                        <label id="DefectFlag" style="position:relative; top:20px; float: left;" >[No Selection]</label>
+                    </span>
+            </div>
+            <div id="ActionHolder" style="position:relative; height: 42px; margin-top:-5px;">
+                <div id="MobileDirectorDiv" style="Z-INDEX: 102; LEFT: 10px; POSITION: relative; TOP: 0px; width:250px;" class="">
+                    <input id="MobileDirector" type="button" class="export" style="position:relative; height: 35px; width:97%;" value="PHOTO" />
+                </div>      
+            </div>
+            <div id="es_container" style="position:relative; height:42px; margin-top:20px; width:250px;">
+                <input id="EnterSpec" type="button" value="Enter Spec" class="export" style="position:absolute; width: 97%; margin-left:10px; height: 35px;font-size: 1.1em;"/>       
         
-    </div>
-    <div id="workorderDiv" style="left: 0px;width: 250px;height: 100px;top:240px;position:absolute;" class="leftsidedropobj">
-            <input id="LoadOpenWorkOrder" type="button" value="Open WorkOrders" class="export" style="position:relative;height: 35px; width:97%; left: 10px;"></input>
-    </div>
-    <div id="InputHolder" style="left: 0px; top: 295px; position: absolute; display: none;">
-        <div id="workdiv" class="inputpad leftsidepanel workorder-inspection">
-            <label for="WorkOrderL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">WORK ORDER</label>
-            <label for="PullDataL" class="label-tab">Pull Data</label>
-
+            </div>
+            <div id="rs_container" style="position:relative; height: 42px; margin-top:20px; width:250px;">
+                <input id="EnterProductSpec" type="button" value="REPORT SPEC" class="export" style="position:absolute; margin-left:10px; width: 97%; height: 35px;font-size: 1.1em;"/>
+            </div>
         </div>
-        <div id="rolldiv" class="inputpad leftsidepanel roll-inspection" style="display: none;">
-            <label for="rollL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">ROLL NUMBER</label>
-            <label for="PullDataL" class="label-tab">Pull Data</label>
-
-        </div>
+    </div>
+    <div id="InputHolder" style="left: 0px; top: 295px; position: absolute; display: none;">      
         <div id="itemdiv" class="inputpad leftsidepanel" style="display: none;">
             <label for="itemL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">ITEM NUMBER</label>           
         </div>
-        <div id="workinputholder" style="position:absolute; left:0px; width: 250px" class="leftsidepanel workorder-inspection">
-            <input id="WorkOrder" class="inputelement inputbox  leftsideobj" type="text" runat="server"  />
-        </div>
-        <div id="rollnumberholder" style="position:absolute; left:0px; width: 250px; display:none;" class="leftsidepanel roll-inspection">
-            <input id="RollNumber" class="inputelement inputbox leftsideobj" type="text" runat="server"  />
-        </div>
-        <div id="itemnumberholder" style="position:absolute; left:0px; width: 250px; display:none;" class="leftsidepanel">
-            <input id="ItemNumber" class="inputelement inputbox leftsideobj" type="text" runat="server"  />
-        </div>
-
-        <div id="cartondiv" class="inputpad leftsidepanel" style="position:absolute; top: 64px; display:none;">
-            <label for="CartonNumberL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">CARTON NUMBER</label>
-            <input id="CartonNumber" class="inputelement inputbox leftsideobj" type="text" runat="server"   />
-
-        </div>
-        <div id="workroomdiv" class="inputpad leftsidepanel workorder-inspection" style="position:absolute; top: 64px;">
-            <label for="workroomL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">WORKROOM</label>
-            <input id="workroom" class="inputelement inputbox leftsideobj" type="text" runat="server"   />
-
-        </div>
-        <div id="loomdiv" class="inputpad leftsidepanel roll-inspection" style="position:absolute; top: 64px; display:none;">
-            <label for="LoomNumberL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">LOOM NUMBER</label>
-            <input id="LoomNumber" class="inputelement inputbox leftsideobj" type="text" runat="server"   />
-
-        </div>
-        
-        <div id="cpdiv" class="inputpad leftsidepanel workorder-inspection" style="position:absolute; top: 128px;">
-            <label for="CPNumberL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">CASE PACK</label>
-            <input id="CPNumber" class="inputelement inputbox leftsideobj" type="text" runat="server"   />
-
-        </div>
-        <div id="inspectordiv" class="inputpad leftsidepanel roll-inspection" style="position:absolute; top: 128px; display:none;">
-            <label for="InspectorL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">INSPECTOR</label>
-            <input id="Inspector" class="inputelement inputbox leftsideobj" type="text" runat="server" value=""  />
-
-        </div>
-        
-        <div id="datanumberdiv" class="inputpad leftsidepanel" style="position:absolute; top: 192px;">
-            <label for="DataNumber" id="DataNumberL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">DATA NUMBER</label>
-            <input id="DataNumber" class="inputelement inputbox leftsideobj" type="text" runat="server"   />
-
-        </div>
-        <div class="inputpad leftsidepanel" id="auditdiv" style="position:absolute; top: 256px;">
-            <label for="AuditorName" id="AuditorNameL" class="workorder-inspection" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">AUDITOR NAME</label>
-            <input id="AuditorName" class="inputelement inputbox" type="hidden" runat="server"   />
-            <select id="Auditor_Name" class="inputelement inputbox leftsidedropobj  workorder-inspection" style="width: 185px;"></select>
-            <label for="Weaver_Names" id="WeaverNamesL" class="roll-inspection" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">WEAVER NAMES</label>
-            <input id="Weaver_Names" class="inputelement inputbox leftsideobj roll-inspection" runat="server" type="text" />
-            <div style="position:relative; top:20%; margin-right:10px;">
-                <label id="AddWeaverL" class="roll-inspection label-tab">Add</label>
-            </div>
-            
-        </div>
-        <div class="inputpad leftsidepanel" style="position:absolute; top: 320px;">
-            <label for="LocationL" style="position:absolute; top:3px; left:10px; font-size:smaller; z-index:100; color:white;">LOCATION</label>
-
-            <select id="Location" disabled runat="server" style="width:185px;"    class="inputelement inputbox leftsidedropobj"></select>
-        </div>
-        <div class="inputpad leftsidepanel" style="position:absolute; top: 385px;" id="LotSizeDiv">
-            <label for="WOQuantity" id="WOQuantityL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">WO QUANTITY</label>
-            <div style="position: relative; top:15px; left:10px;">
-                <input id="WOQuantity" class="inputelement leftsidedropobj" style="height:30px; width:149px; padding-left: 30px; text-align: left;" type="text" value ="0"   />
-            </div>
-        </div>
-        <div id="AQdiv" style="Z-INDEX: 102; LEFT: 10px; POSITION: absolute; TOP: 450px; width:250px;" class="leftsidepanel">
-                <input name="select-3" id="AQLevel" style="width: 162px; height: 20px; display:none;" class="inputelement " ></input>
-                <select id="AQ_Level" style="width:97%; height: 35px; " class="inputelement leftsidedropobj"></select>
-                
-            </div>
-        <div id="ImageCapture" style="z-index:102; left:-9px; position:absolute; top:490px; display:none;">
-            <span class="fileUpload btn btn-primary">
-                <span class="uploadButton">Add Picture</span>
-                    <form method="post" enctype="multipart/form-data" id="myImageForm">
-                      <asp:FileUpload id="FileUploadControl" runat="server" />
-                        <asp:Button runat="server" id="UploadButton" text="Upload" OnClientClick="setnavcop(true)"/>
-                        <br /><br />
-                        <asp:Label runat="server" id="StatusLabel" text="Upload status: " style="position:absolute; left:0px;" />
-                    </form>
-                     <%-- <input id="ImageSubmit" value="Upload" class="buttontemplate" style="width: 100px; height: 50px; font-size: 15px; margin: 4px 0px 0px; padding: 1px 1px; text-align:center;">--%>
-                    <label id="StatusResult" runat="server" style="position:absolute; left:90px;"></label>
-                    <label id="DefectFlag" style="position:relative; top:20px; float: left;" >[No Selection]</label>
-
-                </span>
-        </div>
-        
-            <input type="hidden" runat="server" id="DefectID_Value" value ="0" />
-        
+        <input type="hidden" runat="server" id="DefectID_Value" value ="0" />      
         <div id="dialog" title="SPC Inspection">
             <p>You found a defect!  Are you Sure?</p>
             <div id = "Chk1" style="position:absolute; top: 120px; left: 5px; padding: 0px;" class=SheetClass1>
@@ -402,41 +371,34 @@
             </div>
         </div>
        <div id="NewAuditorName" title="Add AuditorName" style="display:none" class="dialogdiv"> 
-                    <fieldset class="ui-helper-reset"> 
-                        <div class="Auditor-addname">
-                            <label id="AuditorLabel" class="Auditor-addname" > 
-                                Auditor Name</label> 
-                            <input id="Name" class="Auditor-addname" style="height:34px !important;"> 
-                        </div>
-                        <div class="Weaver-addname" style="display:none;"> 
-                            <div style="position:relative; height:100px; margin-bottom:20px; display: none;" class="Weaver-addyards"> 
-                                <label id="WeaverYardsLabel" for="input-weaveryards">
-                                previous Weaver Shift Yards: 
-                                </label>
-                                <input type="number" id="weaveryards" name="yards" min="1" style="height:34px !important; margin-left:30px; margin-top:10px;"/>
-                            </div>
-                            <div style="position:relative; height:170px; width:100%;">
-                                <label id="WeaverLabel" class="Weaver-addname Weaver-addname-label" for="select-weavername">
-                                Select New Weaver Name:</label>
-                                <select id="select-weavername" class="select-mobile" ></select>
-                                <div style="position:absolute; height:90px; top:75px; left: 30px;"> 
-                                    <label id="PreConfirmWeaver1Label" class="Weaver-addname-label" style="color:rgba(128,126, 126, 0.84); font-style:italic!important; margin-top:0px; position:absolute;"></label>
-                                    <label id="PreConfirmWeaver2Label" class="Weaver-addname-label" style="color:rgba(128,126, 126, 0.84); font-style:italic!important; margin-top:25px; position:absolute;"></label>
-                                </div>   
-                                <p style="position:relative; top:80px; left:-100px;"><a href="http://inspection.standardtextile.com/Manage/employees">Add Weaver Here</a></p>                 
-                            </div>
+            <fieldset class="ui-helper-reset"> 
+                <div class="Auditor-addname">
+                    <label id="AuditorLabel" class="Auditor-addname" > 
+                        Auditor Name</label> 
+                    <input id="Name" class="Auditor-addname" style="height:34px !important;"> 
+                </div>
+                <div class="Weaver-addname" style="display:none;"> 
+                    <div style="position:relative; height:100px; margin-bottom:20px; display: none;" class="Weaver-addyards"> 
+                        <label id="WeaverYardsLabel" for="input-weaveryards">
+                        previous Weaver Shift Yards: 
+                        </label>
+                        <input type="number" id="weaveryards" name="yards" min="1" style="height:34px !important; margin-left:30px; margin-top:10px;"/>
+                    </div>
+                    <div style="position:relative; height:170px; width:100%;">
+                        <label id="WeaverLabel" class="Weaver-addname Weaver-addname-label" for="select-weavername">
+                        Select New Weaver Name:</label>
+                        <select id="select-weavername" class="select-mobile" ></select>
+                        <div style="position:absolute; height:90px; top:75px; left: 30px;"> 
+                            <label id="PreConfirmWeaver1Label" class="Weaver-addname-label" style="color:rgba(128,126, 126, 0.84); font-style:italic!important; margin-top:0px; position:absolute;"></label>
+                            <label id="PreConfirmWeaver2Label" class="Weaver-addname-label" style="color:rgba(128,126, 126, 0.84); font-style:italic!important; margin-top:25px; position:absolute;"></label>
+                        </div>   
+                        <p style="position:relative; top:80px; left:-100px;"><a href="http://inspection.standardtextile.com/Manage/employees">Add Weaver Here</a></p>                 
+                    </div>
                             
                             
-                        </div>
-                    </fieldset> 
-                </div> 
-    </div>
-    <div id="ActionHolder" style="position:absolute;top:800px;">
-        <div id="MobileDirectorDiv" style="Z-INDEX: 102; LEFT: 10px; POSITION: relative; TOP: 0px; width:250px;" class="">
-            <input id="MobileDirector" type="button" class="export" style="position:relative; height: 35px; width:97%;" value="PHOTO" />
-        </div>
-        
-        
+                </div>
+            </fieldset> 
+        </div> 
     </div>
     <input id="LocationSelected_Hidden" runat="server" type="hidden" value ="0" />
 </asp:Content>
@@ -447,283 +409,13 @@
 <asp:PlaceHolder runat="server">
     <%: Styles.Render("~/bundles/InspectionInput_styles") %>
 </asp:PlaceHolder>
-<%--<link href="../../Styles/wijmo/jquery-wijmo.css" rel="stylesheet" type="text/css" />
-<link href="../../Styles/wijmo/jquery.wijmo-pro.all.3.20141.34.min.css" rel="stylesheet" type="text/css" />
-<link href="../../Styles/ui.jqgrid.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">--%>
 <meta charset=utf-8 />
-<meta name="viewport" content="width=device-width, initial-scale=1">
-   
-<style>
-        .grid .ui-jqgrid-htable th,
-        .grid .ui-jqgrid-btable .jqgrow td {
-            height: 5em !important;
-        }
-        .ui-jqgrid .ui-jqgrid-titlebar {
-        padding: .3em 14.95em .2em .3em;
-        position: relative;
-        font-size: 12px;
-        border-left: 0 none;
-        border-right: 0 none;
-        border-top: 0 none;
-        width: 100px;
-        }
-        .ui-widget-overlay {
-      background: transparent !important;
-      opacity: .30;
-      filter: Alpha(Opacity=30);
-    }
-    .wijmo-wijsuperpanel-statecontainer {
-        height: 60px !important;
-    }
-    .wijmo-wijsuperpanel-panelContainer {
-        height: 60px !important;
-    }
-    .ui-tabs-top .scrollWrap {
-        border-bottom-width: 0px;
-        height: 60px !important;
-    }
-    .ui-spinner .ui-widget .ui-widget-content .ui-corner-all {
-        height: 45px !important;
-    }
-    option {
-        height: 55px;
-        padding: 5px 5px;
-    }
-    .jqgrow {
-        height:46px;
-    }
-    .ui-jqgrid-title {
-        position:absolute !important;
-    }
-    .ui-state-default .ui-corner-top {
-        height: 56px;
-    }.ui-jqgrid-view {
-            background-color: #cccccc;
-        }
-     .select-mobile {
-        height: 34px !important;
-        margin-left: 30px;
-        margin-top: 10px;
-        position: relative;
-        float: left;
-        top: 10px;
-    }
-    </style>
-     <asp:PlaceHolder runat="server">
-        <%: Scripts.Render("~/bundles/InspectionInput_groupB") %>
-    </asp:PlaceHolder>
-<%--<script src="../../Scripts/jquery.layout.js" type="text/javascript"></script>--%>
-<%--<script src="../../Scripts/grid.locale-en.js" type="text/javascript"></script>--%>
-<%--<script src="../../Scripts/jquery.jqGrid.js" type="text/javascript"></script>--%>
+<meta name="viewport" content="width=device-width, initial-scale=1">  
+<asp:PlaceHolder runat="server">
+    <%: Scripts.Render("~/bundles/InspectionInput_groupB") %>
+</asp:PlaceHolder>
 
-<style type="text/css">
-        .ui-icon.ui-icon-triangle-1-s {
-            position:relative;
-            right:-5px;
-        }
-        .ui-icon.ui-icon-triangle-1-n {
-            position:relative;
-            right:-5px;
-        }
-        .ui-widget {
-            height:92%;
-        }
-        .wijmo-wijinput {
-            right:0%;
-            position: relative;
-            height: 45px !important;
-        }
-        .wijmo-wijinput-wrapper {
-            margin-right: 50%;
-            margin-top:5%;
-            display: block;
-            padding: 5px;
-            overflow: hidden;
-        }
-        .wijmo-wijinput .wijmo-wijinput-spinner-right {
-            position: absolute;
-            right: 0%;
-            top: 0px;
-            width: 57px;
-            cursor: pointer;
-            height: 100%;
-            overflow: hidden;
-        }
-        .ui-icon {
-            width: 16px;
-            height: 16px;
-            margin-right: 40%;
-        }
-        .wijmo-wijinput-spinup {
-            border-bottom: none;
-            display: block;
-            height: 50%;
-            width: 56px;
-            position: relative;
-        }
-        .wijmo-wijinput-spindown {
-            border-top: none;
-            display: block;
-            height: 50%;
-            width: 56px;
-            position: relative;
-        }
-        .elementerror {
-            border-color: red; 
-            border-width:medium;
-        }
-        .ui-jqgrid .ui-jqgrid-pager{
-                height: 75px !important;
-        }
-        .ui-jqgrid .ui-pg-table {
-            height: 74px !important;
-        }
-        .ui-jqgrid .ui-pg-button {
-            height: 19px !important;
-            width: 80px !important;
-        }
-        .ui-spinner-button {
-            width: 16px;
-            height: 50% !important;
-            /* font-size: .5em !important; */
-            padding: 0;
-            margin: 0;
-            text-align: center;
-            position: absolute;
-            cursor: default;
-            display: block;
-            overflow: hidden;
-            right: 0;
-        }
-        .ui-spinner.ui-widget.ui-widget-content.ui-corner-all {
-            border: none;
-        }
-    .ui-corner-top {
-        width: 130px;
-        height: 57px;
-    }
-    .ui-icon-close {
-        margin-left:auto;
-    }
-    .workclick:hover {
-        background-color: rgb( 137, 165, 174);
-    }
-    .buttontemplate {
-          color: #fff;
-          background-color: #6496c8;
-          text-shadow: -1px 1px #417cb8;
-          border: solid;
-          border-color:white;
-          display: inline-block;
-          margin: 0 10px 0 0;
-          padding: 15px 45px;
-          font-size: 48px;
-          font-family: "Bitter",serif;
-          line-height: 1.8;
-          appearance: none;
-          box-shadow: none;
-          border-radius: 0;
-    }
-        .buttontemplate:active {
-            background-color:#A3C6EA;
-        }
-    a {
-        outline: none;
-    }
-    .inputbox {
-        
-      border-radius: 3px;
-      border-color: rgb(200, 200, 200);
-      box-shadow: 0 1px 2px rgba(0,0,0,0.2) inset, 0 -1px 0 rgba(0,0,0,0.05) inset;
-      transition: all 0.2s linear;
-      font-family: "Helvetica Neue", sans-serif;
-      font-size: 13px;
-      color: #222222;
-      position: relative;
-      height: 36px;
-      width: 150px;
-      padding-left: 30px;
-      position:absolute; 
-      left:10px; 
-      top:16px;
-      z-index:3;
-
-    }
-    .inputpad {
-        position:absolute;
-        background-color: RGB(93, 135, 161);
-        height:62px;
-        left:0px;
-        width: 250px;
-        z-index:1;
-        
-    }
-    .inputpad:hover {
-            background-color: rgb( 137, 165, 174);
-    }
-    .select2-container {
-        zoom: 1.3;
-    }
-    .select2-drop {
-        zoom: 1.3;
-    }
-    .ui-widget-header{
-        border: 1px solid #aaaaaa;
-        background: #cccccc url(images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x;
-        color: #222222;
-        font-weight: bold;
-        height: 25px;
-
-    }
-    #loginfrm {
-	        BORDER-RIGHT: 0px; BORDER-TOP: #95A0A9 1px solid; BACKGROUND: #87A7AA; LEFT: expression(document.body.clientWidth / 2 - this.offsetWidth / 2); BORDER-LEFT: 0px; WIDTH: 100%px; BORDER-BOTTOM: #95A0A9 1px solid; POSITION: absolute; TOP: 150px; HEIGHT: 326px;
-             box-shadow: 5px 15px 15px rgba(0,0,0,.7);
-             -webkit-box-shadow: 5px 10px 10px rgba(0,0,0,.7);
-             -moz-box-shadow: 5px 10px 10px rgba(0,0,0,.7);
-             border-radius: 4px;
-        }
-    div.hidden {
-        display: none;
-        position: fixed;
-        z-index:106;
-    }
-    .ui-jqgrid tr.jqgrow {
-        outline-style: none;
-        height: 70px;
-    }
-    .ui-pg-div {
-        font-size: medium;
-    }
-    .label-tab{
-        position: relative;
-        top: 11px;
-        float: right;
-        font-weight: 800;
-        font-size: small;
-        z-index: 100;
-        color: white;
-        max-width: 40px;
-        word-wrap: break-word;
-        display: block;
-    }
-    .Weaver-addname-label { 
-        width: 200px;
-        margin-right: 0px;
-        top: 10px;
-        position: relative;
-    }
-    .dialog-select { 
-        height: 30px;
-        width: 130px;
-        position: relative;
-        float: right;
-        top: -10px;
-    }
-
-</style>
-<script src="//oss.maxcdn.com/jquery.form/3.50/jquery.form.min.js"></script>
-<%--<script type="text/javascript" src="../../handlers/Utility/cypher.ashx"></script>--%>
+<%--<script src="//oss.maxcdn.com/jquery.form/3.50/jquery.form.min.js"></script>--%>
 <script type="text/javascript">
     
     //window.alert = function(e) {alert(e)};
@@ -800,6 +492,7 @@
     var buttonid;
     var buttonvalue;
     var buttonname;
+    var pad_minimized = false;
     function isOdd(num) { return num % 2; }
     $(function () {
         var screenwidth = screen.width - 200;
@@ -826,6 +519,7 @@
         IsSPCMachine = <%=IsSPCMacine%>;
         SelectSPCMachineName = '<%=SPCMachineName%>';
         pageBehindInspectionStarted = '<%=InspectionStartedFlag%>';
+        datahandler.ColumnCount = <%=ColumnCount%>
 
         RenderEngine.SizeChecker();
         eventshandler.UserKeyPress.Init();
@@ -844,8 +538,9 @@
         controls.SetAuditFromCookie();
         controls.InitWOQuantity(); 
         controls.InitNumbers(); 
+        controls.InitStatsTag();
         eventshandler.InitPageEventHandlers();
-
+        $(".de_container").fadeIn(150); 
         
         
         if (InspectionConfirmFlag == 'true') { 
@@ -935,39 +630,25 @@
             var buttonid_ = $(this).attr('id');
             //var buttonvalue_ = $(this).attr('value');
             var buttonvalue_ = $(this).text();
+            var idnum = $("#" + buttonid_ + "_hidden").val(); 
+            var button_lib_id = $("#ButtonLibraryId_" + idnum).val();  
             var buttonname_ = $(this).attr('name');
  
             if ($Location.val() != "" || $LotSize.val() != "" || $AuditorName.Val() != "" || $DataNo.Val() != "") {
                 if (buttonvalue_) {
-                    $('#DefectFlag').text('[' + buttonvalue_ + ']');
+                    $('#DefectFlag').text('[' + button_lib_id + "." + buttonvalue_ + ']');
                     
                     var GoodCount = new Number($goodcount.val());
                     var BadCount = new Number($badcount.val());
                     var total = GoodCount + BadCount;
-                    var splitarr = buttonvalue_.split(".")
-
-                    if(splitarr.length > 0) { 
-                        var strsum = '';
-                        for (i = 0; i < splitarr.length; i++) { 
-                            if (i > 0) { 
-                                strsum = strsum + splitarr[i];
-                            }
-                        }
-                        buttonvalue = strsum;
-                    } else { 
-                        buttonvalue = buttonvalue_.trim()
-                    }
+                    buttonvalue = buttonvalue_; 
                     if (InspectionStartedVal == false) { 
                         alert("Please Start an Inspection by Filling in Required info and Clicking Start");
                     } else {
                         if (AutoConfirm == false) { 
                             buttonid = buttonid_;
                             buttonname = buttonname_;
-                            //datahandler.SubmitDefect(buttonid_, buttonvalue_);
-                        
                             $("#dialog").wijdialog("open");
-                      
-
                         } else {
                             datahandler.SubmitDefect(buttonid_, buttonvalue, buttonname_, InspectionJobSummaryIdPage, InspectionId);
                         }
@@ -1028,7 +709,6 @@
                    
         });
        
-        
         $("#MachineLinkCheck").click(function (e) { 
             var WOArray = OpenWorkOrderArray; 
             var $Checkele = $("#MachineLinkCheck");
@@ -1276,23 +956,47 @@
             }
         });
         var InspectionStartedAlertFlag = false; 
-        $(".inputelement.inputbox.leftsideobj").on( "keydown", function (e) { 
-            
+        $(".inputelement.inputbox.leftsideobj").on( "keyup", function (e) { 
+             
             if (InspectionJobSummaryIdPage != 0 && LineType != 'ROLL') { 
                 alert("There is an inspection in progress! Are you trying to open another Inspection? If yes please use the OPEN WORK ORDER or NEW button to navigate away from the current active inspection. Click OK to continue the current active inspection.");
-                e.preventDefault();
-                return false;
+            } else { 
+                var tarbox = e.currentTarget.id;
+                console.log(e,  tarbox); 
+                var jobnumber_label = $("#jobnumber_label").val(); 
+                if (!$("#jobnumber_stat_tag").is(":visible")  && (jobnumber_label.trim().length <= 1 || e.currentTarget.value.trim().length > 0))
+                    $("#jobnumber_stat_tag").fadeIn(200); 
+                $("#jobnumber_label").val(e.currentTarget.value);            
+            }
+            e.preventDefault(); 
+            return false;
+        });
+        $(".PullDataL").click(function(e) { 
+            switch(LineType) { 
+                case "ROLL": 
+                    if ($rollnumber.val().length > 0) { 
+                        var querystring = "TemplateId=" + SelectedId.toString() + "&RollNumber=" + $rollnumber.val().toString() + "&Username=" + $auditorname.val().toString() + "&400REQ=ROLLNUMBER&LocationId=" + $("#MainContent_Location").val() + "&CID_Info=000" + selectedCIDnum;
+                        window.location.assign("<%=Session("BaseUri")%>" + "/APP/Mob/SPCInspectionInput.aspx?" + querystring)
+                    }
+                    break; 
+                default: 
+                    if ($workorder.val().length > 0) { 
+                            var querystring = "TemplateId=" + SelectedId.toString() + "&WorkOrder=" + $workorder.val().toString() + "&Username=" + $auditorname.val().toString() + "&AQL=" + $aql.val() + "&400REQ=WORKORDER&LocationId=" + $("#MainContent_Location").val() + "&standard=" + $("#MainContent_aqlstandard").val() + "&CID_Info=000" + selectedCIDnum; 
+                            window.location.assign("<%=Session("BaseUri")%>" + "/APP/Mob/SPCInspectionInput.aspx?" + querystring)
+                    }
+                    break;
             }
             
-        });
+        })
         $(".inputpad").click(function (e) {
+            e.preventDefault();
             var selectedtarget = e.currentTarget.id;
   
             var classname = e.currentTarget.className
             var $auditorname = $('#MainContent_AuditorName');
             //var $lotsize = $('#WOQuantity'); 
           
-            e.preventDefault();
+            
             if (IsSPCMachine == true) { 
                 alert("This Page is currently Linked to an Machine.  Click NEW or Exit the page to escape");
             } else if (InspectionJobSummaryIdPage != 0 && selectedtarget != 'auditdiv' && LineType != 'ROLL') { 
@@ -1300,37 +1004,39 @@
                 //alert("There is an inspection in progress! Are you trying to open another Inspection? If yes please use the OPEN WORK ORDER or NEW button to navigate away from the current active inspection. Click OK to continue the current active inspection.");
             } else {
                 NavCop = true;
+                console.log(selectedtarget);
                 switch (selectedtarget) { 
                     case "workroomdiv":
-                        var querystring = "TemplateId=" + SelectedId.toString() + "&workroom=" + $("#MainContent_workroom").val().toString() + "&400REQ=WORKROOM&AQL=" + $_aql.val() + "&CID_Info=000" + selectedCIDnum
+                       <%-- var querystring = "TemplateId=" + SelectedId.toString() + "&workroom=" + $("#MainContent_workroom").val().toString() + "&400REQ=WORKROOM&AQL=" + $_aql.val() + "&CID_Info=000" + selectedCIDnum
                         if ($("#MainContent_workroom").val().length > 4) {
                             window.location.assign("<%=Session("BaseUri")%>" + "/APP/Mob/SPCInspectionInput.aspx?" + querystring)
-                        }
+                        }--%>
                     
                         break;
                     case "cpdiv": 
                         if ($purchaseorder.val().length > 4 & classname!= "inputelement inputbox") { 
 
                         } else if (classname != "inputelement inputbox") { 
-                            togglevalidation("workdiv")
+                          //  togglevalidation("workdiv")
                         }
                         break;
                     case "workdiv": 
-               
-                        if ($workorder.val().length > 2) {
+                        console.log($workorder.val());
+                        <%--if ($workorder.val().length > 2) {
                             var querystring = "TemplateId=" + SelectedId.toString() + "&WorkOrder=" + $workorder.val().toString() + "&Username=" + $auditorname.val().toString() + "&AQL=" + $aql.val() + "&400REQ=WORKORDER&LocationId=" + $("#MainContent_Location").val() + "&standard=" + $("#MainContent_aqlstandard").val() + "&CID_Info=000" + selectedCIDnum; 
                             window.location.assign("<%=Session("BaseUri")%>" + "/APP/Mob/SPCInspectionInput.aspx?" + querystring)
                         } else if (classname == "inputpad") { 
-                            togglevalidation("workdiv")
-                        };
+                            //  togglevalidation("workdiv")
+                            return false;
+                        };--%>
                         break;
                     case "rolldiv": 
-                        if ($rollnumber.val().length > 2) { 
+                      <%--  if ($rollnumber.val().length > 2) { 
                             var querystring = "TemplateId=" + SelectedId.toString() + "&RollNumber=" + $rollnumber.val().toString() + "&Username=" + $auditorname.val().toString() + "&400REQ=ROLLNUMBER&LocationId=" + $("#MainContent_Location").val() + "&CID_Info=000" + selectedCIDnum;
                             window.location.assign("<%=Session("BaseUri")%>" + "/APP/Mob/SPCInspectionInput.aspx?" + querystring)
                         } else { 
-                            togglevalidation("rolldiv")
-                        }
+                            //togglevalidation("rolldiv")
+                        }--%>
                         break;
                     case "auditdiv": 
                         if (LineType == "ROLL") { 
@@ -1339,8 +1045,12 @@
                             $('#NewAuditorName').wijdialog('open');
                         }
                         break;
+                    default:
+                        return false;
+                        break;
                 }
             }
+            return false;
         });
         
         $(".export").click(function () {
@@ -1424,24 +1134,9 @@
                 $("#AQL_Standard_Dialog option").prop('disabled', true);
                 $("#selectNames").prop("disabled", true);
 
-                if (LineType == "ROLL") { 
-                    var weaverInfoObj = <%=OpenRollInfoString%>;
-          
-                    if (weaverInfoObj != null) { 
-                        Inspection.WeaverShiftId = weaverInfoObj[0].ShiftId
-                        if (weaverInfoObj.Length == 1 && weaverInfoObj[0].EmployeeNoId != null) { 
-                            Inspection.Weavers.Weaver1ID = weaverInfoObj[0].EmployeeNoId; 
-                            Inspection.Weavers.Weaver1Initials = weaverInfoObj[0].Initials; 
-                        }
-                        if (weaverInfoObj.Length == 2 && weaverInfoObj[1].EmployeeNoId != null && weaverInfoObj[0].ShiftId == weaverInfoObj[1].ShiftId) { 
-                            Inspection.Weavers.Weaver2ID = weaverInfoObj[1].EmployeeNoId; 
-                            Inspection.Weavers.Weaver2Initials = weaverInfoObj[1].Initials; 
-                        }
-                    }
-                    
-                } else { 
-                    $("#Auditor_Name").prop('disabled', true); 
-                }
+                if (LineType != "ROLL") { 
+                    $("#Auditor_Name").prop('disabled', true);
+                } 
 
                 if (IsPhoneSize == true) { 
                     RenderEngine.ShowActiveInspectionMobile();
@@ -1489,7 +1184,7 @@
         ShowActiveInspectionMobile: function () { 
             $("#LoadWorkOrderDiv").css("display", "none");
             $("#InputHolder").css("display","none");
-            $("#tabs").css({left:"0px", display: 'block', width: (screen.width - 20).toString() + 'px', height: ($('body').height() - 20).toString() + 'px', top: '185px'}); 
+            $("#tabs_holder").css({left:"0px", display: 'block', width: (screen.width - 20).toString() + 'px', height: ($('body').height() - 20).toString() + 'px', top: '185px'}); 
             if (TemplateCollection.length > 0) { Template.Load();}
             $("#mendiv").css({display:'none'});
             $("#ActionHolder").css({top:'120px', display: 'block'});
@@ -1552,7 +1247,7 @@
                 $("#scorelabels").css({display: 'block', left: "69%"});
                 $("#menudiv").css("display", "block");
                 $("body").css("min-width", "900px");
-                $("#tabs").css("width", "68%");
+                $("#tabs_holder").css("width", "83%");
                 if (TemplateCollection.length > 0) { Template.Load();}
             }
         }
@@ -1563,16 +1258,15 @@
         PreConfirmWeavers: { Weaver1ID: 0, Weaver1Initials: "", Weaver2ID: 0, Weaver2Initials: "" },
         SetWeaversHTML: function () { 
                 
-            if (Inspection.PreConfirmWeavers.Weaver1ID != 0) { 
-                $("#MainContent_Weaver_Names").val(Inspection.PreConfirmWeavers.Weaver1Initials); 
-            } 
             if (Inspection.PreConfirmWeavers.Weaver2ID != 0) { 
-                $("#MainContent_Weaver_Names").val($("#MainContent_Weaver_Names").val() + ", " + Inspection.PreConfirmWeavers.Weaver2Initials); 
+                $("#MainContent_Weaver_Names").val(Inspection.PreConfirmWeavers.Weaver1Initials + ", " + Inspection.PreConfirmWeavers.Weaver2Initials); 
+            } else { 
+                $("#MainContent_Weaver_Names").val(Inspection.PreConfirmWeavers.Weaver1Initials); 
             }
             $("#PreConfirmWeaver1Label").text(''); 
             $("#PreConfirmWeaver2Label").text('');
-            Inspection.Weavers = Inspection.PreConfirmWeavers;
-            Inspection.PreConfirmWeavers = { Weaver1ID: 0, Weaver1Initials: "", Weaver2ID: 0, Weaver2Initials: "" }; 
+            Inspection.Weavers = Inspection.PreConfirmWeavers;         
+            
         },
         WeaverShiftNumber: 1, 
         WeaverShiftId: 0
@@ -1728,6 +1422,7 @@
 
                         switch(LineType) { 
                             case 'ROLL': 
+                                
                                 if ((Inspection.Weavers.Weaver1ID > 0 || Inspection.Weavers.Weaver2ID > 0) && $("#MainContent_Inspector").val().toString().trim().length > 0) { 
                                     InspectionCanStart = true;
                                 }
@@ -1843,30 +1538,29 @@
                         
                         var AuditorDisplay = $(".Auditor-addname").css('display'); 
                         var EnteredName = $('#Name').val();
-                         
+                       
                         switch (AuditorDisplay) { 
                             case 'none': 
                                 var WeaverId = $("#select-weavername").val();
                                 var existingName = $("#MainContent_Weaver_Names").val().toString().trim();
                                 var WeaverInitial = "";
-
+                             
                                 $.each(pageData.WeaversList, function (index, value) { 
                                     if (value.Id == WeaverId) { 
                                         WeaverInitial = value.Initials;
                                     }
                                 });
+                                
                                 if (existingName.length > 0) {existingName = existingName + ", "};
                                 if (Inspection.PreConfirmWeavers.Weaver1ID == 0) { 
                                     Inspection.PreConfirmWeavers.Weaver1ID = WeaverId; 
                                     Inspection.PreConfirmWeavers.Weaver1Initials = WeaverInitial;
+                                    $("#MainContent_Weaver_Names").val(WeaverInitial);
                                     $("#PreConfirmWeaver1Label").text( "New Weaver 1: " + WeaverInitial);
-                                } else if (Inspection.PreConfirmWeavers.Weaver2ID == 0) { 
-                                    Inspection.PreConfirmWeavers.Weaver2ID = WeaverId; 
-                                    Inspection.PreConfirmWeavers.Weaver2Initials = WeaverInitial;
-                                    $("#PreConfirmWeaver2Label").text( "New Weaver 2: " + WeaverInitial);
                                 } else { 
-                                    alert('Only two weavers allowed'); 
-                                }                             
+                                    alert('Only one weaver allowed'); 
+                                }      
+                                
                                 break; 
                             case 'block': 
                                 if (EnteredName) {                        
@@ -1880,21 +1574,11 @@
                                 }
                                 break;
                         }
-                        $(this).wijdialog('close');               
+                                       
                     },
-                    'Close': function () {
-                        var Enteredyards = new Number($("#weaveryards").val());
-                        if (InspectionStartedVal == true && Enteredyards == 0) { 
-                            alert("Enter Previous Weaver(s) Yards");
-                        } else if (InspectionStartedVal == true && Inspection.PreConfirmWeavers.Weaver1ID == 0 &&  Inspection.PreConfirmWeavers.Weaver2ID == 0) {
-                            alert("Please enter at least one weaver");
-                        } else if (InspectionStartedVal == true && Enteredyards > 0) { 
-                            datahandler.StartNewWeaverShift(); 
-                        } else { 
-                            Inspection.SetWeaversHTML(); 
-                            $(this).wijdialog('close');
-                            
-                        }        
+                    'Close': function () { 
+                        Inspection.SetWeaversHTML(); 
+                        $(this).wijdialog('close');
                     }
                 },
                 open: function () {
@@ -1910,10 +1594,10 @@
                 },
                 close: function () {
                     //$form.find('input').val("").end();
-                    $("#PreConfirmWeaver1Label").text('');
-                    $("#PreConfirmWeaver2Label").text('');
-
-                    Inspection.PreConfirmWeavers = { Weaver1ID: 0, Weaver1Initials: "", Weaver2ID: 0, Weaver2Initials: "" };
+                    //$("#PreConfirmWeaver1Label").text('');
+                    //$("#PreConfirmWeaver2Label").text('');
+                    Inspection.SetWeaversHTML(); 
+                    //Inspection.PreConfirmWeavers = { Weaver1ID: 0, Weaver1Initials: "", Weaver2ID: 0, Weaver2Initials: "" };
                 }
             });
         }
@@ -1928,7 +1612,16 @@
             var totalcountnum = new Number(totalcount)
             var localarray = new Array(tabdatahandler.tabbuttonarray);
             var tabbuttoncount = controlhandler.gettabbuttoncount(tabselect, localarray);
-            var buttonsize = controlhandler.sizebutton(tabbuttoncount)
+            var buttonsize;
+            
+            if (datahandler.ColumnCount == 3) { 
+                var colc = 3; 
+                if (pad_minimized == true)
+                    colc = 4;
+                buttonsize = controlhandler.sizebutton3R(tabbuttoncount, colc);
+            } else { 
+                buttonsize = controlhandler.sizebutton(tabbuttoncount); 
+            } 
             var counter = 0;
             var placementstring;
             //var buttoncolor = "#4875AE";
@@ -1957,24 +1650,107 @@
                         }
                     }
                     
-
                     if (localarray[0][i].DefectCode.length == 0) {spacer = ""}
                     if (buttonsize[0].height < 100) {buttonsize[0].height = 100}
 
-                    placementstring = controlhandler.placebutton(counter, buttonsize[0].height, buttonsize[0].width)
-                    
+                    if (datahandler.ColumnCount == 3) { 
+                        if (pad_minimized == true) { 
+                            placementstring = controlhandler.placebutton4R(counter, buttonsize[0].height, buttonsize[0].width); 
+                        } else { 
+                            placementstring = controlhandler.placebutton3R(counter, buttonsize[0].height, buttonsize[0].width)
+                        }                 
+                    } else { 
+                        placementstring = controlhandler.placebutton(counter, buttonsize[0].height, buttonsize[0].width)
+                    }                              
                     if (localarray[0][i].Timer == true) { 
-                        timerplacementstring = controlhandler.placetimerbutton(counter, buttonsize[0].height, buttonsize[0].width, "START");
-                        timerstopplacementstring = controlhandler.placetimerbutton(counter, buttonsize[0].height, buttonsize[0].width, "STOP");
-                        timerlabelplacementstring = controlhandler.placetimerlabel(counter, buttonsize[0].height, buttonsize[0].width);
+                        if (datahandler.ColumnCount == 3) { 
+                            if (pad_minimized == true ) { 
+                                timerplacementstring = controlhandler.placetimerbutton4R(counter, buttonsize[0].height, buttonsize[0].width, "START");
+                                timerstopplacementstring = controlhandler.placetimerbutton4R(counter, buttonsize[0].height, buttonsize[0].width, "STOP");
+                                timerlabelplacementstring = controlhandler.placetimerlabel4R(counter, buttonsize[0].height, buttonsize[0].width);
+                            } else { 
+                                timerplacementstring = controlhandler.placetimerbutton3R(counter, buttonsize[0].height, buttonsize[0].width, "START");
+                                timerstopplacementstring = controlhandler.placetimerbutton3R(counter, buttonsize[0].height, buttonsize[0].width, "STOP");
+                                timerlabelplacementstring = controlhandler.placetimerlabel3R(counter, buttonsize[0].height, buttonsize[0].width);
+                            }                         
+                        } else { 
+                            timerplacementstring = controlhandler.placetimerbutton(counter, buttonsize[0].height, buttonsize[0].width, "START");
+                            timerstopplacementstring = controlhandler.placetimerbutton(counter, buttonsize[0].height, buttonsize[0].width, "STOP");
+                            timerlabelplacementstring = controlhandler.placetimerlabel(counter, buttonsize[0].height, buttonsize[0].width);
+                        }
+                       
                         TimerStringhtml = '<button id="start_button_' + localarray[0][i].id.toString() + '" name="' + localarray[0][i].ButtonTemplateId.toString() + '" type="button" class="timerbutton" style="width:' + (buttonsize[0].width * .15).toString() + 'px;height:' + (buttonsize[0].height * .85).toString() + 'px; z-index: 100; position:absolute; ' + timerplacementstring + '; font-size:1.2em; background-color:#85b2cb;">START</button><button id="stop_button_' + localarray[0][i].id.toString() + '" type="button" name="' + localarray[0][i].ButtonTemplateId.toString()  + '" class="timerbutton" style="width:' + (buttonsize[0].width * .15).toString() + 'px;height:' + (buttonsize[0].height * .85).toString() + 'px; z-index: 100; position:absolute; ' + timerstopplacementstring + '; font-size:1.2em; background-color:rgba(111, 106, 107, 0.68);">STOP</button><input id="hiddenTimerId_' + localarray[0][i].id.toString() + '" type="hidden" name="TimerId" value="0"><label id="start_label_' + localarray[0][i].id.toString() + '" style="position:absolute; ' + timerlabelplacementstring + '; font-size:1.35em; z-index:110; font-weight:900; color: white;"></label>';
                     }
-                    $(ui.panel).append(TimerStringhtml + '<button id="button' + localarray[0][i].id.toString() + '" name="' + localarray[0][i].ButtonTemplateId.toString() + '" type="button" class="buttontemplate" style="width:' + buttonsize[0].width + 'px;height:' + buttonsize[0].height + 'px; position:absolute; ' + placementstring + '; font-size:1.2em; background-color:' + buttoncolor + ';">' + localarray[0][i].ButtonLibraryId.toString() + '.<br />' + localarray[0][i].text + '</button>');
+                    $(ui.panel).append('<div style="display:block; overflow:auto;"><input id="ButtonLibraryId_' + localarray[0][i].id.toString() + '" type="hidden" value="' + localarray[0][i].ButtonLibraryId.toString() + '" /><input id="button' + localarray[0][i].id.toString() + '_hidden" type="hidden" value="' + localarray[0][i].id.toString() + '" />' + TimerStringhtml + '<button id="button' + localarray[0][i].id.toString() + '" name="' + localarray[0][i].ButtonTemplateId.toString() + '" type="button" class="buttontemplate" style="width:' + buttonsize[0].width + 'px;height:' + buttonsize[0].height + 'px; position:absolute; ' + placementstring + '; font-size:1.2em; background-color:' + buttoncolor + ';">' + localarray[0][i].text + '</button></div>');
                     counter = counter + 1;
                     tabdatahandler.buttoncount = tabdatahandler.buttoncount + 1;
                 }
             }
             tabdatahandler.newbuttonflag = false;
+        },
+        placetimerbutton3R: function(count, buttonheight, buttonwidth, type) { 
+            var left;
+            var top;
+            var countnumber = new Number(count + 1);
+            var butheight = new Number(buttonheight);
+            var butwidth = new Number(buttonwidth);
+
+            if (count % 3 == 0) { 
+                if (type == "STOP") { 
+                    left = 15 + butwidth  - (butwidth * .18);
+                } else { 
+                    left = 15;
+                }
+            } else if (count % 3 == 1) { 
+                if (type == "STOP") { 
+                    left = 35 + (butwidth * 2) - (butwidth * .18);
+                } else { 
+                    left = 18 + butwidth;
+                }
+            } else if (count % 3 == 2) { 
+                if (type == "STOP") { 
+                    left = 55 + (butwidth * 3) - (butwidth * .18);
+                } else { 
+                    left = 21 + butwidth * 2;
+                }
+            }
+            top = 86 + Math.floor(count / 3) * butheight + 5;
+            return 'left: ' + left.toString() + 'px; top: ' + top.toString() + 'px;'
+        },
+        placetimerbutton4R: function(count, buttonheight, buttonwidth, type) { 
+            var left;
+            var top;
+            var countnumber = new Number(count + 1);
+            var butheight = new Number(buttonheight);
+            var butwidth = new Number(buttonwidth);
+
+            if (count % 4 == 0) { 
+                if (type == "STOP") { 
+                    left = 15 + butwidth  - (butwidth * .18);
+                } else { 
+                    left = 15;
+                }
+            } else if (count % 4 == 1) { 
+                if (type == "STOP") { 
+                    left = 35 + (butwidth * 2) - (butwidth * .18);
+                } else { 
+                    left = 18 + butwidth;
+                }
+            } else if (count % 4 == 2) { 
+                if (type == "STOP") { 
+                    left = 55 + (butwidth * 3) - (butwidth * .18);
+                } else { 
+                    left = 21 + butwidth * 2;
+                }
+            } else if (count % 4 == 3) { 
+                if (type == "STOP") { 
+                    left = 75 + (butwidth * 4) - (butwidth * .18);
+                } else { 
+                    left = 24 + butwidth * 3;
+                }
+            }
+            top = 86 + Math.floor(count / 4) * butheight + 5;
+            return 'left: ' + left.toString() + 'px; top: ' + top.toString() + 'px;'
         },
         placetimerbutton: function (count, buttonheight, buttonwidth, type) { 
             var height = controlhandler.$tabs.height()
@@ -2006,8 +1782,6 @@
             return 'left: ' + left.toString() + 'px; top: ' + top.toString() + 'px;'
         },
         placetimerlabel: function (count, buttonheight, buttonwidth) { 
-            var height = controlhandler.$tabs.height()
-            var width = controlhandler.$tabs.width()
             var left;
             var top;
             var countnumber = new Number(count + 1);
@@ -2024,6 +1798,48 @@
                 top = butheight + ((countnumber - 2) * butheight + 1) / 2
             }
 
+            return 'left: ' + left.toString() + 'px; top: ' + top.toString() + 'px;'
+        },
+        placetimerlabel3R: function (count, buttonheight, buttonwidth) { 
+            var left;
+            var top;
+            var countnumber = new Number(count + 1);
+            var butheight = new Number(buttonheight);
+            var butwidth = new Number(buttonwidth);
+
+            if (count % 3 == 0) { 
+                left = 15;
+                
+            } else if (count % 3 == 1) {
+                left = 18 + butwidth;
+
+            } else if (count % 3 == 2) { 
+                left = 21 + butwidth * 2;
+
+            }
+            top = butheight + Math.floor(count / 3) * butheight + 5;
+            return 'left: ' + left.toString() + 'px; top: ' + top.toString() + 'px;'
+        },
+        placetimerlabel4R: function (count, buttonheight, buttonwidth) { 
+            var left;
+            var top;
+            var countnumber = new Number(count + 1);
+            var butheight = new Number(buttonheight);
+            var butwidth = new Number(buttonwidth);
+
+            if (count % 4 == 0) { 
+                left = 15;
+                
+            } else if (count % 4 == 1) {
+                left = 18 + butwidth;
+
+            } else if (count % 4 == 2) { 
+                left = 21 + butwidth * 2;
+
+            } else if (count % 4 == 3) { 
+                left = 24 + butwidth * 3; 
+            }
+            top = butheight + Math.floor(count / 4) * butheight + 5;
             return 'left: ' + left.toString() + 'px; top: ' + top.toString() + 'px;'
         },
         toggleButtonColor: function (ui, antiui) { 
@@ -2100,6 +1916,62 @@
 
             return returnarray
 
+        },
+        sizebutton3R: function (buttonCount, column_count) { 
+            var returnarray = new Array(); 
+            if (controlhandler.$tabs) { 
+                var bCount = new Number(buttonCount); 
+                if (bCount > 0) { 
+                    var DistanceToCenter = Math.ceil(bCount/column_count); 
+                    var ButtonHeight = (controlhandler.$tabs.height() - 10) / DistanceToCenter; 
+                    var ButtonWidth = (controlhandler.$tabs.width() - 5) / column_count; 
+                    if (ButtonHeight > 300) {ButtonHeight = 300}
+                    returnarray.push({width: ButtonWidth, height: ButtonHeight}); 
+                } else { 
+                    returnarray.push({width: 200, height: 200})
+                }
+            }
+            return returnarray; 
+        },
+        placebutton3R: function (count, buttonheight, buttonwidth) { 
+            var height = controlhandler.$tabs.height()
+            var width = controlhandler.$tabs.width()
+            var left;
+            var top;
+            var countnumber = new Number(count);
+            var butheight = new Number(buttonheight);
+            var butwidth = new Number(buttonwidth);
+            var HeaderBuffer = 42 + $(".ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all").height();
+            if (countnumber % 3 == 0) {
+                left = 5;
+            } else if (countnumber % 3 == 1) {
+                left = 12 + butwidth;
+            } else if (countnumber % 3 == 2) {
+                left = 17 + butwidth * 2;
+            }
+            top = HeaderBuffer + Math.floor(count / 3) * buttonheight + 5;
+            return 'left: ' + left.toString() + 'px; top: ' + top.toString() + 'px;'
+        },
+        placebutton4R: function (count, buttonheight, buttonwidth) { 
+            var height = controlhandler.$tabs.height()
+            var width = controlhandler.$tabs.width()
+            var left;
+            var top;
+            var countnumber = new Number(count);
+            var butheight = new Number(buttonheight);
+            var butwidth = new Number(buttonwidth);
+            var HeaderBuffer = 42 + $(".ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all").height();
+            if (countnumber % 4 == 0) {
+                left = 5;
+            } else if (countnumber % 4 == 1) {
+                left = 12 + butwidth;
+            } else if (countnumber % 4 == 2) {
+                left = 17 + butwidth * 2;
+            } else if (countnumber % 4 == 3) { 
+                left = 22 + butwidth * 3; 
+            }
+            top = HeaderBuffer + Math.floor(count / 4) * buttonheight + 5;
+            return 'left: ' + left.toString() + 'px; top: ' + top.toString() + 'px;'
         },
         RenderProductSpecTable: function () {
             $("#Specgrid").jqGrid({
@@ -2754,11 +2626,26 @@
                 }
             });
             $("#WeaverShiftYards").height(30);
+        },
+        InitStatsTag: function() { 
+            var jobnum = ''; 
+            switch(LineType) { 
+                case 'ROLL': 
+                    jobnum = $("#MainContent_RollNumber").val();                    
+                    break; 
+                default: 
+                    jobnum = $("#MainContent_WorkOrder").val(); 
+            }
+            if (jobnum.trim().length > 0) { 
+                $("#jobnumber_stat_tag").fadeIn(300);                        
+            }
+            $("#jobnumber_label").val(jobnum.trim());
         }
 
     };
     var Template = {
         Load: function () {
+            console.log("pad_minimized", pad_minimized);
             var json = TemplateCollection;
   
             if (!json) { 
@@ -2771,6 +2658,9 @@
             var buttoncounter = 1;
             var selectedtab = tabselect;
             $('#loading').toggle();
+            for (i = 0; i < controlhandler.tabarray.length; i++) { 
+                $("#tabs").wijtabs("remove", 0);
+            }
             var refreshId = setInterval(function () {
 
                 if (counter == length || length < 1) {
@@ -3162,6 +3052,7 @@
             });
         },
         InspectionArray: new Array(),
+        ColumnCount: 2,
         GetInspectionJobSummaryId: function (TargetNumberIn, IsDefect) { 
             $("#jobIdSpinner").toggle();
             $.ajax({
@@ -3173,7 +3064,7 @@
                     if (data != 'NOJOBS' && data.length > 0) { 
                         var InspectionArray = $.parseJSON(data);
                         datahandler.InspectionArray = InspectionArray; 
-                         
+                        Inspection.PreConfirmWeavers = { Weaver1ID: 0, Weaver1Initials: "", Weaver2ID: 0, Weaver2Initials: "" }; 
                         var returnnum = InspectionArray[0].id;
                         $("#<%=InspectionId.ClientID%>").val(InspectionArray[0].id);
                         var woq = InspectionArray[0].WOQuantity;
@@ -3357,6 +3248,7 @@
                     if (JobObj.JobSummaryId != -99) { 
                         $("#<%=InspectionId.ClientID%>").val(JobObj.JobSummaryId);
                         pageBehindInspectionStarted = "true";
+                        Inspection.PreConfirmWeavers = { Weaver1ID: 0, Weaver1Initials: "", Weaver2ID: 0, Weaver2Initials: "" }; 
                         $("#AQ_Level").prop('disabled', true);
                         InspectionJobSummaryIdPage = JobObj.JobSummaryId;
                         $("#MainContent_inspectionjobsummaryid_hidden").val(InspectionJobSummaryIdPage);
@@ -3675,21 +3567,6 @@
             } else { 
                 alert("Product Spec entry failed"); 
             }
-        }, 
-        StartNewWeaverShift: function () { 
-            if (Inspection.WeaverShiftId != null && Inspection.WeaverShiftId > 0) { 
-                $.ajax({
-                    url: "<%=Session("BaseUri")%>" + "/handlers/DataEntry/SPC_InspectionInput_JobDispatch.ashx", 
-                    type: 'POST', 
-                    data: { method: 'StartNewWeaverShift', args: {shiftId: Inspection.WeaverShiftId, JobSummaryId: InspectionJobSummaryIdPage, WeaverInfo: JSON.stringify(Inspection.PreConfirmWeavers), Yards: $("#weaveryards").val(), CurrentShiftNumber: Inspection.WeaverShiftNumber}}
-                }).done(function (data) { 
-                    Inspection.WeaverShiftId = new Number(data);  
-                    Inspection.WeaverShiftNumber++; 
-                    $("#MainContent_WeaverShiftId_hidden").val(Inspection.WeaverShiftId);
-                    Inspection.SetWeaversHTML(); 
-                    $('#NewAuditorName').wijdialog('close');
-                });
-            }
         }
     };
     var eventshandler = { 
@@ -3892,6 +3769,30 @@
                     close: function(event, ui) { 
                         $("#JobStart-confirm-jobid").text("NA"); 
                         $("#JobStart-confirm-aql").text("1"); 
+                    }
+                });
+                $(".minimize_pad").click(function(event) { 
+                    var open = new Boolean($("#pad_open_flag").val());
+                    if ($("#LoadWorkOrderDiv").is(":visible")) { 
+                        $("#LoadWorkOrderDiv").fadeOut(80); 
+                        $(".de_container").css("width", "43px"); 
+                        $("#pad_open_flag").val("0");
+                        $("#pad_b_icon").attr("src", "../../Images/icons8-Maximize Window-64.png");
+                        $("#tabs_holder").css("left", "50px")
+                                         .css("width", "93%"); 
+                        $("#jobnumber_stat_tag").fadeIn(200); 
+                        pad_minimized = true;
+                        Template.Load();
+                    } else { 
+                        $(".de_container").css("width", "260px"); 
+                        $("#LoadWorkOrderDiv").fadeIn(200); 
+                        $("#pad_open_flag").val("1");
+                        $("#pad_b_icon").attr("src", "../../Images/icons8-Minimize Window-64.png");
+                        $("#tabs_holder").css("left", "260px")
+                                         .css("width", "83%");
+                        pad_minimized = false;
+                        Template.Load(); 
+
                     }
                 });
             }

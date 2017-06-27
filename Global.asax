@@ -13,26 +13,37 @@
         'Dim config As HttpConfiguration = GlobalConfiguration.Configuration
 
         'config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-        'ignore this 
+
         BundleTable.Bundles.Add(New ScriptBundle("~/bundles/SPCInspectReporter").Include(
-        "~/Scripts/jquery.layout.js",
-        "~/Scripts/grid.locale-en.js",
-        "~/Scripts/jquery.jqGrid.min.js",
-        "~/Scripts/jquery.jqGrid.js",
-        "~/Scripts/wijmo/jquery.wijmo-open.all.3.20141.34.min.js",
-        "~/Scripts/D3/d3.v3.min.js",
-        "~/Scripts/D3/d3.v3.js",
-        "~/Scripts/wijmo/jquery.wijmo-pro.all.3.20141.34.min.js",
-        "~/Scripts/wijmo/wijmo.data.ajax.3.20141.34.js",
-        "~/Scripts/Gcharts/jsapi.js"))
+            "~/Scripts/jquery.layout.js",
+            "~/Scripts/grid.locale-en.js",
+            "~/Scripts/jquery.jqGrid.min.js",
+            "~/Scripts/jquery.jqGrid.js",
+            "~/Scripts/wijmo/jquery.wijmo-open.all.3.20141.34.min.js",
+            "~/Scripts/D3/d3.v3.min.js",
+            "~/Scripts/D3/d3.v3.js",
+            "~/Scripts/wijmo/jquery.wijmo-pro.all.3.20141.34.min.js",
+            "~/Scripts/wijmo/wijmo.data.ajax.3.20141.34.js",
+            "~/Scripts/Gcharts/jsapi.js"))
+
         BundleTable.Bundles.Add(New ScriptBundle("~/bundles/InspectionVisualizer").Include(
                 "~/Scripts/wijmo/jquery.wijmo-open.all.3.20153.83.min.js",
                 "~/Scripts/wijmo/jquery.wijmo-pro.all.3.20153.83.min.js",
                 "~/Scripts/wijmo/interop/wijmo.data.ajax.3.20153.83.js",
                 "~/Scripts/grid.locale-en.js",
                 "~/Scripts/jquery.jqGrid.min.js",
-                "~/Scripts/Gcharts/jsapi.js",
-                "~/Scripts/select2/select2.js"))
+                "~/Scripts/select2/select2.min.js"
+))
+
+        'BundleTable.Bundles.Add(New ScriptBundle("~/bundles/InspectionVisualizer").Include(
+        '        "~/Scripts/wijmo/jquery.wijmo-open.all.3.20153.83.min.js",
+        '        "~/Scripts/wijmo/jquery.wijmo-pro.all.3.20153.83.min.js",
+        '        "~/Scripts/wijmo/interop/wijmo.data.ajax.3.20153.83.js",
+        '        "~/Scripts/grid.locale-en.js",
+        '        "~/Scripts/jquery.jqGrid.min.js",
+        '         "~/Scripts/select2/select2.min.js",
+        '        "~/Scripts/Gcharts/jsapi.js"
+        '       ))
 
         BundleTable.Bundles.Add(New ScriptBundle("~/bundles/InspectionInput_groupA").Include(
 "~/Scripts/jquery-1.11.1.js",
@@ -40,19 +51,20 @@
 ))
 
         BundleTable.Bundles.Add(New ScriptBundle("~/bundles/InspectionInput_groupB").Include(
-                "~/Scripts/wijmo/jquery.wijmo-open.all.3.20141.34.min.js",
-                "~/Scripts/wijmo/jquery.wijmo-pro.all.3.20141.34.min.js",
-                "~/Scripts/wijmo/wijmo.data.ajax.3.20141.34.js",
-                "~/Scripts/jquery.layout.js",
-                "~/Scripts/grid.locale-en.js",
-                "~/Scripts/jquery.jqGrid.js"
-            ))
+            "~/Scripts/wijmo/jquery.wijmo-open.all.3.20141.34.min.js",
+            "~/Scripts/wijmo/jquery.wijmo-pro.all.3.20141.34.min.js",
+            "~/Scripts/wijmo/wijmo.data.ajax.3.20141.34.js",
+            "~/Scripts/jquery.layout.js",
+            "~/Scripts/grid.locale-en.js",
+            "~/Scripts/jquery.jqGrid.js"
+        ))
 
         BundleTable.Bundles.Add(New StyleBundle("~/bundles/InspectionInput_styles").Include(
                 "~/Styles/wijmo/jquery-wijmo.css",
                 "~/Styles/wijmo/jquery.wijmo-pro.all.3.20141.34.min.css",
                 "~/Styles/ui.jqgrid.css",
-                "~/Styles/jquery-ui.css"
+                "~/Styles/jquery-ui.css",
+                "~/Styles/defectEntry_main.css"
         ))
 
         '    BundleTable.Bundles.Add(New ScriptBundle("~/bundles/FlagBrdMaintenance").Include(

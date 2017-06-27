@@ -9,10 +9,37 @@ Imports System.Web.Configuration
 Partial Class LoginTest
     Inherits System.Web.UI.Page
     Public credsError = "false"
+    Public loc_array As String
+    Public selected_cid As String
+
+    Dim jser As New Script.Serialization.JavaScriptSerializer
     Private Sub on_load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         returnUrl_hidden.Value = Request.QueryString("returnUrl")
+        Dim uc = Request.QueryString("UC")
+        If Not uc Is Nothing Then
+            If uc.Trim().Length > 0 Then
+                selected_cid = uc
+            End If
+        End If
 
+        loc_array = jser.Serialize(getLocations)
     End Sub
+
+    Private Function getLocations() As core.Locationarray()
+        Dim empty_arr() As core.Locationarray = {}
+        Try
+            Using _db As New AprManager_Entities()
+                Dim recs = (From x In _db.LocationMasters Where x.CtxCID IsNot Nothing Select New core.Locationarray With {.CID = x.CtxCID.Trim(), .Abreviation = x.Abreviation, .id = x.id, .text = x.Name}).ToArray()
+                If Not recs Is Nothing Then
+                    Return recs
+                End If
+            End Using
+        Catch ex As Exception
+            Elmah.ErrorSignal.FromCurrentContext().Raise(ex)
+        End Try
+
+        Return empty_arr
+    End Function
     Sub OnAuthenticate(ByVal sender As Object, ByVal e As EventArgs) Handles btnSubmit.Click
         Dim User = txtUserName.Value.ToString().Trim()
         If User.Length = 0 Or txtPassword.Value.Length = 0 Then
@@ -33,8 +60,8 @@ Partial Class LoginTest
                 Dim UDAO As New core.userDAO
                 Dim CID As String = getCID()
                 If CID.Length > 0 Then
-                    Dim adjustedName = AdjustUserNameForm(txtUserName.Value.Trim())
-                    If UDAO.AutenticateUser(adjustedName, txtPassword.Value, CID) = True Then
+                    'Dim adjustedName = AdjustUserNameForm(txtUserName.Value.Trim())
+                    If UDAO.AutenticateUser(txtUserName.Value, txtPassword.Value, CID) = True Then
                         SetCookie("APR_UserActivityLog", "PrimaryKey", UDAO.LogUserActivity(User, "WebApp_CTX", CID))
                         SetCookie("APR_Username", "Username", User)
                         AddAuthCookie(User)

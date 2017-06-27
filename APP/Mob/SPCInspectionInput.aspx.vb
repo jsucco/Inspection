@@ -38,6 +38,7 @@ Namespace core
         Public HasCID As Boolean = False
         Public LocationName As String
         Public LineType As String = "EOL"
+        Public ColumnCount As Integer = 2
         Public EmailJobSummId As Integer = 0
         Public SessionId As String
         Public Property cypherclass As New cypher
@@ -320,10 +321,11 @@ Namespace core
             Dim compare As String
 
             If Not TemplateId = -1 And Not TemplateId = 0 Then
-                listso = bmapso.GetInspectObject("SELECT LineType as Object1 FROM TemplateName WHERE TemplateId =" & TemplateId)
+                listso = bmapso.GetInspectObject("SELECT LineType as Object1, ColumnCount as Object2 FROM TemplateName WHERE TemplateId =" & TemplateId)
 
                 If listso.Count > 0 Then
                     compare = listso.ToArray()(0).Object1.ToString().Trim.ToUpper()
+                    ColumnCount = listso.ToArray()(0).Object2
                 Else
                     Throw New Exception("Failed To Retieve Template Type from Server")
                 End If
@@ -372,8 +374,6 @@ Namespace core
         Protected Sub COnfirm2_Click(ByVal sender As Object, ByVal e As EventArgs) Handles Confirm.Click, ConfirmRoll.Click
             Dim returnmessage As String = ""
             Dim ErrorFlag As Boolean = False
-            Dim cs As ClientScriptManager = Page.ClientScript
-            Dim cstype As Type = Me.GetType()
             Dim cstext2 As String = ""
             Dim curijs As New InspectionJobSummary
             Dim ijsnum As Integer = 0
@@ -384,8 +384,6 @@ Namespace core
             Try
                 ijsnum = CType(inspectionjobsummaryid_hidden.Value, Integer)
             Catch ex As Exception
-                cstext2 = "alert('" + ex.Message + "');"
-                cs.RegisterStartupScript(cstype, "PopUpScript", cstext2, True)
 
                 Response.Redirect("~/APP/Mob/SPCInspectionInput.aspx?TemplateId=" + SelectedId.ToString() + "&CONFIRM=" + returnmessage)
                 Exit Sub
@@ -423,13 +421,6 @@ Namespace core
                                     JobPassFail = "Pass"
                                 End If
                                 curijs.TotalInspectedItems = CType(totalinspectedyards.Value, Integer)
-                                Try
-                                    Dim WeaverShiftId = CType(WeaverShiftId_hidden.Value, Integer)
-
-                                    UpdateWeaversAsync(WeaverShiftId, CType(WeaverShiftYards_hidden.Value, Decimal))
-                                Catch ex As Exception
-                                    Elmah.ErrorSignal.FromCurrentContext.Raise(ex)
-                                End Try
 
                         End Select
                         curijs.MajorsCount = InspectInput.GetDefectCountByType(ijsnum.ToString(), "MAJOR")
@@ -532,11 +523,8 @@ Namespace core
                 Elmah.ErrorSignal.FromCurrentContext().Raise(ex)
             End Try
 
-
-            Dim cstext1 As String = "alert('" + returnmessage + "');"
-            cs.RegisterStartupScript(cstype, "PopUpScript", cstext1, True)
             Response.Clear()
-            Response.Redirect(Page.Request.RawUrl + "?TemplateId=" + SelectedId.ToString())
+            Response.Redirect("~/APP/Mob/SPCInspectionInput.aspx?TemplateId=" + SelectedId.ToString())
 
         End Sub
 
@@ -606,38 +594,6 @@ Namespace core
             End Try
         End Sub
 
-        Private Sub UpdateWeaversAsync(ByVal WeaverShiftId As Integer, ByVal Yards As Decimal)
-            Dim t As System.Threading.Tasks.Task = System.Threading.Tasks.Task.Run(Sub()
-                                                                                       UpdateWeavers(WeaverShiftId, Yards)
-                                                                                   End Sub)
-        End Sub
-
-        Private Sub UpdateWeavers(ByVal WeaverShiftId As Integer, ByVal Yards As Decimal)
-            Try
-                If WeaverShiftId <= 0 Then
-                    Throw New Exception("Weaver ShiftId must be greater than zero")
-                    Return
-                End If
-
-                Using _db As New Inspection_Entities
-                    Dim WeaversList = (From x In _db.WeaverProductions Where x.ShiftId = WeaverShiftId Select x).ToList()
-
-                    For Each item In WeaversList
-                        item.Yards = Yards
-                    Next
-
-                    Dim shift = (From x In _db.WeaverShifts Where x.Id = WeaverShiftId Select x).FirstOrDefault()
-
-                    If IsNothing(shift) = False Then
-                        shift.Finish = DateTime.Now
-                    End If
-
-                    _db.SaveChanges()
-                End Using
-            Catch ex As Exception
-                Elmah.ErrorSignal.FromCurrentContext.Raise(ex)
-            End Try
-        End Sub
         Private Function GetFailCount(ByVal JobSummaryId As String, ByVal JobType As String) As Integer
             Dim listso1 As New List(Of SingleObject)
             Dim bmapso As New BMappers(Of SingleObject)
@@ -720,7 +676,7 @@ Namespace core
             Dim bmapijs As New BMappers(Of SPCInspection.OpenRollInfo)
             Dim listijs As New List(Of SPCInspection.OpenRollInfo)
             Dim sql As String
-            sql = "SELECT ijs.JobNumber, ijs.WOQuantity, ijs.AQL_Level, ijs.Standard, ijs.EmployeeNo, wp.EmployeeNoId, emp.Initials, wp.ShiftId FROM InspectionJobSummary ijs left outer join WeaverProduction wp ON wp.JobSummaryId = ijs.id left outer join EmployeeNo emp on emp.Id = wp.EmployeeNoId WHERE ijs.id = " & ijsid.ToString() + " order by ShiftId desc"
+            sql = "SELECT ijs.JobNumber, ijs.WOQuantity, ijs.AQL_Level, ijs.Standard, ijs.EmployeeNo FROM InspectionJobSummary WHERE ijs.id = " & ijsid.ToString() + " order by ShiftId desc"
 
             listijs = bmapijs.GetInspectObject(sql)
             If listijs.Count > 0 Then
@@ -729,20 +685,6 @@ Namespace core
                 DataNumber.Value = as400.GetRollDataNumber(rollnumberinput)
                 rolllist = as400.GetGriegeNo(rollnumberinput, False)
                 Inspector.Value = listijs.ToArray()(0).EmployeeNo
-                If IsNothing(listijs.ToArray()(0).Initials) = False Then
-                    Weaver_Names.Value = listijs.ToArray()(0).Initials
-                    WeaverShiftId_hidden.Value = listijs.ToArray()(0).ShiftId
-                End If
-
-                If listijs.Count >= 2 Then
-                    If listijs.ToArray()(1).ShiftId = listijs.ToArray()(0).ShiftId Then
-                        If IsNothing(listijs.ToArray()(1).Initials) = False Then
-                            Weaver_Names.Value = Weaver_Names.Value + ", " + listijs.ToArray()(1).Initials
-                        End If
-                    End If
-                End If
-
-                OpenRollInfoString = jser.Serialize(listijs)
 
                 If rolllist.Count = 0 Then
                     rolllist = as400.GetGriegeNo(rollnumberinput, True)

@@ -10,14 +10,14 @@ Namespace core
 
         Private Sub page_load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
 
-            Dim CSCode As CSExample = New CSExample()
-            Dim x As Integer = Request.Browser.ScreenPixelsWidth - 0.1 * Request.Browser.ScreenPixelsWidth
-            Dim y As Integer = Request.Browser.ScreenPixelsHeight - 0.1 * Request.Browser.ScreenPixelsHeight
+            'Dim CSCode As CSExample = New CSExample()
+            'Dim x As Integer = Request.Browser.ScreenPixelsWidth - 0.1 * Request.Browser.ScreenPixelsWidth
+            'Dim y As Integer = Request.Browser.ScreenPixelsHeight - 0.1 * Request.Browser.ScreenPixelsHeight
 
 
 
 
-            mobilelabel.Text = CSCode.TeamString.ToString() + " Screen Pixel Width: " + Convert.ToString(x) + " Screen Pixel Height: " + Convert.ToString(y) + ""
+            'mobilelabel.Text = CSCode.TeamString.ToString() + " Screen Pixel Width: " + Convert.ToString(x) + " Screen Pixel Height: " + Convert.ToString(y) + ""
 
             Dim Env As Environment = New Environment(Context)
             Dim corp As corporate = New corporate

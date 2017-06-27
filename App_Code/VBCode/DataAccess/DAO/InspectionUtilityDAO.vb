@@ -788,7 +788,7 @@ Namespace core
 
         End Function
 
-        Public Function SetLineType(ByVal TemplateId As Integer, ByVal LineType As String) As Boolean
+        Public Function SetLineType(ByVal TemplateId As Integer, ByVal LineType As String, ByVal ColumnCount As Integer) As Boolean
 
             Dim SQL As String
             Dim sqlcommand As SqlCommand
@@ -803,7 +803,7 @@ Namespace core
 
 
                     SQL = "UPDATE TemplateName" & vbCrLf &
-                    "SET LineTypeId = " & listso.ToArray()(0).Object1.ToString() & "" & vbCrLf &
+                    "SET LineTypeId = " & listso.ToArray()(0).Object1.ToString() & ", ColumnCount = " + ColumnCount.ToString() & vbCrLf &
                     "WHERE (TemplateId = @TemplateId)"
 
                     Using connection As New SqlConnection(DL.InspectConnectionString())
@@ -2605,9 +2605,9 @@ Namespace core
                                 'If Not InsertButton(TabTemplateId, Button.ButtonId, Button.text, Button.DefectType) Then
                                 '    Return False
                                 'End If
-                                If Button.DefectType <> "False" And Button.DefectType <> "True" Then
-                                    Button.DefectType = "True"
-                                End If
+                                'If Button.DefectType <> "False" And Button.DefectType <> "True" Then
+                                '    Button.DefectType = "True"
+                                'End If
                                 Dim sql As String = "INSERT INTO ButtonTemplate" & vbCrLf &
                                                          "(ButtonId, DefectType, TabTemplateId)" & vbCrLf &
                                                          "VALUES (@ButtonId,@DefectType,@TabTemplateId)"

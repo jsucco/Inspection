@@ -34,7 +34,7 @@ Namespace core
             If IsNothing(userid.Value) Or IsNothing(password.Value) Then
                 lblError.Text = "User Name or Password left Blank"
             Else
-                If userDAO.AutenticateUser(userid.Value, password.Value) = True Then
+                If userDAO.AutenticateUser(userid.Value, password.Value, "000578") = True Then
                     'Session("CID") = strURLCUSTOMER
                     Session("Username") = userid.Value
                     userDAO.LogUserActivity(userid.Value, "Mobile")
@@ -60,7 +60,7 @@ Namespace core
                         'Response.Redirect("~/ErrorPage.aspx")
                     End Try
                     SetUserCookies(userid.Value)
-                    
+
                     Response.Redirect("~/Mobile/APREntry.aspx")
 
                 Else

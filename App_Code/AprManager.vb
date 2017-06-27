@@ -43,6 +43,7 @@ Partial Public Class LocationMaster
     Public Property ProductionResults As Nullable(Of Boolean)
     Public Property AS400_Connection As Nullable(Of Boolean)
     Public Property AS400_Abr As String
+    Public Property CtxCID As String
 
     Public Overridable Property LinkedServerMasters As ICollection(Of LinkedServerMaster) = New HashSet(Of LinkedServerMaster)
     Public Overridable Property OPCMasters As ICollection(Of OPCMaster) = New HashSet(Of OPCMaster)
