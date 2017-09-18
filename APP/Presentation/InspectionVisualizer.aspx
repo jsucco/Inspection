@@ -21,11 +21,6 @@
         <div id="select2div" style="top:10px; left: 100px; position:relative; height: 150px;">
             <select id="select-location" style="width:100%;"></select>
         </div>
-<%--        <div id="Locations" class="owl-carousel" style="position: absolute; left: 100px;">
-            <div class="item"><h4>1</h4></div>
-            <div class="item"><h4>2</h4></div>
-        
-        </div>--%>
     </div>
     <div style="position:absolute; width: 130px; left: 85%; height:150px;">
         <div id="actionbuttons" style="width: 110px;
@@ -41,7 +36,7 @@
     </div>
     </div>
     <div id="PageFilters">
-    <div style="position:absolute; z-index:1000; left: 95.2%;" id="filterdiv">
+    <div style="position:absolute; z-index:100; left: 95.2%;" id="filterdiv">
         <a id="hideFilters" style="position:absolute;border-style: outset;"></a>
         <a id="showFilters" style="position:absolute; display: none; border-style: outset;"></a>
     </div>
@@ -62,19 +57,19 @@
             <input type="hidden" id="DateTo_Hidden" runat="server" class="PageFilter"/>
         </div>
         </div>
-    <div data-role="fieldcontain" style="position:absolute; top: 30px; left:50%; z-index:1000;">
+    <div data-role="fieldcontain" style="position:absolute; top: 30px; left:50%; z-index:100;">
                 <label for="select-based-flipswitch" class="filterlabel">DataNumber:</label>
                 <select id="select-DataNo" style="position:absolute; left:-2px;" data-role="flipswitch" class="PageFilter selector">
                   <option value="ALL">ALL</option>
                 </select>
               </div>
     
-    <div data-role="fieldcontain" style="position:absolute; top: 30px; left:70%; z-index:1000;">
+    <div data-role="fieldcontain" style="position:absolute; top: 30px; left:70%; z-index:100;">
                 <label for="select-based-flipswitch" class="filterlabel">Audit Type:</label>
                 <select id="select-AuditType" data-role="flipswitch" class="PageFilter selector">
                 </select>
               </div>
-    <div data-role="fieldcontain" style="position:absolute; top: 30px; left:90%; z-index:1000;">
+    <div data-role="fieldcontain" style="position:absolute; top: 30px; left:90%; z-index:100;">
                 <label for="select-based-flipswitch" class="filterlabel">Prp Code:</label>
         <div style="position:relative;">
             <select id="select-prp" style="position:absolute; left:-2px; width: 150px;" data-role="flipswitch" class="selector"  multiple="multiple">
@@ -134,7 +129,7 @@
         <asp:Button ID="ReportCallBack" runat="server" Text="none" />
             </div>
     </div>
-        <div id="tabs" style="position:relative; display:none; Z-INDEX: 104; top: 80px; margin:auto; width: 100%; height: 100%; left: -10px;" >
+        <div id="tabs" style="position:relative; display:none; Z-INDEX: 100; top: 80px; margin:auto; width: 100%; height: 100%; left: -10px;" >
         <ul>
             <li><a href="#tabs-1">Overview</a></li>
             <li><a href="#tabs-2">JobSummary</a></li>
@@ -142,7 +137,7 @@
             <li><a href="#tabs-4">Photos</a></li>
         </ul>
         <div id="tabs-1">
-            <div data-role="fieldcontain" style="position:absolute; top:130px; left:40%; z-index:1000;">
+            <div data-role="fieldcontain" style="position:absolute; top:130px; left:40%; z-index:100;">
                 <label for="select-based-flipswitch" class="filterlabel">Select:</label>
                 <select id="select-graph" class="selector" style="position:absolute; left:80px; top:-8px;" data-role="flipswitch">
                   <option value="LineGraph">LineGraph</option>
@@ -191,7 +186,6 @@
                               <option value="ALL">ALL</option>
                             </select>
               </div>
-
             </div>
             <div id="GrapBorder" style ="position:absolute; left:20px; top:95px; width:60%; height:80%; border-style:outset;"></div>
             <div id="Graph1Holder" style ="position:relative; left:90px; top:45px;">
@@ -205,11 +199,8 @@
                 <input type="image" src="../../Images/load-indicator.gif" style="z-index:200; margin-left: 41%; margin-top:20%; position:absolute;" />
             </div>
             <div id="ovsholder" style="position:absolute; top:150px; left:63%;">
-                <table id="ovsgrid" style="z-index:104; font-weight:800;"></table>
-                <%--<div id="ovsgridpager1" style="Z-INDEX: 105; position:absolute; z-index: 105;" ></div>--%>
-                    </div>
-             
-                
+                <table id="ovsgrid" style="z-index:104; font-weight:800;"></table>                
+             </div>             
         </div>
         <div id="tabs-2">
             <table id="ijsgrid" style=" font-size:smaller; Z-INDEX: 104; font-weight:800;  ">
@@ -245,12 +236,28 @@
 
                     </a>
                 </div>
-            <%--<div id="defectCarousel" style="    position: relative; float: right; top: 100px; left: 40px;">
-
-            </div>--%>
-                </div>
+            </div>
         </div>
       
+    </div>
+    <div id="dialog-confirm" title="Merge Inspection Jobs?" style="display:none;">
+      <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>These items will be permanently merged. Are you sure?</p>
+        <div style="display: grid; grid-template-columns: 220px; grid-gap:10px;">          
+            <div style="padding:5px; width:300px;">
+                <label for="Merge1">Job Number A: </label>
+                <select style="width: 160px;" id="Merge1" class="job-merge-selector"></select>
+                
+            </div>
+            <div style="padding: 5px; width:300px;">
+                <label for="Merge2">Job Number B: </label>
+                <select style="width: 160px;" id="Merge2" class="job-merge-selector"></select>
+                
+            </div>
+        </div>
+        <div style="width:100%; height: 110px; margin: 40px auto 0px auto; text-align: center;">
+            <img id="Merge-loading-img" src="../../Images/load-indicator.gif" style="height:85px; display:none;" />
+            <label id="Merge-result-label" style="font-style:oblique; font-weight: 700;"></label>        
+        </div>
     </div>
     <input type="hidden" runat="server" id="ActiveReportId" value="none" />
     <input type="hidden" runat="server" id="SelectedCID" value="999" />
@@ -258,400 +265,8 @@
 
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="ControlOptions" Runat="Server">
-    <style>
-      .owl-item {
-            position: relative;
-            min-height: 1px;
-            float: left;
-            background: rgb(163,180,205);
-            width: 40px;
-            -webkit-backface-visibility: hidden;
-            -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-        h4 {
-            font-size: 2.1em;
-            color: #FBF5F5;
-        }
-        a {
-            font-size: 23px;
-        }
-        .wijmo-wijmenu {
-            padding: 0.3em;
-            height: 70px;
-            position: relative;
-        }
-        .wijmo-wijmenu .wijmo-wijmenu-item {
-            width: 100%;
-            float: left;
-            clear: both;
-            margin: 1px 0;
-            padding: 0;
-            position: relative;
-            top: 0px;
-        }
-        .wijmo-wijmenu .wijmo-wijmenu-list .wijmo-wijmenu-item {
-            background: none;
-            border: none;
-            width: 200px;
-            /* vertical-align: middle; */
-            /* top: 20px; */
-        }
-        .wijmo-wijmenu .wijmo-wijmenu-link {
-            display: block;
-            width: 92% !important;
-            height: 50px;
-            outline: none;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 20px;
-            border: solid 1px transparent;
-            float: left;
-            line-height: 16px;
-            padding: 0.3em;
-        }
-        .wijmo-wijmenu .wijmo-wijmenu-parent .wijmo-wijmenu-child {
-            display: none;
-            width: 200px !important;
-            height:240px;
-            padding: 0.3em;
-        }
-        .wijmo-wijmenu-text, .wijmo-wijmenu-horizontal .wijmo-wijmenu-parent .ui-icon, .wijmo-wijmenu-breadcrumb a, .wijmo-wijmenu-breadcrumb span, .wijmo-wijmenu-breadcrumb .wijmo-wijmenu-prev-list a .ui-icon {
-        float: left;
-        position: absolute;
-        top: 30px;
-        width: 200px;
-        }
-        .ui-icon .ui-icon-triangle-1-s { 
-            display:none;
-        }
-        .wijmo-wijmenu .wijmo-wijmenu-parent .ui-icon, .wijmo-wijmenu-horizontal .wijmo-wijmenu-child .ui-icon, .wijmo-wijmenu-ipod .ui-icon-triangle-1-e, .wijmo-wijmenu-ipod .ui-icon-arrow-r {
-        float: right;
-        display: none;
-    }
-        div.dbl {
-            background: yellow;
-            color: black;
-          }
-
-        .ui-tabs .ui-tabs-nav li.ui-state-default {
-            border: solid 1px #8b8b8b;
-            height: 70px;
-            width: 170px;
-        }
-        .ui-tabs .ui-tabs-nav {
-            margin: 0;
-            padding: .2em .2em 0;
-            border-width: 1px;
-            height: 70px;
-        }
-        #ijsgrid .ui-jqgrid tr.jqgrow td {
-          font-weight: 800 !important;
-          font-size: 13px;
-          overflow: hidden;
-          white-space: pre;
-          padding: 0 2px 0 2px;
-          border-bottom-width: 1px;
-          border-bottom-color: inherit;
-          border-bottom-style: solid;
-          color: #717073;
-          font-family: 'Roboto',arial,'Noto Sans Japanese',sans-serif;
-        }
-        .editable {
-            height: 60px;
-            font-size: 19px !important;
-            font-weight: 900;
-            font-family: 'Roboto',arial,'Noto Sans Japanese',sans-serif !important;
-            color: #525055;
-        }
-        #Specgrid .ui-jqgrid tr.jqgrow td {
-          font-weight: 800 !important;
-          font-size: 13px;
-          overflow: hidden;
-          white-space: pre;
-          padding: 0 2px 0 2px;
-          border-bottom-width: 1px;
-          border-bottom-color: inherit;
-          border-bottom-style: solid;
-          color: #717073;
-          font-family: 'Roboto',arial,'Noto Sans Japanese',sans-serif;;
-        }
-        .ui-jqgrid tr.jqgrow td {
-          font-weight: 800 !important;
-          overflow: hidden;
-          white-space: pre;
-          padding: 0 2px 0 2px;
-          border-bottom-width: 1px;
-          border-bottom-color: inherit;
-          border-bottom-style: solid;
-          color: #717073;
-          font-family: 'Roboto',arial,'Noto Sans Japanese',sans-serif;;
-        }
-        .ui-search-toolbar {
-            height: 50px;
-        }
-        #ovsholder .ui-jqgrid tr.jqgrow {
-            outline-style: none;
-            height: 110px !important;
-        }
-        #ovsholder .ui-jqgrid-labels {
-            height: 50px;
-            font-size: 17px;
-        }
-        .ui-jqgrid tr.jqgrow {
-            outline-style: none;
-            height: 40px !important;
-        }
-        .ui-jqgrid .ui-search-table {
-            padding: 0;
-            border: 0 none;
-            height: 50px;
-            width: 100%;
-        }
-        #ovsholder .ui-widget-content {
-            border: 1px solid #aaaaaa;
-            background: #ffffff url(images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
-            color: #717073 !important;
-            font-family: 'Roboto',arial,'Noto Sans Japanese',sans-serif;;
-            height:43px;
-            font-size: 27px;
-        }
-        #ijsgrid .ui-widget-content {
-            border: 1px solid #aaaaaa;
-            background: #ffffff url(images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
-            color: #717073 !important;
-            font-family: 'Roboto',arial,'Noto Sans Japanese',sans-serif;
-            height: 43px;
-            font-size: 13px;
-        }
-        #Specgrid .ui-widget-content {
-            border: 1px solid #aaaaaa;
-            background: #ffffff url(images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
-            color: #717073 !important;
-            font-family: 'Roboto',arial,'Noto Sans Japanese',sans-serif;
-            height: 43px;
-            font-size: 13px;
-        }
-        #ovsholder .ui-jqgrid tr.ui-row-ltr td {
-            text-align: left;
-            border-width: 1px;
-            border-color: inherit;
-            border-style: solid;
-        }
-        .ui-corner-top {
-        -moz-border-radius-topleft: 3px;
-        -webkit-border-top-left-radius: 3px;
-        border-top-left-radius: 3px;
-        -moz-border-radius-topright: 3px;
-        -webkit-border-top-right-radius: 3px;
-        border-top-right-radius: 3px;
-        z-index: 1000;
-    }
-        *:focus {
-    outline: none;
-}
-        .filterlabel {  
-            font-size:20px;
-            font-family: 'Roboto',arial,'Noto Sans Japanese',sans-serif;
-        }
-        .selector {
-            height:40px;
-            position:absolute;
-            left:29px;
-        }
-        .ui-jqgrid .ui-jqgrid-htable th div {
-            overflow: hidden;
-            position: relative;
-            height: 17px;
-            font-size: 18px;
-        }
-        .actionButton {
-            transition: all 0.5s ease;
-            text-decoration: none;
-            display: inline-block;
-            vertical-align: top;
-            width: 100px;
-            height: 100px;
-            text-align: center;
-            padding: 8px;
-            color: #fff  !important;
-            background: #919195;
-            border: none;
-            cursor: pointer;
-            box-sizing: border-box;
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            margin: 0px 5px;
-            font-size: 29px;
-            font-family: 'OpenSans-SemiBold';
-        }
-        #options h1 {
-            font-family: 'Open Sans', Arial, sans-serif;
-            font-weight: 300;
-            font-size: 1.5em;
-            margin: 0 0 15px 0;
-            padding: 0;
-        }
-        #options label {
-            display: inline-block;
-            cursor: pointer;
-            position: relative;
-            font-family: 'Open Sans', Arial, sans-serif;
-            font-weight: 400;
-            font-size: 0.875em;
-        }
-        #reportOptions {
-            display: none;
-            background: #fff;
-            position: absolute;
-            left: -10000px;
-            top: 50%;
-            margin: -250px 0px 0px -225px;
-            padding: 60px 50px;
-            width: 400px;
-            height: 400px;
-            border: 1px solid #cccccc;
-            text-align: center;
-            vertical-align: middle;
-            z-index: 500;
-        }
-        #options {
-            text-align: center;
-            margin: 0 auto;
-            position: relative;
-        }
-        .img-doctype {
-            width: 50px;
-            height: 50px;
-            vertical-align: middle;
-        }
-        .tile-options {
-            cursor: pointer;
-            margin-top: 10px;
-            overflow: hidden;
-            border: 1px solid #cccccc;
-            text-align: left;
-        }
-        #options .button {
-            width: 200px;
-            background-color: #5D87A1;
-            color: #FFF;
-            font-size: 1em;
-            cursor: pointer;
-            border: none;
-        }
-        #options button {
-            position: relative;
-            margin: 20px 0 10px 0;
-        }
-        #menuLnkBack {
-            float: left;
-            width: auto;
-            text-decoration: none;
-            font-size: 50px;
-            color: rgb(94, 136, 162);
-            font-family: 'OpenSans-Light';
-            background: url('../../Images/back_lnk.png') no-repeat left center;
-            padding: 15px 0px 10px 30px;
-        }
-        #hideFilters {
-            float: left;
-            width: 20px;
-            border-style: outset;
-            text-decoration: none;
-            font-size: 50px;
-            color: rgb(94, 136, 162);
-            font-family: 'OpenSans-Light';
-            background: url('../../Images/arrow_up.png') no-repeat left center;
-            padding: 15px 0px 10px 30px;
-        }
-        #showFilters {
-            float: left;
-            width: 20px;
-            border-style: outset;
-            text-decoration: none;
-            font-size: 50px;
-            color: rgb(94, 136, 162);
-            font-family: 'OpenSans-Light';
-            background: url('../../Images/arrow_down.png') no-repeat left center;
-            padding: 15px 0px 10px 30px;
-        }
-        a:-webkit-any-link {
-            color: -webkit-link;
-            text-decoration: initial;
-            cursor: auto;
-        }
-        input[type=checkbox]
-        {
-            /* Double-sized Checkboxes */
-            -ms-transform: scale(2); /* IE */
-            -moz-transform: scale(2); /* FF */
-            -webkit-transform: scale(2); /* Safari and Chrome */
-            -o-transform: scale(2); /* Opera */
-            padding: 10px;
-        }
-        .ui-tabs .ui-tabs-nav li.ui-state-default {
-            border: solid 1px #8b8b8b;
-            height: 70px;
-            width: 190px;
-        }
-        option {
-            font-size: 18px;
-        }
-        #customersSlider { overflow: hidden; height: 200px; margin-bottom: 15px; position: relative; -ms-touch-action: none; }
-                #customersWrapper { position: absolute; left: 0px; top: 0px; height: 110px; -ms-touch-action: none; }
-                #customers { padding: 0px; margin: 0px; position: relative; list-style: none; width: auto; }
-                #customers > * { -webkit-transform: scale(0); -ms-transform: scale(0); -o-transform: scale(0); transform: scale(0); -webkit-transition: all 0.3s cubic-bezier(0.55, 0, 0.1, 1);  -o-transition: all 0.3s cubic-bezier(0.55, 0, 0.1, 1);  transition: all 0.3s cubic-bezier(0.55, 0, 0.1, 1); }
-                #customers > .animated {  -webkit-transform: scale(1);  -ms-transform: scale(1);  -o-transform: scale(1);  transform: scale(1); }
-                .customerItem { padding:0px; cursor:pointer; display: inline-block; margin: 0px 10px 10px 0px; vertical-align: top; position: relative; }
-                .customerItem:last-child { margin-right: 0px; }
-                .customerItem a { text-decoration: none; background: #5D87A1; padding: 10px; width: 300px; height: 360px; color: #fff; display: block; }
-                .customerItem a h2 { font-size: 14px; margin: 4px 0px 0px 0px; padding: 0px; color: #fff; text-decoration: none; font-family: 'OpenSans-Regular'; font-weight: 400; }
-                .extraInfo { position: absolute; bottom: 50px; left: 10px; display: none; color: #fff; font-size: 14px; font-family: 'OpenSans-Regular'; font-weight :400; }
-                .extraInfoValue { font-weight: 400; }
-                .customerItem a h2 span b, .extraInfoValue b { color: #FFDE75; }
-                .activeCustomer a { background: #896791; }
-                .draggable {
-                                    /* Prevent text selection */
-                                    -webkit-user-select: none;
-                                    -khtml-user-select: none;
-                                    -moz-user-select: none;
-                                    -o-user-select: none;
-                                    user-select: none;
-                                    cursor: move;
-                    }
-                    .draggable a, .draggable { cursor: move; }
-        #LcustomersSlider { overflow: hidden; height: 200px; margin-bottom: 15px; position: relative; -ms-touch-action: none; }
-                #LcustomersWrapper { position: absolute; left: 0px; top: 0px; height: 110px; -ms-touch-action: none; }
-                #Lcustomers { padding: 0px; margin: 0px; position: relative; list-style: none; width: auto; }
-                #Lcustomers > * { -webkit-transform: scale(0); -ms-transform: scale(0); -o-transform: scale(0); transform: scale(0); -webkit-transition: all 0.3s cubic-bezier(0.55, 0, 0.1, 1);  -o-transition: all 0.3s cubic-bezier(0.55, 0, 0.1, 1);  transition: all 0.3s cubic-bezier(0.55, 0, 0.1, 1); }
-                #Lcustomers > .animated {  -webkit-transform: scale(1);  -ms-transform: scale(1);  -o-transform: scale(1);  transform: scale(1); }
-                .LcustomerItem { padding:0px; cursor:pointer; display: inline-block; margin: 0px 10px 10px 0px; vertical-align: top; position: relative; }
-                .LcustomerItem:last-child { margin-right: 0px; }
-                .LcustomerItem a { text-decoration: none; background: #5D87A1; padding: 10px; width: 200px; height: 80px; color: #fff; display: block; }
-                .LcustomerItem a h2 { font-size: 14px; margin: 4px 0px 0px 0px; padding: 0px; color: #fff; text-decoration: none; font-family: 'OpenSans-Regular'; font-weight: 400; }
-                .extraInfo { position: absolute; bottom: 50px; left: 10px; display: none; color: #fff; font-size: 14px; font-family: 'OpenSans-Regular'; font-weight :400; }
-                .extraInfoValue { font-weight: 400; }
-                .LcustomerItem a h2 span b, .extraInfoValue b { color: #FFDE75; }
-                .LactiveCustomer a { background: #896791; }
-                .draggable {
-                                    /* Prevent text selection */
-                                    -webkit-user-select: none;
-                                    -khtml-user-select: none;
-                                    -moz-user-select: none;
-                                    -o-user-select: none;
-                                    user-select: none;
-                                    cursor: move;
-                    }
-                    .draggable a, .draggable { cursor: move; }
-        
-    </style>
+<link href="../../Styles/InspectionVisualizer.css" rel="stylesheet" type="text/css" />
     <link href="http://cdn.wijmo.com/themes/aristo/jquery-wijmo.css" rel="stylesheet" type="text/css" />
-    <link href="../../Styles/owl/owl.carousel.css" rel="stylesheet" type="text/css" />
 
 <script src="http://code.jquery.com/jquery-1.11.1.min.js" type="text/javascript"></script>
 <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.min.js" type="text/javascript"></script>
@@ -667,6 +282,15 @@
 <script src="../../Scripts/jquery.jqGrid.min.js" type="text/javascript"></script>--%>
 <%--<script src="../../Scripts/select2/select2.min.js" type="text/javascript" ></script>--%>
 <link href="../../Styles/select2/select2.css" rel="stylesheet" />
+    <style type="text/css">
+        .ui-widget-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1350px;
+        }
+    </style>
 <script src="../../Scripts/Gcharts/jsapi.js"></script>
 
     <script type="text/javascript">
@@ -796,18 +420,7 @@
                 datahandler.LocationChangeEvent(selList); 
             });
             //$("#Locations").html(html.join(''));
-            var html = [];
-            //detached code 4.18.17 JJS
-            //$.each(LocationNames, function (k, value) {
-            //    html.push('<li class="LcustomerItem animated">');
-            //    html.push('<a onclick="click()" title="" href="#">');
-            //    html.push('<h2><span style="background:rgb(116, 171, 205);" class="Loc_lbl">' + value.Abreviation.trim() + '</span></h2>');
-            //    html.push('<input type="checkbox" class="LocCheckbox" style="float: right; top:-20px; position: relative;" onclick="return false;" onkeydown="return false;" name="LocCheck" checked="checked">');
-            //    html.push('<h1><span style="color:white; position:relative; font-size: 19px; top:-15px; background-color: rgb(116, 171, 205);" class="LcustName">' + value.text.trim() + '</span></h1>');
-            //    html.push('</a></li>');
-            //});
-            
-            var data = [{ id: 0, text: 'enhancement' }, { id: 1, text: 'bug' }, { id: 2, text: 'duplicate' }, { id: 3, text: 'invalid' }, { id: 4, text: 'wontfix' }];
+            var html = [];           
 
             datahandler.Get_Prpselect();
             datahandler.GetDefectImageDescList();
@@ -937,8 +550,7 @@
                     }
                     
                 }
-
-            
+          
                 ActiveFilterString = JSON.stringify(ActiveFilterArray);
                 $('#MainContent_FilterListTag').val(ActiveFilterString);
                 
@@ -970,12 +582,7 @@
                 $('#ovsholder').find("th:eq(0)").each(function(){$(this).css('width','220px')})
                 $('#ovsgrid').find("td:eq(0)").each(function(){$(this).css('width','220px')})
                 $('#ovsgrid').setGridWidth(950);
-
-                
-                
-        
-                
-                
+            
                 $('#filter-dialog').wijdialog('open')
             });
             $("#select-Location_fc").on('change', function(event){
@@ -988,112 +595,7 @@
                              { datatype: 'json' }).trigger('reloadGrid');
 
             });
-            //code detached 4.18.17 JJS 
-            //$('.customerItem, .animated').on('dblclick', function (event) {
-            //    var $this = $(this);
-            //    var IsChecked;
-            //    var Loc_lbl = 'N';
-
-            //    if (Ldragging == true) {
-            //        return false;
-            //    }
-                
-            //    $(this).find('.Loc_lbl').each(function() {
-                    
-            //        Loc_lbl = $(this).text();
-            //    });
-     
-            //    $(this).find('input').each(function() {
-            //        IsChecked = $(this).prop('checked');
-            //    });
-                
-            //    if (Loc_lbl == "ALL") {
-            //        if (IsChecked == true) {
-                   
-            //            $(".LocCheckbox").removeAttr('checked');
-            //            var newarray = $.map(FullLocationsArray, function (e,v) { 
-
-            //                return {value: e.value, status: false, CID: e.CID, ProdAbreviation: e.ProdAbreviation}
-                            
-            //                i++;
-            //            });
-            //            FullLocationsArray = newarray;
-            //            LocationsStringArray = JSON.stringify(FullLocationsArray);
-            //            $(".LcustName").css({background: '#5D87A1'});
-            //            $(".Loc_lbl").css({background: '#5D87A1'});
-            //        } else {
-                 
-            //            $(".LocCheckbox").prop('checked', true);
-            //            var newarray = $.map(FullLocationsArray, function (e,v) { 
-
-            //                return {value: e.value, status: true, CID: e.CID, ProdAbreviation: e.ProdAbreviation}
-                            
-            //                i++;
-            //            });
-            //            FullLocationsArray = newarray;
-            //            LocationsStringArray = JSON.stringify(FullLocationsArray);
-            //            $(".LcustName").css({background: 'rgb(116, 171, 205)'});
-            //            $(".Loc_lbl").css({background: 'rgb(116, 171, 205)'});
-            //        }
-
-
-            //    } else {
-            //        $(this).find('input').each(function() {
-                    
-            //            if( IsChecked == true) { 
-            //                $(this).removeAttr('checked');
-            //                var i = 0;
-            //                var newarray = $.map(FullLocationsArray, function (e,v) { 
-
-            //                    if (e.value == Loc_lbl || e.status == false) { 
-            //                        return {value: e.value, status: false, CID: e.CID, ProdAbreviation: e.ProdAbreviation}
-            //                    } else { 
-            //                        return {value: e.value, status: true, CID: e.CID, ProdAbreviation: e.ProdAbreviation}
-            //                    }
-            //                    i++;
-            //                });
-            //                FullLocationsArray = newarray;
-            //                LocationsStringArray = JSON.stringify(FullLocationsArray);
-            //            } else { 
-            //                $(this).prop('checked', true);
-            //                var newarray = $.map(FullLocationsArray, function (e,v) { 
-
-            //                    if (e.value == Loc_lbl || e.status == true) { 
-            //                        return {value: e.value, status: true, CID: e.CID, ProdAbreviation: e.ProdAbreviation}
-            //                    } else { 
-            //                        return {value: e.value, status: false, CID: e.CID, ProdAbreviation: e.ProdAbreviation}
-            //                    }
-            //                    i++;
-            //                });
-            //                FullLocationsArray = newarray;
-            //                LocationsStringArray = JSON.stringify(FullLocationsArray);
-                        
-            //            }
-            //            $("#MainContent_SelectedCID").val(LocationsStringArray);
-            //            //ActiveLocationsArray = newarray;
-              
-                    
-            //        });
-            //        $(this).find('span').each(function() {
-            //            if (IsChecked) { 
-            //                if (IsChecked == true) { 
-            //                    $(this).css({background: '#5D87A1'});
-            //                } else { 
-            //                    $(this).css({background: 'rgb(116, 171, 205)'});
-            //                }
-            //            } else { 
-            //                $(this).css({background: 'rgb(116, 171, 205)'});
-            //            }
-                    
-            //        });
-            //    }
-            //    datahandler.FilterEvent("485", "Location");
-                
-                
-            //    //$('').css({background: '#5D87A1'});
-            //});
             $('#select-graph').on('change', function(event){
-
                 
                 var selecteval = event.currentTarget.value;
                 switch(selecteval) { 
@@ -1119,28 +621,7 @@
                         break;
                 }
             });
-            //$('.owl-item, .active').on('dblclick', function(event){
-            //    var $this = $(this);
 
-            //    if($this.hasClass('clicked')){
-            //        $this.removeAttr('style').removeClass('clicked');
-            //    } else{
-            //        var LocObject = datahandler.FilterJsonTable($this[0].children[0].innerText.trim(), LocationNames, "Abreviation");
-            //        if (LocObject) { 
-            //            if (LocObject.length > 0 ) { 
-            //                SelectedCID = LocObject[0].CID
-            //                $("#MainContent_SelectedCID").val(LocObject[0].CID);
-            //                datahandler.FilterEvent(LocObject[0].CID, "Location");
-            //            }
-            //        }
-            //        $this.css('background','#7fc242').addClass('clicked');
-            //    }
-            //    $('.owl-item').each(function (index) { 
-            //        if ($this[0].children[0].innerText.trim() != $(this).text().trim()) { 
-            //            $(this).css('background','rgb(163,180,205)');
-            //        }
-            //    });
-            //});
             $('.actionButton').on('click', function(event) { 
                 $('#MainContent_ReportCallBack').trigger('click');
                 //if ($('#reportOptions').is(":visible")) { 
@@ -1214,13 +695,6 @@
                     exytd_DateFrom_fc = (data.date.getMonth() + 1) + "/" + data.date.getDate()  + "/" + data.date.getFullYear();
                     $("#ovsgrid").jqGrid('setGridParam', 
                                  { datatype: 'json' }).trigger('reloadGrid');
-                    //var formatted_Fromdate = (data.date.getMonth() + 1) + "/" + data.date.getDate()  + "/" + data.date.getFullYear();
-               
-                    //$("#MainContent_DateFrom_Hidden").val(formatted_Fromdate);
-                    //$Fromdateval = formatted_Fromdate;
-                    //LineGraphldcnt=0;
-                    //BreakOutldcnt = 0;
-                    //datahandler.FilterEvent(formatted_Fromdate, "Date");
                 },
                 date: exytd_DateFrom_fc
             });
@@ -1232,13 +706,6 @@
                     exytd_DateTo_fc = (data.date.getMonth() + 1) + "/" + data.date.getDate()  + "/" + data.date.getFullYear();
                     $("#ovsgrid").jqGrid('setGridParam', 
                                  { datatype: 'json' }).trigger('reloadGrid');
-                    //var formatted_Todate = (data.date.getMonth() + 1) + "/" + data.date.getDate()  + "/" + data.date.getFullYear();
-               
-                    //$("#MainContent_DateTo_Hidden").val(formatted_Todate);
-                    //$Todateval = formatted_Todate;
-                    //LineGraphldcnt=0;
-                    //BreakOutldcnt = 0;
-                    //datahandler.FilterEvent(formatted_Todate, "Date");
                 },
                 date: exytd_DateTo_fc
             });
@@ -1249,13 +716,6 @@
                     exmtd_DateFrom_fc = (data.date.getMonth() + 1) + "/" + data.date.getDate()  + "/" + data.date.getFullYear();
                     $("#ovsgrid").jqGrid('setGridParam', 
                                  { datatype: 'json' }).trigger('reloadGrid');
-                    //var formatted_Fromdate = (data.date.getMonth() + 1) + "/" + data.date.getDate()  + "/" + data.date.getFullYear();
-               
-                    //$("#MainContent_DateFrom_Hidden").val(formatted_Fromdate);
-                    //$Fromdateval = formatted_Fromdate;
-                    //LineGraphldcnt=0;
-                    //BreakOutldcnt = 0;
-                    //datahandler.FilterEvent(formatted_Fromdate, "Date");
                 },
                 date: exmtd_DateFrom_fc
             });
@@ -1267,13 +727,6 @@
                     exmtd_DateTo_fc = (data.date.getMonth() + 1) + "/" + data.date.getDate()  + "/" + data.date.getFullYear();
                     $("#ovsgrid").jqGrid('setGridParam', 
                                  { datatype: 'json' }).trigger('reloadGrid');
-                    //var formatted_Todate = (data.date.getMonth() + 1) + "/" + data.date.getDate()  + "/" + data.date.getFullYear();
-               
-                    //$("#MainContent_DateTo_Hidden").val(formatted_Todate);
-                    //$Todateval = formatted_Todate;
-                    //LineGraphldcnt=0;
-                    //BreakOutldcnt = 0;
-                    //datahandler.FilterEvent(formatted_Todate, "Date");
                 },
                 date: exmtd_DateTo_fc
             });
@@ -1579,16 +1032,8 @@
                     },
                     paging: false
                 });
-                //jQuery("#ovsgrid").jqGrid('navGrid','#ovsgridpager1',{edit:false,add:false,del:false});
-                //$('#ovsgrid').jqGrid('navGrid', '#gridpager',
-                //{
-                //    edit: false,
-                //    add: false,
-                //    del: false,
-                //    search: false
-                //}
-                //    );
             },
+            RSSelectedRowCID: "", 
             RenderSummaryGrid: function () {
             var dataarray = [];
             var SubGridEditFlag = false;
@@ -1607,19 +1052,20 @@
                             { name: 'delete', index: 'delete', hidden: hiddenVal, width: 90, formatter: 'actions', formatoptions : { onError:function(rowid, jqXHR, textStatus) {
                                 alert('There was some problem, wit row ' + rowid.toString() + ' :' + textStatus);
                             }, actions: { delbutton:EditPermissions, editbutton: EditPermissions, keys: false}} },
-                            { name: 'ijsid', index: 'ijsid', hidden: false, editable: false, formatter: grids.formatijsGrid, width: 76 },
+                            { name: 'ijsid', index: 'ijsid', hidden: false, editable: true, formatter: grids.formatijsGrid, width: 76, editoptions: { dataInit: function(e){ $(e).prop('readonly', true)}} },
                             { name: 'JobType', index: 'JobType', hidden: true },
-                            { name: 'JobNumber', index: 'JobNumber', editable: false, formatter: grids.formatijsGrid },
+                            { name: 'JobNumber', index: 'JobNumber', editable: true, formatter: grids.formatijsGrid },
                             { name: 'DataNo', index: 'DataNo', hidden: true },
-                            { name: 'PRP_Code', index: 'PRP_Code', hidden: false },
+                            { name: 'PRP_Code', index: 'PRP_Code', editable:true, hidden: false },
                             { name: 'UnitDesc', index: 'UnitDesc', width: 255, editable: false, formatter: grids.formatijsGrid },
                             { name: 'Location', index: 'Location', width: 90, editable:true, edittype:'select', editoptions:{value: LocationNamesDrop }, search: false, formatter: grids.formatijsGrid },
                             { name: 'TemplateId', index: 'TemplateId', hidden: true },
                             { name: 'Name', index: 'Name', editable: false, formatter: grids.formatijsGrid },
-                            { name: 'LineType', index: 'LineType', editable: false, search: false, formatter: grids.formatijsGrid },
+                            { name: 'LineType', index: 'LineType', editable: true, edittype: 'select', editoptions: {value: 'MFG:MFG; FINAL AUDIT:FINAL AUDIT; IN LINE:IN LINE; ROLL:ROLL; UPGRADES:UPGRADES; PASS/FAIL:PASS/FAIL; CHECK:CHECK; KAUMO:KAUMO; SHIPPING:SHIPPING'}, 
+                                formatter: grids.formatijsGrid },
                             { name: 'TotalInspectedItems', index: 'TotalInspectedItems', editable: true, formatter: 'number', search: false, formatoptions: { actions: {afterSave: function(x) { } },decimalSeparator: ".", thousandsSeparator: " ", decimalPlaces: 0, defaultValue: '0' }},
                             { name: 'ItemPassCount', index: 'ItemPassCount', editable: true, formatter: 'number', search: false, formatoptions: { decimalSeparator: ".", thousandsSeparator: " ", decimalPlaces: 0, defaultValue: '0' }},
-                            { name: 'ItemFailCount', index: 'ItemFailCount', editable: false, formatter: 'number', search: false, formatoptions: { decimalSeparator: ".", thousandsSeparator: " ", decimalPlaces: 0, defaultValue: '0' }},
+                            { name: 'ItemFailCount', index: 'ItemFailCount', editable: true, formatter: 'number', search: false, formatoptions: { decimalSeparator: ".", thousandsSeparator: " ", decimalPlaces: 0, defaultValue: '0' }},
                             { name: 'WOQuantity', index: 'WOQuantity', editable: true, formatter: 'number', search: false, formatoptions: { decimalSeparator: ".", thousandsSeparator: " ", decimalPlaces: 0, defaultValue: '0' }},
                             { name: 'WorkOrderPieces', index: 'WOQuantity', editable: true, formatter: 'number', search: false, formatoptions: { decimalSeparator: ".", thousandsSeparator: " ", decimalPlaces: 0, defaultValue: '0' }},
                             { name: 'AQL_Level', index: 'AQL_Level', editable:true, edittype:'select', editoptions:{value: '1:1; 1.5:1.5; 2.5:2.5; 4:4; 100:100' }, formatter: 'number', search: false, formatoptions: { decimalSeparator: ".", thousandsSeparator: " ", decimalPlaces: 1, defaultValue: '0' }},
@@ -1721,19 +1167,7 @@
                                 ActiveFilter = FilterColumnName; 
                                  
                                 var ExistsFlag = false;
-                                //ActiveFilterArray = $.each(ActiveFilterArray, function(index, value) { 
-                                //    if (value.Name == FilterColumnName) { 
-                                //        FilterCnt++;
-                                //        value.value = e.currentTarget.value;
-                                //        value.id = FilterCnt;
-                                //        ExistsFlag = true;
-                                //    } 
-                                //});
-                                //if (ExistsFlag == false) { 
-                                //    FilterCnt++;
-                                //    ActiveFilterArray.push({id:FilterCnt, Name: FilterColumnName, value: e.currentTarget.value});
-                                //}
-                                // begin insert new code
+
                                 for (var i = ActiveFilterArray.length-1; i >= 0; i--) {
                                     if (ActiveFilterArray[i].Name === FilterColumnName && event.currentTarget.value == "ALL") {
                                         ExistsFlag = true;
@@ -1749,7 +1183,6 @@
                                 if (ExistsFlag == false) { 
                                     ActiveFilterArray.push({id:FilterCnt, Name: FilterColumnName, value: e.currentTarget.value});
                                 }
-                                // end 
                                 
                                 ActiveFilterString = JSON.stringify(ActiveFilterArray);
                                 
@@ -1785,15 +1218,13 @@
                     },
                     onSelectRow: function (id) {
 
-                        var rowdata = $("#ijsgrid").find("td[aria-describedby='ijsgrid_ijsid']");
-
+                        var rowdata = $("#ijsgrid").find("td[aria-describedby='ijsgrid_ijsid']"); 
                         if (rowdata) { 
 
                             subgridquerystr = "ijsid=" + rowdata[id - 1].innerText;
                             grids.Selected_ijs_id = rowdata[id - 1].innerText;
-                        }
-    
-                        
+                            console.log("ijs_id", grids.Selected_ijs_id); 
+                        }                      
                     },
                     subGrid: true,
                     subGridRowColapsed: function(pID, id) {
@@ -1844,18 +1275,13 @@
                                 }
                             },
                             onSelectRow: function (id) {
-
                                 var rowdata = $("#"+subgrid_table_id).find("td[aria-describedby='" + subgrid_table_id + "_DefectID']");
 
                                 if (rowdata) { 
                                     if (rowdata.length > 0 && id > 0) {
                                         subgridquerystr = "dmId=" + id;
-                                    }
-                                    
-                                    
-                                }
-    
-                        
+                                    }                                                                   
+                                }                           
                             },
                             gridComplete: function () { 
                                 var tableht = $("#"+subgrid_table_id).height() + 46;
@@ -1865,11 +1291,150 @@
                                 }
                                 
                             }
-                        });
-                        
+                        });                      
+                    }, 
+                    loadComplete: function () {
+                        var iCol = grids.getColumnIndexByName($("#ijsgrid"), 'delete');
+                        console.log("iCol", iCol); 
+                        $(this).find(">tbody>tr.jqgrow>td:nth-child(" + (iCol + 1) + ")")
+                            .each(function() {
+                                $("<div>", {
+                                    title: "Custom",
+                                    mouseover: function() {
+                                        $(this).addClass('ui-state-hover');
+                                    },
+                                    mouseout: function() {
+                                        $(this).removeClass('ui-state-hover');
+                                    },
+                                    click: function(e) {
+                                        var editObject = e.currentTarget.nextSibling.id; 
+
+                                        if (editObject == null) 
+                                            return; 
+
+                                        var rowindex = editObject.split("_")[1]; 
+
+                                        if (rowindex == null || rowindex.length == 0) 
+                                            return; 
+
+                                        var rowObject = $("#ijsgrid").find("tr")[rowindex].children[2].innerHTML; 
+                                        var CID = $("#ijsgrid").find("tr")[rowindex].children[20].innerHTML;           
+                                        var optionHtml = []; 
+
+                                        optionHtml.push('<option value="' + rowObject + '">' + rowObject + '</option>');
+                                        grids.RSSelectedRowCID = "000" + CID.toString(); 
+                                      
+                                        $("#Merge1").html(optionHtml.join('')); 
+                                        $('#Merge1').val(rowObject).trigger('change');  
+                                        $( "#dialog-confirm" ).dialog({
+                                            resizable: false,
+                                            height: "auto",
+                                            width: 400,
+                                            height:400,
+                                            modal: true,
+                                            buttons: {
+                                                "MERGE": function() {
+                                                    if ($("#Merge1-JobId-Label").text() == "0" || $("#Merge2-JobId-Label").text() == "0") { 
+                                                        $("#Merge-result-label").text("*Two Id's must be selected."); 
+                                                        return; 
+                                                    }                                                       
+                                                    var job1 = $("#Merge1").val(); 
+                                                    var job2 = $("#Merge2").val(); 
+ 
+                                                    $("#Merge-loading-img").css("display", "inline"); 
+                                                    $.ajax({
+                                                        url: '<%=APIBaseUrl%>' + '/api/CombineJobs/' + job1 + '/' + job2, 
+                                                        method: "GET", 
+                                                        success: function(data, textStatus, jqXHR) { 
+                                                            $("#Merge-loading-img").css("display", "none"); 
+                                                            var message = (data.ErrorMessage != null) ? data.ErrorMessage : ""; 
+                                                            if (!!data && !!data.Result) { 
+                                                                if (data.Result) { 
+                                                                    $("#Merge-result-label").text("*MERGE SUCCESS!! " + message); 
+                                                                    return;
+                                                                }
+                                                            } 
+                                                            $("#Merge-result-label").text("*MERGE FAILED. " + message);
+                                                        }, 
+                                                        error: function(jqXHR, textStatus, errorThrown) { 
+                                                            console.log(errorThrown); 
+                                                        }
+                                                    })                                                  
+                                                },
+                                                Cancel: function() {
+                                                    $( this ).dialog( "close" );
+                                                }
+                                            }, 
+                                            open: function(event, ui) {                                                  
+                                                if ($.ui && $.ui.dialog && !$.ui.dialog.prototype._allowInteractionRemapped && $(this).closest(".ui-dialog").length) {
+                                                    if ($.ui.dialog.prototype._allowInteraction) {
+                                                        $.ui.dialog.prototype._allowInteraction = function (e) {
+                                                            if ($(e.target).closest('.select2-drop').length) return true;
+                                                            return ui_dialog_interaction.apply(this, arguments);
+                                                        };
+                                                        $.ui.dialog.prototype._allowInteractionRemapped = true;
+                                                    }
+                                                    else {
+                                                        $.error("You must upgrade jQuery UI or else.");
+                                                    }
+                                                }
+                                            }, 
+                                            close: function(event, ui) { 
+                                                $("#Merge-result-label").text(''); 
+                                            }
+                                        });                                                                                                                    
+                                    }
+                                }
+                              ).css({"margin-right": "5px", float: "left", cursor: "pointer"})
+                               .addClass("ui-pg-div ui-inline-custom")
+                               .append('<span class="ui-icon ui-icon-merge"></span>')
+                               .prependTo($(this).children("div"));
+                            });
+                        $("#Merge1").select2({
+                            placeholder: "Select a Table Id",
+                            data: null, 
+                            ajax: { 
+                                url: '<%=APIBaseUrl%>' + '/api/SuggestJob', 
+                                type: 'GET', 
+                                delay:  250, 
+                                dataType: 'json', 
+                                data: function(params) {  
+                                    return { 
+                                        q: (params.term != null ? params.term : ""), 
+                                        cid: grids.RSSelectedRowCID
+                                    };
+                                },
+                                processResults: function(data, params) { 
+                                    return { 
+                                        results: data
+                                    };
+                                }
+                            }
+                        }); 
+                                       
+                        $("#Merge2").select2({
+                            placeholder: "Select a Table Id",
+                            data: null,
+                            ajax: { 
+                                url: '<%=APIBaseUrl%>' + '/api/SuggestJob', 
+                                type: 'GET', 
+                                delay:  250, 
+                                dataType: 'json', 
+                                data: function(params) { 
+                                    console.log("term", params.term); 
+                                    return { 
+                                        q: (params.term != null ? params.term : ""),
+                                        cid: grids.RSSelectedRowCID
+                                    };
+                                },
+                                processResults: function(data, params) { 
+                                    return { 
+                                        results: data
+                                    };
+                                }
+                            }
+                        }); 
                     }
-
-
                 });
                 jQuery("#ijsgrid").jqGrid('navGrid','#ijsgridpager1',{edit:false,add:false,del:false});
                 jQuery("#ijsgrid").jqGrid('inlineNav', '#ijsgrid',{
@@ -1918,15 +1483,6 @@
                         search: false
                     }
                         );
-                    jQuery("#ijsgrid").jqGrid('filterToolbar',{
-                        searchOperators : true, 
-                        afterSearch: function (v) { 
-                             
-                                
-                    
-                               
-                        }
-                    }).trigger('reloadGrid');
             },
             Selected_ijs_id: 0,
             RenderSpecDisplayGrid: function () { 
@@ -2354,6 +1910,15 @@
                     values.push(this);
                 });
                 return values;
+            },
+            getColumnIndexByName : function (grid, columnName) {
+                var cm = grid.jqGrid('getGridParam', 'colModel'), i, l = cm.length;
+                for (i = 0; i < l; i++) {
+                    if (cm[i].name === columnName) {
+                        return i; // return the index
+                    }
+                }
+                return -1;
             }
         };
         var graphs = { 
@@ -2399,10 +1964,6 @@
 
                 var data = new google.visualization.DataTable();
                 data.addColumn('string', 'DATEVAL');
-                //data.addColumn('number', "LOC_1");
-                //data.addColumn('number', "LOC_2");
-                //data.addColumn('number', "LOC_3");
-                //data.addColumn('number', "LOC_4");
                 $.each(titledata, function(index,value) { 
 
                     data.addColumn('number', value.Object1);
@@ -2525,12 +2086,7 @@
                 $.each(titleArr, function(index, value) { 
                     data.addColumn('number', value.Object3);
                 });
-                //var data = new google.visualization.DataTable();
 
-                //data.addColumn('string', 'DefectDesc');
-                //data.addColumn('number', 'IL');
-                //data.addColumn('number', 'EOL');
-                //data.addColumn('number', 'ROLL');
                 data.addRows(newarray);
 
                 var options = {

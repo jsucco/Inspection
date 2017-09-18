@@ -109,7 +109,6 @@
     <input type="hidden" id="HiddenProduct" runat="server" />
     <input type="hidden" id="InspectionState" class="inputelement" runat="server" />
     <input type="hidden" id="workorder_hidden" runat="server" />
-    <input type="hidden" id="workroom_hidden" value ="nan" class="inputelement" runat="server" />
     <input type="hidden" id="woquantity_hidden" runat="server"  class="inputelement" value="0" />
     <input type="hidden" id="wopieces_hidden" class="inputelement" runat="server" value="0" />
     <input type="hidden" id="inspectionjobsummaryid_hidden" class="inputelement" runat="server" value="0" />
@@ -117,6 +116,7 @@
     <input type="hidden" id="jobconfirmation_hidden" class="inputelement" runat="server" value="0" />
     <input type="hidden" id="Weaver_Names_hidden" class="inputelement" runat="server" value="0" />
     <input type="hidden" id="WeaverShiftYards_hidden" runat="server" value="0" />
+    <input type="hidden" id="workroom_hidden" class="inputelement" runat="server" value="" />
     <input id="_AQLevel" type="hidden" runat="server" value="2.5" class="inputelement" />
     <input id="aqlstandard" type="hidden" runat="server" value="regular" class="inputelement" />
     <input id="totalinspecteditems" type="hidden" runat="server" value="0" />
@@ -234,7 +234,8 @@
             </div>
             <div id="workroomdiv" class="inputpad leftsidepanel workorder-inspection" style="position:relative; margin-top: 5px;">
                 <label for="workroomL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">WORKROOM</label>
-                <input id="workroom" class="inputelement inputbox leftsideobj" type="text" runat="server"   />
+                <input id="workroom" class="inputelement inputbox leftsideobj" style="display:none;" type="text" runat="server"   />
+                <select id="workroom_select" class="inputbox leftsideobj" style="width:185px;"></select>
             </div>
             <div id="loomdiv" class="inputpad leftsidepanel roll-inspection" style="position:relative; margin-top:5px; display:none;">
                 <label for="LoomNumberL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">LOOM NUMBER</label>
@@ -436,7 +437,7 @@
     var $itemnumber = $('#MainContent_ItemNumber');
     var $CartonNumber = $('#MainContent_CartonNumber');
     var $CPNumber = $('#MainContent_CPNumber');
-    var $WorkRoom = $('#MainContent_workroom');
+    var $WorkRoom = $('#MainContent_workroom_hidden');
     var $purchaseorder = $('#MainContent_CartonNumber');
     var $auditorname = $('#MainContent_AuditorName');
     var $auditornameSel = $('#Auditor_Name');
@@ -500,6 +501,7 @@
         
         TargetOrderInput = $('#MainContent_WorkOrder');
         var $_aql = $('#MainContent__AQLevel');
+        var warr = <%=WorkRoomArr%>
         TemplateCollection = <%=TemplateCollection%>
         SpecCollection = <%=ProductSpecCollection%>
         SelectedId = <%=SelectedId%>
@@ -539,6 +541,7 @@
         controls.InitWOQuantity(); 
         controls.InitNumbers(); 
         controls.InitStatsTag();
+        controls.InitWorkRooms(warr); 
         eventshandler.InitPageEventHandlers();
         $(".de_container").fadeIn(150); 
         
@@ -662,6 +665,11 @@
         .css({ height:"100%", overflow: "auto" });
 
         $("#StartInspection").click(function (e) { 
+            $(this).prop('disabled', true); 
+            setTimeout(function() { 
+                $("#StartInspection").removeAttr('disabled'); 
+                $("#StartInspection").prop('disabled', false); 
+            }, 5000);
             if (InspectionStartedVal == true) { 
                 alert('An Inspection Is already In Progress.  Please Clear current Inspection or Complete the Current one');
                 return;
@@ -688,6 +696,11 @@
                     break;
                 default: 
                     var Quantity = new Number($LotSize.val()); 
+                    if ($("#MainContent_workroom_hidden").val().length == 0) 
+                    {
+                        alert("Workroom must be selected."); 
+                        return; 
+                    }
                     if ( $auditornameSel.val() != "SELECT OPTION" && $auditornameSel.val() != "New Name") { 
                         if ($workorder.val().length > 1 && $DataNo.val().length > 1 && Quantity > 0 && $Location.val().length > 1 && InspectionStartedVal == false && InspectionState == 0) { 
                             var AuditorName = $("#MainContent_AuditorName").val();
@@ -1133,7 +1146,10 @@
                 $("#AQ_Level").prop('disabled', true);
                 $("#AQL_Standard_Dialog option").prop('disabled', true);
                 $("#selectNames").prop("disabled", true);
-
+                if ($("#MainContent_workroom_hidden") && $("#MainContent_workroom_hidden").val().length > 0) {
+                    $("#workroom_select").val($("#MainContent_workroom_hidden").val()); 
+                    $("#workroom_select").prop("disabled", true); 
+                }
                 if (LineType != "ROLL") { 
                     $("#Auditor_Name").prop('disabled', true);
                 } 
@@ -2271,6 +2287,9 @@
                     $("#AQL_Level_Dialog").prop('disabled', true);
                     $("#AQ_Level").prop('disabled', true);
                     $("#AQL_Standard_Dialog").prop('disabled', true);
+                    if (OpenOrderFlag == "True") 
+                        $("#workroom_select").prop('disabled', true); 
+
                     InspectionTypeSelector = 0;
                     if (OpenOrderFlag == "False") { 
                         //eventshandler.UserKeyPress.GetLastUserInputs();
@@ -2297,6 +2316,7 @@
                         $("#AQL_Level_Dialog").prop('disabled', true);
                         $("#AQ_Level").prop('disabled', true);
                         $("#AQL_Standard_Dialog").prop('disabled', true);
+                        $("#workroom_select").prop('disabled', true); 
                     }
                     InspectionTypeSelector = 0;
                     break;
@@ -2626,6 +2646,27 @@
                 }
             });
             $("#WeaverShiftYards").height(30);
+        },
+        InitWorkRooms: function(warr) { 
+            if (warr == null || warr.length == 0) { 
+                return
+            }
+            var html = [];
+            var $400workroom = $("#MainContent_workroom_hidden").val();
+            if ($400workroom.length > 0) { 
+                html.push('<option selected value="' + $400workroom + '">' + $400workroom + '</option>')
+            } else { 
+                html.push('<option selected value="">SELECT OPTION</option>')
+            }
+            
+            for (var i = 0; i < warr.length; i++) { 
+                html.push('<option value="' + warr[i].Abbreviation + '">' + warr[i].Abbreviation + '</option>')
+            }
+                   
+            $("#workroom_select").html(html.join('')).bind("change", function(){
+                console.log('hello'); 
+                $("#MainContent_workroom_hidden").val($(this).val());
+            });
         },
         InitStatsTag: function() { 
             var jobnum = ''; 
@@ -3171,9 +3212,9 @@
             
             var returnnum = InspectionArray[0].id;
             pageBehindInspectionStarted = "true";
-            InspectionJobSummaryIdPage = returnnum;
-            $("#MainContent_inspectionjobsummaryid_hidden").val(InspectionJobSummaryIdPage);
+            InspectionJobSummaryIdPage = returnnum;          
             InspectionStartedVal = true; 
+            datahandler.RemoveCompletedProperties(); 
             var AQLNumber;
             if (InspectionArray[0].AQL_Level != null) { 
                 AQLNumber = new Number(InspectionArray[0].AQL_Level); 
@@ -3181,11 +3222,14 @@
                             
             if (AQLNumber != null && AQLNumber == 100) { 
                 InspectionArray[0].AQL_Level = '100'; 
-            }                             
-
+            }            
+            console.log("InspectionArray",InspectionArray); 
+            $("#MainContent_inspectionjobsummaryid_hidden").val(InspectionJobSummaryIdPage);
+            $("#workroom_select").val(InspectionArray[0].WorkRoom); 
             $("#AQ_Level").val(InspectionArray[0].AQL_Level);
             $("#AQ_Level").prop('disabled', true);
             $("#Auditor_Name").prop('disabled', true); 
+            $("#workroom_select").prop('disabled', true); 
             $("#MainContent__AQLevel").val(InspectionArray[0].AQL_Level);
             AQLValue = InspectionArray[0].AQL_Level;
             $("#WOQuantity").val(InspectionArray[0].WOQuantity);
@@ -3215,6 +3259,13 @@
             $("#MainContent_inspectionjobsummaryid_hidden").val(returnnum);
             $("#jobIdSpinner").css('display', 'none');
             datahandler.InspectionArray = new Array(); 
+        },
+        RemoveCompletedProperties() { 
+            $.ajax({
+                url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
+                type: 'GET',
+                data: { method: 'RemoveCompletedProperties', args: {Id: InspectionJobSummaryIdPage}}
+            });
         },
         CreateInspectionJobSummaryId: function (buttonid, buttonvalue, buttonname,IsDefect) { 
 
@@ -3404,6 +3455,7 @@
                                 $('#NewAuditorName').wijdialog('open');
                             }
                             $('#MainContent_AuditorName').val(selectedval);
+                            $('#MainContent_AuditorNameHidden').val(selectedval);
                         });
                         $('#Auditor_Name').val("SELECT OPTION");
                         if (initalval != "New Name" && initalval != "" && initalval != "_") {
@@ -3674,12 +3726,11 @@
                     if (SelectedId && SelectedId.toString().length > 0) { 
                         var r = confirm("This will clear out the current Inspection.  Are you Sure?");
                         if (r == true) { 
-                            window.location.assign("<%=Session("BaseUri")%>" + "/APP/Mob/SPCInspectionInput.aspx?TemplateId=" + SelectedId.toString());
+                            window.location.assign("<%=Session("BaseUri")%>" + "/APP/Mob/SPCInspectionInput.aspx?TemplateId=" + SelectedId.toString() + "&NewInspection=1");
                         }
                     } else { 
                         alert("Template Not Selected"); 
-                    }
-            
+                    }          
                 });
         
                 $("#EnterProductSpec").click(function (e) { 

@@ -152,36 +152,35 @@ Public Class SPC_InspectionInput_JobDispatch
             Dim Summaries As New List(Of dispatchJob)
             que = (From x In _db.InspectionJobSummaries Join t In _db.TemplateNames On x.TemplateId Equals t.TemplateId
                    Where x.JobNumber = JobNumber And x.TemplateId = TemplateId And x.WOQuantity <> 0 Order By x.Inspection_Started Descending
-                   Select New dispatchJob With {.id = x.id, .JobNumber = x.JobNumber, .TemplateId = x.TemplateId, .LineType = t.LineType, .InspectionStarted = x.Inspection_Started, .Technical_PassFail = x.Technical_PassFail, .InspectionFinished = x.Technical_PassFail_Timestamp, .WOQuantity = x.WOQuantity, .AQL_Level = x.AQL_Level, .ItemFailCount = x.ItemFailCount, .RejectLimiter = x.RejectLimiter, .SampleSize = x.SampleSize, .Standard = x.Standard}).ToList()
+                   Select New dispatchJob With {.id = x.id, .JobNumber = x.JobNumber, .TemplateId = x.TemplateId, .LineType = t.LineType, .InspectionStarted = x.Inspection_Started,
+                       .Technical_PassFail = x.Technical_PassFail, .InspectionFinished = x.Technical_PassFail_Timestamp, .WOQuantity = x.WOQuantity, .AQL_Level = x.AQL_Level, .ItemFailCount = x.ItemFailCount,
+                       .RejectLimiter = x.RejectLimiter, .SampleSize = x.SampleSize, .Standard = x.Standard, .WorkRoom = x.WorkRoom}).ToList()
         End Using
-
     End Sub
-    Private Sub ReopenInlineJob()
+
+    Private Sub ReOpenJob(ByVal JobId As Int64)
         Using _db As New Inspection_Entities
-            Dim queRecords As dispatchJob()
-            queRecords = (From o In que Where o.LineType = "IL").Take(1).ToArray()
-            If IsNothing(queRecords) = False And queRecords.Length > 0 Then
-                Dim InspectionJob As New InspectionJobSummary
-                Dim ijsid = queRecords(0).id
-                InspectionJob = (From x In _db.InspectionJobSummaries Where x.id = ijsid).FirstOrDefault()
-                If Not InspectionJob.Inspection_Finished Is Nothing Then
-                    UpdatedispatchQue()
-                    InspectionJob.TotalInspectedItems = Nothing
-                    InspectionJob.Technical_PassFail = Nothing
-                    InspectionJob.Technical_PassFail_Timestamp = Nothing
-                    InspectionJob.UserConfirm_PassFail = Nothing
-                    InspectionJob.UserConfirm_PassFail_Timestamp = Nothing
-                    InspectionJob.Inspection_Finished = Nothing
-                    _db.SaveChanges()
-                End If
-            End If
-
+            Dim InspectionJob = (From x In _db.InspectionJobSummaries Where x.id = JobId).FirstOrDefault()
+            InspectionJob.TotalInspectedItems = Nothing
+            InspectionJob.Technical_PassFail = Nothing
+            InspectionJob.Technical_PassFail_Timestamp = Nothing
+            InspectionJob.UserConfirm_PassFail = Nothing
+            InspectionJob.UserConfirm_PassFail_Timestamp = Nothing
+            InspectionJob.Inspection_Finished = Nothing
+            _db.SaveChanges()
         End Using
     End Sub
-    Private Sub UpdatedispatchQue()
-        que = (From o In que Where o.LineType = "IL").Take(1).ToList()
-        que = (From o In que Select New dispatchJob With {.id = o.id, .JobNumber = o.JobNumber, .InspectionStarted = o.InspectionStarted, .LineType = o.LineType, .TemplateId = o.TemplateId, .Technical_PassFail = Nothing, .InspectionFinished = Nothing, .WOQuantity = o.WOQuantity, .AQL_Level = o.AQL_Level, .ItemFailCount = o.ItemFailCount, .RejectLimiter = o.RejectLimiter, .SampleSize = o.SampleSize, .Standard = o.Standard}).ToList()
+
+    Private Sub ReopenJobAsync(ByVal JobId As Int64)
+        Try
+            Dim t As System.Threading.Tasks.Task = System.Threading.Tasks.Task.Run(Sub()
+                                                                                       ReOpenJob(JobId)
+                                                                                   End Sub)
+        Catch ex As Exception
+            Elmah.ErrorSignal.FromCurrentContext().Raise(ex)
+        End Try
     End Sub
+
     Private Function ProcessJobsInQue(ByVal AQLVAL As String) As String
         Dim returnmsg As String = "NOJOBS"
         Try
@@ -196,10 +195,11 @@ Public Class SPC_InspectionInput_JobDispatch
                 End If
             End If
 
-            'If LineType = "IL" Then
-            '    ReopenInlineJob()
+            que = (From o In que Order By o.InspectionStarted Descending Select o).Take(1).ToList()
+            'If que.Count > 0 Then
+            '    Dim job = que.ToArray()
+            '    ReopenJobAsync(job(0).id)
             'End If
-            que = (From o In que Order By o.InspectionStarted Descending Select o).Take(2).ToList()
         Catch ex As Exception
             Elmah.ErrorSignal.FromCurrentContext.Raise(ex)
         End Try
@@ -225,4 +225,5 @@ Public Class dispatchJob
     Public Property InspectionStarted As DateTime
     Public Property InspectionFinished As DateTime?
     Public Property Technical_PassFail As Boolean?
+    Public Property WorkRoom As String
 End Class

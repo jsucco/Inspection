@@ -1,11 +1,8 @@
 ﻿Imports Microsoft.VisualBasic
-'Imports IBM.Data.DB2
 Imports System.Data.SqlClient
 Imports System.Data
 Imports System.Drawing
 Imports System.Web.Script.Serialization
-Imports System.Web.Services
-
 
 Namespace core
     
@@ -151,6 +148,16 @@ Namespace core
             End Using
 
         End Function
+
+        Public Sub InsertDefectAsync(ByVal input As List(Of SPCInspection.DefectMaster))
+            Try
+                Dim t As System.Threading.Tasks.Task = System.Threading.Tasks.Task.Run(Sub()
+                                                                                           InsertDefects(input)
+                                                                                       End Sub)
+            Catch ex As Exception
+                Elmah.ErrorSignal.FromCurrentContext().Raise(ex)
+            End Try
+        End Sub
 
         Private Sub RegisterInspectionCache(ByVal DefectID As Integer, ByVal CID As String)
 
@@ -317,7 +324,7 @@ Namespace core
 
             If InspectNum.Tables(0).Rows.Count > 0 Then
                 If IsNumeric(InspectNum.Tables(0).Rows(0)("InspectionId")) Then
-                    Return Convert.ToInt16(InspectNum.Tables(0).Rows(0)("InspectionId")) + 1
+                    Return Convert.ToInt64(InspectNum.Tables(0).Rows(0)("InspectionId")) + 1
                 End If
                 Return 0
             Else

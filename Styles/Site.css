@@ -373,33 +373,6 @@ article
      -moz-box-shadow: 5px 15px 15px rgba(0,0,0,.7);
 }
 
-#CONTROLTEX
-{
-    border:NONE;
-    background-color:#D31245;
-    font-Family:Arial Rounded MT Bold;
-    font-size: 100%;
-    text-align:center;
-    color:White;
-    width:100px;
-    float:none;
-    height:45px;
-    
-}
-#WSI
-{
-    border:NONE;
-    background-color:#9FA1A4;
-    font-Family:Arial Rounded MT Bold;
-    font-size: 100%;
-    text-align:center;
-    color:White;
-    width:150px;
-    word-wrap:break-word;
-    float:right;
-    height:45px;
-    
-}
 #WATER
 {
     border:NONE;

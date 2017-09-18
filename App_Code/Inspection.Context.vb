@@ -10,8 +10,6 @@
 Imports System
 Imports System.Data.Entity
 Imports System.Data.Entity.Infrastructure
-Imports System.Data.Entity.Core.Objects
-Imports System.Linq
 
 Partial Public Class Inspection_Entities
     Inherits DbContext
@@ -28,8 +26,11 @@ Partial Public Class Inspection_Entities
     Public Overridable Property ButtonTemplates() As DbSet(Of ButtonTemplate)
     Public Overridable Property DefectMasters() As DbSet(Of DefectMaster)
     Public Overridable Property DefectTimers() As DbSet(Of DefectTimer)
+    Public Overridable Property EmployeeNoes() As DbSet(Of EmployeeNo)
+    Public Overridable Property InspectionCompliances() As DbSet(Of InspectionCompliance)
     Public Overridable Property InspectionJobSummaries() As DbSet(Of InspectionJobSummary)
     Public Overridable Property InspectionTypes() As DbSet(Of InspectionType)
+    Public Overridable Property Locations() As DbSet(Of Location)
     Public Overridable Property ProductSpecifications() As DbSet(Of ProductSpecification)
     Public Overridable Property RollInspectionDetails() As DbSet(Of RollInspectionDetail)
     Public Overridable Property RollInspectionSummaries() As DbSet(Of RollInspectionSummary)
@@ -37,17 +38,8 @@ Partial Public Class Inspection_Entities
     Public Overridable Property TabTemplates() As DbSet(Of TabTemplate)
     Public Overridable Property TemplateActivators() As DbSet(Of TemplateActivator)
     Public Overridable Property TemplateNames() As DbSet(Of TemplateName)
-    Public Overridable Property INS_Summary_VW() As DbSet(Of INS_Summary_VW)
-    Public Overridable Property LocationMaster_VW() As DbSet(Of LocationMaster_VW)
-    Public Overridable Property STT_VW() As DbSet(Of STT_VW)
-    Public Overridable Property EmployeeNoes() As DbSet(Of EmployeeNo)
     Public Overridable Property WeaverProductions() As DbSet(Of WeaverProduction)
     Public Overridable Property WeaverShifts() As DbSet(Of WeaverShift)
-
-    Public Overridable Function SP_AS400_GETPRPCode_Ent(dATANO As String) As ObjectResult(Of String)
-        Dim dATANOParameter As ObjectParameter = If(dATANO IsNot Nothing, New ObjectParameter("DATANO", dATANO), New ObjectParameter("DATANO", GetType(String)))
-
-        Return DirectCast(Me, IObjectContextAdapter).ObjectContext.ExecuteFunction(Of String)("SP_AS400_GETPRPCode_Ent", dATANOParameter)
-    End Function
+    Public Overridable Property WorkRooms() As DbSet(Of WorkRoom)
 
 End Class

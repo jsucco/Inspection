@@ -6,24 +6,25 @@ Imports System.Data.Entity
 Imports System.Threading.Tasks
 Imports System.Web.Script.Serialization
 
-
-
-
 Namespace core
     Public Class ijscrud
         Public Property Id As Integer
         Public Property IjsId As Integer
+        Public Property JobNumber As String
+        Public Property LineType As String
         Public Property Location As String
         Public Property TotalInspectedItems As Integer
         Public Property APR_UserActivityLog As String
         Public Property ItemPassCount As Integer
+        Public Property ItemFailCount As Integer
         Public Property WOQuantity As Integer
+        Public Property PRP_Code As String
         Public Property WorkOrderPieces As Integer
         Public Property AQL_Level As String
         Public Property SampleSize As Integer
         Public Property RejectLimiter As Integer
         Public Property Technical_PassFail As Object
-        Public Property UnitCost As String
+        Public Property UnitCost As Double
         Public Property Comments As String
         Public Property SessionId As String
         Public Property oper As Object
@@ -199,11 +200,20 @@ Namespace core
                 '    End If
                 'End If
                 listijs.CID = ijsObj.Location.Trim()
+                listijs.JobNumber = ijsObj.JobNumber
+                listijs.JobType = ijsObj.LineType
                 listijs.TotalInspectedItems = ijsObj.TotalInspectedItems
                 listijs.ItemPassCount = ijsObj.ItemPassCount
+                listijs.ItemFailCount = ijsObj.ItemFailCount
+                listijs.PRP_Code = ijsObj.PRP_Code
                 listijs.WOQuantity = ijsObj.WOQuantity
                 listijs.WorkOrderPieces = ijsObj.WorkOrderPieces
                 listijs.AQL_Level = ijsObj.AQL_Level
+
+                If ijsObj.UnitCost > 0 Then
+                    listijs.UnitCost = ijsObj.UnitCost
+                End If
+
                 If UpdateFlag = True Then
                     Dim jser As New JavaScriptSerializer()
                     Select Case listijs.Standard
@@ -244,7 +254,7 @@ Namespace core
                 Elmah.ErrorSignal.FromCurrentContext.Raise(New Exception("could not find InspectionSummary row in _db ijsid: " + ijsObj.IjsId.ToString()))
             End If
             If RowsAffected > 0 Then
-                LogTransaction("Edit", listijs)
+                LogTransactionAsync("Edit", listijs)
             End If
         End Sub
         Private Function GetijsSerial(listin As InspectionJobSummary) As String
@@ -261,11 +271,21 @@ Namespace core
             Return jser.Serialize(listretobj)
 
         End Function
-        Public Async Sub LogTransaction(TransType As String, Optional finalobject As Object = "")
+
+        Private Sub LogTransactionAsync(TransType As String, Optional finalobject As Object = "")
+            Try
+                Dim t As System.Threading.Tasks.Task = System.Threading.Tasks.Task.Run(Sub()
+                                                                                           LogTransaction(TransType, finalobject)
+                                                                                       End Sub)
+            Catch ex As Exception
+                Elmah.ErrorSignal.FromCurrentContext().Raise(ex)
+            End Try
+        End Sub
+        Public Sub LogTransaction(TransType As String, Optional finalobject As Object = "")
             Dim aprapp As New APRWebApp
             'Dim usercookie = aprapp.GetCookie("APR_UserActivityLog", "PrimaryKey")
             Dim returnint As Integer = -1
-            Dim ualobject = Await GetUserActivityLog()
+            Dim ualobject = GetUserActivityLog()
             If Not ualobject Is Nothing Then
                 Dim ualobject_new As New UserActivityLog
                 ualobject_new.DBOrigin = "Inspection"
@@ -276,7 +296,7 @@ Namespace core
                 ualobject_new.CID = listijs.CID
                 ualobject_new.ActivityType = TransType
                 _Manager.UserActivityLogs.Add(ualobject_new)
-                Dim sveobj = Await SaveChangesAsync()
+                Dim sveobj = _Manager.SaveChanges()
                 If ualobject_new.id > 0 Then
                     Dim ucalobject As New UserCrudActivityLog
                     ucalobject.oper = TransType
@@ -289,16 +309,14 @@ Namespace core
                     ucalobject.Table = "InspectionJobSummary"
                     ucalobject.PrimaryKeyTarget = listijs.id
                     _Manager.UserCrudActivityLogs.Add(ucalobject)
-                    Dim sveobj2 = Await SaveChangesAsync()
+                    Dim sveobj2 = _Manager.SaveChanges()
 
                 End If
             End If
 
         End Sub
-        Private Function GetUserActivityLog() As Task(Of UserActivityLog)
-            Return Task.Factory.StartNew(Function()
-                                             Return (From v In _Manager.UserActivityLogs Where v.id = UserActivityLogId Select v).FirstOrDefault()
-                                         End Function)
+        Private Function GetUserActivityLog() As UserActivityLog
+            Return (From v In _Manager.UserActivityLogs Where v.id = UserActivityLogId Select v).FirstOrDefault()
         End Function
         Private Function SaveChangesAsync() As Task(Of Integer)
             Return Task.Factory.StartNew(Function()

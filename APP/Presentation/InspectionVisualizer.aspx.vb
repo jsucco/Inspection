@@ -19,7 +19,7 @@ Namespace core
         Public EmployeeNames As String = ""
         Public DefectDescs As String = ""
         Public DefectTypes As String = ""
-        Public ADMINFLAG As String = "false"
+        Public ADMINFLAG As String = "true"
         Public UserActivityLogId As Integer = 0
         Private Inspect As New InspectionUtilityDAO
         Private II As New InspectionInputDAO
@@ -38,9 +38,11 @@ Namespace core
         Public InsTimerReport As MemoryStream
         Public SpecSummaryReport As MemoryStream
         Public InspectionTypesArray As String
+        Public APIBaseUrl As String
 
         Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
             SessionId = Session.SessionID
+            APIBaseUrl = WorkRoomsApi.GetAPIBaseUrl()
 
             Dim UserParse As Object = Request.UserAgent
 
@@ -58,7 +60,6 @@ Namespace core
 
             HttpRuntime.Cache.Remove("TableJobSummary." + SessionId.ToString())
             HttpRuntime.Cache.Remove("TableSpecSummary." + SessionId.ToString())
-
 
         End Sub
 

@@ -1,12 +1,4 @@
-﻿Imports Microsoft.VisualBasic
-Imports System.Data.SqlClient
-Imports System.Data
-Imports System.Globalization
-Imports C1.C1Excel
-Imports OfficeOpenXml
-Imports System.IO
-Imports FiftyOne
-Imports FiftyOne.Foundation.Mobile.Detection
+﻿Imports C1.C1Excel
 
 Namespace core
 

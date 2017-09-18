@@ -179,20 +179,21 @@ Namespace core
                 Dim keys As ICollection = hashtable.Keys
                 If hashtable.Count > 0 Then
                     For Each key In keys
-                        Dim info As PropertyInfo = hashtable(key)
-                        If IsNothing(info) = False Then
-                            If info.CanWrite Then
-                                If IsNothing(RequestParams.GetValues(key)) = False And IsDBNull(RequestParams.GetValues(key)) = False Then
-                                    Dim rpvalue As Object = Util.ConvertType(RequestParams.GetValues(key)(0), info.PropertyType.Name)
-                                    info.SetValue(Obj, rpvalue, Nothing)
+                        Try
+                            Dim info As PropertyInfo = hashtable(key)
+                            If IsNothing(info) = False Then
+                                If info.CanWrite Then
+                                    If IsNothing(RequestParams.GetValues(key)) = False And IsDBNull(RequestParams.GetValues(key)) = False Then
+                                        Dim rpvalue As Object = Util.ConvertType(RequestParams.GetValues(key)(0), info.PropertyType.Name)
+                                        info.SetValue(Obj, rpvalue, Nothing)
+                                    End If
+
                                 End If
-
                             End If
-                        End If
+                        Catch ex As Exception
 
+                        End Try
                     Next
-
-
                 End If
             End If
             Return Obj

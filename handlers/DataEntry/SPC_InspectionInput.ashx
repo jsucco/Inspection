@@ -1,18 +1,8 @@
 ﻿<%@ WebHandler Language="VB" Class="core.SPC_InspectionInput" %>
 
-Imports System
-Imports System.Web
 Imports App.Utilities.Web.Handlers
 Imports System.Web.Script.Serialization
-Imports System.Data.SqlClient
 Imports System.Data
-Imports System.Globalization
-Imports System.Data.Entity
-Imports System.Object
-Imports System.Data.Objects
-Imports System.Threading
-Imports System.Threading.Tasks
-
 
 Namespace core
 
@@ -37,9 +27,7 @@ Namespace core
             Dim DefectArray As New List(Of SPCInspection.DefectMaster)()
 
             Dim inputelementarray As New List(Of InputArray)
-            Dim returnint As Integer
-
-            Dim RejectionCount As Integer = 0
+            Dim returnint As Integer = 0
             Dim InspectionState As Integer = 0
             Dim TargetOrder As String = "WorkOrder"
             Dim InspectionJobSummaryIdret As Int64 = 0
@@ -48,7 +36,6 @@ Namespace core
             Dim DefectType As String = "MINOR"
             Dim DHU As Decimal = 0
             Dim listret As New List(Of SPCInspection.DefectReturnArray)
-            Dim bmapis As New BMappers(Of SPCInspection.InspectionJobSummary)
             Dim bmapso As New BMappers(Of SingleObject)
             Dim jsobj As New SPCInspection.InspectionJobSummary
             Dim EmployeeNo As String = ""
@@ -63,9 +50,7 @@ Namespace core
             GetInputVariblesAsDictionary(inputelementarray)
 
             If dictionary.Count > 0 Then
-
                 Try
-
                     If IsNumeric(ButtonTemplateId) = False Then
                         ButtonTemplateId = "0"
                     Else
@@ -75,7 +60,6 @@ Namespace core
                         Try
                             defecttype_obj = GetDefectType(ButtonTemplateId)
                             If defecttype_obj.Count > 0 Then
-                                'If defecttype_obj.ToArray()(0).Object1 <> "" Then
                                 If defecttype_obj.ToArray()(0).Object1 = "0" Or defecttype_obj.ToArray()(0).Object1 = "False" Then
                                     DefectType = "MINOR"
                                 ElseIf defecttype_obj.ToArray()(0).Object1 = "1" Or defecttype_obj.ToArray()(0).Object1 = "True" Then
@@ -83,7 +67,6 @@ Namespace core
                                 Else
                                     DefectType = defecttype_obj.ToArray()(0).Object1.ToString.ToUpper()
                                 End If
-                                'End If
                             End If
                         Catch ex As Exception
 
@@ -110,13 +93,12 @@ Namespace core
                     End Select
 
                     InspectionJobSummaryIdret = InspectionJobSummaryId
-                    ' End If
 
-                    'If dictionary.Item("MainContent_InspectionId").Length > 0 And dictionary.Item("MainContent_InspectionId").IndexOf(".") > 0 Then
-                    '    InspectionId = CType(dictionary.Item("MainContent_InspectionId").Split(".")(1), Integer)
-                    'End If
-
-                    DefectArray.Add(New SPCInspection.DefectMaster With {.DefectTime = Convert.ToDateTime(Now), .MergeDate = Convert.ToDateTime(Now), .DefectDesc = text, .POnumber = Convert.ToString(dictionary.Item("MainContent_CPNumber")), .DataNo = Convert.ToString(dictionary.Item("MainContent_DataNumber")), .EmployeeNo = EmployeeNo, .Product = Convert.ToString(dictionary.Item("Product")), .DefectClass = DefectType, .AQL = Convert.ToString(dictionary.Item("AQ_Level")), .ThisPieceNo = Convert.ToString(CType(dictionary.Item("MainContent_Good"), Long) + CType(dictionary.Item("MainContent_Bad_Local"), Long)), .TotalLotPieces = Convert.ToString(dictionary.Item("WOQuantity")), .SampleSize = Convert.ToString(dictionary.Item("MainContent_SampleSize")), .Tablet = "Browser", .WorkOrder = Convert.ToString(dictionary.Item("MainContent_WorkOrder")), .LotNo = Convert.ToString(dictionary.Item("MainContent_CartonNumber")), .Location = Convert.ToString(dictionary.Item("MainContent_Location")), .DataType = Convert.ToString("Defect"), .Dimensions = Convert.ToString(dictionary.Item("Dimensions")), .Comment = Convert.ToString(dictionary.Item("Comment")), .TemplateId = Convert.ToInt64(dictionary.Item("TemplateId")), .InspectionId = InspectionId, .RollNumber = RollNumber, .LoomNumber = LoomNumber, .ButtonTemplateId = Convert.ToInt64(ButtonTemplateId), .Inspector = dictionary.Item("MainContent_Inspector"), .ItemNumber = ItemNumber, .InspectionState = Convert.ToString(dictionary.Item("MainContent_InspectionState")), .WorkRoom = Convert.ToString(dictionary.Item("MainContent_workroom")), .RejectLimiter = Convert.ToInt64(dictionary.Item("MainContent_RE")), .InspectionJobSummaryId = InspectionJobSummaryIdret, .WeaverShiftId = WeaverShiftIdVal})
+                    DefectArray.Add(New SPCInspection.DefectMaster With {.DefectTime = Convert.ToDateTime(Now), .MergeDate = Convert.ToDateTime(Now), .DefectDesc = text, .POnumber = Convert.ToString(dictionary.Item("MainContent_CPNumber")), .DataNo = Convert.ToString(dictionary.Item("MainContent_DataNumber")), .EmployeeNo = EmployeeNo, .Product = Convert.ToString(dictionary.Item("Product")), .DefectClass = DefectType,
+                                    .AQL = Convert.ToString(dictionary.Item("AQ_Level")), .ThisPieceNo = Convert.ToString(CType(dictionary.Item("MainContent_Good"), Long) + CType(dictionary.Item("MainContent_Bad_Local"), Long)), .TotalLotPieces = Convert.ToString(dictionary.Item("WOQuantity")), .SampleSize = Convert.ToString(dictionary.Item("MainContent_SampleSize")), .Tablet = "Browser",
+                                    .WorkOrder = Convert.ToString(dictionary.Item("MainContent_WorkOrder")), .LotNo = Convert.ToString(dictionary.Item("MainContent_CartonNumber")), .Location = Convert.ToString(dictionary.Item("MainContent_Location")), .DataType = Convert.ToString("Defect"), .Dimensions = Convert.ToString(dictionary.Item("Dimensions")), .Comment = Convert.ToString(dictionary.Item("Comment")),
+                                    .TemplateId = Convert.ToInt64(dictionary.Item("TemplateId")), .InspectionId = InspectionId, .RollNumber = RollNumber, .LoomNumber = LoomNumber, .ButtonTemplateId = Convert.ToInt64(ButtonTemplateId), .Inspector = dictionary.Item("MainContent_Inspector"), .ItemNumber = ItemNumber, .InspectionState = Convert.ToString(dictionary.Item("MainContent_InspectionState")),
+                                    .WorkRoom = Convert.ToString(dictionary.Item("MainContent_workroom_hidden")), .RejectLimiter = Convert.ToInt64(dictionary.Item("MainContent_RE")), .InspectionJobSummaryId = InspectionJobSummaryIdret, .WeaverShiftId = WeaverShiftIdVal})
 
 
                 Catch ex As Exception
@@ -125,7 +107,8 @@ Namespace core
                     Exit Function
                 End Try
                 If Convert.ToInt32(dictionary.Item("TemplateId")) > 0 And InspectionJobSummaryIdret > 0 And DefectArray.Count > 0 Then
-                    returnint = DA.InsertDefects(DefectArray)
+                    returnint = 1 ' DA.InsertDefects(DefectArray)
+                    DA.InsertDefectAsync(DefectArray)
                 Else
                     Throw New Exception("TemplateId, InspectionJobSummaryId or DefectArray count cannot be zero")
                     Return "-1"
@@ -134,34 +117,16 @@ Namespace core
 
                 If returnint > 0 Then
                     Try
-                        Dim sqlis As String = "UPDATE InspectionJobSummary SET ItemFailCount = @ItemFailCount WHERE (id = " & InspectionJobSummaryIdret.ToString() & ")"
-                        Dim retupdate As Boolean = False
-                        Dim objis As New SPCInspection.InspectionJobSummary
-                        Dim AllTypesDefectCount As Integer = 0
-                        Dim listso As New List(Of SingleObject)
-                        Dim TotalInspected As Integer
-                        objis.ItemFailCount = CType(dictionary.Item("MainContent_Bad_Group"), Integer) + 1
+                        JobSummaryDAO.UpdateFailedCountAsync(InspectionJobSummaryId, CType(dictionary.Item("MainContent_Bad_Group"), Integer) + 1)
 
-                        retupdate = bmapis.InsertSpcObject(sqlis, objis)
-
-                        'sqlis = "SELECT COUNT(DefectID) AS Object1 FROM DefectMaster  INNER JOIN ButtonTemplate ON DefectMaster.ButtonTemplateId = ButtonTemplate.id WHERE DefectMaster." & TargetState & " = '" & TargetNumber & "' AND ButtonTemplate.DefectType = '1'"
-                        'listso = bmapso.GetInspectObject(sqlis)
                         If TargetState = "WorkOrder" Then
-                            'AllTypesDefectCount = listso.ToArray()(0).Object1
-                            'sqlis = "SELECT DISTINCT InspectionJobSummaryId AS Object1, CAST(SampleSize AS int) AS Object2 FROM DefectMaster WHERE (" & TargetState & " = '" & TargetNumber & "')"
-                            'listso.Clear()
-                            'listso = bmapso.GetInspectObject(sqlis)
-                            'If listso.Count > 0 Then
-                            '    Dim listso1 As New List(Of SingleObject)
-                            '    Dim TotalItemsInspected1 = Aggregate v In listso Into Sum(v.Object2)
+                            Dim TotalInspected As Integer
                             TotalInspected = CType(dictionary.Item("MainContent_SampleSize"), Integer)
                             If TotalInspected > 0 Then
                                 DHU = DA.CalculateDHU(TargetState, TargetNumber, InspectionJobSummaryIdret, TotalInspected)
                             End If
                             'End If
                         End If
-
-
                     Catch ex As Exception
                         Throw New Exception("Error updating InspectionJobSummary Table: " + ex.Message)
                         Return "-1"
@@ -384,6 +349,38 @@ Namespace core
 
         End Function
 
+        Public Function RemoveCompletedProperties(ByVal Id As String) As Boolean
+            If Id = "0" Or Id = "" Then
+                Return False
+            End If
+            Dim JobId = Integer.Parse(Id)
+            Using _db As New Inspection_Entities
+                Dim InspectionJob = (From x In _db.InspectionJobSummaries Where x.id = JobId).FirstOrDefault()
+                If InspectionJob Is Nothing Then
+                    Return False
+                End If
+                InspectionJob.TotalInspectedItems = Nothing
+                InspectionJob.Technical_PassFail = Nothing
+                InspectionJob.Technical_PassFail_Timestamp = Nothing
+                InspectionJob.UserConfirm_PassFail = Nothing
+                InspectionJob.UserConfirm_PassFail_Timestamp = Nothing
+                InspectionJob.Inspection_Finished = Nothing
+                _db.SaveChanges()
+            End Using
+            Return True
+        End Function
+
+        'Public Function RemoveCompletedProperties(ByVal Id As Int64) As Boolean
+        '    Try
+        '        Dim t As System.Threading.Tasks.Task = System.Threading.Tasks.Task.Run(Sub()
+        '                                                                                   ReOpenJob(Id)
+        '                                                                               End Sub)
+        '    Catch ex As Exception
+        '        Elmah.ErrorSignal.FromCurrentContext().Raise(ex)
+        '    End Try
+        '    Return True
+        'End Function
+
         Private Function LoadClosedInline(ByVal CID As String) As List(Of SPCInspection.InspectionJobSummary)
             Dim closedInline As New List(Of SPCInspection.InspectionJobSummary)
             Dim CutOff = DateTime.Now.AddDays(-7)
@@ -598,6 +595,10 @@ Namespace core
                 jsobj.CID = Location
 
                 JobObj.JobSummaryId = DA.InsertJobSummaryRecord(jsobj)
+
+                If JobObj.JobSummaryId > 0 Then
+                    JobAPI.UpdateJobSuggestionsAsync(New JobHeader With {.id = JobObj.JobSummaryId, .Name = jsobj.JobNumber, .cid = jsobj.CID})
+                End If
 
                 'If jsobj.JobType <> "WorkOrder" Then
                 '    JobObj.WeaverShiftId = RecordWeaverProduction(WeaverNamesString, JobObj.JobSummaryId)

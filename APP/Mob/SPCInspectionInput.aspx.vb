@@ -1,7 +1,5 @@
 ﻿Imports System.Data
 Imports System.Web.Script.Serialization
-Imports System.Web.Services
-Imports System.Reflection
 
 Namespace core
 
@@ -41,6 +39,7 @@ Namespace core
         Public ColumnCount As Integer = 2
         Public EmailJobSummId As Integer = 0
         Public SessionId As String
+        Public WorkRoomArr As String
         Public Property cypherclass As New cypher
 
         Private Property util As New Utilities
@@ -110,8 +109,7 @@ Namespace core
             End If
 
             initializeInspectionLocations()
-
-
+            initializeWorkrooms(CID)
             If TemplateNames Is Nothing Or LocationNames Is Nothing Then
                 Response.Redirect("~/ErrorPage.aspx")
             End If
@@ -204,8 +202,9 @@ Namespace core
                             End Select
                         End If
                     End If
-
-                    SetLastUserInputs()
+                    If Request.QueryString("NewInspection") Is Nothing Then
+                        SetLastUserInputs()
+                    End If
                 Catch ex As Exception
 
                 End Try
@@ -439,54 +438,6 @@ Namespace core
                             SetCookieExp("LastAQLCompleted", "value", curijs.AQL_Level, 1)
                             If AddEmailFlag.Checked = True Or AddEmailFlagRoll.Checked = True Then
                                 SendEmailAlertsAsync(curijs, ijsnum, JobPassFail, DHY)
-                                'Dim listso As New List(Of SingleObject)
-                                'Dim emaillist As New List(Of Emails)
-                                'Dim listem As New List(Of Emails)
-                                'Dim listemex As New List(Of Emails)
-                                'Dim bmapem As New BMappers(Of Emails)
-
-                                'emaillist = bmapem.GetAprMangObject("SELECT Address, INS_ALERT_EMAIL, ADMIN, HomeLocation FROM EmailMaster")
-                                ''emaillist.Add(New Emails With {.Address = "jsucco@standardtextile.com", .INS_ALERT_EMAIL = 1, .HomeLocation = "ALL"})
-                                ''emaillist.Add(New Emails With {.Address = "John.Succo@gmail.com", .INS_ALERT_EMAIL = 1, .HomeLocation = "EX"})
-                                'Try
-                                '    If emaillist.Count > 0 Then
-                                '        Dim bmapso As New BMappers(Of SingleObject)
-                                '        listso = bmapso.GetAprMangObject("SELECT Name AS Object1 FROM LocationMaster WHERE (CID = '000" & LastLocation & "')")
-                                '        Dim locationString = ""
-                                '        listso.Clear()
-                                '        If listso.Count > 0 Then
-                                '            locationString = "AT " + listso.ToArray()(0).Object1
-                                '            listem = (From v In emaillist Where v.HomeLocation.Trim() = listso.ToArray()(0).Object1.ToString().Trim() Or v.HomeLocation.ToString().Trim() = "ALL").ToList()
-                                '        Else
-                                '            listem = (From v In emaillist Where v.HomeLocation.Trim() = "ALL").ToList()
-                                '        End If
-                                '        Dim DHUCalc As Decimal = InspectInput.CalculateDHU(InspectionState.Value, curijs.JobNumber, ijsnum, curijs.TotalInspectedItems)
-                                '        Dim body As String
-                                '        If InspectionState.Value = "WorkOrder" Then
-                                '            body = "[" + curijs.JobType + ": " & curijs.JobNumber & "][WOQuantity: " & curijs.WOQuantity.ToString() & "][AQL Level: " & curijs.AQL_Level.ToString() & "][TemplateName: " & Templatename.Value.ToString() & "][PassCount: " & curijs.ItemPassCount.ToString() & "][FailCount: " & curijs.ItemFailCount.ToString() & "][SampleSize: " & curijs.SampleSize.ToString() & "][RejectLimitor: " & curijs.RejectLimiter & "][DHU: " & DHUCalc.ToString("F2") & " %][Auditor Name: " & AuditorNameHidden.Value.ToString() & "]<br /><br /> Comments: " + curijs.Comments
-                                '        Else
-                                '            DHY = CType(DHYHidden.Value, Decimal)
-                                '            body = "[" + curijs.JobType + ": " & curijs.JobNumber & "][Yards: " & curijs.WOQuantity.ToString() & "][TemplateName: " & Templatename.Value.ToString() & "][FailCount: " & curijs.ItemFailCount.ToString() & "][DHY: " & DHY.ToString("F2") & " %][Auditor Name: " & AuditorNameHidden.Value.ToString() & "]<br /><br /> Comments: " + curijs.Comments
-                                '        End If
-
-                                '        Dim subject As String = "ALERT JOB " + JobPassFail + "ed " + locationString
-
-                                '        If listem.Count > 0 Then
-                                '            util.SendMail(subject, body, listem)
-                                '        End If
-                                '        EmailJobSummId = ijsnum
-                                '        If DHUCalc > 50 And InspectionState.Value = "WorkOrder" Then
-                                '            listemex = (From v In emaillist Where v.HomeLocation.ToString().Trim() = "EX" Or v.HomeLocation.ToString().Trim() = "ALL").ToList()
-                                '            If listemex.Count > 0 Then
-                                '                util.SendMail(subject, body, listemex)
-                                '            End If
-                                '        End If
-                                '    End If
-
-
-                                'Catch ex As Exception
-                                '    Elmah.ErrorSignal.FromCurrentContext().Raise(ex)
-                                'End Try
                             End If
                             returnmessage = "JOBNUMBER." + curijs.JobNumber + ".CONFIRMATION-SUCCESS." + JobPassFail + "ed"
 
@@ -529,10 +480,10 @@ Namespace core
         End Sub
 
         Private Sub SendEmailAlertsAsync(ByVal curijs As InspectionJobSummary, ByVal ijsnum As Integer, ByVal JobPassFail As String, Optional ByVal DHY As Decimal = 0)
-            sendEmailAlerts(curijs, ijsnum, JobPassFail, DHY)
-            'Dim t As System.Threading.Tasks.Task = System.Threading.Tasks.Task.Run(Sub()
-            '                                                                           sendEmailAlerts(curijs, ijsnum, JobPassFail, DHY)
-            '                                                                       End Sub)
+            'sendEmailAlerts(curijs, ijsnum, JobPassFail, DHY)
+            Dim t As System.Threading.Tasks.Task = System.Threading.Tasks.Task.Run(Sub()
+                                                                                       sendEmailAlerts(curijs, ijsnum, JobPassFail, DHY)
+                                                                                   End Sub)
         End Sub
 
         Private Sub sendEmailAlerts(ByVal curijs As InspectionJobSummary, ByVal ijsnum As Integer, ByVal JobPassFail As String, Optional ByVal DHY As Decimal = 0)
@@ -543,9 +494,11 @@ Namespace core
             Dim listemex As New List(Of Emails)
             Dim bmapem As New BMappers(Of Emails)
 
-            emaillist = bmapem.GetAprMangObject("SELECT Address, INS_ALERT_EMAIL, ADMIN, HomeLocation FROM EmailMaster")
-            'emaillist.Add(New Emails With {.Address = "jsucco@standardtextile.com", .INS_ALERT_EMAIL = 1, .HomeLocation = "ALL"})
-            'emaillist.Add(New Emails With {.Address = "John.Succo@gmail.com", .INS_ALERT_EMAIL = 1, .HomeLocation = "EX"})
+            'emaillist = bmapem.GetAprMangObject("SELECT Address, INS_ALERT_EMAIL, ADMIN, HomeLocation FROM EmailMaster")
+            emaillist.Add(New Emails With {.Address = "jsucco@standardtextile.com", .INS_ALERT_EMAIL = 1, .HomeLocation = "ALL"})
+            emaillist.Add(New Emails With {.Address = "John.Succo@gmail.com", .INS_ALERT_EMAIL = 1, .HomeLocation = "ALL"})
+            emaillist.Add(New Emails With {.Address = "kbredwell@standardtextile.com", .INS_ALERT_EMAIL = 1, .HomeLocation = "ALL"})
+            emaillist.Add(New Emails With {.Address = "jaho@standardtextile.com", .INS_ALERT_EMAIL = 1, .HomeLocation = "ALL"})
             Try
                 If IsNothing(curijs) = True Then
                     Return
@@ -732,8 +685,8 @@ Namespace core
                 inspectionjobsummaryid_hidden.Value = InspectionJobSummaryId
                 CartonNumber.Value = ""
                 DataNumber.Value = listijs.ToArray()(0).DataNo
-                workorder_hidden.Value = listijs.ToArray()(0).WorkRoom
-                workroom.Value = listijs.ToArray()(0).WorkRoom
+                workroom_hidden.Value = listijs.ToArray()(0).WorkRoom
+                'workroom.Value = listijs.ToArray()(0).WorkRoom
                 CPNumber.Value = listijs.ToArray()(0).CasePack
                 AuditorName.Value = listijs.ToArray()(0).EmployeeNo
                 If workorderarray.Length > 0 Then
@@ -812,7 +765,6 @@ Namespace core
                     Location.Value = workorderarray(0).LOCATION.Trim()
                     WOQuantityValue = workorderarray(0).WOQUANTITY
                     workroom_hidden.Value = Trim(workorderarray(0).WORKROOM)
-                    workroom.Value = Trim(workorderarray(0).WORKROOM)
                     wopieces_hidden.Value = workorderarray(0).WOPIECES
                 End If
 
@@ -905,6 +857,9 @@ Namespace core
                 LastLocation = Request.Cookies("SPCLocation")("STCLocation").ToString()
             End If
 
+        End Sub
+        Public Sub initializeWorkrooms(CID As String)
+            WorkRoomArr = WorkRoomsApi.GetResult(CID)
         End Sub
         Private Sub SetTightSamplesSize(ByVal lotsizenumber As Integer, ByVal AQLevel As Decimal)
             If AQLevel = 1 Then

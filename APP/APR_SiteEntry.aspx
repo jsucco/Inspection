@@ -22,7 +22,7 @@
             <li>option 4</li>--%>
         
             <input id="CONTROLTEX" type="text" value="CTX" class="redirect" />
-            <input id="WSI" type="text" value="W.S.I." />
+            <input id="ADMIN" type="text" value="ADMIN" />
         </div>
         </div>
         <div id="MenuButtonContainer2" style="position:absolute; left: 26.5%; display: none;">
@@ -61,11 +61,49 @@
 
 <STYLE type="text/css">
 #loginfrm {
-	BORDER-RIGHT: 0px; BORDER-TOP: #95A0A9 1px solid; BACKGROUND: #87A7AA; LEFT: expression(document.body.clientWidth / 2 - this.offsetWidth / 2); BORDER-LEFT: 0px; WIDTH: 100%px; BORDER-BOTTOM: #95A0A9 1px solid; POSITION: absolute; TOP: 150px; HEIGHT: 326px;
+	BORDER-RIGHT: 0px; 
+    BORDER-TOP: #95A0A9 1px solid; 
+    BACKGROUND: #87A7AA; 
+    LEFT: expression(document.body.clientWidth / 2 - this.offsetWidth / 2); 
+    BORDER-LEFT: 0px; 
+    WIDTH: 100%px; 
+    BORDER-BOTTOM: #95A0A9 1px solid; 
+    POSITION: absolute; 
+    TOP: 150px; 
+    HEIGHT: 326px;
      box-shadow: 5px 15px 15px rgba(0,0,0,.7);
      -webkit-box-shadow: 5px 10px 10px rgba(0,0,0,.7);
      -moz-box-shadow: 5px 10px 10px rgba(0,0,0,.7);
      border-radius: 4px;
+}
+
+#ADMIN { 
+    border: NONE;
+    background-color: #9FA1A4;
+    font-Family: Arial Rounded MT Bold;
+    font-size: 100%;
+    text-align: center;
+    color: White;
+    width: 150px;
+    word-wrap: break-word;
+    float: left;
+    height: 45px;
+    outline: none;
+    width: 100%; 
+}
+
+#CONTROLTEX
+{
+    border:NONE;
+    background-color: #9FA1A4;
+    font-Family:Arial Rounded MT Bold;
+    font-size: 100%;
+    text-align:center;
+    color:White;
+    width:100%;
+    float:none;
+    height:45px;
+    outline:none;   
 }
 div.hidden {
         display: none;
@@ -158,6 +196,10 @@ div.hidden {
             var link = GetCtxLinks();
 
             window.location.assign("http://coredemo.standardtextile.com");
+        });
+        $("#ADMIN").on('click', function() { 
+            fadeoutContainers(); 
+            window.location.assign("http://coredemo3.standardtextile.com/Manage/Index"); 
         });
         
         $('#MenuButton1').on('click', function () {
