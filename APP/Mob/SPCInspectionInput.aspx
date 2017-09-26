@@ -3742,6 +3742,13 @@
                         var r = confirm("This will clear out the current Inspection.  Are you Sure?");
                         if (r == true) { 
                             window.location.assign("<%=Session("BaseUri")%>" + "/APP/Mob/SPCInspectionInput.aspx?TemplateId=" + SelectedId.toString() + "&NewInspection=1");
+                            //clear the work order, work room, case pack, data number, Auditor name, and Work order quantity fields
+                            $('#WorkOrder').val('');// Work Order
+                            $('#workroom').val('');// Work Room
+                            $('#CPNumber').val('');// Case Pack
+                            $('#DataNumber').val('');//Data Number
+                            $('#Name').val('');//Auditor Name
+                            $('#WOQuantity').val('');//WOQuantity
                         }
                     } else { 
                         alert("Template Not Selected"); 
