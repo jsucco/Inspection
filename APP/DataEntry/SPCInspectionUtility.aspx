@@ -2389,8 +2389,8 @@
                         var cl = ids[i];
                         be = "<input style='height:22px;width:20px;' type='button' value='E' onclick=\"jQuery('#DefectTypesgrid').editRow('" + cl + "');\"  />";
                         se = "<input style='height:22px;width:20px;' type='button' value='S' onclick=\"jQuery('#DefectTypesgrid').saveRow('" + cl + "');\"  />";
-                        BUDelete = "<input style='height:22px;width:20px;' type='button' value='D' onclick=\"jQuery('#DefectTypesgrid').delRowData('" + cl + "');\"  />";
-                        jQuery("#DefectTypesgrid").jqGrid('setRowData', ids[i], { act: be + se + BUDelete});
+                        GBDelete = "<input id='GBDelete' style='height:22px;width:20px;' type='button' value='D' onclick=\"jQuery('#DefectTypesgrid').delRowData('" + cl + "');\"  />";
+                        jQuery("#DefectTypesgrid").jqGrid('setRowData', ids[i], { act: be + se + GBDelete});
                     }
                 }
 
@@ -2401,6 +2401,11 @@
        
         
         };
+        $('#GBDelete').click(function () {//new function.  Removes the last button on the stack, but does not retain that after that
+
+            alert('row deleted!');
+
+        });
         function processAddEdit() {
             dbtrans.RefreshManagerGrid();
 
