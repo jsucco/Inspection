@@ -2358,7 +2358,9 @@
                     { name: 'ButtonId', index: 'ButtonId', editable: true, hidden: true },
                     { name: 'DefectCode', index: 'DefectCode', editable: true, width: 50 },
                     { name: 'Name', index: 'Name', sortable: false, width: 200, editable: true },
-                    { name: 'Hide', index: 'value', sortable: false, width: 50, editable: true, edittype: "checkbox", editoptions: { value: "true:false" } }
+                    { name: 'Hide', index: 'value', sortable: false, width: 50, editable: true, edittype: "checkbox", editoptions: { value: "true:false" } },
+                    
+                   
                 ],
                 pager: '#pDefectTypesgrid',
                 caption: "Defect Types Maintenance",
@@ -2371,6 +2373,7 @@
                 gridview: true,
                 height: "100%",
                 data: ButtonLibrary,
+                
                 ondblClickRow: function (id) {
                     if (id && id !== lastSel) {
                         jQuery("#DefectTypesgrid").restoreRow(lastSel);
@@ -2386,12 +2389,17 @@
                         var cl = ids[i];
                         be = "<input style='height:22px;width:20px;' type='button' value='E' onclick=\"jQuery('#DefectTypesgrid').editRow('" + cl + "');\"  />";
                         se = "<input style='height:22px;width:20px;' type='button' value='S' onclick=\"jQuery('#DefectTypesgrid').saveRow('" + cl + "');\"  />";
-                        jQuery("#DefectTypesgrid").jqGrid('setRowData', ids[i], { act: be + se });
+                        BUDelete = "<input style='height:22px;width:20px;' type='button' value='D' onclick=\"jQuery('#DefectTypesgrid').delRowData('" + cl + "');\"  />";
+                        jQuery("#DefectTypesgrid").jqGrid('setRowData', ids[i], { act: be + se + BUDelete});
                     }
                 }
-            });
-        }
 
+            });
+           
+        
+        },
+       
+        
         };
         function processAddEdit() {
             dbtrans.RefreshManagerGrid();
