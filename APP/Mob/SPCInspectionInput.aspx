@@ -204,7 +204,7 @@
             <input id="closeout3" type="button" class="export closebox" value="X" style="position:relative; float:right;TOP: 0px; left: 35px; width:30px; height:30px;" />
         <table id="Specgrid" style=" font-size:medium; Z-INDEX: 104; font-weight:800; ">
                                 </table>
-            <input id="NextItem" type="button" class="export" value="NEXT ITEM" style="position:relative; float:LEFT;TOP: 20px; left: 15px; width:100px; height:50px;" />
+            <%--<input id="NextItem" type="button" class="export" value="NEXT ITEM" style="position:relative; float:LEFT;TOP: 20px; left: 15px; width:100px; height:50px;" />--%>
             <label id="ItemNumberLabel" for="NextItem" style="color:white; font-size:xx-large; position: relative;left: 50px; top: 30px;">Item #: 1</label>
             <div id="pSpecgrid" ></div>
         </div>
@@ -557,6 +557,21 @@
         }
             
         controlhandler.RenderProductSpecTable();
+        $("#Specgrid").navButtonAdd('#pSpecgrid', { //Adds the "Next Item" button into the Product Spec JQGrid
+            caption: "NEXT ITEM",
+            title: "NEXT ITEM",
+
+            onClickButton: function () {
+                var rowclass = $('#2');
+
+                rowclass.css('background', '#FDF9F9 url(images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x !important;');
+                $("#Specgrid").jqGrid('setGridParam',
+                    { datatype: 'json' }).trigger('reloadGrid');
+                SpecItemCounter++;
+                $("#ItemNumberLabel").text("Item #: " + SpecItemCounter.toString());
+            },
+            position: "last"
+        });
         controlhandler.InitInspectionDisplay(LineType); 
        
         var aqlstring = "AQL Level " + $_aql.val().toString()
@@ -3764,15 +3779,7 @@
                     }
                     controlhandler.RenderProductSpecTable(); 
                 });
-                $("#NextItem").click(function (e) { 
-                    var rowclass = $('#2');
-
-                    rowclass.css('background','#FDF9F9 url(images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x !important;');
-                    $("#Specgrid").jqGrid('setGridParam', 
-                                 { datatype: 'json' }).trigger('reloadGrid');
-                    SpecItemCounter++;
-                    $("#ItemNumberLabel").text("Item #: " + SpecItemCounter.toString());
-                });
+                
 
                 $("#ImageSubmit").click(function (e) { 
                     e.preventDefault();
