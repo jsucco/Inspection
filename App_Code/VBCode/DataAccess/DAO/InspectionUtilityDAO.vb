@@ -197,7 +197,7 @@ Namespace core
         End Function
 
         Public Function DeleteDefectId(ByVal DefectId As Integer) As Integer
-
+            Dim sqlstring As String
 
         End Function
 
@@ -479,6 +479,40 @@ Namespace core
 
 
         End Function
+        Public Function DeleteRow(ByVal rowId As Integer) As Integer
+            Dim ButtonValues As New List(Of SPCInspection.buttonlibrary)()
+            Dim sqlcommand As SqlCommand
+            Dim sqlstring As String
+            Dim returnint As Integer
+
+            sqlstring = "delete from dbo.ButtonLibrary " & vbCrLf &
+                    "WHERE (ButtonId = " & rowId.ToString() & ")"
+            Using connection As New SqlConnection(DL.InspectConnectionString())
+
+                sqlcommand = _DAOFactory.GetCommand(sqlstring.ToString(), connection)
+                'Add command parameters             
+
+                Try
+                    SqlCommand.Connection.Open()
+                    returnint = SqlCommand.ExecuteNonQuery()
+
+                    If returnint < 0 Then
+                        Return False
+                    End If
+
+                Catch e As Exception
+                    Return False
+                End Try
+
+
+
+            End Using
+            Return True
+
+        End Function
+
+
+
         Public Function DeleteTabTemplate(ByVal TabTemplatId As Integer, ByVal TemplateId As Integer) As Integer
             Dim SQL As String
             Dim sqlcommand As SqlCommand

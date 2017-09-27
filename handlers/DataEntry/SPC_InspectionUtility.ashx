@@ -32,6 +32,24 @@ Namespace core
 
         End Function
 
+        Public Function DeleteRow(ByVal rowId As Integer) As Boolean
+            If rowId <> 0 Then
+
+                Dim var As Boolean = IU.DeleteRow(rowId)
+                If IU.DeleteRow(rowId) Then
+                    Console.WriteLine("DeleteRow Returned:")
+                    IU.UpdateTemplateCollectionCache(rowId)
+                    Return True
+                Else
+                    Return False
+                End If
+            Else
+                Return False
+            End If
+
+
+        End Function
+
         Public Function GetButtonLibraryGrid() As String
             Dim DSB As New DisplayBoardDAO
             Dim jser As New JavaScriptSerializer

@@ -1789,6 +1789,26 @@
             });
 
         },
+        DeleteDefectRow: function (rowNum) { //calls DeleteRow in the helper with RowID as the argument
+            $.ajax({
+                
+                url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionUtility.ashx',
+                type: 'GET',
+                data: { method: 'DeleteRow', args: { rowId: rowNum } },
+                success: function (data) {
+       
+                    var json;
+                    //json = $.parseJSON(data);
+                    alert(data);
+                    $('#DefectTypesgrid').delRowData(rowNum);
+
+                },
+                error: function (a, b, c) {
+                    alert(c);
+                }
+            });
+
+        },
         RefreshManagerGrid: function () {
 
             $.ajax({
@@ -2355,7 +2375,7 @@
                 colNames: ['Actions', 'ButtonId', 'DefectCode', 'Name', 'Hide'],
                 colModel: [
                     { name: 'act', index: 'act', width: 100, sortable: false },
-                    { name: 'ButtonId', index: 'ButtonId', editable: true, hidden: true },
+                    { name: 'ButtonId', index: 'ButtonId', editable: false, width:50 },
                     { name: 'DefectCode', index: 'DefectCode', editable: true, width: 50 },
                     { name: 'Name', index: 'Name', sortable: false, width: 200, editable: true },
                     { name: 'Hide', index: 'value', sortable: false, width: 50, editable: true, edittype: "checkbox", editoptions: { value: "true:false" } },
@@ -2389,6 +2409,8 @@
                         var cl = ids[i];
                         be = "<input style='height:22px;width:20px;' type='button' value='E' onclick=\"jQuery('#DefectTypesgrid').editRow('" + cl + "');\"  />";
                         se = "<input style='height:22px;width:20px;' type='button' value='S' onclick=\"jQuery('#DefectTypesgrid').saveRow('" + cl + "');\"  />";
+                        var RowId = $('#DefectTypesGrid').jqGrid('getCell', ids[i], 'ButtonId');
+                        console.log(RowId);
                         GBDelete = "<input style='height:22px;width:20px;' type='button' value='X' onclick=\"DeleteRowData('" + cl + "');\"  />";
                         jQuery("#DefectTypesgrid").jqGrid('setRowData', ids[i], { act: be + se + GBDelete });
                     }
@@ -2403,8 +2425,8 @@
         };
          function DeleteRowData(id) { //allows us to delete both the front end AND the back end
             //alert('deleting row ' + id);
-             $('#DefectTypesgrid').delRowData(id);
-             dbtrans.RefreshDefectMaint();
+             
+             dbtrans.DeleteDefectRow(id);
         }
         function processAddEdit() {
             dbtrans.RefreshManagerGrid();
