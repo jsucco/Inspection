@@ -2375,11 +2375,12 @@
                 editurl: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionUtility_DefTyp.ashx',
                 colNames: ['Actions', 'ButtonId', 'DefectCode', 'Name', 'Hide', 'Delete'],
                 colModel: [
-                    { name: 'act', index: 'act', width: 100, sortable: false },
-                    { name: 'ButtonId', index: 'ButtonId', editable: false, width:50 },
+                    
+                    { name: 'ButtonId', index: 'ButtonId', editable: false, hidden: true },
                     { name: 'DefectCode', index: 'DefectCode', editable: true, width: 50 },
                     { name: 'Name', index: 'Name', sortable: false, width: 200, editable: true },
                     { name: 'Hide', index: 'value', sortable: false, width: 50, editable: true, edittype: "checkbox", editoptions: { value: "true:false" } },
+                    { name: 'act', index: 'act', width: 55, sortable: false },
                     {
                         name: "Delete", formatter: buttonFormatter, width: 51,
                         search: false, sortable: false, hidedlg: true, resizable: false,
@@ -2394,7 +2395,7 @@
                 rowNum: 10,
                 viewrecords: true,
                 sortorder: "desc",
-                width: new Number(300),
+                width: new Number(375),
                 gridview: true,
                 height: "100%",
                 data: ButtonLibrary,

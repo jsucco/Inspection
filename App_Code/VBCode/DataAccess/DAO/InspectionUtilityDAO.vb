@@ -28,20 +28,20 @@ Namespace core
         Dim PickCountcmd As SqlCommand
         Dim PickCountConnection As SqlConnection
         Dim result As Boolean
-        Dim ExecuteDeleteConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-        Dim DeleteConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString) 'Connection to MyDB
-        Dim DeleteCommand As New SqlCommand
+        Dim ExecuteConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
+        Dim Connection As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString) 'Connection to MyDB
+        Dim Command As New SqlCommand
         Function ExecuteSQL(ByVal SQL As String, ByVal Log As String) As Object
             'This function executes and logs all of our custom SQL statements.
 
             Dim Outcome As String
-            DeleteCommand.Connection = ExecuteDeleteConnection
-            ExecuteDeleteConnection.Open()
+            Command.Connection = ExecuteConnection
+            ExecuteConnection.Open()
             Dim ErrorString As String = ""
             Try
                 'Attemp to execute SQL statement passed into function
-                DeleteCommand.CommandText = SQL
-                DeleteCommand.ExecuteNonQuery()
+                Command.CommandText = SQL
+                Command.ExecuteNonQuery()
                 Outcome = "Successful"
             Catch ex As Exception
                 'If SQL statement fails log error and trap exception
@@ -52,22 +52,22 @@ Namespace core
             If Log = 1 Then
                 Try
                     'Log our SQL attempt and any errors that may have been thrown
-                    DeleteCommand.CommandText = "insert into MY_sql_execution(MYSQL_Statement, MYSQL_Error, MYSQL_Result, MYSQL_Record, MYSQL_Form, MYSQL_UID, MYSQL_Login, MYSQL_Fullname, MYSQL_IP, MYSQL_SessionID) Select "
-                    DeleteCommand.CommandText += "'" + Replace(SQL, "'", "''") + "' as 'MYSQL_Statement', "
-                    DeleteCommand.CommandText += "'" + Replace(ErrorString, "'", "''") + "' as 'MYSQL_Error',"
-                    DeleteCommand.CommandText += "'" + Outcome + "' as 'MYSQL_Result',"
-                    DeleteCommand.CommandText += "'" + Request.QueryString("JID") + "' as 'MYSQL_Record',"
-                    DeleteCommand.CommandText += "'LandingPage.aspx' as 'Source',"
-                    DeleteCommand.CommandText += "'" + Convert.ToString(0) + "' as 'MYSQL_UID',"
-                    DeleteCommand.CommandText += "'" + "" + "' as 'MYSQL_Login',"
-                    DeleteCommand.CommandText += "'" + "None" + "' as 'MYSQL_Fullname',"
-                    DeleteCommand.CommandText += "'" + Request.UserHostAddress + "' as 'MYSQL_IP', "
-                    DeleteCommand.CommandText += "'" + Session.SessionID + "' as 'MYSQL_SessionID'"
-                    DeleteCommand.ExecuteNonQuery()
+                    Command.CommandText = "insert into MY_sql_execution(MYSQL_Statement, MYSQL_Error, MYSQL_Result, MYSQL_Record, MYSQL_Form, MYSQL_UID, MYSQL_Login, MYSQL_Fullname, MYSQL_IP, MYSQL_SessionID) Select "
+                    Command.CommandText += "'" + Replace(SQL, "'", "''") + "' as 'MYSQL_Statement', "
+                    Command.CommandText += "'" + Replace(ErrorString, "'", "''") + "' as 'MYSQL_Error',"
+                    Command.CommandText += "'" + Outcome + "' as 'MYSQL_Result',"
+                    Command.CommandText += "'" + Request.QueryString("JID") + "' as 'MYSQL_Record',"
+                    Command.CommandText += "'LandingPage.aspx' as 'Source',"
+                    Command.CommandText += "'" + Convert.ToString(0) + "' as 'MYSQL_UID',"
+                    Command.CommandText += "'" + "" + "' as 'MYSQL_Login',"
+                    Command.CommandText += "'" + "None" + "' as 'MYSQL_Fullname',"
+                    Command.CommandText += "'" + Request.UserHostAddress + "' as 'MYSQL_IP', "
+                    Command.CommandText += "'" + Session.SessionID + "' as 'MYSQL_SessionID'"
+                    Command.ExecuteNonQuery()
                 Catch exc As Exception
                 End Try
             End If
-            ExecuteDeleteConnection.Close()
+            ExecuteConnection.Close()
             Return Outcome
         End Function
         Public Sub New()
@@ -517,7 +517,7 @@ Namespace core
 
 
         End Function
-        Public Function DeleteTemplate(ByVal rowId As Integer) As Integer 'helper method to get AROUND FOREIGN KEY CONSTRAINTS
+        Public Function DeleteDefectButtonTemplate(ByVal rowId As Integer) As Integer 'helper method to get AROUND FOREIGN KEY CONSTRAINTS
             Dim Outcome As String = ""
             Dim SQL As String = "DELETE FROM dbo.ButtonTemplate WHERE ButtonId = " & rowId.ToString()
             Outcome = ExecuteSQL(SQL, 1)
@@ -529,39 +529,13 @@ Namespace core
         Public Function DeleteRow(ByVal rowId As Integer) As Integer
             Dim Outcome As String = ""
             Dim SQL As String = "DELETE FROM dbo.ButtonLibrary WHERE ButtonId = " & rowId.ToString()
-            If DeleteTemplate(rowId) Then
+            If DeleteDefectButtonTemplate(rowId) Then 'we must delete the button template first due to a foreign key constraint
                 Outcome = ExecuteSQL(SQL, 1)
             End If
 
             If Outcome = "Successful" Then
                 Return True
             End If
-            'Dim sqlcommand As SqlCommand
-            'Dim sqlstring As String
-            'Dim returnint As Integer
-
-            'sqlstring = "DELETE FROM dbo.ButtonLibrary WHERE ButtonId = " & rowId.ToString()
-            'Using connection As New SqlConnection(DL.InspectConnectionString())
-
-            '    sqlcommand = _DAOFactory.GetCommand(sqlstring.ToString(), connection)
-            '    'Add command parameters             
-
-            '    Try
-            '        sqlcommand.Connection.Open()
-            '        returnint = sqlcommand.ExecuteNonQuery()
-
-            '        If returnint < 0 Then
-            '            Return False
-            '        End If
-
-            '    Catch e As Exception
-            '        Return False
-            '    End Try
-
-
-
-            'End Using
-            'Return True
             Return False
         End Function
 
