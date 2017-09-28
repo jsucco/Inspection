@@ -33,9 +33,10 @@ Namespace core
         End Function
 
         Public Function DeleteRow(ByVal rowId As Integer) As Boolean
+            Console.WriteLine(rowId)
             If rowId <> 0 Then
 
-                Dim var As Boolean = IU.DeleteRow(rowId)
+
                 If IU.DeleteRow(rowId) Then
                     Console.WriteLine("DeleteRow Returned:")
                     IU.UpdateTemplateCollectionCache(rowId)

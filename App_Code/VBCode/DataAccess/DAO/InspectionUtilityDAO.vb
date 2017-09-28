@@ -480,21 +480,19 @@ Namespace core
 
         End Function
         Public Function DeleteRow(ByVal rowId As Integer) As Integer
-            Dim ButtonValues As New List(Of SPCInspection.buttonlibrary)()
             Dim sqlcommand As SqlCommand
             Dim sqlstring As String
             Dim returnint As Integer
 
-            sqlstring = "delete from dbo.ButtonLibrary " & vbCrLf &
-                    "WHERE (ButtonId = " & rowId.ToString() & ")"
+            sqlstring = "DELETE FROM dbo.ButtonLibrary WHERE ButtonId = " & rowId.ToString()
             Using connection As New SqlConnection(DL.InspectConnectionString())
 
                 sqlcommand = _DAOFactory.GetCommand(sqlstring.ToString(), connection)
                 'Add command parameters             
 
                 Try
-                    SqlCommand.Connection.Open()
-                    returnint = SqlCommand.ExecuteNonQuery()
+                    sqlcommand.Connection.Open()
+                    returnint = sqlcommand.ExecuteNonQuery()
 
                     If returnint < 0 Then
                         Return False
