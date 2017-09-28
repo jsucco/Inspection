@@ -1800,7 +1800,6 @@
        
                     var json;
                     //json = $.parseJSON(data);
-                    alert(data);
                     $('#DefectTypesgrid').delRowData(rowNum);
 
                 },
@@ -2436,8 +2435,12 @@
         function DeleteRowData() { //allows us to delete both the front end AND the back end
             var grid = $('#DefectTypesgrid'), rowid = $(this).closest("tr.jqgrow").attr("id");
             var CellData = grid.jqGrid('getCell', rowid, 'ButtonId');
-            alert("Selected  Name: " + CellData);
-            dbtrans.DeleteDefectRow(CellData);
+            var cfm = confirm("Are you sure you want to delete this defect?");
+            if (cfm = true) {
+                dbtrans.DeleteDefectRow(CellData);
+                $('#DefectTypesgrid').jqGrid('delRowData', rowid);
+            }
+            
         }
          
         function processAddEdit() {

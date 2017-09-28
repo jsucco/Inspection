@@ -10,7 +10,7 @@ Namespace core
 
 
     Public Class InspectionUtilityDAO
-
+        Inherits System.Web.UI.Page
         Private Property _DAOFactory As New DAOFactory
         Private Property DL As New dlayer
         Private Property util As New Utilities
@@ -28,7 +28,48 @@ Namespace core
         Dim PickCountcmd As SqlCommand
         Dim PickCountConnection As SqlConnection
         Dim result As Boolean
+        Dim ExecuteDeleteConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
+        Dim DeleteConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString) 'Connection to MyDB
+        Dim DeleteCommand As New SqlCommand
+        Function ExecuteSQL(ByVal SQL As String, ByVal Log As String) As Object
+            'This function executes and logs all of our custom SQL statements.
 
+            Dim Outcome As String
+            DeleteCommand.Connection = ExecuteDeleteConnection
+            ExecuteDeleteConnection.Open()
+            Dim ErrorString As String = ""
+            Try
+                'Attemp to execute SQL statement passed into function
+                DeleteCommand.CommandText = SQL
+                DeleteCommand.ExecuteNonQuery()
+                Outcome = "Successful"
+            Catch ex As Exception
+                'If SQL statement fails log error and trap exception
+                ErrorString += " " & ex.ToString
+                Outcome = "Failed"
+                'LogEvent(1, "EXECUTE_SQL", "1 - Failure Executing SQL Statement", SQL, 1, Replace(ex.ToString, "'", "''"))
+            End Try
+            If Log = 1 Then
+                Try
+                    'Log our SQL attempt and any errors that may have been thrown
+                    DeleteCommand.CommandText = "insert into MY_sql_execution(MYSQL_Statement, MYSQL_Error, MYSQL_Result, MYSQL_Record, MYSQL_Form, MYSQL_UID, MYSQL_Login, MYSQL_Fullname, MYSQL_IP, MYSQL_SessionID) Select "
+                    DeleteCommand.CommandText += "'" + Replace(SQL, "'", "''") + "' as 'MYSQL_Statement', "
+                    DeleteCommand.CommandText += "'" + Replace(ErrorString, "'", "''") + "' as 'MYSQL_Error',"
+                    DeleteCommand.CommandText += "'" + Outcome + "' as 'MYSQL_Result',"
+                    DeleteCommand.CommandText += "'" + Request.QueryString("JID") + "' as 'MYSQL_Record',"
+                    DeleteCommand.CommandText += "'LandingPage.aspx' as 'Source',"
+                    DeleteCommand.CommandText += "'" + Convert.ToString(0) + "' as 'MYSQL_UID',"
+                    DeleteCommand.CommandText += "'" + "" + "' as 'MYSQL_Login',"
+                    DeleteCommand.CommandText += "'" + "None" + "' as 'MYSQL_Fullname',"
+                    DeleteCommand.CommandText += "'" + Request.UserHostAddress + "' as 'MYSQL_IP', "
+                    DeleteCommand.CommandText += "'" + Session.SessionID + "' as 'MYSQL_SessionID'"
+                    DeleteCommand.ExecuteNonQuery()
+                Catch exc As Exception
+                End Try
+            End If
+            ExecuteDeleteConnection.Close()
+            Return Outcome
+        End Function
         Public Sub New()
             Dim PointToTest = System.Web.Configuration.WebConfigurationManager.AppSettings("PointToTest")
 
@@ -196,10 +237,7 @@ Namespace core
 
         End Function
 
-        Public Function DeleteDefectId(ByVal DefectId As Integer) As Integer
-            Dim sqlstring As String
 
-        End Function
 
         Public Function GetTemplateCollection(ByVal TemplateId As Integer) As List(Of SPCInspection.TemplateCollection)
             Dim sqlstring As String
@@ -479,34 +517,52 @@ Namespace core
 
 
         End Function
+        Public Function DeleteTemplate(ByVal rowId As Integer) As Integer 'helper method to get AROUND FOREIGN KEY CONSTRAINTS
+            Dim Outcome As String = ""
+            Dim SQL As String = "DELETE FROM dbo.ButtonTemplate WHERE ButtonId = " & rowId.ToString()
+            Outcome = ExecuteSQL(SQL, 1)
+            If Outcome = "Successful" Then
+                Return True
+            End If
+            Return False
+        End Function
         Public Function DeleteRow(ByVal rowId As Integer) As Integer
-            Dim sqlcommand As SqlCommand
-            Dim sqlstring As String
-            Dim returnint As Integer
+            Dim Outcome As String = ""
+            Dim SQL As String = "DELETE FROM dbo.ButtonLibrary WHERE ButtonId = " & rowId.ToString()
+            If DeleteTemplate(rowId) Then
+                Outcome = ExecuteSQL(SQL, 1)
+            End If
 
-            sqlstring = "DELETE FROM dbo.ButtonLibrary WHERE ButtonId = " & rowId.ToString()
-            Using connection As New SqlConnection(DL.InspectConnectionString())
+            If Outcome = "Successful" Then
+                Return True
+            End If
+            'Dim sqlcommand As SqlCommand
+            'Dim sqlstring As String
+            'Dim returnint As Integer
 
-                sqlcommand = _DAOFactory.GetCommand(sqlstring.ToString(), connection)
-                'Add command parameters             
+            'sqlstring = "DELETE FROM dbo.ButtonLibrary WHERE ButtonId = " & rowId.ToString()
+            'Using connection As New SqlConnection(DL.InspectConnectionString())
 
-                Try
-                    sqlcommand.Connection.Open()
-                    returnint = sqlcommand.ExecuteNonQuery()
+            '    sqlcommand = _DAOFactory.GetCommand(sqlstring.ToString(), connection)
+            '    'Add command parameters             
 
-                    If returnint < 0 Then
-                        Return False
-                    End If
+            '    Try
+            '        sqlcommand.Connection.Open()
+            '        returnint = sqlcommand.ExecuteNonQuery()
 
-                Catch e As Exception
-                    Return False
-                End Try
+            '        If returnint < 0 Then
+            '            Return False
+            '        End If
+
+            '    Catch e As Exception
+            '        Return False
+            '    End Try
 
 
 
-            End Using
-            Return True
-
+            'End Using
+            'Return True
+            Return False
         End Function
 
 
@@ -2012,7 +2068,7 @@ Namespace core
             Dim con As New SqlConnection(DL.InspectConnectionString())
             Dim cmd As SqlCommand = con.CreateCommand()
             Dim rglist As New List(Of SPCInspection.WorkOrderCompliance)
-            Dim Branch As String
+
             Try
                 Using con
                     con.Open()
@@ -2044,7 +2100,7 @@ Namespace core
             Dim con As New SqlConnection(DL.InspectConnectionString())
             Dim cmd As SqlCommand = con.CreateCommand()
             Dim rglist As New List(Of SPCInspection.InspectionCompliance_Local)
-            Dim Branch As String
+
             Try
                 Using con
                     con.Open()
@@ -2075,7 +2131,7 @@ Namespace core
             Dim con As New SqlConnection(DL.InspectConnectionString())
             Dim cmd As SqlCommand = con.CreateCommand()
             Dim rglist As New List(Of SingleObject)
-            Dim Branch As String
+
             Try
                 Using con
                     con.Open()
@@ -2119,7 +2175,7 @@ Namespace core
             Dim con As New SqlConnection(DL.InspectConnectionString())
             Dim cmd As SqlCommand = con.CreateCommand()
             Dim rglist As New List(Of SPCInspection.InspectionCompliance_Local)
-            Dim Branch As String
+
             Try
                 Using con
                     con.Open()
@@ -2800,8 +2856,8 @@ Namespace core
         Public Function GetRollInspectionSummaryHeaders(ByVal datefrom As DateTime, ByVal dateto As DateTime) As List(Of SPCInspection.RollInspectionSummaryHeaders)
             Dim con As New SqlConnection(DL.InspectConnectionString)
             Dim cmd As SqlCommand = con.CreateCommand()
-            Dim corereader As SqlDataReader
-            Dim record As IDataRecord
+
+
             Dim readerlist As New List(Of SPCInspection.RollInspectionSummaryHeaders)
             Dim Sql As String
             Dim datefromstring As String
