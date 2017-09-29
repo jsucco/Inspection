@@ -517,7 +517,7 @@ Namespace core
 
 
         End Function
-        Public Function DeleteDefectButtonTemplate(ByVal rowId As Integer) As Integer 'helper method to get AROUND FOREIGN KEY CONSTRAINTS
+        Public Function DeleteDefectButtonTemplate(ByVal rowId As Integer) As Integer 'Pretty sure ButtonTemplate is unused...
             Dim Outcome As String = ""
             Dim SQL As String = "UPDATE dbo.ButtonTemplate SET Hide = 1 WHERE ButtonId =  " & rowId.ToString()
             Outcome = ExecuteSQL(SQL, 1)
@@ -533,6 +533,15 @@ Namespace core
                 Outcome = ExecuteSQL(SQL, 1)
             End If
 
+            If Outcome = "Successful" Then
+                Return True
+            End If
+            Return False
+        End Function
+        Public Function AlterDefectRow(ByVal rowId As Integer, ByVal DefectCode As String, ByVal Name As String) As Integer
+            Dim Outcome As String = ""
+            Dim SQL As String = "UPDATE dbo.ButtonLibrary SET Name = '" & Name & "', DefectCode = '" & DefectCode & "' WHERE ButtonId =  " & rowId.ToString()
+            Outcome = ExecuteSQL(SQL, 1)
             If Outcome = "Successful" Then
                 Return True
             End If

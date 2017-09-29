@@ -48,6 +48,22 @@ Namespace core
 
 
         End Function
+        Public Function AlterDefectRow(ByVal rowId As Integer, ByVal DefectCode As String, ByVal Name As String) As Boolean
+            If rowId <> 0 Then
+
+
+                If IU.AlterDefectRow(rowId, DefectCode, Name) Then
+                    IU.UpdateTemplateCollectionCache(rowId)
+                    Return True
+                Else
+                    Return False
+                End If
+            Else
+                Return False
+            End If
+
+
+        End Function
 
         Public Function GetButtonLibraryGrid() As String
             Dim DSB As New DisplayBoardDAO
