@@ -39,7 +39,7 @@ Namespace core
             ExecuteConnection.Open()
             Dim ErrorString As String = ""
             Try
-                'Attemp to execute SQL statement passed into function
+                'Attempt to execute SQL statement passed into function
                 Command.CommandText = SQL
                 Command.ExecuteNonQuery()
                 Outcome = "Successful"
@@ -93,7 +93,7 @@ Namespace core
         End Function
         Public Function GetLibraryGrid() As List(Of SPCInspection.ButtonLibrarygrid)
             Dim selectObjects As New List(Of SPCInspection.ButtonLibrarygrid)
-            Dim sql As String = "SELECT ButtonId, Name, DefectCode, Hide FROM ButtonLibrary ORDER BY UPPER(Name) asc"
+            Dim sql As String = "SELECT ButtonId, Name, DefectCode, Hide FROM ButtonLibrary Where Hide = 0 ORDER BY UPPER(Name) asc"
             Dim bmap As New BMappers(Of SPCInspection.ButtonLibrarygrid)
             'selectObjects = BMapper(Of SPCInspection.ButtonLibrarygrid).GetInspectObject(sql)
             selectObjects = bmap.GetInspectObject(sql)
@@ -528,10 +528,10 @@ Namespace core
         End Function
         Public Function DeleteRow(ByVal rowId As Integer) As Integer
             Dim Outcome As String = ""
-            Dim SQL As String = "DELETE FROM dbo.ButtonLibrary WHERE ButtonId = " & rowId.ToString()
-            If DeleteDefectButtonTemplate(rowId) Then 'we must delete the button template first due to a foreign key constraint
-                Outcome = ExecuteSQL(SQL, 1)
-            End If
+            Dim SQL As String = "UPDATE dbo.ButtonLibrary SET Hide = 1 WHERE ButtonId = " & rowId.ToString()
+            'If DeleteDefectButtonTemplate(rowId) Then 'we must delete the button template first due to a foreign key constraint
+            Outcome = ExecuteSQL(SQL, 1)
+            'End If
 
             If Outcome = "Successful" Then
                 Return True

@@ -7,21 +7,21 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "APRDEV", ".", "{66E9FD95-9A
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
 		Debug.AspNetCompiler.VirtualPath = "/APRFINAL"
-		Debug.AspNetCompiler.PhysicalPath = "..\APRDEV\"
+		Debug.AspNetCompiler.PhysicalPath = "..\Inspection\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\APRFINAL\"
 		Debug.AspNetCompiler.Updateable = "true"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.VirtualPath = "/APRFINAL"
-		Release.AspNetCompiler.PhysicalPath = "..\APRDEV\"
+		Release.AspNetCompiler.PhysicalPath = "..\Inspection\"
 		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\APRFINAL\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "58661"
-		SlnRelativePath = "..\APRDEV\"
+		SlnRelativePath = "..\Inspection\"
 	EndProjectSection
 EndProject
 Global

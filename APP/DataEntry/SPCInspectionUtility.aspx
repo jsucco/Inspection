@@ -1797,10 +1797,7 @@
                 type: 'GET',
                 data: { method: 'DeleteRow', args: { rowId: rowNum } },
                 success: function (data) {
-       
-                    var json;
-                    //json = $.parseJSON(data);
-                    $('#DefectTypesgrid').delRowData(rowNum);
+                    
 
                 },
                 error: function (a, b, c) {
@@ -2373,7 +2370,7 @@
             $("#DefectTypesgrid").jqGrid({
                 datatype: "local",
                 editurl: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionUtility_DefTyp.ashx',
-                colNames: ['Actions', 'ButtonId', 'DefectCode', 'Name', 'Hide', 'Delete'],
+                colNames: ['ButtonId', 'DefectCode', 'Name', 'Hide', 'Actions', 'Delete'],
                 colModel: [
                     
                     { name: 'ButtonId', index: 'ButtonId', editable: false, hidden: true },
