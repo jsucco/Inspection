@@ -2370,13 +2370,13 @@
             $("#DefectTypesgrid").jqGrid({
                 datatype: "local",
                 editurl: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionUtility_DefTyp.ashx',
-                colNames: ['ButtonId', 'DefectCode', 'Name', 'Hide', 'Actions', 'Delete'],
+                colNames: ['ButtonId', 'DefectCode', 'Name',  'Actions', 'Delete'],
                 colModel: [
                     
                     { name: 'ButtonId', index: 'ButtonId', editable: false, hidden: true },
                     { name: 'DefectCode', index: 'DefectCode', editable: true, width: 50 },
                     { name: 'Name', index: 'Name', sortable: false, width: 200, editable: true },
-                    { name: 'Hide', index: 'value', sortable: false, width: 50, editable: true, edittype: "checkbox", editoptions: { value: "true:false" } },
+                    //{ name: 'Hide', index: 'value', sortable: false, width: 50, editable: true, edittype: "checkbox", editoptions: { value: "true:false" } },
                     { name: 'act', index: 'act', width: 55, sortable: false },
                     {
                         name: "Delete", formatter: buttonFormatter, width: 51,
@@ -2436,7 +2436,8 @@
             var cfm = confirm("Are you sure you want to delete this defect?");
             if (cfm = true) {
                 dbtrans.DeleteDefectRow(CellData);
-                $('#DefectTypesgrid').jqGrid('delRowData', rowid);
+                //$('#DefectTypesgrid').jqGrid('delRowData', rowid);
+                dbtrans.RefreshDefectMaint();
             }
             
         }

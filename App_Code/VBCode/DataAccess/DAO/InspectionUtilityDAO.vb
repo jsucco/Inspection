@@ -84,7 +84,7 @@ Namespace core
             Dim ButtonValues As New List(Of SPCInspection.buttonlibrary)()
             Dim sqlstring As String
 
-            sqlstring = "select * from dbo.ButtonLibrary ORDER BY UPPER(Name) asc"
+            sqlstring = "select * from dbo.ButtonLibrary WHERE Hide = 0 ORDER BY UPPER(Name) asc"
 
             ButtonValues = _DAOFactory.getbuttonlibrary(sqlstring, 3)
 
@@ -519,7 +519,7 @@ Namespace core
         End Function
         Public Function DeleteDefectButtonTemplate(ByVal rowId As Integer) As Integer 'helper method to get AROUND FOREIGN KEY CONSTRAINTS
             Dim Outcome As String = ""
-            Dim SQL As String = "DELETE FROM dbo.ButtonTemplate WHERE ButtonId = " & rowId.ToString()
+            Dim SQL As String = "UPDATE dbo.ButtonTemplate SET Hide = 1 WHERE ButtonId =  " & rowId.ToString()
             Outcome = ExecuteSQL(SQL, 1)
             If Outcome = "Successful" Then
                 Return True
@@ -529,9 +529,9 @@ Namespace core
         Public Function DeleteRow(ByVal rowId As Integer) As Integer
             Dim Outcome As String = ""
             Dim SQL As String = "UPDATE dbo.ButtonLibrary SET Hide = 1 WHERE ButtonId = " & rowId.ToString()
-            'If DeleteDefectButtonTemplate(rowId) Then 'we must delete the button template first due to a foreign key constraint
-            Outcome = ExecuteSQL(SQL, 1)
-            'End If
+            If DeleteDefectButtonTemplate(rowId) Then 'takes care of the button template too
+                Outcome = ExecuteSQL(SQL, 1)
+            End If
 
             If Outcome = "Successful" Then
                 Return True
