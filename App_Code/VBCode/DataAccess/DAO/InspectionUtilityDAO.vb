@@ -563,35 +563,13 @@ Namespace core
 
 
         Public Function DeleteTabTemplate(ByVal TabTemplatId As Integer, ByVal TemplateId As Integer) As Integer
-            Dim SQL As String
-            Dim sqlcommand As SqlCommand
-            Dim returnint As Integer
-
-
-            SQL = "UPDATE TabTemplate SET Active = 0" & vbCrLf &
-                    "WHERE (TemplateId = " & TemplateId.ToString() & ") AND (TabTemplateId = " & TabTemplatId.ToString() & ")"
-            Using connection As New SqlConnection(DL.InspectConnectionString())
-
-                sqlcommand = _DAOFactory.GetCommand(SQL.ToString(), connection)
-                'Add command parameters             
-
-                Try
-                    sqlcommand.Connection.Open()
-                    returnint = sqlcommand.ExecuteNonQuery()
-
-                    If returnint < 1 Then
-                        Return False
-                    End If
-
-                Catch e As Exception
-                    Return False
-                End Try
-
-
-
-            End Using
-            Return True
-
+            Dim Outcome As String = ""
+            Dim SQL As String = "UPDATE TabTemplate SET Active = 0 WHERE (TemplateId = " & TemplateId.ToString() & ") AND (TabTemplateId = " & TabTemplatId.ToString() & ")"
+            Outcome = ExecuteSQL(SQL, 1)
+            If Outcome = "Successful" Then
+                Return True
+            End If
+            Return False
         End Function
         Public Function UpdateButtonLibrary(ByVal obj As SPCInspection.ButtonLibrarygrid) As Boolean
             Dim SQL As String
@@ -636,9 +614,8 @@ Namespace core
 
         End Function
         Public Function ToggleStatusTemplateById(ByVal TemplateId As Integer, ByVal Status As Boolean) As Integer
+            Dim Outcome As String = ""
             Dim SQL As String
-            Dim sqlcommand As SqlCommand
-            Dim returnint As Integer
             Dim StatusVal As String
 
             If Status = True Then
@@ -647,60 +624,27 @@ Namespace core
                 StatusVal = "1"
             End If
 
-            SQL = "UPDATE TemplateName" & vbCrLf &
-                    "SET Active = " & StatusVal & " " & vbCrLf &
-                    "WHERE (TemplateId = " & TemplateId.ToString() & ")"
-            Using connection As New SqlConnection(DL.InspectConnectionString())
-
-                sqlcommand = _DAOFactory.GetCommand(SQL.ToString(), connection)
-                'Add command parameters             
-
-                Try
-                    sqlcommand.Connection.Open()
-                    returnint = sqlcommand.ExecuteNonQuery()
-
-                    If returnint < 1 Then
-                        Return 0
-                    End If
-
-                Catch e As Exception
-                    Return -1
-                End Try
-
-
-
-            End Using
-            Return returnint
+            SQL = "UPDATE TemplateName SET Active = " & StatusVal & "WHERE (TemplateId = " & TemplateId.ToString() & ")"
+            Outcome = ExecuteSQL(SQL, 1)
+            If Outcome = "Successful" Then
+                Return True
+            End If
+            Return False
 
         End Function
         Public Function UpdateProductSpecBit(ByVal TabTemplateId As Integer) As Integer
             Dim SQL As String
-            Dim sqlcommand As SqlCommand
-            Dim returnint As Integer
+            Dim Outcome As String = ""
 
             SQL = "UPDATE TabTemplate" & vbCrLf &
             "SET ProductSpecs = 1" & vbCrLf &
             "WHERE (TabTemplateId = " & TabTemplateId.ToString() & ")"
 
-            Using connection As New SqlConnection(DL.InspectConnectionString())
-
-                sqlcommand = _DAOFactory.GetCommand(SQL.ToString(), connection)
-                'Add command parameters             
-
-                Try
-                    sqlcommand.Connection.Open()
-                    returnint = sqlcommand.ExecuteNonQuery()
-
-                    If returnint < 1 Then
-                        Return 0
-                    End If
-
-                Catch e As Exception
-                    Throw New System.Exception(e.Message)
-                End Try
-
-            End Using
-            Return returnint
+            Outcome = ExecuteSQL(SQL, 1)
+            If Outcome = "Successful" Then
+                Return True
+            End If
+            Return False
 
         End Function
 
