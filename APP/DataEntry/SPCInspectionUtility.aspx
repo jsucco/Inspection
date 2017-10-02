@@ -1790,7 +1790,6 @@
 
         },
         DeleteDefectRow: function (rowNum) { //calls DeleteRow in the helper with the ButtonId as the argument
-            alert(rowNum);
             $.ajax({
                 
                 url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionUtility.ashx',
@@ -1807,7 +1806,6 @@
 
         },
         UpdateDefectRow: function (rowNum, Defect, defectName) { //calls DeleteRow in the helper with the ButtonId as the argument
-            alert(rowNum);
             $.ajax({
 
                 url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionUtility.ashx',
@@ -2393,8 +2391,7 @@
                     { name: 'ButtonId', index: 'ButtonId', editable: false, hidden: true },
                     { name: 'DefectCode', index: 'DefectCode', editable: true, width: 50 },
                     { name: 'Name', index: 'Name', sortable: false, width: 200, editable: true },
-                    //{ name: 'Hide', index: 'value', sortable: false, width: 50, editable: true, edittype: "checkbox", editoptions: { value: "true:false" } },
-                    //{ name: 'act', index: 'act', width: 55, sortable: false },
+                    
                     {
                         name: "Edit", formatter: EditButtonFormatter, width: 51,
                         search: false, sortable: false, hidedlg: true, resizable: false,
@@ -2431,19 +2428,8 @@
                     }
                     jQuery("#DefectTypesgrid").editRow(id, true);
 
-                },
-                gridComplete: function () {
-                    //$('#gridpager').css('display', 'none');
-                    var ids = $("#DefectTypesgrid").jqGrid('getDataIDs');//when key:true, returns the button IDs...
-                    for (var i = 0; i < ids.length; i++) {
-                        var cl = ids[i];
-                        be = "<input style='height:22px;width:20px;' type='button' value='E' onclick=\"jQuery('#DefectTypesgrid').editRow('" + cl + "');\"  />";
-                        se = "<input style='height:22px;width:20px;' type='button' value='S' onclick=\"jQuery('#DefectTypesgrid').saveRow('" + cl + "');\"  />";
-                       
-                        //GBDelete = "<input style='height:22px;width:20px;' type='button' value='X' onclick=\"DeleteRowData('" + cl + "');\"  />";
-                        //$("#DefectTypesgrid").jqGrid('setRowData', ids[i], { act: be + se  });
-                    }
                 }
+                
 
             });
             function EditButtonFormatter() {
@@ -2463,10 +2449,12 @@
 
 
         };
-        function SaveRowData() { //allows us to delete both the front end AND the back end
+        function SaveRowData() { //allows us to update both the front end AND the back end
             var grid = $('#DefectTypesgrid'), rowid = $(this).closest("tr.jqgrow").attr("id");
             grid.saveRow(rowid);
             var ButtonId = grid.jqGrid('getCell', rowid, 'ButtonId');
+            if (ButtonId === '') ButtonId = -1;
+            alert(ButtonId);
             var DefectCode = grid.jqGrid('getCell', rowid, 'DefectCode');
             var Name = grid.jqGrid('getCell', rowid, 'Name');
             dbtrans.UpdateDefectRow(ButtonId, DefectCode, Name)
@@ -2474,7 +2462,7 @@
         
 
         };
-        function EditRowData() { //allows us to delete both the front end AND the back end
+        function EditRowData() { //allows us to use the edit button like a double click
             var grid = $('#DefectTypesgrid'), rowid = $(this).closest("tr.jqgrow").attr("id");
             if (rowid && rowid !== lastSel) {
                 grid.restoreRow(lastSel);

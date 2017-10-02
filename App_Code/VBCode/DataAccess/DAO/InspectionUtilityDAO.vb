@@ -31,6 +31,7 @@ Namespace core
         Dim ExecuteConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
         Dim Connection As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString) 'Connection to MyDB
         Dim Command As New SqlCommand
+        Dim DR As SqlDataReader
         Function ExecuteSQL(ByVal SQL As String, ByVal Log As String) As Object
             'This function executes and logs all of our custom SQL statements.
 
@@ -540,12 +541,23 @@ Namespace core
         End Function
         Public Function AlterDefectRow(ByVal rowId As Integer, ByVal DefectCode As String, ByVal Name As String) As Integer
             Dim Outcome As String = ""
-            Dim SQL As String = "UPDATE dbo.ButtonLibrary SET Name = '" & Name & "', DefectCode = '" & DefectCode & "' WHERE ButtonId =  " & rowId.ToString()
-            Outcome = ExecuteSQL(SQL, 1)
-            If Outcome = "Successful" Then
-                Return True
+            If rowId = -1 Then
+                Dim SQL As String = "INSERT INTO dbo.ButtonLibrary (Name, DefectCode) VALUES ('" & Name & "', '" & DefectCode & "')"
+                Outcome = ExecuteSQL(SQL, 1)
+                If Outcome = "Successful" Then
+                    Return True
+                End If
+                Return False
+
+            Else
+
+                Dim SQL As String = "UPDATE dbo.ButtonLibrary SET Name = '" & Name & "', DefectCode = '" & DefectCode & "' WHERE ButtonId =  " & rowId.ToString()
+                Outcome = ExecuteSQL(SQL, 1)
+                If Outcome = "Successful" Then
+                    Return True
+                End If
+                Return False
             End If
-            Return False
         End Function
 
 
