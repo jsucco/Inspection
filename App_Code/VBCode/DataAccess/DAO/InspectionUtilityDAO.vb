@@ -572,46 +572,13 @@ Namespace core
             Return False
         End Function
         Public Function UpdateButtonLibrary(ByVal obj As SPCInspection.ButtonLibrarygrid) As Boolean
-            Dim SQL As String
-            Dim sqlcommand As SqlCommand
-            Dim returnint As Integer
-
-
-            SQL = "UPDATE ButtonLibrary" & vbCrLf &
-                    "SET Name = @Name, DefectCode = @DefectCode, Hide = @Hide" & vbCrLf &
-                    "WHERE (ButtonId = @ButtonId)"
-            Using connection As New SqlConnection(DL.InspectConnectionString())
-
-                sqlcommand = _DAOFactory.GetCommand(SQL.ToString(), connection)
-                sqlcommand.Parameters.Add(_DAOFactory.Getparameter("@ButtonId", DbType.Int32))
-                sqlcommand.Parameters.Add(_DAOFactory.Getparameter("@Name", DbType.String))
-                sqlcommand.Parameters.Add(_DAOFactory.Getparameter("@DefectCode", DbType.String))
-                sqlcommand.Parameters.Add(_DAOFactory.Getparameter("@Hide", DbType.Boolean))
-                'Add command parameters             
-                sqlcommand.Parameters("@ButtonId").Value = obj.ButtonId
-                sqlcommand.Parameters("@Name").Value = obj.Name
-                sqlcommand.Parameters("@DefectCode").Value = obj.DefectCode
-                sqlcommand.Parameters("@Hide").Value = obj.Hide
-
-                Try
-                    sqlcommand.Connection.Open()
-                    returnint = sqlcommand.ExecuteNonQuery()
-
-                    If returnint < 1 Then
-                        Return False
-                    End If
-
-                Catch e As Exception
-                    Return False
-                End Try
-
-
-
-            End Using
-            Return True
-
-
-
+            Dim Outcome As String = ""
+            Dim SQL As String = "UPDATE dbo.ButtonLibrary SET Name = '" & obj.Name & "', DefectCode = '" & obj.DefectCode & "' WHERE ButtonId =  " & obj.ButtonId.ToString()
+            Outcome = ExecuteSQL(SQL, 1)
+            If Outcome = "Successful" Then
+                Return True
+            End If
+            Return False
         End Function
         Public Function ToggleStatusTemplateById(ByVal TemplateId As Integer, ByVal Status As Boolean) As Integer
             Dim Outcome As String = ""

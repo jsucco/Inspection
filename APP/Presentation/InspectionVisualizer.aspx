@@ -18,7 +18,7 @@
                 </div>
             
             </div>
-        <div id="select2div" style="top:10px; left: 100px; position:relative; height: 150px;">
+        <div id="select2div" style="top:10px; left: 100px; position:relative; height: 150px; font-size:25px">
             <select id="select-location" style="width:100%;"></select>
         </div>
     </div>
@@ -1057,10 +1057,10 @@
                             { name: 'JobNumber', index: 'JobNumber', editable: true, formatter: grids.formatijsGrid },
                             { name: 'DataNo', index: 'DataNo', hidden: true },
                             { name: 'PRP_Code', index: 'PRP_Code', editable:true, hidden: false },
-                            { name: 'UnitDesc', index: 'UnitDesc', width: 255, editable: false, formatter: grids.formatijsGrid },
+                            { name: 'UnitDesc', index: 'UnitDesc', width: 255, editable: true, formatter: grids.formatijsGrid },
                             { name: 'Location', index: 'Location', width: 90, editable:true, edittype:'select', editoptions:{value: LocationNamesDrop }, search: false, formatter: grids.formatijsGrid },
                             { name: 'TemplateId', index: 'TemplateId', hidden: true },
-                            { name: 'Name', index: 'Name', editable: false, formatter: grids.formatijsGrid },
+                            { name: 'Name', index: 'Name', editable: true, formatter: grids.formatijsGrid },
                             { name: 'LineType', index: 'LineType', editable: true, edittype: 'select', editoptions: {value: 'MFG:MFG; FINAL AUDIT:FINAL AUDIT; IN LINE:IN LINE; ROLL:ROLL; UPGRADES:UPGRADES; PASS/FAIL:PASS/FAIL; CHECK:CHECK; KAUMO:KAUMO; SHIPPING:SHIPPING'}, 
                                 formatter: grids.formatijsGrid },
                             { name: 'TotalInspectedItems', index: 'TotalInspectedItems', editable: true, formatter: 'number', search: false, formatoptions: { actions: {afterSave: function(x) { } },decimalSeparator: ".", thousandsSeparator: " ", decimalPlaces: 0, defaultValue: '0' }},
@@ -1073,10 +1073,10 @@
                             { name: 'RejectLimiter', index: 'WOQuantity', editable: true, formatter: 'number', search: false, formatoptions: { decimalSeparator: ".", thousandsSeparator: " ", decimalPlaces: 0, defaultValue: '0' }},
                             { name: 'CID', index: 'CID', hidden: true, width: 85, formatter: grids.formatijsGrid },
                             { name: 'Technical_PassFail', index: 'Technical_PassFail',  editable:true, edittype:'select', editoptions:{value: 'PASS:PASS; FAIL:FAIL; : ' }, formatter: grids.formatijsGrid },
-                            { name: 'STARTED', index: 'STARTED', editable: false, search: false, formatter: grids.formatijsGrid, formatter: 'date', formatoptions: {srcformat: 'ISO8601Long', newformat: 'm/d/y H:i A'}  },
-                            { name: 'FINISHED', index: 'FINISHED', editable: false, search: false, formatter: grids.formatijsGrid, formatter: 'date', formatoptions: {srcformat: 'ISO8601Long', newformat: 'm/d/y H:i A'} },
-                            { name: 'DHU', index: 'DHU', editable: false, formatter: 'number', search: false, formatoptions: { decimalSeparator: ".", thousandsSeparator: " ", decimalPlaces: 2, defaultValue: '0.00' }},
-                            { name: 'RejectionRate', index: 'RejectionRate', editable: false, search: false, formatter: 'number', formatoptions: { decimalSeparator: ".", thousandsSeparator: " ", decimalPlaces: 2, defaultValue: '0.00' }},
+                            { name: 'STARTED', index: 'STARTED', editable: true, search: false, formatter: grids.formatijsGrid, formatter: 'date', formatoptions: {srcformat: 'ISO8601Long', newformat: 'm/d/y H:i A'}  },
+                            { name: 'FINISHED', index: 'FINISHED', editable: true, search: false, formatter: grids.formatijsGrid, formatter: 'date', formatoptions: {srcformat: 'ISO8601Long', newformat: 'm/d/y H:i A'} },
+                            { name: 'DHU', index: 'DHU', editable: true, formatter: 'number', search: false, formatoptions: { decimalSeparator: ".", thousandsSeparator: " ", decimalPlaces: 2, defaultValue: '0.00' }},
+                            { name: 'RejectionRate', index: 'RejectionRate', editable: true, search: false, formatter: 'number', formatoptions: { decimalSeparator: ".", thousandsSeparator: " ", decimalPlaces: 2, defaultValue: '0.00' }},
                             { name: 'UnitCost', index: 'UnitCost', editable: true, search: false, formatter: 'number', formatoptions: { decimalSeparator: ".", thousandsSeparator: " ", decimalPlaces: 2, defaultValue: '0.00' }},
                             { name: 'Comments', index: 'Comments', hidden: false, width: 120, formatter: grids.formatijsGrid, editable: true }
                     ],
