@@ -1188,6 +1188,8 @@
 
                 switch (method) {
                     case 'edit':
+                        //var BUName = $("[aria-selected='true']")[3].innerText; 
+                        //console.log(BUName);
                         var editdefectypeval = $("#EditDefectType").val();
                         for (i = 0; i < datahandler.tabbuttonarray.length; i++) {
 
@@ -1227,6 +1229,8 @@
                                     $('#' + buttonid).val(datahandler.selectededit);
                                 }
                                 datahandler.selectededit = "edit";
+                                //datahandler.tabbuttonarray[i].text = BUName;
+                                dbtrans.ChangeDefectCategory(datahandler.tabbuttonarray[i].id, datahandler.tabbuttonarray[i].DefectType)
                             }
                         }
                         break;
@@ -1797,6 +1801,22 @@
                 data: { method: 'DeleteRow', args: { rowId: rowNum } },
                 success: function (data) {
                     
+
+                },
+                error: function (a, b, c) {
+                    alert(c);
+                }
+            });
+
+        },
+        ChangeDefectCategory: function (id, DC) { 
+            $.ajax({
+
+                url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionUtility.ashx',
+                type: 'GET',
+                data: { method: 'ChangeDefect', args: { DefectId: id, ClassDefect: DC } },
+                success: function (data) {
+
 
                 },
                 error: function (a, b, c) {

@@ -31,7 +31,20 @@ Namespace core
             End If
 
         End Function
+        Public Function ChangeDefect(ByVal DefectId As Integer, ByVal ClassDefect As String) As Boolean
+            If DefectId <> 0 Then
 
+
+                If IU.EditButtonClass(DefectId, ClassDefect) Then
+                    IU.UpdateTemplateCollectionCache(DefectId)
+                    Return True
+                Else
+                    Return False
+                End If
+            Else
+                Return False
+            End If
+        End Function
         Public Function DeleteRow(ByVal rowId As Integer) As Boolean
             If rowId <> 0 Then
 
