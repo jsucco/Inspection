@@ -144,6 +144,31 @@ Namespace core
                 Exit Function
             End If
         End Function
+        Public Function getIncrement(ByVal IncrementId As Integer) As Integer
+            If IncrementId <> 0 Then
+
+
+                Return IU.getIncrement(IncrementId)
+            Else
+                Return -1
+            End If
+
+
+        End Function
+        Public Function setIncrement(ByVal IncrementId As Integer, ByVal IncrementAmount As String) As Boolean
+            If IncrementId <> 0 Then
+
+
+                If IU.setIncrement(IncrementId, IncrementAmount) Then
+
+                    Return True
+                Else
+                    Return False
+                End If
+            Else
+                Return False
+            End If
+        End Function
 
         Private Function GetDefectType(ByVal ButtonTemplateId As Integer) As Object
             Dim bmap_dt As New BMappers(Of SingleObject)
@@ -305,7 +330,7 @@ Namespace core
                     Dim bmapijs As New BMappers(Of SPCInspection.InspectionJobSummary)
                     Dim listis As New List(Of SPCInspection.InspectionJobSummary)
 
-                    listis = bmapijs.GetInspectObject("SELECT id, JobNumber, DataNo, SampleSize, RejectLimiter, WOQuantity FROM InspectionJobSummary WHERE id = " & listso.ToArray()(0).Object2 & "")
+                    listis = bmapijs.GetInspectObject("SELECT id, JobNumber, DataNo, SampleSize, RejectLimiter, WOQuantity, Inspected_Items FROM InspectionJobSummary WHERE id = " & listso.ToArray()(0).Object2 & "")
 
                     Return jser.Serialize(listis)
                 End If
@@ -514,6 +539,7 @@ Namespace core
             jsobj.UnitDesc = as400.Getas400UnitDesc(DataNo)
             jsobj.TemplateId = TemplateId
             jsobj.PRP_Code = ""
+            jsobj.Inspected_Items = 0
             If Len(jsobj.JobNumber) > 2 And jsobj.WOQuantity > 0 And TemplateId > 0 Then
 
                 If jsobj.JobType = "WorkOrder" Then

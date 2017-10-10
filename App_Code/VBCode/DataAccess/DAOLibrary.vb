@@ -301,6 +301,8 @@ Namespace core
             Public Property ScrapCount As Integer
             Public Property EmployeeNo As String
             Public Property CasePack As String
+            Public Property Inspected_Items As Integer
+
             Public Property WorkRoom As String
         End Class
 

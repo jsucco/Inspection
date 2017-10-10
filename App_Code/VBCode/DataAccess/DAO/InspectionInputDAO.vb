@@ -13,6 +13,7 @@ Namespace core
         Public Property dlayer As New dlayer
         Private Property Util As New Utilities
 
+
         Public Function InsertDefects(ByVal input As List(Of SPCInspection.DefectMaster)) As Integer
             Dim SQL As String
             Dim Internalcmd As SqlCommand
@@ -288,8 +289,8 @@ Namespace core
             If IsNothing(jslist) = False Then
 
                 ' returnid = bmapjs.InsertSpcObject()
-                Dim sql As String = "INSERT INTO InspectionJobSummary (JobType, JobNumber, Standard, CID, TemplateId, ItemPassCount, ItemFailCount, WOQuantity, WorkOrderPieces, AQL_Level, SampleSize, RejectLimiter, Inspection_Started, DataNo, UnitCost, UnitDesc, PRP_Code, EmployeeNo, CasePack, WorkRoom )" & vbCrLf &
-                                        "VALUES (@JobType,@JobNumber, @Standard, @CID, @TemplateId, @ItemPassCount,@ItemFailCount,@WOQuantity, @WorkOrderPieces, @AQL_Level,@SampleSize,@RejectLimiter, @Inspection_Started, @DataNo, @UnitCost, @UnitDesc, @PRP_Code, @EmployeeNo, @CasePack, @WorkRoom )"
+                Dim sql As String = "INSERT INTO InspectionJobSummary (JobType, JobNumber, Standard, CID, TemplateId, ItemPassCount, ItemFailCount, WOQuantity, WorkOrderPieces, AQL_Level, SampleSize, RejectLimiter, Inspection_Started, DataNo, UnitCost, UnitDesc, PRP_Code, EmployeeNo, CasePack, WorkRoom, Inspected_Items )" & vbCrLf &
+                                        "VALUES (@JobType,@JobNumber, @Standard, @CID, @TemplateId, @ItemPassCount,@ItemFailCount,@WOQuantity, @WorkOrderPieces, @AQL_Level,@SampleSize,@RejectLimiter, @Inspection_Started, @DataNo, @UnitCost, @UnitDesc, @PRP_Code, @EmployeeNo, @CasePack, @WorkRoom , 0)"
                 returnid = bmapjs.InsertSpcObject_RetNum(sql, jslist, True)
 
             End If

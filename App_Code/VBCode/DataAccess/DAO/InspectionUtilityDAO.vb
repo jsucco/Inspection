@@ -78,8 +78,39 @@ Namespace core
                 AprManagerDb = System.Web.Configuration.WebConfigurationManager.AppSettings("AprManagerTestDb")
             End If
         End Sub
+        Public Function setIncrement(ByVal rowId As Integer, ByVal IncrementAmount As String) As Integer
+            Dim Outcome As String = ""
+            Dim SQL As String = "UPDATE dbo.InspectionJobSummary SET Inspected_Items= Inspected_Items+" & IncrementAmount & " WHERE id =  " & rowId.ToString()
+            Outcome = ExecuteSQL(SQL, 1)
+            If Outcome = "Successful" Then
+                Return True
+            End If
+            Return False
+        End Function
+        Public Function getIncrement(ByVal rowId As Integer) As Integer
+            Dim retval As Integer = -1
+            Dim SQL As String = "SELECT Inspected_Items as INSITEMS From dbo.InspectionJobSummary WHERE id=" & rowId.ToString()
+            Command.CommandType = CommandType.Text 'sets the type of the sql
+            Command.Connection = Connection 'sets the connection of our sql command to MyDB
+            Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+            Connection.Open() 'opens the connction
+            DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+            If DR.HasRows = True Then 'Check whether the SqlDataReader has 1 or more rows
+                DR.Read() 'The default position of the SqlDataReader is before the first record. Therefore, you must call Read to begin accessing any data.  The reader has moved down to the first row.
+                'Response.Write(DR("Cust_Name")) 'Writes a string to an HTTP response output stream.  In this case, just Cust_Name
+
+                retval = Convert.ToInt32(DR("INSITEMS")) '
+
+            Else
+                Return retval
 
 
+            End If
+
+            Connection.Close() 'closes the connection
+            DR.Close() 'closes the reader
+            Return retval
+        End Function
         Public Function GetButtonLibrary() As List(Of SPCInspection.buttonlibrary)
 
             Dim ButtonValues As New List(Of SPCInspection.buttonlibrary)()
