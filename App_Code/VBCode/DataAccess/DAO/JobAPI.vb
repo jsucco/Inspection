@@ -7,7 +7,7 @@ Public Class JobAPI
     Private Shared jser As JavaScriptSerializer
 
     Public Shared Async Sub UpdateJobSuggestions(ByVal data As JobHeader)
-        Dim json = jser.Serialize(data)
+        Dim json As String = jser.Serialize(data)
 
         Using client As New HttpClient()
 

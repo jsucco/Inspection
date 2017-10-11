@@ -894,7 +894,7 @@
                         var name;
                         var parsedata = JSON.parse(data);
                         OpenWorkOrderArray = parsedata;
-
+                        
                         if (parsedata) {
                             for (var i = 0; i < parsedata.length; i++) {
                                 name = parsedata[i];
@@ -925,7 +925,7 @@
                             var selectedid = $(this).val();
                             console.log(selectedid);
                             var selectedtext = $(this).text();
-                            dbtrans.getIncrement(selectedid);
+                            //dbtrans.getIncrement(selectedid);
                             
                             
                            
@@ -976,7 +976,7 @@
                         $("#RollConfirmation").css("display", "none");
                         $("#loginfrm").fadeIn();
                         $("#WorkOrderSelection").fadeIn();
-                        dbtrans.getIncrement();
+                        
                         hiddenSection.fadeIn()
                             .css({ 'display': 'block' })
                             // set to full screen
@@ -1259,6 +1259,7 @@
                 datahandler.GetOpenTimers();
                 //datahandler.GetInspectionJobSummaryId(TargetOrderInput.val(), buttonid, buttonvalue, buttonname, false); 
                 $("#<%=InspectionId.ClientID%>").val(InspectionJobSummaryIdPage);
+                dbtrans.getIncrement($("#<%=InspectionId.ClientID%>").val());//sets the value initially.
                 pageBehindInspectionStarted = "true";
                 InspectionStartedVal = true;
 
@@ -3177,7 +3178,7 @@
 
                                  $("#MaintContent_InspectionId").val(returnnum.toString());
                                  InspectionId = returnnum;
-                                 dbtrans.getIncrement(parseInt($('#MainContent_InspectionId').val()));
+                                 //dbtrans.getIncrement(parseInt($('#MainContent_InspectionId').val()));
                              }
                      }
                  },

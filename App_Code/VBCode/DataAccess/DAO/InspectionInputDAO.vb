@@ -289,8 +289,8 @@ Namespace core
             If IsNothing(jslist) = False Then
 
                 ' returnid = bmapjs.InsertSpcObject()
-                Dim sql As String = "INSERT INTO InspectionJobSummary (JobType, JobNumber, Standard, CID, TemplateId, ItemPassCount, ItemFailCount, WOQuantity, WorkOrderPieces, AQL_Level, SampleSize, RejectLimiter, Inspection_Started, DataNo, UnitCost, UnitDesc, PRP_Code, EmployeeNo, CasePack, WorkRoom, Inspected_Items )" & vbCrLf &
-                                        "VALUES (@JobType,@JobNumber, @Standard, @CID, @TemplateId, @ItemPassCount,@ItemFailCount,@WOQuantity, @WorkOrderPieces, @AQL_Level,@SampleSize,@RejectLimiter, @Inspection_Started, @DataNo, @UnitCost, @UnitDesc, @PRP_Code, @EmployeeNo, @CasePack, @WorkRoom , 0)"
+                Dim sql As String = "INSERT INTO InspectionJobSummary (JobType, JobNumber, Standard, CID, TemplateId, ItemPassCount, ItemFailCount, WOQuantity, WorkOrderPieces, AQL_Level, SampleSize, RejectLimiter, Inspection_Started, DataNo, UnitCost, UnitDesc, PRP_Code, EmployeeNo, CasePack, WorkRoom)" & vbCrLf &
+                                        "VALUES (@JobType,@JobNumber, @Standard, @CID, @TemplateId, @ItemPassCount,@ItemFailCount,@WOQuantity, @WorkOrderPieces, @AQL_Level,@SampleSize,@RejectLimiter, @Inspection_Started, @DataNo, @UnitCost, @UnitDesc, @PRP_Code, @EmployeeNo, @CasePack, @WorkRoom )"
                 returnid = bmapjs.InsertSpcObject_RetNum(sql, jslist, True)
 
             End If
