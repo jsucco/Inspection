@@ -131,20 +131,20 @@
     <div id="CompleteDiv" style="position:absolute; left: 360px; top: -10px; width: 350px;">
         <input id="completeInspec" type="button" style="position:relative; top: 25px; background:rgb(116,180, 116); color: white; text-align: center; width: 180px;" class="export endjob leftsidedropobj" value="INSPECTION COMPLETE"></input>
     </div>
-    <div style="position:absolute; width: 90px; height: 35px;font-size: .85em; left: 60%; top:5px;">
+   <%-- <div style="position:absolute; width: 90px; height: 35px;font-size: .85em; left: 60%; top:5px;">
         <img src="../../Images/global-technical-specs.jpg" id="GlobalSpecsImage" style="height:80px; z-index: 1000;" />
-    </div>
+    </div>--%>
     <div id="NewPageDiv" style="position:absolute; left: 560px; top: 15px; width: 350px;" class="">
         <input id="NewPage" type="button" value="NEW" class="export" style="position:relative; width:90px; height: 52px; ""></input>
     </div>
-    <div id="PNIncrementDiv" style="position:absolute; left: 730px; top: 15px; width: 350px;" class="">
+    <div id="PNIncrementDiv" style="position:absolute; left: 625px; top: 0px; width: 350px;" class="">
         <input id="BUDecrement" type="button" value="-" class="export" style="position:absolute; top:25px; left: 30px; width:40px; height: 40px; "" />
         <label id="LAIncrementLabel" style="position:absolute; top:3px; left: 50px; color:black; width: 150px;">INSPECTED ITEMS</label>
-        <input id="TBIncrementTextBox"  class="textbox" type="text" style="position:absolute; top:25px; left: 75px; width: 60px; height: 40px;" runat="server"  />
+        <input id="TBIncrementTextBox"  class="textbox" type="text" style="position:absolute; top:25px; left: 75px; width: 60px; height: 40px;" runat="server" onkeypress="return isNumber(event)" />
         <input id="BUIncrement" type="button" value="+" class="export" style="position:absolute; top:25px; left: 145px; width:40px; height: 40px; "" />
         <input id="BUPlusOne" type="button" value="+1" class="export" style="position:absolute; top:25px; left: 190px; width:40px; height: 40px; "" />
     </div>
-    <div id="scorelabels" style="position:absolute; left:69%; top:-5px; width: 400px; height: 100px; display:none;">
+    <div id="scorelabels" style="position:absolute; left:85%; top:-5px; width: 400px; height: 100px; display:none;">
         <label id="DHULabel" style="position:absolute; top:3px; left: 0px; font-size:medium; z-index:100; color:black; width: 150px;">DHU</label>
         <input id="DHU" readonly  class="inputelement inputbox" type="text" style="top:25px; left: 0px; width: 60px; height: 53px;" value="0" runat="server"  />
         <label id="SampleSizeLabel" style="position:absolute; top:3px; left: 100px; font-size:medium; z-index:100; color:black; width: 150px;">SAMPLE SIZE</label>
@@ -174,6 +174,7 @@
                 </ul>
             </li>       
             <li><a>DASHBOARD</a></li>
+       
         </ul>
         <div id="MachineDiv" style="position:relative; top: -47px;width: 170px;float:right;border-right-style: solid;border-color: rgb(123, 122, 122);border-width: thick;z-index: 200;height: 34px; display:none;">
             <label id="MachineLbl" style="position: relative; top: 4px; left: 5px; font-size:medium; font-weight:700; z-index:100; color:black; width: 150px;height: 34px;">  </label>
@@ -314,6 +315,11 @@
             </div>
             <div id="rs_container" style="position:relative; height: 42px; margin-top:20px; width:250px;">
                 <input id="EnterProductSpec" type="button" value="REPORT SPEC" class="export" style="position:absolute; margin-left:10px; width: 97%; height: 35px;font-size: 1.1em;"/>
+            </div>
+            <div id="img_container" style="position:relative; height: 42px; margin-top:20px; width:250px;">
+                <div style="position:absolute; width: 90px; height: 35px;font-size: .85em; left: 50%; top:5px;">
+                    <img src="../../Images/global-technical-specs.jpg" id="GlobalSpecsImage" style="height:80px; z-index: 1000;" />
+                </div>
             </div>
         </div>
     </div>
@@ -505,13 +511,19 @@
     var pad_minimized = false;
     var Inc_Num;
     function isOdd(num) { return num % 2; }
-
-
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
 
     $(function () {
         var screenwidth = screen.width - 200;
         var json = new Array();
-        
+        document.getElementById("LAEqualCheck").style.color = "#ff0000";//set color of warning label to red.
         TargetOrderInput = $('#MainContent_WorkOrder');
         var $_aql = $('#MainContent__AQLevel');
         var warr = <%=WorkRoomArr%>
@@ -1028,7 +1040,7 @@
                                         //$("#MainContent_Good").val(SampleCount - RejCount);
                                         alert('on switch of inspection state: ' + $('#MainContent_Good').val());
                                         $("#FailCountValue").text(RejCount.toString())
-                                        $("#PassCountValue").text($("#MainContent_Good").val());
+                                        $("#PassCountValue").text(Number($("#MainContent_Good").val()) - Number($("#FailCountValue").val()));
                                         //$("#TotalCountValue").val($SampleSize.val());
                                         $("#TotalCountValue").wijinputnumber("option", "value", $('#MainContent_Good').val());
                                         $("#TotalCountValue").wijinputnumber('option', "minValue", RejCount);
@@ -1038,7 +1050,10 @@
                                         $("#WorkOrderSelection").css("display", "none");
                                         $("#MachineSelection").css("display", "none");
                                         $("#RollConfirmation").css("display", "none");
-                                        $("#LAEqualCheck").css("display", "none");
+                                        if (Number($('#MainContent_Good').val()) == Number($('#MainContent_SampleSize').val())) {
+                                            $("#LAEqualCheck").css("display", "none");
+                                        }
+                                        
                                         $("#JobConfirmation").css("display", "block");
 
                                         if (RejCount >= LimiterNo) {
