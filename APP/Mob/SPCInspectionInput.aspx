@@ -333,6 +333,10 @@
             <div id = "Chk1" style="position:absolute; top: 120px; left: 5px; padding: 0px;" class=SheetClass1>
                                         <input id="Skip" name="ChkBx1" type="checkbox" class=chkbox2 />Skip All Confirmations.</div>
         </div>
+        <div id="LimitReachedDialog" title="Limit Reached!">
+            <p>Go directly to confirmation?</p>
+            
+        </div>
         <div id="StartInspectiondialog" title="START Inspection?">
             <div id="StartInspectionRollDiv">
                 <p>TO START AN INSPECTION CLICK CONFIRM.</p>
@@ -414,7 +418,8 @@
                             
                 </div>
             </fieldset> 
-        </div> 
+        </div>
+        
     </div>
     <input id="LocationSelected_Hidden" runat="server" type="hidden" value ="0" />
 </asp:Content>
@@ -523,7 +528,7 @@
     $(function () {
         var screenwidth = screen.width - 200;
         var json = new Array();
-        document.getElementById("LAEqualCheck").style.color = "#ff0000";//set color of warning label to red.
+        document.getElementById("LAEqualCheck").style.color = "#ffff00";//set color of warning label to red.
         TargetOrderInput = $('#MainContent_WorkOrder');
         var $_aql = $('#MainContent__AQLevel');
         var warr = <%=WorkRoomArr%>
@@ -554,6 +559,7 @@
         dialogs.InitProductSpecEntry();
         dialogs.InitStartDialog();
         dialogs.InitDefectsEntry();
+        dialogs.LimitReached()
         dialogs.InitAuditorName();
         controls.InitTemplateDropDown(<%=TemplateNames%>);
         controls.InitLocationDropDown(<%=LocationNames%>, selectedCIDnum, selectedCID);
@@ -615,7 +621,9 @@
             var amount = parseInt($('#MainContent_TBIncrementTextBox').val());
            
             if (originalamount + amount >= limit) {
-                dbtrans.setIncrement(id, limit-originalamount);
+                dbtrans.setIncrement(id, limit - originalamount);
+                //alert('Warning: Sample size reached');
+                $("#LimitReachedDialog").wijdialog("open");
             } else {
                 dbtrans.setIncrement(id, amount);
             }
@@ -626,7 +634,8 @@
             var amount = parseInt($('#MainContent_TBIncrementTextBox').val());
             
             if (originalamount - amount <= 0) {
-                dbtrans.setIncrement(id, originalamount*(-1));
+                dbtrans.setIncrement(id, originalamount * (-1));
+                alert('Warning: No Items Inspected');
             } else {
                 dbtrans.setIncrement(id, amount*(-1));
             }
@@ -636,7 +645,8 @@
             var limit = parseInt($('#MainContent_SampleSize').val());
             var originalamount = parseInt($('#MainContent_Good').val());
             if (originalamount + 1 > limit) {
-                
+                //alert('Warning: Sample size reached');
+                $("#LimitReachedDialog").wijdialog("open");
             } else {
                 dbtrans.setIncrement(id, 1);
             }
@@ -1038,7 +1048,7 @@
                                     case 0:
                                         jobnumber = $workorder.val();
                                         //$("#MainContent_Good").val(SampleCount - RejCount);
-                                        alert('on switch of inspection state: ' + $('#MainContent_Good').val());
+                                        //alert('on switch of inspection state: ' + $('#MainContent_Good').val());
                                         $("#FailCountValue").text(RejCount.toString())
                                         $("#PassCountValue").text(Number($("#MainContent_Good").val()) - Number($("#FailCountValue").val()));
                                         //$("#TotalCountValue").val($SampleSize.val());
@@ -1050,6 +1060,9 @@
                                         $("#WorkOrderSelection").css("display", "none");
                                         $("#MachineSelection").css("display", "none");
                                         $("#RollConfirmation").css("display", "none");
+                                        if (Number($('#MainContent_Good').val()) != Number($('#MainContent_SampleSize').val())) {
+                                            $("#LAEqualCheck").css("display", "block");
+                                        }
                                         if (Number($('#MainContent_Good').val()) == Number($('#MainContent_SampleSize').val())) {
                                             $("#LAEqualCheck").css("display", "none");
                                         }
@@ -1391,13 +1404,18 @@
                 $("#GlobalSpecsImage").css("display", "none");
                 $("#Image1").css("display", "none");
                 $("#loginView").empty();
-                $("#CompleteDiv").css("left", "40px");
-                $("#NewPageDiv").css("left", "230px");
-                $("#scorelabels").css({ display: 'block', left: "340px" });
+                $("#CompleteDiv").css("left", "10px");
+                $("#NewPageDiv").css("left", "200px");
+                $("#scorelabels").css({ display: 'block', left: "300px" });
+                $("#PNIncrementDiv").css({ display: 'block', left: "655px" });
                 $("body").css("min-width", "900px");
                 if (TemplateCollection.length > 0) { Template.Load(); }
             } else {
+                $("#CompleteDiv").css("left", "360px");
+                $("#NewPageDiv").css("left", "560px");
+                $("#Image1").css("display", "block");
                 $("#scorelabels").css({ display: 'block', left: "69%" });
+                $("#PNIncrementDiv").css({ display: 'block', left: "625px" });
                 $("#menudiv").css("display", "block");
                 $("body").css("min-width", "900px");
                 $("#tabs_holder").css("width", "83%");
@@ -1631,6 +1649,122 @@
                         var value = e.currentTarget.checked;
                         AutoConfirm = value;
                     });
+                }
+            });
+        },
+        LimitReached: function () {
+            $("#LimitReachedDialog").wijdialog({
+                buttons: {
+                    Confirm: function () {
+                        $(this).wijdialog("close");
+                        var buttonid_ = $(this).attr('id');
+                        if (IsSPCMachine == true) {
+                            alert("This Page is currently Linked to an Machine. End the Job at the Machine PC. Click NEW or Exit the page to escape");
+                        } else {
+                            $("#MainContent_JobConfirmation_hidden").val(buttonid_);
+                            var samesizenum = new Number($('#MainContent_SampleSizeHidden').val());
+
+                            if (InspectionTypeState == 'WorkOrder' && samesizenum == 0) {
+                                alert('Sample Size Not Set');
+                                return;
+                            }
+                            $.when(datahandler.SetSampleSize()).done(function () {
+                                if (($workorder.val().length > 2 && InspectionJobSummaryIdPage > 0 && InspectionStartedVal == true) || ($rollnumber.val().length > 2 && InspectionJobSummaryIdPage > 0 && InspectionStartedVal == true)) {
+                                    if ($LotSize.val() != "0" && SelectedId != 0) {
+
+                                        $.when(datahandler.UpdateRejectionCount(InspectionState, InspectionJobSummaryIdPage)).done(function () {
+                                            var SampleCount = new Number($SampleSize.val());
+                                            var RejCount = new Number($("#MainContent_Bad_Group").val());
+                                            var jobnumber;
+                                            var LimiterNo = new Number($("#MainContent_REHidden").val());
+                                            switch (InspectionState) {
+                                                case 0:
+                                                    jobnumber = $workorder.val();
+                                                    //$("#MainContent_Good").val(SampleCount - RejCount);
+                                                    //alert('on switch of inspection state: ' + $('#MainContent_Good').val());
+                                                    $("#FailCountValue").text(RejCount.toString())
+                                                    $("#PassCountValue").text(Number($("#MainContent_Good").val()) - Number($("#FailCountValue").val()));
+                                                    //$("#TotalCountValue").val($SampleSize.val());
+                                                    $("#TotalCountValue").wijinputnumber("option", "value", $('#MainContent_Good').val());
+                                                    $("#TotalCountValue").wijinputnumber('option', "minValue", RejCount);
+                                                    $('#MainContent_totalinspecteditems').val($('#MainContent_Good').val());
+                                                    $("#JobNumberValue").text(jobnumber);
+                                                    $("#LocationSelection").css("display", "none");
+                                                    $("#WorkOrderSelection").css("display", "none");
+                                                    $("#MachineSelection").css("display", "none");
+                                                    $("#RollConfirmation").css("display", "none");
+                                                    if (Number($('#MainContent_Good').val()) != Number($('#MainContent_SampleSize').val())) {
+                                                        $("#LAEqualCheck").css("display", "block");
+                                                    }
+                                                    if (Number($('#MainContent_Good').val()) == Number($('#MainContent_SampleSize').val())) {
+                                                        $("#LAEqualCheck").css("display", "none");
+                                                    }
+
+                                                    $("#JobConfirmation").css("display", "block");
+
+                                                    if (RejCount >= LimiterNo) {
+                                                        $("#MainContent_AddEmailFlag").prop("checked", true);
+                                                    }
+                                                    break;
+                                                case 1:
+                                                    jobnumber = $rollnumber.val();
+                                                    $("#RollNumberValue").text(jobnumber);
+                                                    $("#FailRollValue").text(RejCount.toString())
+                                                    $("#TotalYardValue").wijinputnumber("option", "value", $('#WOQuantity').val());
+                                                    $('#MainContent_totalinspectedyards').val($('#WOQuantity').val());
+                                                    $("#LocationSelection").css("display", "none");
+                                                    $("#WorkOrderSelection").css("display", "none");
+                                                    $("#MachineSelection").css("display", "none");
+                                                    $("#RollConfirmation").css("display", "block");
+                                                    $("#JobConfirmation").css("display", "none");
+                                                    var DHY = new Number($('#MainContent_SampleSize').val());
+                                                    if (DHY > 10) {
+                                                        $("#MainContent_AddEmailFlagRoll").prop("checked", true);
+                                                    }
+                                                    break;
+                                                    //case 2: 
+                                                    //    jobnumber = $itemnumber.val(); 
+                                                    break;
+                                            }
+
+
+                                            $loginfrm.css("height", "360px");
+                                            $loginfrm.fadeIn();
+                                            hiddenSection.fadeIn()
+                                                .css({ 'display': 'block' })
+                                                // set to full screen
+                                                .css({ width: $(window).width() + 'px', height: '100%' })
+                                                .css({
+                                                    top: ($(window).height() - hiddenSection.height()) / 2 + 'px',
+                                                    left: ($(window).width() - hiddenSection.width()) / 2 + 'px'
+                                                })
+                                                // greyed out background
+                                                .css({ 'background-color': 'rgba(0,0,0,0.5)' });
+                                        });
+                                    }
+
+                                }
+                            });
+                        }
+                    },
+                    Cancel: function () {
+                        $(this).wijdialog("close");
+                    }
+                },
+                captionButtons: {
+                    pin: { visible: false },
+                    refresh: { visible: false },
+                    toggle: { visible: false },
+                    minimize: { visible: false },
+                    maximize: { visible: false }
+                },
+                height: 244,
+                autoOpen: false,
+                open: function (e) {
+                    
+                },
+                create: function (e) {
+                   
                 }
             });
         },
@@ -2759,7 +2893,7 @@
                     var PassCount = new Number(Inspected - rejcount);
                     $("#PassCountValue").text(PassCount);
                     $("#MainContent_Good").val(PassCount);
-                    alert('On initNumbers: ' + $('#MainContent_Good').val());
+                    //alert('On initNumbers: ' + $('#MainContent_Good').val());
                     $('#MainContent_totalinspecteditems').val(data.value);
 
                 }
