@@ -323,7 +323,7 @@ Namespace core
                 Return 0
             End If
 
-            If InspectNum.Tables(0).Rows.Count > 0 Then
+            If InspectNum.Tables(0).Rows.Count > 0 Then '
                 If IsNumeric(InspectNum.Tables(0).Rows(0)("InspectionId")) Then
                     Return Convert.ToInt64(InspectNum.Tables(0).Rows(0)("InspectionId")) + 1
                 End If

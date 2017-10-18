@@ -314,7 +314,7 @@ Namespace core
             Return retobj
 
         End Function
-        Public Function GetInspectionId() As Integer
+        Public Function GetInspectionId() As Integer 'calls getTemplateId from the database access object
 
             Return DA.GetTemplateId()
         End Function

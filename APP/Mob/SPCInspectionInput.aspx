@@ -1125,7 +1125,9 @@
                 var jobnumber_label = $("#jobnumber_label").val();
                 if (!$("#jobnumber_stat_tag").is(":visible") && (jobnumber_label.trim().length <= 1 || e.currentTarget.value.trim().length > 0))
                     $("#jobnumber_stat_tag").fadeIn(200);
-                $("#jobnumber_label").val(e.currentTarget.value);
+                if (e.currentTarget.id === "MainContent_WorkOrder")
+                    $("#jobnumber_label").val(e.currentTarget.value);
+                
             }
             e.preventDefault();
             return false;
@@ -1610,7 +1612,7 @@
                         if (InspectionCanStart == true) {
                             $("#selectNames").prop("disabled", true);
                             if (total == 0 && OpenOrderFlag == "False") {
-                                $.when(datahandler.GetInspectionId()).done(function () {
+                                $.when(datahandler.GetInspectionId()).done(function () {//when GetInspectionId finishes...
                                     if (InspectionJobSummaryIdPage == 0) {
                                         datahandler.GetInspectionJobSummaryId(TargetOrderInput.val(), false);
                                     }
@@ -3312,7 +3314,7 @@
             return elementarrayval
 
         },
-        GetInspectionId: function () {
+        GetInspectionId: function () {//calls get InspectionId in the handler method.
             $.ajax({
                 url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
                 type: 'GET',
@@ -3376,11 +3378,11 @@
         InspectionArray: new Array(),
         ColumnCount: 2,
         GetInspectionJobSummaryId: function (TargetNumberIn, IsDefect) {
-            $("#jobIdSpinner").toggle();
-            $.ajax({
-                url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput_JobDispatch.ashx',
-                type: 'GET',
-                data: { method: 'OpenJobIfExists', args: { TargetNumber: TargetNumberIn, TemplateId: SelectedId, InspectionType: LineType, AQLVAL: AQLValue } },
+            $("#jobIdSpinner").toggle(); //
+            $.ajax({ //
+                url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput_JobDispatch.ashx', //
+                type: 'GET', //
+                data: { method: 'OpenJobIfExists', args: { TargetNumber: TargetNumberIn, TemplateId: SelectedId, InspectionType: LineType, AQLVAL: AQLValue } }, //
                 success: function (data) {
 
                     if (data != 'NOJOBS' && data.length > 0) {
@@ -3958,6 +3960,7 @@
                             var InputObject = $.parseJSON(data);
                             eventshandler.UserKeyPress.ExistingUserInputs = InputObject;
                             eventshandler.UserKeyPress.SetUserInputs();
+                            alert('the event fired');
 
                         }
                     },

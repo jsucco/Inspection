@@ -157,6 +157,7 @@ Partial Public Class InspectionJobSummary
     Public Property ThreadColorConfirm As Nullable(Of Boolean)
     Public Property RollWidth As Nullable(Of Decimal)
 
+    Public Property Inspected_Items As Nullable(Of Integer)
     Public Overridable Property DefectTimers As ICollection(Of DefectTimer) = New HashSet(Of DefectTimer)
     Public Overridable Property SpecMeasurements As ICollection(Of SpecMeasurement) = New HashSet(Of SpecMeasurement)
     Public Overridable Property WeaverProductions As ICollection(Of WeaverProduction) = New HashSet(Of WeaverProduction)

@@ -87,9 +87,19 @@ Namespace core
             End If
             Return False
         End Function
+        Public Function setISRow(ByVal rowId As Integer, ByVal ItemFailCount As Integer, ByVal TotalInspectedItems As Integer, ByVal TechnicalPassFail As Boolean, ByVal ItemPassCount As Integer, ByVal MajorsCount As Integer, ByVal MinorsCount As Integer, ByVal RepairsCount As Integer, ByVal ScrapCount As Integer, ByVal UserConfirm_PassFail As Boolean, ByVal UserConfirm_PassFail_Timestamp As DateTime, ByVal Inspection_Finished As DateTime, ByVal JobType As String, ByVal Comments As String) As Integer
+            Dim Outcome As String = ""
+            Dim retval As Integer = -1
+            Dim SQL As String = "UPDATE dbo.InspectionJobSummary SET ItemFailCount= " & ItemFailCount & ",TotalInspectedItems = " & TotalInspectedItems & ",Technical_PassFail = '" & TechnicalPassFail & "',ItemPassCount = " & ItemPassCount & ",MajorsCount = " & MajorsCount & ",MinorsCount = " & MinorsCount & ",RepairsCount = " & RepairsCount & ",ScrapCount = " & ScrapCount & ",UserConfirm_PassFail = '" & UserConfirm_PassFail & "',UserConfirm_PassFail_TimeStamp = CAST('" & UserConfirm_PassFail_Timestamp & "' AS DATETIME),Inspection_Finished = CAST('" & Inspection_Finished & "' AS DATETIME),JobType = '" & JobType & "',Comments = '" & Comments & "' WHERE id =  " & rowId.ToString()
+            Outcome = ExecuteSQL(SQL, 1)
+            If Outcome = "Successful" Then
+                Return 1
+            End If
+            Return False
+        End Function
         Public Function getIncrement(ByVal rowId As Integer) As Integer
             Dim retval As Integer = -1
-            Dim SQL As String = "SELECT Inspected_Items as INSITEMS From dbo.InspectionJobSummary WHERE id=" & rowId.ToString()
+            Dim SQL As String = "Select Inspected_Items As INSITEMS From dbo.InspectionJobSummary WHERE id=" & rowId.ToString()
             Command.CommandType = CommandType.Text 'sets the type of the sql
             Command.Connection = Connection 'sets the connection of our sql command to MyDB
             Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -116,7 +126,7 @@ Namespace core
             Dim ButtonValues As New List(Of SPCInspection.buttonlibrary)()
             Dim sqlstring As String
 
-            sqlstring = "select * from dbo.ButtonLibrary WHERE Hide = 0 ORDER BY UPPER(Name) asc"
+            sqlstring = "Select * from dbo.ButtonLibrary WHERE Hide = 0 ORDER BY UPPER(Name) asc"
 
             ButtonValues = _DAOFactory.getbuttonlibrary(sqlstring, 3)
 
@@ -125,7 +135,7 @@ Namespace core
         End Function
         Public Function GetLibraryGrid() As List(Of SPCInspection.ButtonLibrarygrid)
             Dim selectObjects As New List(Of SPCInspection.ButtonLibrarygrid)
-            Dim sql As String = "SELECT ButtonId, Name, DefectCode, Hide FROM ButtonLibrary Where Hide = 0 ORDER BY UPPER(Name) asc"
+            Dim sql As String = "Select ButtonId, Name, DefectCode, Hide FROM ButtonLibrary Where Hide = 0 ORDER BY UPPER(Name) asc"
             Dim bmap As New BMappers(Of SPCInspection.ButtonLibrarygrid)
             'selectObjects = BMapper(Of SPCInspection.ButtonLibrarygrid).GetInspectObject(sql)
             selectObjects = bmap.GetInspectObject(sql)
@@ -136,7 +146,7 @@ Namespace core
             Dim sqlstring As String
             Dim selectValues As New List(Of selector2array)()
 
-            sqlstring = "SELECT TemplateId, Name FROM TemplateName  WHERE Active = 1 ORDER BY TemplateId asc"
+            sqlstring = "Select TemplateId, Name FROM TemplateName  WHERE Active = 1 ORDER BY TemplateId asc"
 
             selectValues = _DAOFactory.getSelector2(sqlstring, 3)
 
@@ -151,18 +161,18 @@ Namespace core
             Dim sel2_ret As New List(Of selector2array)
             If CID > 0 Then
                 Dim loc_lst As List(Of core.SingleObject)
-                Dim sql1 As String = "SELECT Abreviation AS Object1 FROM LocationMaster WHERE CID = 000" & CID.ToString()
+                Dim sql1 As String = "Select Abreviation As Object1 FROM LocationMaster WHERE CID = 000" & CID.ToString()
                 loc_lst = bmap_locm.GetAprMangObject(sql1)
                 If loc_lst.Count > 0 Then
                     Dim bmap_sel As New BMappers(Of selector2array)
-                    Dim sql2 As String = "SELECT TemplateId AS id, Name as text FROM TemplateName WHERE (Loc_" & loc_lst.ToArray()(0).Object1.ToString().Trim() & " = 1) AND (Active = 1)"
+                    Dim sql2 As String = "Select TemplateId As id, Name As text FROM TemplateName WHERE (Loc_" & loc_lst.ToArray()(0).Object1.ToString().Trim() & " = 1) And (Active = 1)"
                     sel2_lst = bmap_sel.GetInspectObject(sql2)
                 End If
             End If
 
             If sel2_lst.Count > 0 Then
                 Dim listar = sel2_lst.ToArray()
-                sel2_lst.Add(New selector2array With {.id = -1, .text = "SELECT OPTION"})
+                sel2_lst.Add(New selector2array With {.id = -1, .text = "Select Option"})
                 sel2_ret = (From x In sel2_lst Select x Order By x.id Ascending).ToList()
             Else
                 sel2_ret.Add(New selector2array With {.id = -1, .text = "NO TEMPLATES"})
@@ -177,18 +187,18 @@ Namespace core
             Dim sel2_ret As New List(Of selector2array)
             If CID > 0 Then
                 Dim loc_lst As List(Of core.SingleObject)
-                Dim sql1 As String = "SELECT id AS Object1, Abreviation AS Object3 FROM LocationMaster WHERE CID = 000" & CID.ToString()
+                Dim sql1 As String = "Select id As Object1, Abreviation As Object3 FROM LocationMaster WHERE CID = 000" & CID.ToString()
                 loc_lst = bmap_locm.GetAprMangObject(sql1)
                 If loc_lst.Count > 0 Then
                     Dim bmap_sel As New BMappers(Of selector2array)
-                    Dim sql2 As String = "select tn.TemplateId as id, tn.Name as text from TemplateName tn INNER JOIN TemplateActivator ta ON tn.TemplateId = ta.TemplateId where ta.LocationMasterId = " + loc_lst.ToArray()(0).Object1.ToString() + " and ta.Status = 1 and tn.Active = 1"
+                    Dim sql2 As String = "Select tn.TemplateId As id, tn.Name As text from TemplateName tn INNER JOIN TemplateActivator ta On tn.TemplateId = ta.TemplateId where ta.LocationMasterId = " + loc_lst.ToArray()(0).Object1.ToString() + " And ta.Status = 1 And tn.Active = 1"
                     sel2_lst = bmap_sel.GetInspectObject(sql2)
                 End If
             End If
 
             If sel2_lst.Count > 0 Then
                 Dim listar = sel2_lst.ToArray()
-                sel2_lst.Add(New selector2array With {.id = -1, .text = "SELECT OPTION"})
+                sel2_lst.Add(New selector2array With {.id = -1, .text = "Select Option"})
                 sel2_ret = (From x In sel2_lst Select x Order By x.id Ascending).ToList()
             Else
                 sel2_ret.Add(New selector2array With {.id = -1, .text = "NO TEMPLATES"})
@@ -202,9 +212,9 @@ Namespace core
             Dim bmap As New BMappers(Of selector2array)
 
             If CID = "999" Then
-                sql = "SELECT Id AS id, Machine as text FROM LiveProduction"
+                sql = "Select Id As id, Machine As text FROM LiveProduction"
             Else
-                sql = "SELECT Id AS id, Machine as text FROM LiveProduction WHERE CID = '" & CID & "'"
+                sql = "Select Id As id, Machine As text FROM LiveProduction WHERE CID = '" & CID & "'"
             End If
 
             selectvalues = bmap.GetSpcObject(sql)

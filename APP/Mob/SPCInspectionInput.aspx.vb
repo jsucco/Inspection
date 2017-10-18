@@ -57,7 +57,7 @@ Namespace core
         Dim TemplateCollectionCache As String
         Private IstestMode As Boolean = False
         Private CurrentTemplateNames As New List(Of selector2array)
-
+        Private IU As New InspectionUtilityDAO
         Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
 
             Dim QueryUsername As String = Request.QueryString("Username")
@@ -370,6 +370,114 @@ Namespace core
                 Response.Cookies("SPCInspectionInput").Expires = DateTime.Now.AddDays(60)
             End If
         End Sub
+        'Protected Sub COnfirm2_Click(ByVal sender As Object, ByVal e As EventArgs) Handles Confirm.Click, ConfirmRoll.Click
+        '    Dim returnmessage As String = ""
+        '    Dim ErrorFlag As Boolean = False
+        '    Dim cstext2 As String = ""
+        '    Dim curijs As New InspectionJobSummary
+        '    Dim ijsnum As Integer = 0
+        '    Dim DHY As Decimal = 0
+        '    Dim JobPassFail As String = "Pass"
+        '    Dim ErrorMessage As String = ""
+
+        '    Try
+        '        ijsnum = CType(inspectionjobsummaryid_hidden.Value, Integer)
+        '    Catch ex As Exception
+
+        '        Response.Redirect("~/APP/Mob/SPCInspectionInput.aspx?TemplateId=" + SelectedId.ToString() + "&CONFIRM=" + returnmessage)
+        '        Exit Sub
+        '    End Try
+        '    Try
+        '        Using _db As New Inspection_Entities
+        '            curijs = (From v In _db.InspectionJobSummaries Where v.id = ijsnum).FirstOrDefault()
+
+        '            If IsNothing(curijs) = False Then
+        '                Select Case InspectionState.Value
+        '                    Case "WorkOrder"
+
+        '                        curijs.ItemFailCount = GetFailCount(ijsnum.ToString(), InspectionState.Value.Trim())
+        '                        curijs.TotalInspectedItems = util.ConvertType(totalinspecteditems.Value, "Integer") ' CType(totalinspecteditems.Value, Integer)
+
+        '                        If curijs.ItemFailCount >= curijs.RejectLimiter Then
+        '                            curijs.Technical_PassFail = False
+        '                            JobPassFail = "Fail"
+        '                        Else
+        '                            curijs.Technical_PassFail = True
+        '                            JobPassFail = "Pass"
+        '                        End If
+        '                        curijs.ItemPassCount = curijs.TotalInspectedItems - curijs.ItemFailCount
+
+        '                    Case "RollNumber"
+
+        '                        DHY = util.ConvertType(DHYHidden.Value, "Decimal")
+        '                        curijs.ItemFailCount = GetFailCount(ijsnum.ToString(), InspectionState.Value.Trim())
+        '                        curijs.ItemPassCount = -1
+        '                        If DHY > 10 Then
+        '                            curijs.Technical_PassFail = False
+        '                            JobPassFail = "Fail"
+        '                        Else
+        '                            curijs.Technical_PassFail = True
+        '                            JobPassFail = "Pass"
+        '                        End If
+        '                        curijs.TotalInspectedItems = CType(totalinspectedyards.Value, Integer)
+
+        '                End Select
+        '                curijs.MajorsCount = InspectInput.GetDefectCountByType(ijsnum.ToString(), "MAJOR")
+        '                curijs.MinorsCount = InspectInput.GetDefectCountByType(ijsnum.ToString(), "MINOR")
+        '                curijs.RepairsCount = InspectInput.GetDefectCountByType(ijsnum.ToString(), "REPAIRS")
+        '                curijs.ScrapCount = InspectInput.GetDefectCountByType(ijsnum.ToString(), "SCRAP")
+        '                curijs.UserConfirm_PassFail = True
+        '                curijs.UserConfirm_PassFail_Timestamp = Date.Now
+        '                curijs.Inspection_Finished = Date.Now
+        '                curijs.JobType = InspectionState.Value
+        '                curijs.Comments = JobMessage.Value
+
+        '                Dim rowsaff As Integer = _db.SaveChanges()
+        '                rowsaff = rowsaff
+        '                If rowsaff > 0 Then
+        '                    SetCookieExp("LastAQLCompleted", "value", curijs.AQL_Level, 1)
+        '                    If AddEmailFlag.Checked = True Or AddEmailFlagRoll.Checked = True Then
+        '                        SendEmailAlertsAsync(curijs, ijsnum, JobPassFail, DHY)
+        '                    End If
+        '                    returnmessage = "JOBNUMBER." + curijs.JobNumber + ".CONFIRMATION-SUCCESS." + JobPassFail + "ed"
+
+        '                    WorkOrder.Value = ""
+        '                    Good.Value = "0"
+        '                    Bad_Local.Value = "0"
+        '                    Bad_Group.Value = "0"
+        '                    RE.Value = "0"
+        '                    AC.Value = "0"
+        '                    DHU.Value = "0"
+        '                    SampleSize.Value = "0"
+        '                    DataNumber.Value = ""
+        '                    CartonNumber.Value = ""
+        '                    CPNumber.Value = ""
+        '                    RollNumber.Value = ""
+        '                    LoomNumber.Value = ""
+        '                    woquantity_hidden.Value = "0"
+        '                    ItemNumber.Value = ""
+        '                    OpenOrderLoadFlag = "False"
+
+        '                Else
+        '                    returnmessage = "JOB NOT COMPLETE-FAILED.Framework Error 0 Rows Affected."
+        '                    ErrorFlag = True
+        '                End If
+
+        '            Else
+        '                returnmessage = "JOB NOT COMPLETE-Failed to retrieve Inspection Information"
+        '                ErrorFlag = True
+        '            End If
+        '        End Using
+        '    Catch ex As Exception
+        '        returnmessage = "JOB NOT COMPLETE-" + ex.Message
+        '        ErrorFlag = True
+        '        Elmah.ErrorSignal.FromCurrentContext().Raise(ex)
+        '    End Try
+
+        '    Response.Clear()
+        '    Response.Redirect("~/APP/Mob/SPCInspectionInput.aspx?TemplateId=" + SelectedId.ToString())
+
+        'End Sub
         Protected Sub COnfirm2_Click(ByVal sender As Object, ByVal e As EventArgs) Handles Confirm.Click, ConfirmRoll.Click
             Dim returnmessage As String = ""
             Dim ErrorFlag As Boolean = False
@@ -387,10 +495,11 @@ Namespace core
                 Response.Redirect("~/APP/Mob/SPCInspectionInput.aspx?TemplateId=" + SelectedId.ToString() + "&CONFIRM=" + returnmessage)
                 Exit Sub
             End Try
+            'Dim curijs2 As Object = IU.getRow(ijsnum)
             Try
                 Using _db As New Inspection_Entities
-                    curijs = (From v In _db.InspectionJobSummaries Where v.id = ijsnum).FirstOrDefault()
 
+                    curijs = (From v In _db.InspectionJobSummaries Where v.id = ijsnum).FirstOrDefault() 'change to use IUDAO
                     If IsNothing(curijs) = False Then
                         Select Case InspectionState.Value
                             Case "WorkOrder"
@@ -432,9 +541,9 @@ Namespace core
                         curijs.JobType = InspectionState.Value
                         curijs.Comments = JobMessage.Value
 
-                        Dim rowsaff As Integer = _db.SaveChanges()
+                        Dim rowsaff As Integer = IU.setISRow(ijsnum, curijs.ItemFailCount, curijs.TotalInspectedItems, curijs.Technical_PassFail, curijs.ItemPassCount, curijs.MajorsCount, curijs.MinorsCount, curijs.RepairsCount, curijs.ScrapCount, curijs.UserConfirm_PassFail, curijs.UserConfirm_PassFail_Timestamp, curijs.Inspection_Finished, curijs.JobType, curijs.Comments)
 
-                        If rowsaff > 0 Then
+                        If rowsaff = 1 Then
                             SetCookieExp("LastAQLCompleted", "value", curijs.AQL_Level, 1)
                             If AddEmailFlag.Checked = True Or AddEmailFlagRoll.Checked = True Then
                                 SendEmailAlertsAsync(curijs, ijsnum, JobPassFail, DHY)
