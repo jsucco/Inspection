@@ -1050,7 +1050,7 @@
                                         //$("#MainContent_Good").val(SampleCount - RejCount);
                                         //alert('on switch of inspection state: ' + $('#MainContent_Good').val());
                                         $("#FailCountValue").text(RejCount.toString())
-                                        $("#PassCountValue").text(Number($("#MainContent_Good").val()) - Number($("#FailCountValue").val()));
+                                        $("#PassCountValue").text(Number($("#MainContent_Good").val()) - Number($("#MainContent_Bad_Group").val()));
                                         //$("#TotalCountValue").val($SampleSize.val());
                                         $("#TotalCountValue").wijinputnumber("option", "value", $('#MainContent_Good').val());
                                         $("#TotalCountValue").wijinputnumber('option', "minValue", RejCount);
@@ -1614,6 +1614,7 @@
                             if (total == 0 && OpenOrderFlag == "False") {
                                 $.when(datahandler.GetInspectionId()).done(function () {//when GetInspectionId finishes...
                                     if (InspectionJobSummaryIdPage == 0) {
+                                        alert('JobSummaryId is 0');
                                         datahandler.GetInspectionJobSummaryId(TargetOrderInput.val(), false);
                                     }
                                     $("#ItemNumberLabel").text("Item #: 1");
@@ -1685,7 +1686,7 @@
                                                     //$("#MainContent_Good").val(SampleCount - RejCount);
                                                     //alert('on switch of inspection state: ' + $('#MainContent_Good').val());
                                                     $("#FailCountValue").text(RejCount.toString())
-                                                    $("#PassCountValue").text(Number($("#MainContent_Good").val()) - Number($("#FailCountValue").val()));
+                                                    $("#PassCountValue").text(Number($("#MainContent_Good").val()) - Number($("#MainContent_Bad_Group").val()));
                                                     //$("#TotalCountValue").val($SampleSize.val());
                                                     $("#TotalCountValue").wijinputnumber("option", "value", $('#MainContent_Good').val());
                                                     $("#TotalCountValue").wijinputnumber('option', "minValue", RejCount);
@@ -3322,7 +3323,7 @@
                 success: function (data) {
                     if (data) {
 
-                        var returnnum = new Number(data);
+                        var returnnum = new Number(data); //returns the inspectionID
 
                              //$("#<%=InspectionId.ClientID%>").val(data);
                              if (returnnum > 0) {

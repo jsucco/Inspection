@@ -80,7 +80,7 @@ Namespace core
         End Sub
         Public Function setIncrement(ByVal rowId As Integer, ByVal IncrementAmount As String) As Integer
             Dim Outcome As String = ""
-            Dim SQL As String = "UPDATE dbo.InspectionJobSummary SET Inspected_Items= Inspected_Items+" & IncrementAmount & " WHERE id =  " & rowId.ToString()
+            Dim SQL As String = "UPDATE dbo.InspectionJobSummary SET TotalInspectedItems= TotalInspectedItems+" & IncrementAmount & " WHERE id =  " & rowId.ToString()
             Outcome = ExecuteSQL(SQL, 1)
             If Outcome = "Successful" Then
                 Return True
@@ -99,7 +99,7 @@ Namespace core
         End Function
         Public Function getIncrement(ByVal rowId As Integer) As Integer
             Dim retval As Integer = -1
-            Dim SQL As String = "Select Inspected_Items As INSITEMS From dbo.InspectionJobSummary WHERE id=" & rowId.ToString()
+            Dim SQL As String = "Select TotalInspectedItems As INSITEMS From dbo.InspectionJobSummary WHERE id=" & rowId.ToString()
             Command.CommandType = CommandType.Text 'sets the type of the sql
             Command.Connection = Connection 'sets the connection of our sql command to MyDB
             Command.CommandText = SQL 'sets the statement that executes at the data source to our string
