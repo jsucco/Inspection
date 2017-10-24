@@ -87,6 +87,16 @@ Namespace core
             End If
             Return False
         End Function
+        Public Function EditCompletedProperties(ByVal rowId As Integer) As Integer
+            Dim Outcome As String = ""
+            Dim retval As Integer = -1
+            Dim SQL As String = "UPDATE dbo.InspectionJobSummary SET Technical_PassFail = NULL,Technical_PassFail_TimeStamp = NULL, UserConfirm_PassFail = NULL,UserConfirm_PassFail_TimeStamp = NULL,Inspection_Finished = NULL  WHERE id =  " & rowId.ToString()
+            Outcome = ExecuteSQL(SQL, 1)
+            If Outcome = "Successful" Then
+                Return 1
+            End If
+            Return False
+        End Function
         Public Function setISRow(ByVal rowId As Integer, ByVal ItemFailCount As Integer, ByVal TotalInspectedItems As Integer, ByVal TechnicalPassFail As Boolean, ByVal ItemPassCount As Integer, ByVal MajorsCount As Integer, ByVal MinorsCount As Integer, ByVal RepairsCount As Integer, ByVal ScrapCount As Integer, ByVal UserConfirm_PassFail As Boolean, ByVal UserConfirm_PassFail_Timestamp As DateTime, ByVal Inspection_Finished As DateTime, ByVal JobType As String, ByVal Comments As String) As Integer
             Dim Outcome As String = ""
             Dim retval As Integer = -1

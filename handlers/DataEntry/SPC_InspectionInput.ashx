@@ -384,13 +384,8 @@ Namespace core
                 If InspectionJob Is Nothing Then
                     Return False
                 End If
-                InspectionJob.TotalInspectedItems = Nothing
-                InspectionJob.Technical_PassFail = Nothing
-                InspectionJob.Technical_PassFail_Timestamp = Nothing
-                InspectionJob.UserConfirm_PassFail = Nothing
-                InspectionJob.UserConfirm_PassFail_Timestamp = Nothing
-                InspectionJob.Inspection_Finished = Nothing
-                _db.SaveChanges()
+
+                IU.EditCompletedProperties(JobId)
             End Using
             Return True
         End Function

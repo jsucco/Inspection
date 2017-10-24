@@ -3,6 +3,32 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent"  Runat="Server">    
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
+  <style type="text/css">
+    #mask {
+  position:absolute;
+  left:0;
+  top:0;
+  z-index:9000;
+  background-color:#000;
+  display:none;
+}  
+#boxes .window {
+  position:absolute;
+  left:0;
+  top:0;
+  width:440px;
+  height:200px;
+  display:none;
+  z-index:9999;
+  padding:20px;
+}
+#boxes #WarningDialog {
+  width:375px; 
+  height:203px;
+  padding:10px;
+  background-color:#ffffff;
+}
+      </style>
     <div class="hidden">
         <input type="hidden" value ="False" id="Authenticated_hidden" runat="server" />
     </div> 
@@ -137,6 +163,13 @@
     <div id="NewPageDiv" style="position:absolute; left: 560px; top: 15px; width: 350px;" class="">
         <input id="NewPage" type="button" value="NEW" class="export" style="position:relative; width:90px; height: 52px; ""></input>
     </div>
+    <div id="boxes">
+        <div style="top: 199.5px; left: 551.5px; display: none;" id="WarningDialog" class="window">
+        <a href="#" class="close">X</a>
+        <p>Please hit the 'New' button before attempting to start a new Inspection</p>
+        </div>
+        <div style="width: 1478px; height: 602px; display: none; opacity: 0.4;" id="mask"></div>
+    </div>
     <div id="PNIncrementDiv" style="position:absolute; left: 625px; top: 0px; width: 350px;" class="">
         <input id="BUDecrement" type="button" value="-" class="export" style="position:absolute; top:25px; left: 30px; width:40px; height: 40px; "" />
         <label id="LAIncrementLabel" style="position:absolute; top:3px; left: 50px; color:black; width: 150px;">INSPECTED ITEMS</label>
@@ -264,6 +297,7 @@
                 <input id="DataNumber" class="inputelement inputbox leftsideobj" type="text" runat="server"   />
 
             </div>
+            
             <div class="inputpad leftsidepanel" id="auditdiv" style="position:relative; margin-top:5px;">
                 <label for="AuditorName" id="AuditorNameL" class="workorder-inspection" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">AUDITOR NAME</label>
                 <input id="AuditorName" class="inputelement inputbox" type="hidden" runat="server"   />
@@ -316,9 +350,9 @@
             <div id="rs_container" style="position:relative; height: 42px; margin-top:20px; width:250px;">
                 <input id="EnterProductSpec" type="button" value="REPORT SPEC" class="export" style="position:absolute; margin-left:10px; width: 97%; height: 35px;font-size: 1.1em;"/>
             </div>
-            <div id="img_container" style="position:relative; height: 42px; margin-top:20px; width:250px;">
-                <div style="position:absolute; width: 90px; height: 35px;font-size: .85em; left: 50%; top:5px;">
-                    <img src="../../Images/global-technical-specs.jpg" id="GlobalSpecsImage" style="height:80px; z-index: 1000;" />
+            <div id="img_container"   style="position:relative;  margin-top:20px; width:250px;">
+                <div style="position:absolute; width: 90px; height: 35px;font-size: .85em; left: 40%; top:5px;">
+                    <img src="../../Images/global-technical-specs.jpg" id="GlobalSpecsImage"   onmouseover="" style="height:80px; z-index: 1000; cursor: pointer;" />
                 </div>
             </div>
         </div>
@@ -524,6 +558,50 @@
         }
         return true;
     }
+    $(document).ready(function () {
+        var firstTime = localStorage.getItem("firstTime");
+        if (!firstTime) {
+            var id = '#WarningDialog';
+
+            //Get the screen height and width
+            var maskHeight = $(document).height();
+            var maskWidth = $(window).width();
+
+            //Set heigth and width to mask to fill up the whole screen
+            $('#mask').css({ 'width': maskWidth, 'height': maskHeight });
+
+            //transition effect     
+            $('#mask').fadeIn(1000);
+            $('#mask').fadeTo("slow", 0.8);
+
+            //Get the window height and width
+            var winH = $(window).height();
+            var winW = $(window).width();
+
+            //Set the popup window to center
+            $(id).css('top', winH / 2 - $(id).height() / 2);
+            $(id).css('left', winW / 2 - $(id).width() / 2);
+
+            //transition effect
+            $(id).fadeIn(2000);
+
+            //if close button is clicked
+            $('.window .close').click(function (e) {
+                //Cancel the link behavior
+                e.preventDefault();
+
+                $('#mask').hide();
+                $('.window').hide();
+            });
+
+            //if mask is clicked
+            $('#mask').click(function () {
+                $(this).hide();
+                $('.window').hide();
+            });
+            localStorage.setItem("firstTime", true);
+        }
+    });
 
     $(function () {
         var screenwidth = screen.width - 200;
@@ -1614,7 +1692,7 @@
                             if (total == 0 && OpenOrderFlag == "False") {
                                 $.when(datahandler.GetInspectionId()).done(function () {//when GetInspectionId finishes...
                                     if (InspectionJobSummaryIdPage == 0) {
-                                        alert('JobSummaryId is 0');
+                                        //alert('JobSummaryId is 0');
                                         datahandler.GetInspectionJobSummaryId(TargetOrderInput.val(), false);
                                     }
                                     $("#ItemNumberLabel").text("Item #: 1");

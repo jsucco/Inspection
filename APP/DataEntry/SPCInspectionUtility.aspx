@@ -824,7 +824,7 @@
                 maximize: { visible: false }
             },
             buttons: {
-                'Edit': function () {
+                'Edit': function () {//upon clicking the edit button
                     datahandler.editbuttons('edit')
                     UtilityOperation = "Edit"
                     var TabJsonString = JSON.stringify(controlhandler.tabarray);
@@ -1230,7 +1230,7 @@
                                 }
                                 datahandler.selectededit = "edit";
                                 //datahandler.tabbuttonarray[i].text = BUName;
-                                dbtrans.ChangeDefectCategory(datahandler.tabbuttonarray[i].id, datahandler.tabbuttonarray[i].DefectType)
+                                dbtrans.ChangeDefectCategory(datahandler.tabbuttonarray[i].id, datahandler.tabbuttonarray[i].DefectType);
                             }
                         }
                         break;

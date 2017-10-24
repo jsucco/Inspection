@@ -2,19 +2,24 @@
 Imports System.Net.Http.Headers
 Imports System.Web.Script.Serialization
 Imports Microsoft.VisualBasic
+Imports System.Web.Ex
+Imports Newtonsoft.Json
 
 Public Class JobAPI
     Private Shared jser As JavaScriptSerializer
 
     Public Shared Async Sub UpdateJobSuggestions(ByVal data As JobHeader)
-        Dim json As String = jser.Serialize(data)
+
+        Dim json As String = JsonConvert.SerializeObject(data)
 
         Using client As New HttpClient()
 
             setAuthorizationHeader(client)
             client.DefaultRequestHeaders.Accept.Add(New MediaTypeWithQualityHeaderValue("application/json"))
 
-            Dim result = Await client.PostAsJsonAsync(Of JobHeader)("http://coredemo2.standardtextile.com/api/SuggestJob", data).ConfigureAwait(False)
+            Dim result = Await client.PostAsJsonAsync(Of JobHeader)("http://coreroute_test.standardtextile.com/api/SuggestJob", data).ConfigureAwait(False)
+            'Dim result = Await client.PostAsJsonAsync(Of JobHeader)("http://localhost:58661/api/SuggestJob", data).ConfigureAwait(False)
+
             Dim response = result.Content.ReadAsStringAsync().Result
         End Using
     End Sub
@@ -39,7 +44,9 @@ Public Class JobAPI
 End Class
 
 Public Class JobHeader
+
     Public Property id As Int64
     Public Property Name As String
     Public Property cid As String
+
 End Class
