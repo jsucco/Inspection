@@ -666,6 +666,7 @@
                         Inc_Num = data;
                         
                         $goodcount.val(data.toString());
+                        //$("#PassCountValue").text(Number($("#MainContent_Good").val()) - Number($("#MainContent_Bad_Group").val()));
 
                     },
                     error: function (a, b, c) {
@@ -705,6 +706,10 @@
             } else {
                 dbtrans.setIncrement(id, amount);
             }
+            document.getElementById("BUIncrement").disabled = true;
+            setTimeout(function () {
+                document.getElementById("BUIncrement").disabled = false;
+            }, 3000);
            });
         $("#BUDecrement").click(function (e) {
             var id = parseInt($('#MainContent_InspectionId').val());
@@ -717,6 +722,10 @@
             } else {
                 dbtrans.setIncrement(id, amount*(-1));
             }
+            document.getElementById("BUDecrement").disabled = true;
+            setTimeout(function () {
+                document.getElementById("BUDecrement").disabled = false;
+            }, 3000);
         });
         $("#BUPlusOne").click(function (e) {
             var id = parseInt($('#MainContent_InspectionId').val());
@@ -728,6 +737,10 @@
             } else {
                 dbtrans.setIncrement(id, 1);
             }
+            document.getElementById("BUPlusOne").disabled = true;
+            setTimeout(function () {
+                document.getElementById("BUPlusOne").disabled = false;
+            }, 3000);
         });
         setInterval(function () {
             var id = $('#MainContent_InspectionId').val();
@@ -2962,21 +2975,30 @@
             }
         },
         InitNumbers: function () {
+            var limit = parseInt($('#MainContent_SampleSize').val());
             $("#TotalCountValue").wijinputnumber({
                 type: 'numeric',
                 minValue: 0,
-                maxValue: 10000000,
+                maxValue: limit,
                 decimalPlaces: 0,
                 showSpinner: true,
                 valueChanged: function (e, data) {
+
+                    
                     var rejcount = new Number($("#MainContent_Bad_Group").val());
                     var Inspected = new Number(data.value);
                     var PassCount = new Number(Inspected - rejcount);
+
+                    
+                   
+
                     $("#PassCountValue").text(PassCount);
-                    $("#MainContent_Good").val(PassCount);
+                    //$("#MainContent_Good").val(PassCount);
+                    //alert('shenananigans afoot');
                     //alert('On initNumbers: ' + $('#MainContent_Good').val());
                     $('#MainContent_totalinspecteditems').val(data.value);
 
+                    
                 }
             });
             $("#TotalCountValue").height(50);
