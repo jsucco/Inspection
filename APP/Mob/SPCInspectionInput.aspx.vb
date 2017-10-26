@@ -584,7 +584,7 @@ Namespace core
             End Try
 
             Response.Clear()
-            Response.Redirect("~/APP/Mob/SPCInspectionInput.aspx?TemplateId=" + SelectedId.ToString())
+            Response.Redirect("~/APP/Mob/SPCInspectionInput.aspx?TemplateId=-1")
 
         End Sub
 
