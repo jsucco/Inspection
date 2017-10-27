@@ -569,6 +569,30 @@ Namespace core
 
 
         End Function
+        Public Function delSpecM(ByVal rowId As Integer) As Integer
+            Dim Outcome As String = ""
+            Dim SQL As String = "DELETE FROM dbo.SpecMeasurements Where SpecId = " & rowId.ToString()
+
+            Outcome = ExecuteSQL(SQL, 1)
+
+
+            If Outcome = "Successful" Then
+                Return True
+            End If
+            Return False
+        End Function
+        Public Function delSpec(ByVal rowId As Integer) As Integer
+            Dim Outcome As String = ""
+            Dim SQL As String = "DELETE FROM dbo.ProductSpecification Where SpecId = " & rowId.ToString()
+            If delSpecM(rowId) Then
+                Outcome = ExecuteSQL(SQL, 1)
+            End If
+
+            If Outcome = "Successful" Then
+                Return True
+            End If
+            Return False
+        End Function
         Public Function EditButtonClass(ByVal tabId As Integer, ByVal DefectClass As String) As Integer
             Dim Outcome As String = ""
             Dim SQL As String = "UPDATE dbo.ButtonTemplate SET DefectType='" & DefectClass & "' WHERE id =  " & tabId.ToString()

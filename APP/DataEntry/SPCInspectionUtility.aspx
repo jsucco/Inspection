@@ -1792,6 +1792,22 @@
                 }
             });
 
+            },
+        delSpec: function (rowNum) { //calls DeleteRow in the helper with the ButtonId as the argument
+            $.ajax({
+
+                url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionUtility.ashx',
+                type: 'GET',
+                data: { method: 'delSpec', args: { rowId: rowNum } },
+                success: function (data) {
+
+
+                },
+                error: function (a, b, c) {
+                    alert(c);
+                }
+            });
+
         },
         DeleteDefectRow: function (rowNum) { //calls DeleteRow in the helper with the ButtonId as the argument
             $.ajax({
@@ -2252,14 +2268,14 @@
         },
         RenderProductSpecGrid: function () {
             var initialarray = new Array({ "SpecId": 0, "TabTemplateId": 0, "Spec_Description": "Desc Here", "Upper_Spec_Value": -.99, "Lower_Spec_Value": .99 });
-
+            
             $("#Specgrid").jqGrid({
                 datatype: "json",
                 url:     "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionUtility_SpecLoad.ashx',
                 editurl: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionUtility_Spec.ashx',
-                colNames: ['SpecId', 'TabTemplateId', 'DataNo', 'ProductType', 'Spec Description', 'HowTo', 'value', 'Upper_Spec_Value', 'Lower_Spec_Value', 'GlobalSpec', 'SpecSource'],
+                colNames: [ 'SpecId','TabTemplateId', 'DataNo', 'ProductType', 'Spec Description', 'HowTo', 'value', 'Upper_Spec_Value', 'Lower_Spec_Value', 'GlobalSpec', 'SpecSource'],
                 colModel: [
-                    { name: 'SpecId', index: 'SpecId', editable: true, editoptions: { readonly: true }, sorttype: 'int' },
+                    { name: 'SpecId', index: 'SpecId', editable: true, editoptions: { readonly: true }  },
                     { name: 'TabTemplateId', index: 'TabtemplateId', hidden: true },
                     { name: 'DataNo', index: 'DataNo', editable: true },
                     { name: 'ProductType', index: 'PrudctType', editable: true },
@@ -2302,6 +2318,7 @@
 
                 }
             });
+            $('#Specgrid').setColProp('SpecId', { sortable: false });
             jQuery("#Specgrid").jqGrid('navGrid', '#pSpecgrid', {
                 edit: true,
                 add: true,
@@ -2367,6 +2384,8 @@
                         SpecId: function () {
                             var sel_id = $("#Specgrid").jqGrid('getGridParam', 'selrow');
                             var value = $("#Specgrid").jqGrid('getCell', sel_id, 'SpecId');
+                            alert(value);
+                            dbtrans.delSpec(value);
                             return value;
                         }
                     }

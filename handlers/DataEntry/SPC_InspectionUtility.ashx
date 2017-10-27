@@ -45,6 +45,20 @@ Namespace core
                 Return False
             End If
         End Function
+        Public Function delSpec(ByVal rowId As Integer) As Boolean
+            If rowId <> 0 Then
+
+
+                If IU.delSpec(rowId) Then
+                    IU.UpdateTemplateCollectionCache(rowId)
+                    Return True
+                Else
+                    Return False
+                End If
+            Else
+                Return False
+            End If
+        End Function
         Public Function DeleteRow(ByVal rowId As Integer) As Boolean
             If rowId <> 0 Then
 
