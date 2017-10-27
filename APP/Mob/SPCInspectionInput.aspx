@@ -285,7 +285,7 @@
                 <input id="LoomNumber" class="inputelement inputbox leftsideobj" type="text" runat="server"   />
             </div>
             <div id="cpdiv" class="inputpad leftsidepanel workorder-inspection" style="position:relative; margin-top:5px;">
-                <label for="CPNumberL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">CASE PACK</label>
+                <label for="CPNumberL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">SOURCE</label>
                 <input id="CPNumber" class="inputelement inputbox leftsideobj" type="text" runat="server"   />
             </div>
             <div id="inspectordiv" class="inputpad leftsidepanel roll-inspection" style="position:relative; margin-top:5px; display:none;">
@@ -362,10 +362,23 @@
             <label for="itemL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">ITEM NUMBER</label>           
         </div>
         <input type="hidden" runat="server" id="DefectID_Value" value ="0" />      
-        <div id="dialog" title="SPC Inspection">
-            <p>You found a defect!  Are you Sure?</p>
-            <div id = "Chk1" style="position:absolute; top: 120px; left: 5px; padding: 0px;" class=SheetClass1>
-                                        <input id="Skip" name="ChkBx1" type="checkbox" class=chkbox2 />Skip All Confirmations.</div>
+        <div id="dialog" style="display: block" title="SPC Inspection">
+            <section>
+                <label id ="LAFlawType"> </label>
+            </section>
+            <section>
+                <label id="LAFlawName"> </label>
+            </section>
+            
+            
+            <label for="DDSourceSelection" style=" font-size:smaller; z-index:100; color:black;">Source:</label>
+            <select id="DDSourceSelection" name = "sources" style="width: 280px" />
+            
+            <div id = "Chk1" style="display: block; position:absolute; top: 100px; left: 5px; padding: 0px;">
+                                       
+                <input id="Skip" name="ChkBx1" type="checkbox" />Skip All Confirmations.
+
+            </div>
         </div>
         <div id="LimitReachedDialog" title="Limit Reached!">
             <p>Go directly to confirmation?</p>
@@ -847,6 +860,18 @@
 
             return false;
         });
+        var color = '';
+        function hexc(colorval) {
+            var parts = colorval.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+            delete (parts[0]);
+            for (var i = 1; i <= 3; ++i) {
+                parts[i] = parseInt(parts[i]).toString(16);
+                if (parts[i].length == 1) parts[i] = '0' + parts[i];
+            }
+            color = '#' + parts.join('');
+
+            return color;
+        }
         $(".ui-tabs-panel").on('click', '.buttontemplate', function (e) {
             var buttonid_ = $(this).attr('id');
             //var buttonvalue_ = $(this).attr('value');
@@ -854,7 +879,9 @@
             var idnum = $("#" + buttonid_ + "_hidden").val();
             var button_lib_id = $("#ButtonLibraryId_" + idnum).val();
             var buttonname_ = $(this).attr('name');
-
+            var $c = $(this).css("background-color");
+            hexc($c);
+            alert(color);
             if ($Location.val() != "" || $LotSize.val() != "" || $AuditorName.Val() != "" || $DataNo.Val() != "") {
                 if (buttonvalue_) {
                     $('#DefectFlag').text('[' + button_lib_id + "." + buttonvalue_ + ']');
@@ -869,6 +896,24 @@
                         if (AutoConfirm == false) {
                             buttonid = buttonid_;
                             buttonname = buttonname_;
+                            //alert(buttonvalue_);
+                            if (color === "#b7b328"){
+                                $("#LAFlawType").text("MINOR");
+                            } else if (color === "#cf0d39") {
+                                $("#LAFlawType").text("MAJOR");
+                            } else if (color === hexc("rgba(0,0,0,0.5)")) {
+                                $("#LAFlawType").text("REPAIRS");
+                            } else if (color === "#0c0d0c"){
+                                $("#LAFlawType").text("SCRAP");
+                            } else if (color === "#33ccd2") {
+                                $("#LAFlawType").text("TIME");
+                            } else if (color === "#14b71e") {
+                                $("#LAFlawType").text("UPGRADE");
+                            } else if (color === "#95ea9a") {
+                                $("#LAFlawType").text("FIX");
+                            }
+                            
+                            $("#LAFlawName").text(buttonvalue_);
                             $("#dialog").wijdialog("open");
                         } else {
                             datahandler.SubmitDefect(buttonid_, buttonvalue, buttonname_, InspectionJobSummaryIdPage, InspectionId);
