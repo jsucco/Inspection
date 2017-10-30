@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="8871cbe7cced4d99ab20f3e8fd00a8a9" Name="Diagram1">
+        <EntityTypeShape EntityType="AprManager_Model.EmailMaster" Width="1.5" PointX="5.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="AprManager_Model.LinkedServerMaster" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="AprManager_Model.LocationMaster" Width="1.5" PointX="0.75" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="AprManager_Model.OPCMaster" Width="1.5" PointX="3" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="AprManager_Model.SPC_ApplicationLog" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="AprManager_Model.UserActivityLog" Width="1.5" PointX="5.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="AprManager_Model.UserCrudActivityLog" Width="1.5" PointX="8" PointY="1" IsExpanded="true" />
+        <AssociationConnector Association="AprManager_Model.FK_LinkedServerMaster_LocationMaster" ManuallyRouted="false" />
+        <AssociationConnector Association="AprManager_Model.FK_OPCMaster_LocationMaster" ManuallyRouted="false" />
+        <AssociationConnector Association="AprManager_Model.FK_UserCrudActivityLog_ToTable" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
