@@ -2275,7 +2275,7 @@
                 editurl: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionUtility_Spec.ashx',
                 colNames: [ 'SpecId','TabTemplateId', 'DataNo', 'ProductType', 'Spec Description', 'HowTo', 'value', 'Upper_Spec_Value', 'Lower_Spec_Value', 'GlobalSpec', 'SpecSource'],
                 colModel: [
-                    { name: 'SpecId', index: 'SpecId', editable: true, editoptions: { readonly: true }  },
+                    { name: 'SpecId', index: 'SpecId', hidden: true  },
                     { name: 'TabTemplateId', index: 'TabtemplateId', hidden: true },
                     { name: 'DataNo', index: 'DataNo', editable: true },
                     { name: 'ProductType', index: 'PrudctType', editable: true },
