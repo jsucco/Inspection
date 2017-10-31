@@ -35,7 +35,7 @@ Namespace core
             Dim dt As New DataTable
             Dim dl As New dlayer
 
-            Dim strConnString As String = dl.CtxConnectionString
+            Dim strConnString As String = dl.GetCtxConnectionString_("")
             Dim con As New SqlConnection(strConnString)
             Dim sda As New SqlDataAdapter
             cmd.CommandType = CommandType.Text
