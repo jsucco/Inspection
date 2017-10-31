@@ -56,7 +56,7 @@ Namespace core
                     Dim CacheString As String = todate.ToString("yy-MM-dd") + "." + fromdate.ToString("yy-MM-dd")
                     Try
                         If objdm.NextFlag = "false" And FilterList.Count = 0 Then
-                            listdm = AssembleObject()
+                            listdm = IU.GetSpecSummary(fromdate, todate)
                         ElseIf FilterList.Count > 0 And IsNothing(objdm.FilterListstring) = False Then
                             If IsNothing(listdm) = False Then
                                 listdm = AssembleObject()

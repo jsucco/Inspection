@@ -363,7 +363,7 @@ Namespace core
                 If InspectionJob Is Nothing Then
                     Return False
                 End If
-                InspectionJob.TotalInspectedItems = Nothing
+
                 InspectionJob.Technical_PassFail = Nothing
                 InspectionJob.Technical_PassFail_Timestamp = Nothing
                 InspectionJob.UserConfirm_PassFail = Nothing
@@ -518,6 +518,7 @@ Namespace core
             jsobj.UnitDesc = as400.Getas400UnitDesc(DataNo)
             jsobj.TemplateId = TemplateId
             jsobj.PRP_Code = ""
+            jsobj.TotalInspectedItems = 0
             If Len(jsobj.JobNumber) > 2 And jsobj.WOQuantity > 0 And TemplateId > 0 Then
 
                 If jsobj.JobType = "WorkOrder" Then

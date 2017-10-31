@@ -8,6 +8,7 @@ Namespace core
         Inherits System.Web.UI.Page
 
         Private Shared resultContent As String = ""
+        Private Shared errorEx As Exception = Nothing
 
         Private Shared Async Function GetCached(CID As String) As Threading.Tasks.Task(Of MethodResponse)
             'Dim address As String = "http://coredemo2.standardtextile.com/api/WorkRooms/" + CID
@@ -24,7 +25,7 @@ Namespace core
                     Return LoadResponse(response)
                 End Using
             Catch ex As Exception
-
+                errorEx = ex
             End Try
             Return LoadResponse("")
         End Function
@@ -92,8 +93,8 @@ Namespace core
 
             Dim content = task.Result
 
-            If content.Result = False Then
-                Elmah.ErrorSignal.FromCurrentContext().Raise(New Exception(content.ErrorMessage))
+            If IsNothing(errorEx) = False Then
+                Elmah.ErrorSignal.FromCurrentContext().Raise(errorEx)
             End If
 
             Return jser.Serialize(content.Content)
