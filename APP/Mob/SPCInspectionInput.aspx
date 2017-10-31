@@ -881,7 +881,7 @@
             var buttonname_ = $(this).attr('name');
             var $c = $(this).css("background-color");
             hexc($c);
-            alert(color);
+            //alert(color);
             if ($Location.val() != "" || $LotSize.val() != "" || $AuditorName.Val() != "" || $DataNo.Val() != "") {
                 if (buttonvalue_) {
                     $('#DefectFlag').text('[' + button_lib_id + "." + buttonvalue_ + ']');

@@ -17,7 +17,7 @@ Public Class JobAPI
             setAuthorizationHeader(client)
             client.DefaultRequestHeaders.Accept.Add(New MediaTypeWithQualityHeaderValue("application/json"))
 
-            Dim result = Await client.PostAsJsonAsync(Of JobHeader)("http://coreroute_test.standardtextile.com/api/SuggestJob", data).ConfigureAwait(False)
+            Dim result = Await client.PostAsJsonAsync(Of JobHeader)("http://falter.standardtextile.com/api/SuggestJob", data).ConfigureAwait(False)
             'Dim result = Await client.PostAsJsonAsync(Of JobHeader)("http://localhost:58661/api/SuggestJob", data).ConfigureAwait(False)
 
             Dim response = result.Content.ReadAsStringAsync().Result
