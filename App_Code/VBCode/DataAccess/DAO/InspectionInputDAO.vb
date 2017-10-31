@@ -289,7 +289,7 @@ Namespace core
 
                 ' returnid = bmapjs.InsertSpcObject()
                 Dim sql As String = "INSERT INTO InspectionJobSummary (JobType, JobNumber, Standard, CID, TemplateId, ItemPassCount, ItemFailCount, WOQuantity, WorkOrderPieces, AQL_Level, SampleSize, RejectLimiter, Inspection_Started, DataNo, UnitCost, UnitDesc, PRP_Code, EmployeeNo, CasePack, WorkRoom, TotalInspectedItems )" & vbCrLf &
-                                        "VALUES (@JobType,@JobNumber, @Standard, @CID, @TemplateId, @ItemPassCount,@ItemFailCount,@WOQuantity, @WorkOrderPieces, @AQL_Level,@SampleSize,@RejectLimiter, @Inspection_Started, @DataNo, @UnitCost, @UnitDesc, @PRP_Code, @EmployeeNo, @CasePack, @WorkRoom, @TotalInspectedItems)"
+                                        "VALUES (@JobType,@JobNumber, @Standard, @CID, @TemplateId, @ItemPassCount,@ItemFailCount,@WOQuantity, @WorkOrderPieces, @AQL_Level,@SampleSize,@RejectLimiter, @Inspection_Started, @DataNo, @UnitCost, @UnitDesc, @PRP_Code, @EmployeeNo, @CasePack, @WorkRoom, @TotalInspectedItems1)"
                 returnid = bmapjs.InsertSpcObject_RetNum(sql, jslist, True)
 
             End If

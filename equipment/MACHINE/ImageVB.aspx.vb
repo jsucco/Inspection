@@ -35,7 +35,7 @@ Namespace core
             Dim dt As New DataTable
             Dim dl As New dlayer
 
-            Dim strConnString As String = dl.GetCtxConnectionString_("")
+            Dim strConnString As String = dl.GetCtxConnectionString_("000578")
             Dim con As New SqlConnection(strConnString)
             Dim sda As New SqlDataAdapter
             cmd.CommandType = CommandType.Text
@@ -56,8 +56,5 @@ Namespace core
         End Function
 
     End Class
-
-
-
 
 End Namespace
