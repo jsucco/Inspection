@@ -48,29 +48,6 @@ Namespace core
                 Context.Cache.Insert("CacheImageDefectId_" + DefectId.ToString(), ImageList, Nothing, Now.AddDays(100), System.Web.Caching.Cache.NoSlidingExpiration)
             End If
         End Sub
-        Public Function GetData(ByVal cmd As SqlCommand) As DataTable
-            Dim dt As New DataTable
-            Dim dl As New dlayer
-
-            Dim strConnString As String = dl.CtxConnectionString
-            Dim con As New SqlConnection(strConnString)
-            Dim sda As New SqlDataAdapter
-            cmd.CommandType = CommandType.Text
-            cmd.Connection = con
-            Try
-                con.Open()
-                sda.SelectCommand = cmd
-                sda.Fill(dt)
-                Return dt
-            Catch ex As Exception
-                Response.Write(ex.Message)
-                Return Nothing
-            Finally
-                con.Close()
-                sda.Dispose()
-                con.Dispose()
-            End Try
-        End Function
 
     End Class
 
