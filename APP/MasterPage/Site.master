@@ -74,9 +74,7 @@
                         <asp:MenuItem NavigateUrl="~/EQUIPMENT/Machines.aspx" Text="EQUIPMENT"/>
                         <asp:MenuItem NavigateUrl="~/UTILITIES/utilities.aspx" Text="UTILITIES"/>
                         <asp:MenuItem NavigateUrl="~/EQUIPMENT/MACHINE/MachineStatus.aspx" Text="MACHINE STATUS"/>
-                        <asp:MenuItem NavigateUrl="~/APP/Presentation/SPCInspectionReporter.aspx" Text="INSPECTION TOOL">
-                            <asp:MenuItem NavigateUrl ="~/APP/Mob/SPCInspectionInput.aspx" Text="INPUT" Value="INPUT" />
-                            </asp:MenuItem>
+                        <asp:MenuItem NavigateUrl="~/APP/Mob/SPCInspectionInput.aspx" Text="INSPECTION TOOL"/> <%--Fixed the broken Link and deleted the extra input--%>
                     </Items>
                     
                 </asp:Menu>

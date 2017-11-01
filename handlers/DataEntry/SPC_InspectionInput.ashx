@@ -148,7 +148,31 @@ Namespace core
                 Exit Function
             End If
         End Function
+        Public Function getIncrement(ByVal IncrementId As Integer) As Integer
+            If IncrementId <> 0 Then
 
+
+                Return IU.getIncrement(IncrementId)
+            Else
+                Return -1
+            End If
+
+
+        End Function
+        Public Function setIncrement(ByVal IncrementId As Integer, ByVal IncrementAmount As String) As Boolean
+            If IncrementId <> 0 Then
+
+
+                If IU.setIncrement(IncrementId, IncrementAmount) Then
+
+                    Return True
+                Else
+                    Return False
+                End If
+            Else
+                Return False
+            End If
+        End Function
         Private Function GetDefectType(ByVal ButtonTemplateId As Integer) As Object
             Dim bmap_dt As New BMappers(Of SingleObject)
             Dim defecttype_obj As New List(Of SingleObject)
@@ -364,12 +388,7 @@ Namespace core
                     Return False
                 End If
 
-                InspectionJob.Technical_PassFail = Nothing
-                InspectionJob.Technical_PassFail_Timestamp = Nothing
-                InspectionJob.UserConfirm_PassFail = Nothing
-                InspectionJob.UserConfirm_PassFail_Timestamp = Nothing
-                InspectionJob.Inspection_Finished = Nothing
-                _db.SaveChanges()
+                IU.EditCompletedProperties(JobId)
             End Using
             Return True
         End Function

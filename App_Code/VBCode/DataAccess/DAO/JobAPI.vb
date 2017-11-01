@@ -3,6 +3,8 @@ Imports System.Net.Http.Headers
 Imports System.Threading.Tasks
 Imports System.Web.Script.Serialization
 Imports Microsoft.VisualBasic
+Imports System.Web.Ex
+Imports Newtonsoft.Json
 
 Public Class JobAPI
     Private Shared jser As JavaScriptSerializer
@@ -13,7 +15,7 @@ Public Class JobAPI
 
         Dim url = ConfigurationManager.AppSettings("InspectServicesBaseUrl")
 
-        Dim json = jser.Serialize(data)
+        Dim json As String = JsonConvert.SerializeObject(data)
 
         Using client As New HttpClient()
             setAuthorizationHeader(client)

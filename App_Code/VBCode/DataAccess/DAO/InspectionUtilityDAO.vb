@@ -10,7 +10,7 @@ Namespace core
 
 
     Public Class InspectionUtilityDAO
-
+        Inherits System.Web.UI.Page
         Private Property _DAOFactory As New DAOFactory
         Private Property DL As New dlayer
         Private Property util As New Utilities
@@ -28,7 +28,49 @@ Namespace core
         Dim PickCountcmd As SqlCommand
         Dim PickCountConnection As SqlConnection
         Dim result As Boolean
+        Dim ExecuteConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
+        Dim Connection As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString) 'Connection to MyDB
+        Dim Command As New SqlCommand
+        Dim DR As SqlDataReader
+        Function ExecuteSQL(ByVal SQL As String, ByVal Log As String) As Object
+            'This function executes and logs all of our custom SQL statements.
 
+            Dim Outcome As String
+            Command.Connection = ExecuteConnection
+            ExecuteConnection.Open()
+            Dim ErrorString As String = ""
+            Try
+                'Attemp to execute SQL statement passed into function
+                Command.CommandText = SQL
+                Command.ExecuteNonQuery()
+                Outcome = "Successful"
+            Catch ex As Exception
+                'If SQL statement fails log error and trap exception
+                ErrorString += " " & ex.ToString
+                Outcome = "Failed"
+                'LogEvent(1, "EXECUTE_SQL", "1 - Failure Executing SQL Statement", SQL, 1, Replace(ex.ToString, "'", "''"))
+            End Try
+            If Log = 1 Then
+                Try
+                    'Log our SQL attempt and any errors that may have been thrown
+                    Command.CommandText = "insert into MY_sql_execution(MYSQL_Statement, MYSQL_Error, MYSQL_Result, MYSQL_Record, MYSQL_Form, MYSQL_UID, MYSQL_Login, MYSQL_Fullname, MYSQL_IP, MYSQL_SessionID) Select "
+                    Command.CommandText += "'" + Replace(SQL, "'", "''") + "' as 'MYSQL_Statement', "
+                    Command.CommandText += "'" + Replace(ErrorString, "'", "''") + "' as 'MYSQL_Error',"
+                    Command.CommandText += "'" + Outcome + "' as 'MYSQL_Result',"
+                    Command.CommandText += "'" + Request.QueryString("JID") + "' as 'MYSQL_Record',"
+                    Command.CommandText += "'LandingPage.aspx' as 'Source',"
+                    Command.CommandText += "'" + Convert.ToString(0) + "' as 'MYSQL_UID',"
+                    Command.CommandText += "'" + "" + "' as 'MYSQL_Login',"
+                    Command.CommandText += "'" + "None" + "' as 'MYSQL_Fullname',"
+                    Command.CommandText += "'" + Request.UserHostAddress + "' as 'MYSQL_IP', "
+                    Command.CommandText += "'" + Session.SessionID + "' as 'MYSQL_SessionID'"
+                    Command.ExecuteNonQuery()
+                Catch exc As Exception
+                End Try
+            End If
+            ExecuteConnection.Close()
+            Return Outcome
+        End Function
         Public Sub New()
             Dim PointToTest = System.Web.Configuration.WebConfigurationManager.AppSettings("PointToTest")
 
@@ -36,14 +78,66 @@ Namespace core
                 AprManagerDb = System.Web.Configuration.WebConfigurationManager.AppSettings("AprManagerTestDb")
             End If
         End Sub
+        Public Function setIncrement(ByVal rowId As Integer, ByVal IncrementAmount As String) As Integer
+            Dim Outcome As String = ""
+            Dim SQL As String = "UPDATE dbo.InspectionJobSummary SET TotalInspectedItems= TotalInspectedItems+" & IncrementAmount & " WHERE id =  " & rowId.ToString()
+            Outcome = ExecuteSQL(SQL, 1)
+            If Outcome = "Successful" Then
+                Return True
+            End If
+            Return False
+        End Function
+        Public Function EditCompletedProperties(ByVal rowId As Integer) As Integer
+            Dim Outcome As String = ""
+            Dim retval As Integer = -1
+            Dim SQL As String = "UPDATE dbo.InspectionJobSummary SET Technical_PassFail = NULL,Technical_PassFail_TimeStamp = NULL, UserConfirm_PassFail = NULL,UserConfirm_PassFail_TimeStamp = NULL,Inspection_Finished = NULL  WHERE id =  " & rowId.ToString()
+            Outcome = ExecuteSQL(SQL, 1)
+            If Outcome = "Successful" Then
+                Return 1
+            End If
+            Return False
+        End Function
+        Public Function setISRow(ByVal rowId As Integer, ByVal ItemFailCount As Integer, ByVal TotalInspectedItems As Integer, ByVal TechnicalPassFail As Boolean, ByVal ItemPassCount As Integer, ByVal MajorsCount As Integer, ByVal MinorsCount As Integer, ByVal RepairsCount As Integer, ByVal ScrapCount As Integer, ByVal UserConfirm_PassFail As Boolean, ByVal UserConfirm_PassFail_Timestamp As DateTime, ByVal Inspection_Finished As DateTime, ByVal JobType As String, ByVal Comments As String) As Integer
+            Dim Outcome As String = ""
+            Dim retval As Integer = -1
+            Dim SQL As String = "UPDATE dbo.InspectionJobSummary SET ItemFailCount= " & ItemFailCount & ",TotalInspectedItems = " & TotalInspectedItems & ",Technical_PassFail = '" & TechnicalPassFail & "',ItemPassCount = " & ItemPassCount & ",MajorsCount = " & MajorsCount & ",MinorsCount = " & MinorsCount & ",RepairsCount = " & RepairsCount & ",ScrapCount = " & ScrapCount & ",UserConfirm_PassFail = '" & UserConfirm_PassFail & "',UserConfirm_PassFail_TimeStamp = CAST('" & UserConfirm_PassFail_Timestamp & "' AS DATETIME),Inspection_Finished = CAST('" & Inspection_Finished & "' AS DATETIME),JobType = '" & JobType & "',Comments = '" & Comments & "' WHERE id =  " & rowId.ToString()
+            Outcome = ExecuteSQL(SQL, 1)
+            If Outcome = "Successful" Then
+                Return 1
+            End If
+            Return False
+        End Function
+        Public Function getIncrement(ByVal rowId As Integer) As Integer
+            Dim retval As Integer = -1
+            Dim SQL As String = "SELECT TotalInspectedItems as INSITEMS From dbo.InspectionJobSummary WHERE id=" & rowId.ToString()
+            Command.CommandType = CommandType.Text 'sets the type of the sql
+            Command.Connection = Connection 'sets the connection of our sql command to MyDB
+            Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+            Connection.Open() 'opens the connction
+            DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+            If DR.HasRows = True Then 'Check whether the SqlDataReader has 1 or more rows
+                DR.Read() 'The default position of the SqlDataReader is before the first record. Therefore, you must call Read to begin accessing any data.  The reader has moved down to the first row.
+                'Response.Write(DR("Cust_Name")) 'Writes a string to an HTTP response output stream.  In this case, just Cust_Name
 
+                retval = Convert.ToInt32(DR("INSITEMS")) '
+
+            Else
+                Return retval
+
+
+            End If
+
+            Connection.Close() 'closes the connection
+            DR.Close() 'closes the reader
+            Return retval
+        End Function
 
         Public Function GetButtonLibrary() As List(Of SPCInspection.buttonlibrary)
 
             Dim ButtonValues As New List(Of SPCInspection.buttonlibrary)()
             Dim sqlstring As String
 
-            sqlstring = "select * from dbo.ButtonLibrary ORDER BY UPPER(Name) asc"
+            sqlstring = "select * from dbo.ButtonLibrary WHERE Hide = 0 ORDER BY UPPER(Name) asc"
 
             ButtonValues = _DAOFactory.getbuttonlibrary(sqlstring, 3)
 
@@ -52,7 +146,7 @@ Namespace core
         End Function
         Public Function GetLibraryGrid() As List(Of SPCInspection.ButtonLibrarygrid)
             Dim selectObjects As New List(Of SPCInspection.ButtonLibrarygrid)
-            Dim sql As String = "SELECT ButtonId, Name, DefectCode, Hide FROM ButtonLibrary ORDER BY UPPER(Name) asc"
+            Dim sql As String = "SELECT ButtonId, Name, DefectCode, Hide FROM ButtonLibrary Where Hide = 0 ORDER BY UPPER(Name) asc"
             Dim bmap As New BMappers(Of SPCInspection.ButtonLibrarygrid)
             'selectObjects = BMapper(Of SPCInspection.ButtonLibrarygrid).GetInspectObject(sql)
             selectObjects = bmap.GetInspectObject(sql)
@@ -196,10 +290,7 @@ Namespace core
 
         End Function
 
-        Public Function DeleteDefectId(ByVal DefectId As Integer) As Integer
 
-
-        End Function
 
         Public Function GetTemplateCollection(ByVal TemplateId As Integer) As List(Of SPCInspection.TemplateCollection)
             Dim sqlstring As String
@@ -479,83 +570,102 @@ Namespace core
 
 
         End Function
+        Public Function delSpecM(ByVal rowId As Integer) As Integer
+            Dim Outcome As String = ""
+            Dim SQL As String = "DELETE FROM dbo.SpecMeasurements Where SpecId = " & rowId.ToString()
+
+            Outcome = ExecuteSQL(SQL, 1)
+
+
+            If Outcome = "Successful" Then
+                Return True
+            End If
+            Return False
+        End Function
+        Public Function delSpec(ByVal rowId As Integer) As Integer
+            Dim Outcome As String = ""
+            Dim SQL As String = "DELETE FROM dbo.ProductSpecification Where SpecId = " & rowId.ToString()
+            If delSpecM(rowId) Then
+                Outcome = ExecuteSQL(SQL, 1)
+            End If
+
+            If Outcome = "Successful" Then
+                Return True
+            End If
+            Return False
+        End Function
+        Public Function EditButtonClass(ByVal tabId As Integer, ByVal DefectClass As String) As Integer
+            Dim Outcome As String = ""
+            Dim SQL As String = "UPDATE dbo.ButtonTemplate SET DefectType='" & DefectClass & "' WHERE id =  " & tabId.ToString()
+            Outcome = ExecuteSQL(SQL, 1)
+            If Outcome = "Successful" Then
+                Return True
+            End If
+            Return False
+        End Function
+        Public Function DeleteDefectButtonTemplate(ByVal rowId As Integer) As Integer 'helper method to get AROUND FOREIGN KEY CONSTRAINTS
+            Dim Outcome As String = ""
+            Dim SQL As String = "UPDATE dbo.ButtonTemplate SET Hide = 1 WHERE ButtonId =  " & rowId.ToString()
+            Outcome = ExecuteSQL(SQL, 1)
+            If Outcome = "Successful" Then
+                Return True
+            End If
+            Return False
+        End Function
+        Public Function DeleteRow(ByVal rowId As Integer) As Integer
+            Dim Outcome As String = ""
+            Dim SQL As String = "UPDATE dbo.ButtonLibrary SET Hide = 1 WHERE ButtonId = " & rowId.ToString()
+            If DeleteDefectButtonTemplate(rowId) Then
+                Outcome = ExecuteSQL(SQL, 1)
+            End If
+            If Outcome = "Successful" Then
+                Return True
+            End If
+            Return False
+        End Function
+        Public Function AlterDefectRow(ByVal rowId As Integer, ByVal DefectCode As String, ByVal Name As String) As Integer
+            Dim Outcome As String = ""
+            If rowId = -1 Then
+                Dim SQL As String = "INSERT INTO dbo.ButtonLibrary (Name, DefectCode) VALUES ('" & Name & "', '" & DefectCode & "')"
+                Outcome = ExecuteSQL(SQL, 1)
+                If Outcome = "Successful" Then
+                    Return True
+                End If
+                Return False
+
+            Else
+
+                Dim SQL As String = "UPDATE dbo.ButtonLibrary SET Name = '" & Name & "', DefectCode = '" & DefectCode & "' WHERE ButtonId =  " & rowId.ToString()
+                Outcome = ExecuteSQL(SQL, 1)
+                If Outcome = "Successful" Then
+                    Return True
+                End If
+                Return False
+            End If
+
+        End Function
         Public Function DeleteTabTemplate(ByVal TabTemplatId As Integer, ByVal TemplateId As Integer) As Integer
-            Dim SQL As String
-            Dim sqlcommand As SqlCommand
-            Dim returnint As Integer
-
-
-            SQL = "UPDATE TabTemplate SET Active = 0" & vbCrLf &
-                    "WHERE (TemplateId = " & TemplateId.ToString() & ") AND (TabTemplateId = " & TabTemplatId.ToString() & ")"
-            Using connection As New SqlConnection(DL.InspectConnectionString())
-
-                sqlcommand = _DAOFactory.GetCommand(SQL.ToString(), connection)
-                'Add command parameters             
-
-                Try
-                    sqlcommand.Connection.Open()
-                    returnint = sqlcommand.ExecuteNonQuery()
-
-                    If returnint < 1 Then
-                        Return False
-                    End If
-
-                Catch e As Exception
-                    Return False
-                End Try
-
-
-
-            End Using
-            Return True
+            Dim Outcome As String = ""
+            Dim SQL As String = "UPDATE TabTemplate SET Active = 0 WHERE (TemplateId = " & TemplateId.ToString() & ") AND (TabTemplateId = " & TabTemplatId.ToString() & ")"
+            Outcome = ExecuteSQL(SQL, 1)
+            If Outcome = "Successful" Then
+                Return True
+            End If
+            Return False
 
         End Function
         Public Function UpdateButtonLibrary(ByVal obj As SPCInspection.ButtonLibrarygrid) As Boolean
-            Dim SQL As String
-            Dim sqlcommand As SqlCommand
-            Dim returnint As Integer
-
-
-            SQL = "UPDATE ButtonLibrary" & vbCrLf &
-                    "SET Name = @Name, DefectCode = @DefectCode, Hide = @Hide" & vbCrLf &
-                    "WHERE (ButtonId = @ButtonId)"
-            Using connection As New SqlConnection(DL.InspectConnectionString())
-
-                sqlcommand = _DAOFactory.GetCommand(SQL.ToString(), connection)
-                sqlcommand.Parameters.Add(_DAOFactory.Getparameter("@ButtonId", DbType.Int32))
-                sqlcommand.Parameters.Add(_DAOFactory.Getparameter("@Name", DbType.String))
-                sqlcommand.Parameters.Add(_DAOFactory.Getparameter("@DefectCode", DbType.String))
-                sqlcommand.Parameters.Add(_DAOFactory.Getparameter("@Hide", DbType.Boolean))
-                'Add command parameters             
-                sqlcommand.Parameters("@ButtonId").Value = obj.ButtonId
-                sqlcommand.Parameters("@Name").Value = obj.Name
-                sqlcommand.Parameters("@DefectCode").Value = obj.DefectCode
-                sqlcommand.Parameters("@Hide").Value = obj.Hide
-
-                Try
-                    sqlcommand.Connection.Open()
-                    returnint = sqlcommand.ExecuteNonQuery()
-
-                    If returnint < 1 Then
-                        Return False
-                    End If
-
-                Catch e As Exception
-                    Return False
-                End Try
-
-
-
-            End Using
-            Return True
-
-
-
+            Dim Outcome As String = ""
+            Dim SQL As String = "UPDATE dbo.ButtonLibrary SET Name = '" & obj.Name & "', DefectCode = '" & obj.DefectCode & "' WHERE ButtonId =  " & obj.ButtonId.ToString()
+            Outcome = ExecuteSQL(SQL, 1)
+            If Outcome = "Successful" Then
+                Return True
+            End If
+            Return False
         End Function
         Public Function ToggleStatusTemplateById(ByVal TemplateId As Integer, ByVal Status As Boolean) As Integer
+            Dim Outcome As String = ""
             Dim SQL As String
-            Dim sqlcommand As SqlCommand
-            Dim returnint As Integer
             Dim StatusVal As String
 
             If Status = True Then
@@ -563,61 +673,27 @@ Namespace core
             Else
                 StatusVal = "1"
             End If
+            SQL = "UPDATE TemplateName SET Active = " & StatusVal & "WHERE (TemplateId = " & TemplateId.ToString() & ")"
+            Outcome = ExecuteSQL(SQL, 1)
+            If Outcome = "Successful" Then
+                Return True
+            End If
+            Return False
 
-            SQL = "UPDATE TemplateName" & vbCrLf &
-                    "SET Active = " & StatusVal & " " & vbCrLf &
-                    "WHERE (TemplateId = " & TemplateId.ToString() & ")"
-            Using connection As New SqlConnection(DL.InspectConnectionString())
-
-                sqlcommand = _DAOFactory.GetCommand(SQL.ToString(), connection)
-                'Add command parameters             
-
-                Try
-                    sqlcommand.Connection.Open()
-                    returnint = sqlcommand.ExecuteNonQuery()
-
-                    If returnint < 1 Then
-                        Return 0
-                    End If
-
-                Catch e As Exception
-                    Return -1
-                End Try
-
-
-
-            End Using
-            Return returnint
 
         End Function
         Public Function UpdateProductSpecBit(ByVal TabTemplateId As Integer) As Integer
             Dim SQL As String
-            Dim sqlcommand As SqlCommand
-            Dim returnint As Integer
-
+            Dim Outcome As String = ""
             SQL = "UPDATE TabTemplate" & vbCrLf &
             "SET ProductSpecs = 1" & vbCrLf &
             "WHERE (TabTemplateId = " & TabTemplateId.ToString() & ")"
 
-            Using connection As New SqlConnection(DL.InspectConnectionString())
-
-                sqlcommand = _DAOFactory.GetCommand(SQL.ToString(), connection)
-                'Add command parameters             
-
-                Try
-                    sqlcommand.Connection.Open()
-                    returnint = sqlcommand.ExecuteNonQuery()
-
-                    If returnint < 1 Then
-                        Return 0
-                    End If
-
-                Catch e As Exception
-                    Throw New System.Exception(e.Message)
-                End Try
-
-            End Using
-            Return returnint
+            Outcome = ExecuteSQL(SQL, 1)
+            If Outcome = "Successful" Then
+                Return True
+            End If
+            Return False
 
         End Function
 
@@ -1980,7 +2056,7 @@ Namespace core
             Dim con As New SqlConnection(DL.InspectConnectionString())
             Dim cmd As SqlCommand = con.CreateCommand()
             Dim rglist As New List(Of SPCInspection.WorkOrderCompliance)
-            Dim Branch As String
+
             Try
                 Using con
                     con.Open()
@@ -2012,7 +2088,7 @@ Namespace core
             Dim con As New SqlConnection(DL.InspectConnectionString())
             Dim cmd As SqlCommand = con.CreateCommand()
             Dim rglist As New List(Of SPCInspection.InspectionCompliance_Local)
-            Dim Branch As String
+
             Try
                 Using con
                     con.Open()
@@ -2043,7 +2119,7 @@ Namespace core
             Dim con As New SqlConnection(DL.InspectConnectionString())
             Dim cmd As SqlCommand = con.CreateCommand()
             Dim rglist As New List(Of SingleObject)
-            Dim Branch As String
+
             Try
                 Using con
                     con.Open()
@@ -2087,7 +2163,7 @@ Namespace core
             Dim con As New SqlConnection(DL.InspectConnectionString())
             Dim cmd As SqlCommand = con.CreateCommand()
             Dim rglist As New List(Of SPCInspection.InspectionCompliance_Local)
-            Dim Branch As String
+
             Try
                 Using con
                     con.Open()
@@ -2768,8 +2844,6 @@ Namespace core
         Public Function GetRollInspectionSummaryHeaders(ByVal datefrom As DateTime, ByVal dateto As DateTime) As List(Of SPCInspection.RollInspectionSummaryHeaders)
             Dim con As New SqlConnection(DL.InspectConnectionString)
             Dim cmd As SqlCommand = con.CreateCommand()
-            Dim corereader As SqlDataReader
-            Dim record As IDataRecord
             Dim readerlist As New List(Of SPCInspection.RollInspectionSummaryHeaders)
             Dim Sql As String
             Dim datefromstring As String

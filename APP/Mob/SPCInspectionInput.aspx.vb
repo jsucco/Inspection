@@ -58,7 +58,7 @@ Namespace core
         Dim TemplateCollectionCache As String
         Private IstestMode As Boolean = False
         Private CurrentTemplateNames As New List(Of selector2array)
-
+        Private IU As New InspectionUtilityDAO
         Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
 
             Dim QueryUsername As String = Request.QueryString("Username")
@@ -436,7 +436,7 @@ Namespace core
                         curijs.JobType = InspectionState.Value
                         curijs.Comments = JobMessage.Value
 
-                        Dim rowsaff As Integer = _db.SaveChanges()
+                        Dim rowsaff As Integer = IU.setISRow(ijsnum, curijs.ItemFailCount, curijs.TotalInspectedItems, curijs.Technical_PassFail, curijs.ItemPassCount, curijs.MajorsCount, curijs.MinorsCount, curijs.RepairsCount, curijs.ScrapCount, curijs.UserConfirm_PassFail, curijs.UserConfirm_PassFail_Timestamp, curijs.Inspection_Finished, curijs.JobType, curijs.Comments)
 
                         If rowsaff > 0 Then
                             SetCookieExp("LastAQLCompleted", "value", curijs.AQL_Level, 1)
@@ -479,7 +479,7 @@ Namespace core
             End Try
 
             Response.Clear()
-            Response.Redirect("~/APP/Mob/SPCInspectionInput.aspx?TemplateId=" + SelectedId.ToString())
+            Response.Redirect("~/APP/Mob/SPCInspectionInput.aspx?TemplateId=-1")
 
         End Sub
 

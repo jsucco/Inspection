@@ -17,6 +17,22 @@ Namespace core
         Private Util As New Utilities
 
         Dim Colors As String() = {"rgb(93, 135, 161)", "rgb(176, 181, 121)", "rgb(251, 176, 64)", "rgb(149, 160, 169)", "rgb(211, 18, 69)", "rgb(255, 222, 117)", "rgb(233, 227, 220)", "rgb(95, 110, 119)", "rgb(8, 88, 139)", "rgb(156, 123, 156)", "rgb(93, 152, 89)", "rgb(134, 152, 89)"}
+        Public Function AlterDefectRow(ByVal rowId As Integer, ByVal DefectCode As String, ByVal Name As String) As Boolean
+            If rowId <> 0 Then
+
+
+                If IU.AlterDefectRow(rowId, DefectCode, Name) Then
+                    IU.UpdateTemplateCollectionCache(rowId)
+                    Return True
+                Else
+                    Return False
+                End If
+            Else
+                Return False
+            End If
+
+
+        End Function
         Public Function GetButtonLibrary() As String
             Dim DSB As New DisplayBoardDAO
             Dim jser As New JavaScriptSerializer
@@ -29,9 +45,51 @@ Namespace core
             Else
                 Return "nodata"
             End If
+        End Function
+        Public Function ChangeDefect(ByVal DefectId As Integer, ByVal ClassDefect As String) As Boolean
+            If DefectId <> 0 Then
+
+
+                If IU.EditButtonClass(DefectId, ClassDefect) Then
+                    IU.UpdateTemplateCollectionCache(DefectId)
+                    Return True
+                Else
+                    Return False
+                End If
+            Else
+                Return False
+            End If
+        End Function
+        Public Function delSpec(ByVal rowId As Integer) As Boolean
+            If rowId <> 0 Then
+
+
+                If IU.delSpec(rowId) Then
+                    IU.UpdateTemplateCollectionCache(rowId)
+                    Return True
+                Else
+                    Return False
+                End If
+            Else
+                Return False
+            End If
+        End Function
+        Public Function DeleteRow(ByVal rowId As Integer) As Boolean
+            If rowId <> 0 Then
+
+
+                If IU.DeleteRow(rowId) Then
+                    IU.UpdateTemplateCollectionCache(rowId)
+                    Return True
+                Else
+                    Return False
+                End If
+            Else
+                Return False
+            End If
+
 
         End Function
-
         Public Function GetButtonLibraryGrid() As String
             Dim DSB As New DisplayBoardDAO
             Dim jser As New JavaScriptSerializer
