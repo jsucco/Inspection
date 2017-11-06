@@ -236,7 +236,7 @@ Namespace core
                 DataNumber.Value = UserData.MainContent_DataNumber
                 workroom.Value = UserData.MainContent_workroom
                 AuditorName.Value = UserData.MainContent_AuditorName
-                CPNumber.Value = UserData.MainContent_CPNumber
+                'CPNumber.Value = UserData.
                 WOQuantityValue = UserData.WOQuantity
                 RollNumber.Value = UserData.MainContent_RollNumber
                 LoomNumber.Value = UserData.MainContent_LoomNumber
@@ -455,7 +455,7 @@ Namespace core
                             SampleSize.Value = "0"
                             DataNumber.Value = ""
                             CartonNumber.Value = ""
-                            CPNumber.Value = ""
+                            'CPNumber.Value = ""
                             RollNumber.Value = ""
                             LoomNumber.Value = ""
                             woquantity_hidden.Value = "0"
@@ -620,7 +620,7 @@ Namespace core
             Dim CartonNumberArray = as400.GetInputCartonData(CartonNumber_input).ToArray()
             If CartonNumberArray.Length > 0 Then
                 DataNumber.Value = CartonNumberArray(0).DATAN
-                CPNumber.Value = CartonNumberArray(0).CASEPACK
+                'CPNumber.Value = CartonNumberArray(0).CASEPACK
                 WOQuantityValue = CartonNumberArray(0).WOQUANTITY
                 WorkOrder.Value = CartonNumberArray(0).WONUM
                 CartonNumber.Value = CartonNumber_input
@@ -691,7 +691,7 @@ Namespace core
                 DataNumber.Value = listijs.ToArray()(0).DataNo
                 workroom_hidden.Value = listijs.ToArray()(0).WorkRoom
                 'workroom.Value = listijs.ToArray()(0).WorkRoom
-                CPNumber.Value = listijs.ToArray()(0).CasePack
+                'CPNumber.Value = listijs.ToArray()(0).CasePack
                 AuditorName.Value = listijs.ToArray()(0).EmployeeNo
                 If workorderarray.Length > 0 Then
                     'Dim casepackCalc As Integer = workorderarray(0).CASEPACK / 10
@@ -764,7 +764,7 @@ Namespace core
                     'CPNumber.Value = workorderarray(0).CASEPACK.ToString.Trim()
                     DataNumber.Value = workorderarray(0).DATAN.Trim()
                     If workorderarray(0).DATAN.Trim().ToString.Length > 0 Then
-                        CPNumber.Value = as400.GetCasePackConv(workorderarray(0).DATAN.Trim().ToString)
+                        'CPNumber.Value = as400.GetCasePackConv(workorderarray(0).DATAN.Trim().ToString)
                     End If
                     Location.Value = workorderarray(0).LOCATION.Trim()
                     WOQuantityValue = workorderarray(0).WOQUANTITY

@@ -3,7 +3,7 @@
 Imports App.Utilities.Web.Handlers
 Imports System.Web.Script.Serialization
 Imports System.Data
-
+Imports Newtonsoft.Json
 Namespace core
 
     Public Class SPC_InspectionInput
@@ -172,6 +172,18 @@ Namespace core
             Else
                 Return False
             End If
+        End Function
+        Public Function GetMachineLocation(ByVal Location As String) As String
+
+            If Location <> Nothing Then
+
+
+                Return JsonConvert.SerializeObject(IU.GetMachineLocation(Location))
+            Else
+                Return Nothing
+            End If
+
+
         End Function
         Private Function GetDefectType(ByVal ButtonTemplateId As Integer) As Object
             Dim bmap_dt As New BMappers(Of SingleObject)
@@ -542,7 +554,7 @@ Namespace core
 
                 If jsobj.JobType = "WorkOrder" Then
                     jsobj.AQL_Level = CType(AQL, Decimal)
-                    jsobj.CasePack = CasePack
+                    jsobj.ProdMachineName = CasePack
                     jsobj.WorkRoom = WorkRoom
                     Try
                         If isCompleted(jsobj.JobNumber, CID, jsobj.AQL_Level) = True Then

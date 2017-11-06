@@ -286,7 +286,7 @@
             </div>
             <div id="cpdiv" class="inputpad leftsidepanel workorder-inspection" style="position:relative; margin-top:5px;">
                 <label for="CPNumberL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">SOURCE</label>
-                <input id="CPNumber" class="inputelement inputbox leftsideobj" type="text" runat="server"   />
+                <select id="CPNumber_Select" class="inputelement inputbox leftsidedropobj" style="width:185px;"></select>
             </div>
             <div id="inspectordiv" class="inputpad leftsidepanel roll-inspection" style="position:relative; margin-top:5px; display:none;">
                 <label for="InspectorL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">INSPECTOR</label>
@@ -503,7 +503,7 @@
     var $rollnumber = $('#MainContent_RollNumber');
     var $itemnumber = $('#MainContent_ItemNumber');
     var $CartonNumber = $('#MainContent_CartonNumber');
-    var $CPNumber = $('#MainContent_CPNumber');
+    var $CPNumber = $('CPNumber_Select');
     var $WorkRoom = $('#MainContent_workroom_hidden');
     var $purchaseorder = $('#MainContent_CartonNumber');
     var $auditorname = $('#MainContent_AuditorName');
@@ -622,6 +622,7 @@
         document.getElementById("LAEqualCheck").style.color = "#ffff00";//set color of warning label to red.
         TargetOrderInput = $('#MainContent_WorkOrder');
         var $_aql = $('#MainContent__AQLevel');
+        
         var warr = <%=WorkRoomArr%>
             TemplateCollection = <%=TemplateCollection%>
             SpecCollection = <%=ProductSpecCollection%>
@@ -664,6 +665,7 @@
         controls.InitNumbers();
         controls.InitStatsTag();
         controls.InitWorkRooms(warr);
+        controls.InitMachineLocation();
         eventshandler.InitPageEventHandlers();
         $(".de_container").fadeIn(150);
 
@@ -681,6 +683,21 @@
                         $goodcount.val(data.toString());
                         //$("#PassCountValue").text(Number($("#MainContent_Good").val()) - Number($("#MainContent_Bad_Group").val()));
 
+                    },
+                    error: function (a, b, c) {
+                        alert(c);
+                    }
+                });
+
+            },
+            GetMachineLocation: function (loc) {
+                $.ajax({
+
+                    url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
+                    type: 'GET',
+                    data: { method: 'GetMachineLocation', args: { Location: loc } },
+                    success: function (data) {
+                        console.log(data);
                     },
                     error: function (a, b, c) {
                         alert(c);
@@ -2000,7 +2017,7 @@
                                 }
                                 break;
                         }
-
+                        $(this).wijdialog('close');
                     },
                     'Close': function () {
                         Inspection.SetWeaversHTML();
@@ -2745,7 +2762,7 @@
                     TargetOrderInput = $('#MainContent_WorkOrder');
                     $(".workorder-inspection").css('display', 'block');
                     $(".roll-inspection").css('display', 'none');
-                    $("#MainContent_CPNumber").prop('disabled', false);
+                    $("#CPNumber_Select").prop('disabled', false);
                     $("#InspectionType").prop('innerText', "WORK ORDER");
                     $("#WOQuantityL").text("WO QUANTITY");
                     $("#DataNumberL").prop('innerText', "DATA NUMBER");
@@ -2759,7 +2776,7 @@
                     TargetOrderInput = $('#MainContent_RollNumber');
                     $(".roll-inspection").css('display', 'block');
                     $(".workorder-inspection").css('display', 'none');
-                    $("#MainContent_CPNumber").prop('disabled', true);
+                    $("#CPNumber_Select").prop('disabled', true);
                     $("#InspectionType").prop('innerText', "ROLL");
                     $("#WOQuantityL").text("YARDS");
                     $("#DataNumberL").prop('innerText', "RM #");
@@ -2777,7 +2794,7 @@
                     TargetOrderInput = $('#MainContent_WorkOrder');
                     $(".workorder-inspection").css('display', 'block');
                     $(".roll-inspection").css('display', 'none');
-                    $("#MainContent_CPNumber").prop('disabled', false);
+                    $("#CPNumber_Select").prop('disabled', false);
                     $("#InspectionType").prop('innerText', "WORK ORDER");
                     $("#WOQuantityL").text("WO QUANTITY");
                     $("#DataNumberL").prop('innerText', "DATA NUMBER");
@@ -2791,8 +2808,50 @@
 
 
     };
+    var SourceArray = [];
+    var dbtrans = {
 
+        GetMachineLocation: function (loc) {
+            $.ajax({
+
+                url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
+                type: 'GET',
+                data: { method: 'GetMachineLocation', args: { Location: loc } },
+                success: function (data) {
+                    console.log(data);
+                    var conversion = JSON.parse(data);
+                    for (i = 0; i < conversion.length; i++) {
+                        SourceArray.push(conversion[i]);
+                    }
+                    console.log(SourceArray);
+                    var html = [];
+                    html.push('<option selected value="0">SELECT OPTION</option>');
+                    html.push('<option value="1">NOT APPLICABLE</option>');
+
+                    for (var i = 0; i < SourceArray.length; i++) {
+                        html.push('<option value="' + (i+2) + '">' + SourceArray[i] + '</option>')
+                    }
+
+                    $("#CPNumber_Select").html(html.join('')).bind("change", function () {
+                        //console.log('hello');
+                        var index = $('#CPNumber_Select').prop('selectedIndex');
+                        console.log(index);
+                        $('#DDSourceSelection').val(''+index);
+                    });
+                    $("#DDSourceSelection").html(html.join('')).bind("change", function () {
+                        //console.log('hello');
+
+                    });
+                },
+                error: function (a, b, c) {
+                    alert(c);
+                }
+            });
+
+        }
+    };
     var controls = {
+        
         InitTemplateDropDown: function (TemplateNames) {
             var html = [];
             var name;
@@ -3071,6 +3130,12 @@
                 }
             });
             $("#WeaverShiftYards").height(30);
+        },
+        InitMachineLocation: function () {
+           //alert($('#MainContent_Location').val());
+            var strLoc = $('#MainContent_Location option:selected').text();
+            dbtrans.GetMachineLocation(strLoc)
+            
         },
         InitWorkRooms: function (warr) {
             if (warr == null || warr.length == 0) {
@@ -3714,7 +3779,7 @@
                 type: 'GET',
                 data: {
                     method: 'CreateJobSummaryId',
-                    args: { jobtype: InspectionTypeState, AQLStandard: $("#MainContent_aqlstandard").val(), IsDefect: IsDefect, JobNumber: JobNumber, WOQuantity: $LotSize.val(), AQL: AQLValue, Location: $Location.val(), TemplateId: SelectedId, DataNo: $DataNo.val().trim(), CID: selectedCIDnum, Auditor: AuditorName, CasePack: $CPNumber.val(), WorkRoom: $WorkRoom.val(), WeaverNamesString: JSON.stringify(Inspection.Weavers) }
+                    args: { jobtype: InspectionTypeState, AQLStandard: $("#MainContent_aqlstandard").val(), IsDefect: IsDefect, JobNumber: JobNumber, WOQuantity: $LotSize.val(), AQL: AQLValue, Location: $Location.val(), TemplateId: SelectedId, DataNo: $DataNo.val().trim(), CID: selectedCIDnum, Auditor: AuditorName, CasePack: $('#CPNumber_Select option:selected').text(), WorkRoom: $WorkRoom.val(), WeaverNamesString: JSON.stringify(Inspection.Weavers) }
                 },
                 success: function (data) {
                     var JobObj = JSON.parse(data);
@@ -4114,7 +4179,7 @@
                     }
                 });
             },
-            ExistingUserInputs: { MainContent_WorkOrder: "", MainContent_workroom: "", MainContent_CPNumber: "", MainContent_DataNumber: "", MainContent_AuditorName: "", MainContent_Location: "", WOQuantity: "", MainContent_RollNumber: "", MainContent_LoomNumber: "", MainContent_Inspector: "" },
+            ExistingUserInputs: { MainContent_WorkOrder: "", MainContent_workroom: "", CPNumber_Select: "", MainContent_DataNumber: "", MainContent_AuditorName: "", MainContent_Location: "", WOQuantity: "", MainContent_RollNumber: "", MainContent_LoomNumber: "", MainContent_Inspector: "" },
             Timeout_id: 0
 
         },
@@ -4158,12 +4223,12 @@
                         if (r == true) {
                             window.location.assign("<%=Session("BaseUri")%>" + "/APP/Mob/SPCInspectionInput.aspx?TemplateId=" + SelectedId.toString() + "&NewInspection=1");
                             //clear the work order, work room, case pack, data number, Auditor name, and Work order quantity fields
-                            //$('#WorkOrder').val('');// Work Order
-                            //$('#workroom').val('');// Work Room
-                            //$('#CPNumber').val('');// Case Pack
-                            //$('#DataNumber').val('');//Data Number
-                            //$('#Name').val('');//Auditor Name
-                            //$('#WOQuantity').val('');//WOQuantity
+                            $('#WorkOrder').val('');// Work Order
+                            $('#workroom').val('');// Work Room
+                            $('#CPNumber').val('');// Case Pack
+                            $('#DataNumber').val('');//Data Number
+                            $('#Name').val('');//Auditor Name
+                            $('#WOQuantity').val('');//WOQuantity
                         }
                     } else {
                         alert("Template Not Selected");

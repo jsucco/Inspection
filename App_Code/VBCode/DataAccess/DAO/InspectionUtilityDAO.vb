@@ -132,6 +132,32 @@ Namespace core
             Return retval
         End Function
 
+        Public Function GetMachineLocation(ByVal Location As String) As List(Of String)
+            Dim retval As New List(Of String)()
+            Dim SQL As String = "SELECT MOP as LOC From dbo.MachineLocations WHERE LOCATION='" & Location & "'"
+            Command.CommandType = CommandType.Text 'sets the type of the sql
+            Command.Connection = Connection 'sets the connection of our sql command to MyDB
+            Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+            Connection.Open() 'opens the connction
+            DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+            If DR.HasRows = True Then 'Check whether the SqlDataReader has 1 or more rows
+                While DR.Read()
+                    retval.Add(String.Format("{0}", CType(DR, IDataRecord)(0)))
+                End While 'The default position of the SqlDataReader is before the first record. Therefore, you must call Read to begin accessing any data.  The reader has moved down to the first row.
+                'Response.Write(DR("Cust_Name")) 'Writes a string to an HTTP response output stream.  In this case, just Cust_Name
+
+
+
+            Else
+                Return retval
+
+
+            End If
+
+            Connection.Close() 'closes the connection
+            DR.Close() 'closes the reader
+            Return retval
+        End Function
         Public Function GetButtonLibrary() As List(Of SPCInspection.buttonlibrary)
 
             Dim ButtonValues As New List(Of SPCInspection.buttonlibrary)()
