@@ -670,6 +670,27 @@
         $(".de_container").fadeIn(150);
 
         var dbtrans = {
+            //dbtrans.RecordSource(InspectionId, $("#DDSourceSelection option:selected").text(), $("#MainContent_Location option:selected").text(), DateTime.now());
+            RecordSource: function (id, mop, loc, time) {
+                $.ajax({
+
+                    url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
+                    type: 'GET',
+                    data: { method: 'RecordSource', args: { ID: id, MOP: mop, LOC:loc, TIME: time } },
+                    success: function (data) {
+                        console.log(data);
+                        Inc_Num = data;
+
+                        $goodcount.val(data.toString());
+                        //$("#PassCountValue").text(Number($("#MainContent_Good").val()) - Number($("#MainContent_Bad_Group").val()));
+
+                    },
+                    error: function (a, b, c) {
+                        alert(c);
+                    }
+                });
+
+            },
             getIncrement: function (id) {
                 $.ajax({
 
@@ -1932,7 +1953,13 @@
                         var BadCount = new Number($badcount.val());
                         var total = GoodCount + BadCount;
                         if (InspectionJobSummaryIdPage > 0) {
-                            datahandler.SubmitDefect(buttonid, buttonvalue, buttonname, InspectionJobSummaryIdPage, InspectionId);
+                            if ($("#DDSourceSelection option:selected").text() !== "SELECT OPTION") {
+                                datahandler.SubmitDefect(buttonid, buttonvalue, buttonname, InspectionJobSummaryIdPage, InspectionId);
+                                dbtrans2.RecordSource($("#<%=InspectionId.ClientID%>").val(), $("#DDSourceSelection option:selected").text(), $("#MainContent_Location option:selected").text());
+                            }
+                            else {
+                                alert("Please select an option.")
+                            }
                         } else {
                             alert("InspectionId must be greater than zero")
                         }
@@ -2809,8 +2836,24 @@
 
     };
     var SourceArray = [];
-    var dbtrans = {
+    var dbtrans2 = {
+        RecordSource: function (id, mop, loc) {
+            $.ajax({
 
+                url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
+                type: 'GET',
+                data: { method: 'RecordSource', args: { ID: id, MOP: mop, LOC: loc } },
+                success: function (data) {
+                   
+                    //$("#PassCountValue").text(Number($("#MainContent_Good").val()) - Number($("#MainContent_Bad_Group").val()));
+
+                },
+                error: function (a, b, c) {
+                    alert(c);
+                }
+            });
+
+        },
         GetMachineLocation: function (loc) {
             $.ajax({
 
@@ -2953,13 +2996,14 @@
                 select: function (e, data) {
 
                     var selectedtext = e.currentTarget.innerText;
-                    //GetCypherHash("<%=Session("BaseUri")%>")
+                    //GetCypherHash("<%=Session("BaseUri")%>");
 
                     switch (selectedtext) {
                         case "INPUT DEFECTS":
                             window.location.assign("<%=Session("BaseUri")%>" + '/APP/Mob/SPCInspectionInput.aspx');
                             break;
                         case "TEMPLATE UTILITY":
+                            //alert("<%=Session("BaseUri")%>");
                             window.location.assign("<%=Session("BaseUri")%>" + '/APP/DataEntry/SPCInspectionUtility.aspx');
                             break;
                         case "RESULTS":
@@ -3134,7 +3178,7 @@
         InitMachineLocation: function () {
            //alert($('#MainContent_Location').val());
             var strLoc = $('#MainContent_Location option:selected').text();
-            dbtrans.GetMachineLocation(strLoc)
+            dbtrans2.GetMachineLocation(strLoc)
             
         },
         InitWorkRooms: function (warr) {

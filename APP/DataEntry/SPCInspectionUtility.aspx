@@ -45,7 +45,7 @@
                     <input id="ActiveTemplateTitle" type="text" style="height: 40px; width: 200px; position: absolute; top: -80px; border: none; left: 100px; font-family: initial; font-size: large; font-weight: 700; /* border: gray; */" value="">
 
 
-                    <asp:Button ID="Button1" CssClass="export" Style="position: absolute; left: 425px; height: 40px; width: 110px; top: 1px;" Text="SAVE" runat="server" />
+                    <asp:Button ID="TemplateSubmit" CssClass="export" Style="position: absolute; left: 425px; height: 40px; width: 110px; top: 1px;" Text="SAVE" runat="server" />
                 </div>
 
             </div>

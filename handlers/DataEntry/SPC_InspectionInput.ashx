@@ -94,12 +94,12 @@ Namespace core
 
                     InspectionJobSummaryIdret = InspectionJobSummaryId
 
-                    DefectArray.Add(New SPCInspection.DefectMaster With {.DefectTime = Convert.ToDateTime(Now), .MergeDate = Convert.ToDateTime(Now), .DefectDesc = text, .POnumber = Convert.ToString(dictionary.Item("MainContent_CPNumber")), .DataNo = Convert.ToString(dictionary.Item("MainContent_DataNumber")), .EmployeeNo = EmployeeNo, .Product = Convert.ToString(dictionary.Item("Product")), .DefectClass = DefectType,
+                    DefectArray.Add(New SPCInspection.DefectMaster With {.DefectTime = Convert.ToDateTime(Now), .MergeDate = Convert.ToDateTime(Now), .DefectDesc = text, .POnumber = 0, .DataNo = Convert.ToString(dictionary.Item("MainContent_DataNumber")), .EmployeeNo = EmployeeNo, .Product = Convert.ToString(dictionary.Item("Product")), .DefectClass = DefectType,
                                     .AQL = Convert.ToString(dictionary.Item("AQ_Level")), .ThisPieceNo = Convert.ToString(CType(dictionary.Item("MainContent_Good"), Long) + CType(dictionary.Item("MainContent_Bad_Local"), Long)), .TotalLotPieces = Convert.ToString(dictionary.Item("WOQuantity")), .SampleSize = Convert.ToString(dictionary.Item("MainContent_SampleSize")), .Tablet = "Browser",
                                     .WorkOrder = Convert.ToString(dictionary.Item("MainContent_WorkOrder")), .LotNo = Convert.ToString(dictionary.Item("MainContent_CartonNumber")), .Location = Convert.ToString(dictionary.Item("MainContent_Location")), .DataType = Convert.ToString("Defect"), .Dimensions = Convert.ToString(dictionary.Item("Dimensions")), .Comment = Convert.ToString(dictionary.Item("Comment")),
                                     .TemplateId = Convert.ToInt64(dictionary.Item("TemplateId")), .InspectionId = InspectionId, .RollNumber = RollNumber, .LoomNumber = LoomNumber, .ButtonTemplateId = Convert.ToInt64(ButtonTemplateId), .Inspector = dictionary.Item("MainContent_Inspector"), .ItemNumber = ItemNumber, .InspectionState = Convert.ToString(dictionary.Item("MainContent_InspectionState")),
                                     .WorkRoom = Convert.ToString(dictionary.Item("MainContent_workroom_hidden")), .RejectLimiter = Convert.ToInt64(dictionary.Item("MainContent_RE")), .InspectionJobSummaryId = InspectionJobSummaryIdret, .WeaverShiftId = WeaverShiftIdVal})
-
+                    'changed cpnumber here
 
                 Catch ex As Exception
                     Throw New Exception("Error filling DefectArray: " + ex.Message)
@@ -164,6 +164,20 @@ Namespace core
 
 
                 If IU.setIncrement(IncrementId, IncrementAmount) Then
+
+                    Return True
+                Else
+                    Return False
+                End If
+            Else
+                Return False
+            End If
+        End Function
+        Public Function RecordSource(ByVal ID As Integer, ByVal MOP As String, ByVal LOC As String) As Boolean
+            If ID <> 0 Then
+
+
+                If IU.RecordSource(ID, MOP, LOC) Then
 
                     Return True
                 Else
