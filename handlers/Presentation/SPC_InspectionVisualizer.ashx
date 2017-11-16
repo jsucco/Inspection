@@ -80,7 +80,32 @@ Namespace core
 
             Return retstrg
         End Function
+        Public Function GetWorkOrders(ByVal fromdate As String, ByVal todate As String, ByVal LocArray As String, ByVal AuditType As String) As String
 
+            Dim returnobj As New List(Of selectorobject)
+            Dim bmapso As New BMappers(Of selectorobject)
+            Dim _todate As DateTime = DateTime.Parse(todate).AddDays(1)
+            Dim _formdate As DateTime = DateTime.Parse(fromdate)
+            Dim inputelementarray = jser.Deserialize(Of List(Of ActiveLocations))(LocArray)
+            Dim Sql As String
+            Dim locsql As String = ""
+            Dim auditsql As String = ""
+
+            locsql = GetLocationDataNoFilter(inputelementarray)
+
+            If AuditType <> "ALL" Then
+
+                auditsql = "(it.Name = N'" & AuditType.ToUpper().Trim & "') AND "
+
+            End If
+
+            Sql = "SELECT DISTINCT InspectionJobSummary.JobNumber AS id, InspectionJobSummary.UnitDesc as text FROM InspectionJobSummary INNER JOIN" & vbCrLf &
+                    "TemplateName ON InspectionJobSummary.TemplateId = TemplateName.TemplateId INNER JOIN InspectionTypes it ON it.id = TemplateName.LineTypeId WHERE " & auditsql & " (InspectionJobSummary.Inspection_Started >= cast( '" & _formdate.ToString("yyyy-MM-dd") & "' as datetime)) AND LEN(InspectionJobSummary.UnitDesc) > 0 AND (InspectionJobSummary.Inspection_Started <= cast('" & _todate.ToString("yyyy-MM-dd") & "' as datetime)) " + locsql
+            returnobj = bmapso.GetInspectObject(Sql)
+
+            Return jser.Serialize(returnobj)
+
+        End Function
         Public Function GetDataNos(ByVal fromdate As String, ByVal todate As String, ByVal LocArray As String, ByVal AuditType As String) As String
 
             Dim returnobj As New List(Of selectorobject)

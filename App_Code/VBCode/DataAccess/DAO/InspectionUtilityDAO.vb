@@ -3064,7 +3064,7 @@ Namespace core
 
 
 
-            sqlstring = " select dm.Location as Location_, dm.DefectDesc as DefectDesc_, ijs.DataNo as DataNo_, ijs.PRP_Code as Prp_Code, UnitDesc as UnitDesc_, it.Name as AuditType from DefectMaster dm" & vbCrLf &
+            sqlstring = " select dm.Location as Location_, dm.DefectDesc as DefectDesc_, ijs.JobNumber as WorkOrder_, ijs.DataNo as DataNo_, ijs.PRP_Code as Prp_Code, UnitDesc as UnitDesc_, it.Name as AuditType from DefectMaster dm" & vbCrLf &
                             "INNER JOIN InspectionJobSummary ijs ON dm.InspectionJobSummaryId = ijs.id" & vbCrLf &
                             "INNER JOIN TemplateName tn ON ijs.TemplateId = tn.TemplateId" & vbCrLf &
                             "INNER JOIN InspectionTypes it ON rtrim(tn.LineType) = it.Abreviation" & vbCrLf &

@@ -63,6 +63,12 @@
                   <option value="ALL">ALL</option>
                 </select>
               </div>
+    <div data-role="fieldcontain" style="position:absolute; top: 30px; left:60%; z-index:100;">
+                <label for="select-based-flipswitch" class="filterlabel">Work Order:</label>
+                <select id="select-WorkOrder" style="position:absolute; left:-2px;" data-role="flipswitch" class="PageFilter selector">
+                  <option value="ALL">ALL</option>
+                </select>
+              </div>
     
     <div data-role="fieldcontain" style="position:absolute; top: 30px; left:70%; z-index:100;">
                 <label for="select-based-flipswitch" class="filterlabel">Audit Type:</label>
@@ -323,7 +329,8 @@
         var BreakOutldcnt = 0;
         var LineGraphldcnt = 0;
         var $AuditType = "ALL";
-        var $DataNo = "ALL"; 
+        var $DataNo = "ALL";
+        var $WorkOrder = "ALL";
         var ActiveFilter = "ALL";
         var DefectPictureArray = [];
         var DefectPictureArrayF = [];
@@ -527,6 +534,28 @@
                         ActiveFilterArray.push({id:FilterCnt, Name: "pf_AuditType", value: $AuditType});
                     }
                      
+                }
+                if (event.delegateTarget.id == "select-WorkOrder") {
+                    FilterCnt++;
+                    $WorkOrder = event.currentTarget.value;
+                    ActiveFilter = "WorkOrder";
+                    FilterColumnName = "pf_WorkOrder";
+                    Filterqvalue = $WorkOrder;
+                    var ExistsFlag = false;
+                    for (var i = ActiveFilterArray.length - 1; i >= 0; i--) {
+                        if (ActiveFilterArray[i].Name === "pf_WorkOrder" && $WorkOrder == "ALL") {
+                            ActiveFilterArray.splice(i, 1);
+                            ExistsFlag = true;
+                        } else if (ActiveFilterArray[i].Name === "pf_WorkOrder") {
+                            ActiveFilterArray[i].value = $WorkOrder
+                            ExistsFlag = true;
+                        }
+                    }
+
+                    if (ExistsFlag == false) {
+                        ActiveFilterArray.push({ id: FilterCnt, Name: "pf_WorkOrder", value: $WorkOrder });
+                    }
+
                 }
                 if(event.delegateTarget.id == "select-DataNo") {  
                     FilterCnt++;  
@@ -780,6 +809,7 @@
             //datahandler.GetDefectImages("999");
             datahandler.GetDHULine();
             datahandler.GetDataNos();
+            datahandler.GetWorkOrders();
             //datahandler.GetREJLine();
              grids.RenderOvsgrid();
              
@@ -2354,6 +2384,18 @@
                                         }
 
                                     }
+                                    if (FilterId == 'select-WorkOrder' && FilterVal != null) {
+                                        DefectDescListF = jQuery.extend(true, [], DefectDescList);
+                                        for (var i = DefectDescListF.length - 1; i >= 0; i--) {
+                                            if (DefectDescListF[i].WorkOrder_ != null) {
+                                                if (DefectDescListF[i].WorkOrder_.trim() != FilterVal.trim() && FilterVal != "ALL") {
+                                                    DefectDescListF.splice(i, 1);
+                                                }
+                                            }
+
+                                        }
+
+                                    }
                                     var ddfhtml = [];
                                     ddfhtml.push('<option value = "ALL">ALL</option>');
                                     $.each(DefectDescListF, function (index, value) { 
@@ -2394,7 +2436,7 @@
             FilterEvent: function (value, field) {
                 //console.log(field + ' : ' + value); 
                 datahandler.GetDataNos();
-                
+                datahandler.GetWorkOrders();
                 switch(SelectedTab){
                     case 'Overview':
                         OwFilterFlag = true;
@@ -2648,6 +2690,36 @@
 
 
             },
+            GetWorkOrders: function () {
+                $.ajax({
+                    url: "<%=Session("BaseUri")%>" + '/handlers/Presentation/SPC_InspectionVisualizer.ashx',
+                    type: 'GET',
+                    data: { method: 'GetWorkOrders', args: { fromdate: $Fromdateval, todate: $Todateval, LocArray: LocationsStringArray, AuditType: $AuditType } },
+                    success: function (data) {
+                        var json = $.parseJSON(data);
+
+                        //console.log(json);
+                        selelm = $("#select-WorkOrder");
+                        selelm.empty();
+                        var html = [];
+                        var name;
+
+                        html.push('<option value="ALL">ALL</option>');
+
+                        for (var i = 0; i < json.length; i++) {
+                            name = json[i];
+                            html.push('<option value="' + name.id + '">' + name.id + '</option>');
+                        }
+                        selelm.html(html.join(''));
+                        //console.log($DataNo);
+                        selelm.val($WorkOrder);
+                    },
+                    error: function (a, b, c) {
+                        alert(c);
+                    }
+                });
+
+            }, 
             GetDataNos: function () { 
                 $.ajax({
                 url: "<%=Session("BaseUri")%>" + '/handlers/Presentation/SPC_InspectionVisualizer.ashx',
