@@ -1,0 +1,23 @@
+﻿<%@ Master Language="VB" CodeFile="blank.master.vb" Inherits="APP_MasterPage_blank" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <asp:ContentPlaceHolder id="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <div>
+        <asp:ContentPlaceHolder id="MainContent" runat="server">
+        
+        </asp:ContentPlaceHolder>
+        <asp:ContentPlaceHolder ID="ControlOptions" runat="server">
+                
+        </asp:ContentPlaceHolder>
+    </div>
+    </form>
+</body>
+</html>
