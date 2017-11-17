@@ -4,31 +4,33 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
   <style type="text/css">
-    #mask {
-  position:absolute;
-  left:0;
-  top:0;
-  z-index:9000;
-  background-color:#000;
-  display:none;
-}  
-#boxes .window {
-  position:absolute;
-  left:0;
-  top:0;
-  width:440px;
-  height:200px;
-  display:none;
-  z-index:9999;
-  padding:20px;
-}
-#boxes #WarningDialog {
-  width:375px; 
-  height:203px;
-  padding:10px;
-  background-color:#ffffff;
-}
-      </style>
+      #mask {
+          position: absolute;
+          left: 0;
+          top: 0;
+          z-index: 9000;
+          background-color: #000;
+          display: none;
+      }
+
+      #boxes .window {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 440px;
+          height: 200px;
+          display: none;
+          z-index: 9999;
+          padding: 20px;
+      }
+
+      #boxes #WarningDialog {
+          width: 375px;
+          height: 203px;
+          padding: 10px;
+          background-color: #ffffff;
+      }
+  </style>
     <div class="hidden">
         <input type="hidden" value ="False" id="Authenticated_hidden" runat="server" />
     </div> 
@@ -132,6 +134,15 @@
         </div>
         <div id="JobStart-confirm" style="display:none;" title="Existing Job Found.">
             <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>This WorkOrder is already open and has the ID <label id="JobStart-confirm-jobid"></label>, AQL <label id="JobStart-confirm-aql"></label> Would you like to continue the previous or begin a new AQL. Please select an option below.</p>
+            <fieldset class="ui-helper-reset">
+            <div id="PrevWOs" style="position: absolute; top: 100px; width: 300px;">
+                <table id="PrevWOsGrid" style="font-size: smaller; z-index: 104; font-weight: 800;">
+                </table>
+
+                <div id="pPrevWOsGrid"></div>
+
+            </div>
+        </fieldset>
         </div>
     <input type="hidden" id="HiddenProduct" runat="server" />
     <input type="hidden" id="TBIncrementTextBox_Hidden" runat="server" value="-1" />
@@ -489,10 +500,12 @@
     //window.alert = function(e) {alert(e)};
     var TemplateCollection;
     var SpecCollection;
+    var PrevWOs = [];
     var tabselect = 0;
     var SelectedId;
     var SelectedName;
     var SelectedTab;
+    var lastSel = 0;
     var UserSelectedTabNumber;
     var NavCop = new Boolean();
     var AutoConfirm = false;
@@ -622,7 +635,7 @@
         document.getElementById("LAEqualCheck").style.color = "#ffff00";//set color of warning label to red.
         TargetOrderInput = $('#MainContent_WorkOrder');
         var $_aql = $('#MainContent__AQLevel');
-        
+
         var warr = <%=WorkRoomArr%>
             TemplateCollection = <%=TemplateCollection%>
             SpecCollection = <%=ProductSpecCollection%>
@@ -676,7 +689,7 @@
 
                     url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
                     type: 'GET',
-                    data: { method: 'RecordSource', args: { ID: id, MOP: mop, LOC:loc, TIME: time } },
+                    data: { method: 'RecordSource', args: { ID: id, MOP: mop, LOC: loc, TIME: time } },
                     success: function (data) {
                         console.log(data);
                         Inc_Num = data;
@@ -742,6 +755,27 @@
                     }
                 });
 
+            },
+            GetPrevWOGrid: function (WorkOrder) {
+                $.ajax({
+                    url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
+                    type: 'GET',
+                    data: { method: 'GetPrevWOGrid', args: { WO: WorkOrder } },
+                    success: function (data) {
+                        var json = $.parseJSON(data);
+
+                        if (json.length > 0) {
+                            PrevWOs = json;
+                        }
+                        else {
+                            return false
+                        }
+                    },
+                    error: function (a, b, c) {
+                        alert(c);
+                        console.log('failed');
+                    }
+                });
             }
         };
         $("#BUIncrement").click(function (e) {
@@ -2072,11 +2106,73 @@
             });
         }
     };
+    function SwitchRowData() {
+        //AQL_Num, WorkRoom, WOQ
+        var rowid = $(this).closest("tr.jqgrow").attr("id");
+        var InsID = $("#PrevWOsGrid").jqGrid('getCell', rowid, 'ID');
+        var AQL_Num = $("#PrevWOsGrid").jqGrid('getCell', rowid, 'AQLLevel');
+        var WorkRoom = $("#PrevWOsGrid").jqGrid('getCell', rowid, 'WorkRoom');
+        var WOQ = $("#PrevWOsGrid").jqGrid('getCell', rowid, 'WOQuantity');
+        datahandler.LoadExistingJobID(InsID, AQL_Num, WorkRoom, WOQ);
+        $("#JobStart-confirm").dialog("close");
+    };
     var controlhandler = {
         $tab_title_input: $('#tab_title'),
         $tabs: $('#tabs'),
         tab_counter: 2,
         tabarray: new Array(),
+        RenderPrevWOsGrid: function () {
+            //alert($("#MainContent_WorkOrder").val());
+            dbtrans2.GetPrevWOGrid($("#MainContent_WorkOrder").val());
+            //console.log(PrevWOs);
+            var $deft = $("#PrevWOsGrid");
+            $("#PrevWOsGrid").jqGrid({
+                datatype: "local",
+                editurl: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionUtility_DefTyp.ashx',
+                colNames: ['ID', 'WO', 'AuditType', 'SampleSize', 'Inspected', 'AQLLevel', 'WorkRoom', 'WOQuantity', 'LinkToInspection'],
+                colModel: [
+
+                    { name: 'ID', index: 'ID', editable: false, width: 200 },
+                    { name: 'WO', index: 'WO', editable: false, width: 200 },
+                    { name: 'AuditType', index: 'AuditType', sortable: false, width: 200, editable: false },
+                    { name: 'SampleSize', index: 'SampleSize', sortable: false, width: 200, editable: false },
+                    { name: 'Inspected', index: 'Inspected', sortable: false, width: 200, editable: false },
+                    { name: 'AQLLevel', index: 'AQLLevel', editable: false, hidden: true },
+                    { name: 'WorkRoom', index: 'WorkRoom', editable: false, hidden: true },
+                    { name: 'WOQuantity', index: 'WOQuantity', editable: false, hidden: true },
+
+                    {
+                        name: "LinkToInspection", formatter: InspectionButtonFormatter, width: 200,
+                        search: false, sortable: false, hidedlg: true, resizable: false,
+                        editable: false, viewable: false
+                    }
+                ],
+                pager: '#pPrewWOsGrid',
+                caption: "Previous Inspections",
+                multiselect: false,
+                loadonce: false,
+                rowNum: 10,
+                viewrecords: true,
+                sortorder: "desc",
+                width: new Number(1200),
+                gridview: true,
+                height: "100%",
+                //data: PrevWOs,
+                ondblClickRow: function (id) {
+                    if (id && id !== lastSel) {
+                        jQuery("#PrevWOsGrid").restoreRow(lastSel);
+                        lastSel = id;
+                    }
+                    jQuery("#PrevWOsGrid").editRow(id, true);
+
+
+                }
+            });
+
+            function InspectionButtonFormatter() {
+                return '<button type="button" onClick="SwitchRowData.call(this)";>Link to Inspection</button>';
+            };
+        },
         addbuttontotab: function (totalcount, ui) {
             //$(ui.panel).empty();
             var totalcountnum = new Number(totalcount)
@@ -2836,6 +2932,13 @@
 
     };
     var SourceArray = [];
+    function FixJson(str) {
+        return str
+            // wrap keys without quote with valid double quote
+            .replace(/([\$\w]+)\s*:/g, function (_, $1) { return '"' + $1 + '":' })
+            // replacing single quote wrapped ones to double quote 
+            .replace(/'([^']+)'/g, function (_, $1) { return '"' + $1 + '"' })
+    };
     var dbtrans2 = {
         RecordSource: function (id, mop, loc) {
             $.ajax({
@@ -2844,7 +2947,7 @@
                 type: 'GET',
                 data: { method: 'RecordSource', args: { ID: id, MOP: mop, LOC: loc } },
                 success: function (data) {
-                   
+
                     //$("#PassCountValue").text(Number($("#MainContent_Good").val()) - Number($("#MainContent_Bad_Group").val()));
 
                 },
@@ -2853,6 +2956,29 @@
                 }
             });
 
+        },
+        GetPrevWOGrid: function (WorkOrder) {
+            $.ajax({
+                url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
+                type: 'GET',
+                data: { method: 'GetPrevWOGrid', args: { WO: WorkOrder } },
+                success: function (data) {
+
+                    console.log(data);
+                    var conversion = JSON.parse(data);
+                    for (i = 0; i < conversion.length; i++) {
+                        PrevWOs.push(JSON.parse(FixJson(conversion[i])));
+                    }
+                    console.log(PrevWOs);
+                    for (var i = 0; i <= PrevWOs.length; i++) {
+                        $("#PrevWOsGrid").jqGrid('addRowData', i + 1, PrevWOs[i]);
+                    }
+                },
+                error: function (a, b, c) {
+                    alert(c);
+                    console.log('failed');
+                }
+            });
         },
         GetMachineLocation: function (loc) {
             $.ajax({
@@ -2872,14 +2998,14 @@
                     html.push('<option value="1">NOT APPLICABLE</option>');
 
                     for (var i = 0; i < SourceArray.length; i++) {
-                        html.push('<option value="' + (i+2) + '">' + SourceArray[i] + '</option>')
+                        html.push('<option value="' + (i + 2) + '">' + SourceArray[i] + '</option>')
                     }
 
                     $("#CPNumber_Select").html(html.join('')).bind("change", function () {
                         //console.log('hello');
                         var index = $('#CPNumber_Select').prop('selectedIndex');
                         console.log(index);
-                        $('#DDSourceSelection').val(''+index);
+                        $('#DDSourceSelection').val('' + index);
                     });
                     $("#DDSourceSelection").html(html.join('')).bind("change", function () {
                         //console.log('hello');
@@ -2894,7 +3020,7 @@
         }
     };
     var controls = {
-        
+
         InitTemplateDropDown: function (TemplateNames) {
             var html = [];
             var name;
@@ -3176,10 +3302,10 @@
             $("#WeaverShiftYards").height(30);
         },
         InitMachineLocation: function () {
-           //alert($('#MainContent_Location').val());
+            //alert($('#MainContent_Location').val());
             var strLoc = $('#MainContent_Location option:selected').text();
             dbtrans2.GetMachineLocation(strLoc)
-            
+
         },
         InitWorkRooms: function (warr) {
             if (warr == null || warr.length == 0) {
@@ -3741,6 +3867,66 @@
                 }
             });
         },
+        LoadExistingJobID: function (InsID, AQL_Num, WorkRoom, WOQ) {
+            var InspectionArray = datahandler.InspectionArray;
+            $("#<%=InspectionId.ClientID%>").val(InsID);
+            $('#MainContent_InspectionId').val(InsID);
+            if (InspectionArray == null || InspectionArray.Length == 0)
+                alert("Failed loading existing job.  Error loading job info.");
+
+            var returnnum = InsID;
+            pageBehindInspectionStarted = "true";
+            InspectionJobSummaryIdPage = returnnum;
+            InspectionStartedVal = true;
+            datahandler.RemoveCompletedProperties();
+            var AQLNumber;
+            if (AQL_Num != null) {//
+                AQLNumber = new Number(AQL_Num);
+            }
+
+            if (AQLNumber != null && AQLNumber == 100) {
+                InspectionArray[0].AQL_Level = '100';
+            }
+            console.log("InspectionArray", InspectionArray);
+            $("#MainContent_inspectionjobsummaryid_hidden").val(InspectionJobSummaryIdPage);
+            $("#workroom_select").val(WorkRoom);
+            $("#AQ_Level").val(AQL_Num);
+            $("#AQ_Level").prop('disabled', true);
+            $("#Auditor_Name").prop('disabled', true);
+            $("#workroom_select").prop('disabled', true);
+            $("#MainContent__AQLevel").val(AQL_Num);
+            AQLValue = AQL_Num;
+            $("#WOQuantity").val(WOQ);
+            $("#Specgrid").jqGrid('setGridParam',
+                { datatype: 'json' }).trigger('reloadGrid');
+
+            var mydata = $("#Specgrid").jqGrid('getGridParam', 'data');
+
+            if (mydata.length > 0) {
+                $("#EnterSpec").val("Specs (" + mydata.length + ")");
+            }
+            if (IsPhoneSize == true) {
+                RenderEngine.ShowActiveInspectionMobile();
+            }
+            //if (IsDefect == true) { 
+            //    datahandler.SubmitDefect(buttonid, buttonvalue, buttonname, returnnum, InspectionId);
+            //}
+            if (OpenOrderFlag == "false") {
+                datahandler.SetSampleSize();
+            }
+            datahandler.GetOpenTimers();
+            datahandler.UpdateRejectionCount(InspectionState, InspectionJobSummaryIdPage)
+            setInterval(
+                function () {
+                    datahandler.UpdateRejectionCount(InspectionState, InspectionJobSummaryIdPage)
+                }
+                , 10000);
+            $("#MainContent_inspectionjobsummaryid_hidden").val(returnnum);
+            $("#jobIdSpinner").css('display', 'none');
+            datahandler.InspectionArray = new Array();
+
+
+        },
         LoadExistingJob: function () {
             var InspectionArray = datahandler.InspectionArray;
 
@@ -4257,136 +4443,139 @@
                             JobNumber = "JobNumber=" + $rollnumber.val();
                         }
                         window.location.assign("<%=Session("BaseUri")%>" + "/Mobile/DataEntry/DefectImageEntry.aspx?DefectID=" + DefectID.toString() + "&InspectionID=" + InspectionJobSummaryIdPage.toString() + "&CID=" + selectedCIDnum.toString() + "&InspectionStarted=" + InspectionStartedVal.toString() + "&" + JobNumber);
-                        }
                     }
-                });
-                $("#NewPage").click(function (e) {
+                }
+            });
+            $("#NewPage").click(function (e) {
 
-                    if (SelectedId && SelectedId.toString().length > 0) {
-                        var r = confirm("This will clear out the current Inspection.  Are you Sure?");
-                        if (r == true) {
-                            window.location.assign("<%=Session("BaseUri")%>" + "/APP/Mob/SPCInspectionInput.aspx?TemplateId=" + SelectedId.toString() + "&NewInspection=1");
-                            //clear the work order, work room, case pack, data number, Auditor name, and Work order quantity fields
-                            $('#WorkOrder').val('');// Work Order
-                            $('#workroom').val('');// Work Room
-                            $('#CPNumber').val('');// Case Pack
-                            $('#DataNumber').val('');//Data Number
-                            $('#Name').val('');//Auditor Name
-                            $('#WOQuantity').val('');//WOQuantity
-                        }
-                    } else {
-                        alert("Template Not Selected");
+                if (SelectedId && SelectedId.toString().length > 0) {
+                    var r = confirm("This will clear out the current Inspection.  Are you Sure?");
+                    if (r == true) {
+                        window.location.assign("<%=Session("BaseUri")%>" + "/APP/Mob/SPCInspectionInput.aspx?TemplateId=" + SelectedId.toString() + "&NewInspection=1");
+                        //clear the work order, work room, case pack, data number, Auditor name, and Work order quantity fields
+                        $('#WorkOrder').val('');// Work Order
+                        $('#workroom').val('');// Work Room
+                        $('#CPNumber').val('');// Case Pack
+                        $('#DataNumber').val('');//Data Number
+                        $('#Name').val('');//Auditor Name
+                        $('#WOQuantity').val('');//WOQuantity
                     }
-                });
+                } else {
+                    alert("Template Not Selected");
+                }
+            });
 
-                $("#EnterProductSpec").click(function (e) {
+            $("#EnterProductSpec").click(function (e) {
 
-                    if (InspectionStartedVal == true && $DataNo.val().length > 2) {
-                        $("#ProductSpecEntrydialog").wijdialog("open");
-                    } else {
-                        alert("Inspection Not Started and/or DataNo Not Set");
-                    }
+                if (InspectionStartedVal == true && $DataNo.val().length > 2) {
+                    $("#ProductSpecEntrydialog").wijdialog("open");
+                } else {
+                    alert("Inspection Not Started and/or DataNo Not Set");
+                }
 
-                });
+            });
 
-                $("#EnterSpec").click(function (e) {
-                    if (InspectionStartedVal == true) {
-                        $("#WorkOrderSelection").css("display", "none");
-                        $("#LocationSelection").css("display", "none");
-                        $("#JobConfirmation").css("display", "none");
-                        $("#RollConfirmation").css("display", "none");
-                        $("#loginfrm").css("display", "none");
-                        $("#SpecTable").fadeIn();
-                        hiddenSection.fadeIn()
-                            .css({ 'display': 'block' })
-                            // set to full screen
-                            .css({ width: $(window).width() + 'px', height: '100%' })
-                            .css({
-                                top: ($(window).height() - hiddenSection.height()) / 2 + 'px',
-                                left: ($(window).width() - hiddenSection.width()) / 2 + 'px'
-                            })
-                            // greyed out background
-                            .css({ 'background-color': 'rgba(0,0,0,0.5)' });
-                    } else {
-                        alert('Please START an Inspection or Load an Open WorkOrder');
-                    }
-                    controlhandler.RenderProductSpecTable();
-                });
+            $("#EnterSpec").click(function (e) {
+                if (InspectionStartedVal == true) {
+                    $("#WorkOrderSelection").css("display", "none");
+                    $("#LocationSelection").css("display", "none");
+                    $("#JobConfirmation").css("display", "none");
+                    $("#RollConfirmation").css("display", "none");
+                    $("#loginfrm").css("display", "none");
+                    $("#SpecTable").fadeIn();
+                    hiddenSection.fadeIn()
+                        .css({ 'display': 'block' })
+                        // set to full screen
+                        .css({ width: $(window).width() + 'px', height: '100%' })
+                        .css({
+                            top: ($(window).height() - hiddenSection.height()) / 2 + 'px',
+                            left: ($(window).width() - hiddenSection.width()) / 2 + 'px'
+                        })
+                        // greyed out background
+                        .css({ 'background-color': 'rgba(0,0,0,0.5)' });
+                } else {
+                    alert('Please START an Inspection or Load an Open WorkOrder');
+                }
+                controlhandler.RenderProductSpecTable();
+            });
 
 
-                $("#ImageSubmit").click(function (e) {
-                    e.preventDefault();
+            $("#ImageSubmit").click(function (e) {
+                e.preventDefault();
 
-                    $("#myImageForm").ajaxSubmit({ url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/DefectImage_handler.ashx?DefectID=' + DefectID.toString(), type: 'post', success: function (data) { alert(data); } })
+                $("#myImageForm").ajaxSubmit({ url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/DefectImage_handler.ashx?DefectID=' + DefectID.toString(), type: 'post', success: function (data) { alert(data); } })
                    // $("#myImageForm").ajaxSubmit({url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/DefectImage_handler.ashx', type: 'post' })
 
-                 });
+            });
 
-                 $(".closebox").click(function (e) {
+            $(".closebox").click(function (e) {
 
-                     if (e.currentTarget.id == 'closeout2') {
+                if (e.currentTarget.id == 'closeout2') {
 
 
-                     }
-                     $("#loginfrm").fadeOut();
-                     $("#LocationSelection").fadeOut();
-                     $("#JobConfirmation").fadeOut();
-                     $("#MachineSelection").fadeOut();
-                     $("#SpecTable").fadeOut();
-                     $("#RollConfirmation").fadeOut();
-                     hiddenSection.fadeOut()
-                 });
+                }
+                $("#loginfrm").fadeOut();
+                $("#LocationSelection").fadeOut();
+                $("#JobConfirmation").fadeOut();
+                $("#MachineSelection").fadeOut();
+                $("#SpecTable").fadeOut();
+                $("#RollConfirmation").fadeOut();
+                hiddenSection.fadeOut()
+            });
 
-                 $("#JobStart-confirm").dialog({
-                     resizable: false,
-                     autoOpen: false,
-                     height: "auto",
-                     width: 500,
-                     modal: true,
-                     buttons: {
-                         "CONTINUE": function () {
-                             datahandler.LoadExistingJob();
-                             $(this).dialog("close");
-                         },
-                         "NEW AQL": function () {
-                             if (OpenOrderFlag == "False") {
-                                 datahandler.CreateInspectionJobSummaryId(false);
-                             } else {
-                                 $("#jobIdSpinner").css('display', 'none');
-                             }
-                             datahandler.InspectionArray = new Array();
-                             $(this).dialog("close");
-                         }
-                     },
-                     close: function (event, ui) {
-                         $("#JobStart-confirm-jobid").text("NA");
-                         $("#JobStart-confirm-aql").text("1");
-                     }
-                 });
-                 $(".minimize_pad").click(function (event) {
-                     var open = new Boolean($("#pad_open_flag").val());
-                     if ($("#LoadWorkOrderDiv").is(":visible")) {
-                         $("#LoadWorkOrderDiv").fadeOut(80);
-                         $(".de_container").css("width", "43px");
-                         $("#pad_open_flag").val("0");
-                         $("#pad_b_icon").attr("src", "../../Images/icons8-Maximize Window-64.png");
-                         $("#tabs_holder").css("left", "50px")
-                             .css("width", "93%");
-                         $("#jobnumber_stat_tag").fadeIn(200);
-                         pad_minimized = true;
-                         Template.Load();
-                     } else {
-                         $(".de_container").css("width", "260px");
-                         $("#LoadWorkOrderDiv").fadeIn(200);
-                         $("#pad_open_flag").val("1");
-                         $("#pad_b_icon").attr("src", "../../Images/icons8-Minimize Window-64.png");
-                         $("#tabs_holder").css("left", "260px")
-                             .css("width", "83%");
-                         pad_minimized = false;
-                         Template.Load();
+            $("#JobStart-confirm").dialog({
+                resizable: false,
+                autoOpen: false,
+                height: 500,
+                width: 1300,
+                modal: true,
+                buttons: {
+                    "CONTINUE": function () {
+                        datahandler.LoadExistingJob();
+                        $(this).dialog("close");
+                    },
+                    "NEW AQL": function () {
+                        if (OpenOrderFlag == "False") {
+                            datahandler.CreateInspectionJobSummaryId(false);
+                        } else {
+                            $("#jobIdSpinner").css('display', 'none');
+                        }
+                        datahandler.InspectionArray = new Array();
+                        $(this).dialog("close");
+                    }
+                },
+                open: function () {
+                    controlhandler.RenderPrevWOsGrid();
+                },
+                close: function (event, ui) {
+                    $("#JobStart-confirm-jobid").text("NA");
+                    $("#JobStart-confirm-aql").text("1");
+                }
+            });
+            $(".minimize_pad").click(function (event) {
+                var open = new Boolean($("#pad_open_flag").val());
+                if ($("#LoadWorkOrderDiv").is(":visible")) {
+                    $("#LoadWorkOrderDiv").fadeOut(80);
+                    $(".de_container").css("width", "43px");
+                    $("#pad_open_flag").val("0");
+                    $("#pad_b_icon").attr("src", "../../Images/icons8-Maximize Window-64.png");
+                    $("#tabs_holder").css("left", "50px")
+                        .css("width", "93%");
+                    $("#jobnumber_stat_tag").fadeIn(200);
+                    pad_minimized = true;
+                    Template.Load();
+                } else {
+                    $(".de_container").css("width", "260px");
+                    $("#LoadWorkOrderDiv").fadeIn(200);
+                    $("#pad_open_flag").val("1");
+                    $("#pad_b_icon").attr("src", "../../Images/icons8-Minimize Window-64.png");
+                    $("#tabs_holder").css("left", "260px")
+                        .css("width", "83%");
+                    pad_minimized = false;
+                    Template.Load();
 
-                     }
-                 });
+                }
+            });
         }
     };
     function setnavcop(setvalue) {

@@ -187,6 +187,18 @@ Namespace core
                 Return False
             End If
         End Function
+        Public Function GetPrevWOGrid(ByVal WO As String) As String
+
+            If WO <> Nothing Then
+
+
+                Return JsonConvert.SerializeObject(IU.GetPrevWOGrid(WO))
+            Else
+                Return Nothing
+            End If
+
+
+        End Function
         Public Function GetMachineLocation(ByVal Location As String) As String
 
             If Location <> Nothing Then
