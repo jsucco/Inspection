@@ -31,7 +31,7 @@ Namespace core
                     SpecObj.Lower_Spec_Value = util.ConvertType(RequestParams.GetValues("Lower_Spec_Value")(0), "Decimal")
                     SpecObj.GlobalSpec = util.ConvertType(RequestParams.GetValues("GlobalSpec")(0), "Boolean")
                     SpecObj.SpecSource = util.ConvertType(RequestParams.GetValues("SpecSource")(0), "String")
-                    If SpecObj.Lower_Spec_Value > SpecObj.Upper_Spec_Value Or SpecObj.Lower_Spec_Value = SpecObj.Upper_Spec_Value Then
+                    If SpecObj.Lower_Spec_Value > SpecObj.Upper_Spec_Value Then
                         resultobj = "Upper Spec Value must be greater than Lower Spec Value"
                         GoTo 101
                     End If

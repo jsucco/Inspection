@@ -1663,22 +1663,22 @@
                                     }
                                     break;
                                 case "MS_Upper_Spec_Value":
-                                    if (input[0].value <= 0) {
+                                    if (input[0].value < 0) {
                                         ErrorFlag = true;
                                         Inputarray[0].Upper_Spec_Value = input[0].value;
                                         $(this).css({ "border-color": "red", "border-width": "medium" });
-                                        $ErrorLbl.html("Value Must be Greater Than Zero");
+                                        $ErrorLbl.html("Value Must be equal to or Greater Than Zero");
                                     } else {
                                         $(this).css({ "border-color": "black", "border-width": "thin" });
                                         Inputarray[0].Upper_Spec_Value = input[0].value;
                                     }
                                     break;
                                 case "MS_Lower_Spec_Value":
-                                    if (input[0].value >= 0) {
+                                    if (input[0].value > 0) {
                                         ErrorFlag = true;
                                         Inputarray[0].Lower_Spec_Value = input[0].value;
                                         $(this).css({ "border-color": "red", "border-width": "medium" });
-                                        $ErrorLbl.html("Value Must be Less Than Zero");
+                                        $ErrorLbl.html("Value Must be equal to or Less Than Zero");
                                     } else {
                                         $(this).css({ "border-color": "black", "border-width": "thin" });
                                         Inputarray[0].Lower_Spec_Value = input[0].value;
