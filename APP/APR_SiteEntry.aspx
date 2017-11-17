@@ -32,7 +32,6 @@
                 <input id="LoomPres" name="loom" type="text" class="dropdown2-sub pointer" value="Looms FlagBoard" class="redirect3" style="background-color: #B80030; height: 45px; width: 300px; font-size: 100%; text-align: center; color: White; font-family: Arial Rounded MT Bold; border: none;" />
                 <input id="MaintFB" name="flagboard" type="text" class="dropdown2-sub pointer" value="Maintenance FlagBoard" style="background-color: #B80030; height: 45px; width: 300px; font-size: 100%; text-align: center; color: White; font-family: Arial Rounded MT Bold; border: none;" />
                 <input id="Inspect" name="inspect" type="text" class="dropdown2-sub pointer" value="Inspection Utility" style="background-color: #B80030; height: 45px; width: 300px; font-size: 100%; text-align: center; color: White; font-family: Arial Rounded MT Bold; border: none;" />
-                <input id="Template" name="Template" type="text" class="dropdown2-sub" value="Template Utility" style="background-color: #B80030; height: 45px; width: 300px; font-size: 100%; text-align: center; color: White; font-family: Arial Rounded MT Bold; border: none;" />
                 <input id="Dashboard" name="Dashboard" type="text" class="dropdown2-sub pointer" value="Dashboard" style="background-color: #B80030; height: 45px; width: 300px; font-size: 100%; text-align: center; color: White; font-family: Arial Rounded MT Bold; border: none;" />
                 <input id="Results" name="Results" type="text" class="dropdown2-sub pointer" value="Results" style="background-color: #B80030; height: 45px; width: 300px; font-size: 100%; text-align: center; color: White; font-family: Arial Rounded MT Bold; border: none;" />
                 <div id="sub-results" class="sub-redirect2">
@@ -310,13 +309,6 @@
                     permission = true;
                     url = BaseURI + '/APP/Mob/SPCInspectionInput.aspx';
                     Destination = "APRInspect";
-                    break;
-                case "Template":
-
-                    permission = true;
-                    url = BaseURI + '/APP/DataEntry/SPCInspectionUtility.aspx';
-                    Destination = "APRTemplate";
-
                     break;
                 case "Results":
 

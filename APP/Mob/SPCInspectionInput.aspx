@@ -350,7 +350,7 @@
             <div id="rs_container" style="position:relative; height: 42px; margin-top:20px; width:250px;">
                 <input id="EnterProductSpec" type="button" value="REPORT SPEC" class="export" style="position:absolute; margin-left:10px; width: 97%; height: 35px;font-size: 1.1em;"/>
             </div>
-            <div id="img_container"   style="position:relative;  margin-top:20px; width:250px;">
+            <div id="img_container"   style="position:relative;  margin-top:20px; width:250px; height:100px;">
                 <div style="position:absolute; width: 90px; height: 35px;font-size: .85em; left: 40%; top:5px;">
                     <img src="../../Images/global-technical-specs.jpg" id="GlobalSpecsImage"   onmouseover="" style="height:80px; z-index: 1000; cursor: pointer;" />
                 </div>
@@ -380,11 +380,11 @@
 
             </div>
         </div>
-        <div id="LimitReachedDialog" title="Limit Reached!">
+        <div id="LimitReachedDialog" style="display:none;" title="Limit Reached!">
             <p>Go directly to confirmation?</p>
             
         </div>
-        <div id="StartInspectiondialog" title="START Inspection?">
+        <div id="StartInspectiondialog" style="display:none;" title="START Inspection?">
             <div id="StartInspectionRollDiv">
                 <p>TO START AN INSPECTION CLICK CONFIRM.</p>
             </div>
@@ -405,7 +405,7 @@
             <div id = "Chk1" style="position:absolute; top: 150px; left:5px; padding: 0px;" class=SheetClass1>
                                             <input id="Skip" name="ChkBx1" type="checkbox" class=chkbox2 />Skip All Confirmations.</div>
         </div>
-        <div id="ProductSpecEntrydialog" title="Manual Spec Entry">
+        <div id="ProductSpecEntrydialog" style="display:none;" title="Manual Spec Entry">
             <p>Product Spec Info below will be locally added now.  Globally added on QA Manager approval</p>
 
             <div style="position:absolute; float:right; left:165px; top:75px;">
@@ -624,19 +624,19 @@
         var $_aql = $('#MainContent__AQLevel');
         
         var warr = <%=WorkRoomArr%>
-            TemplateCollection = <%=TemplateCollection%>
-            SpecCollection = <%=ProductSpecCollection%>
-            SelectedId = <%=SelectedId%>
-            SelectedName = "<%=SelectedName%>"
+        TemplateCollection = <%=TemplateCollection%>
+        SpecCollection = <%=ProductSpecCollection%>
+        SelectedId = <%=SelectedId%>
+        SelectedName = "<%=SelectedName%>"
         LocationNames = <%=LocationNames%>
-            LastLocation = '<%=LastLocation%>'
+        LastLocation = '<%=LastLocation%>'
         TemplateTabCount = <%=TemplateTabCount%>
-            AQLValue = '<%=AQL%>';
+        AQLValue = '<%=AQL%>';
         IsSPCMachine = new Boolean(<%=IsSPCMacine%>);
         IsMobile = new Boolean(<%=IsMobile%>);
         HasTargetCount = "<%=HasTargetCount%>";
         WOQuantity = <%=WOQuantityValue%>
-            selectedCID = '<%=CID%>';
+        selectedCID = '<%=CID%>';
         selectedCIDnum = '<%=CIDnum%>';
         HasCID = '<%=HasCID%>';
         OpenOrderFlag = '<%=OpenOrderLoadFlag%>';
@@ -645,7 +645,7 @@
         pageBehindInspectionStarted = '<%=InspectionStartedFlag%>';
         datahandler.ColumnCount = <%=ColumnCount%>
 
-            RenderEngine.SizeChecker();
+        RenderEngine.SizeChecker();
         eventshandler.UserKeyPress.Init();
         $(".scrollWrap, .wijmo-wijsuperpanel, .ui-widget, .ui-widget-content, .ui-corner-all").css("height", "60px");
         dialogs.InitProductSpecEntry();
@@ -2443,6 +2443,7 @@
             top = HeaderBuffer + Math.floor(count / 4) * buttonheight + 5;
             return 'left: ' + left.toString() + 'px; top: ' + top.toString() + 'px;'
         },
+        SelectedSpecId: 0,
         RenderProductSpecTable: function () {
             $("#Specgrid").jqGrid({
                 datatype: "json",
@@ -2530,18 +2531,15 @@
                     //jQuery('#Specgrid').jqGrid('editRow', id, true, null, null, "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput_SpecSave.ashx', {DefectId: DefectID, InspectionId: InspectionId, TemplateId: SelectedId, TabName: SelectedTab, TabNumber: UserSelectedTabNumber, SpecId: rowdata.SpecId});
                     SpecGridEditId = id;
 
-                    //                jQuery("#Specgrid").jqGrid('editGridRow', id, {
-                    //                    addCaption: "Add Record",
-                    //                    editCaption: "Add Measurement",
-                    //                    bSubmit: "Submit",
-                    //                    bCancel: "Cancel",
-                    //                    bClose: "Close",
-                    //                    bYes : "Yes",
-                    //                    bNo : "No",
-                    //                    bExit : "Cancel"
-                    //} );
+                },
+                onSelectRow: function(rowid, status, e) { 
+ 
+                    var ID_cell = $("#" + rowid).find("td[aria-describedby='Specgrid_SpecId']").html();
+                    console.log("ID_Cell", $.isNumeric(ID_cell)); 
+                    if ($.isNumeric(ID_cell))
+                        controlhandler.SelectedSpecId = ID_cell;
 
-
+                    console.log("gridselected ", controlhandler.SelectedSpecId );
                 },
                 gridComplete: function () {
                     var mydata = $("#Specgrid").jqGrid('getGridParam', 'data');
@@ -2606,9 +2604,8 @@
                     keys: true,
                     extraparam: {
                         SpecId: function () {
-                            var sel_id = $("#Specgrid").jqGrid('getGridParam', 'selrow');
-                            var value = $("#Specgrid").jqGrid('getCell', sel_id, 'SpecId');
-                            return value;
+                            console.log("selectedspecid", controlhandler.SelectedSpecId); 
+                            return controlhandler.SelectedSpecId;
                         },
                         InspectionSummaryId: function () {
                             return InspectionJobSummaryIdPage;
@@ -2651,7 +2648,10 @@
                         },
                         SpecItemCount: function () {
                             return SpecItemCounter;
-                        }
+                        },
+                        Workroom: function () { 
+                            return $("#MainContent_workroom_hidden").val();
+                        },
                     },
                     aftersavefunc: function () {
 
@@ -3194,7 +3194,7 @@
             }
 
             for (var i = 0; i < warr.length; i++) {
-                html.push('<option value="' + warr[i].Abbreviation + '">' + warr[i].Abbreviation + '</option>')
+                html.push('<option value="' + warr[i].Name + '">' + warr[i].Name + '</option>')
             }
 
             $("#workroom_select").html(html.join('')).bind("change", function () {
