@@ -142,7 +142,7 @@ Namespace core
         End Function
         Public Function GetPrevWOGrid(ByVal WO As String) As List(Of String)
             Dim retval As New List(Of String)()
-            Dim SQL As String = "SELECT InspectionJobSummary.id, InspectionJobSummary.JobNumber,TemplateName.LineType, InspectionJobSummary.SampleSize, InspectionJobSummary.TotalInspectedItems, InspectionJobSummary.AQL_Level, InspectionJobSummary.WorkRoom, InspectionJobSummary.WOQuantity From dbo.InspectionJobSummary INNER JOIN dbo.TemplateName ON InspectionJobSummary.TemplateId=TemplateName.TemplateId WHERE JobNumber='" & WO & "'"
+            Dim SQL As String = "SELECT InspectionJobSummary.id, InspectionJobSummary.JobNumber,TemplateName.LineType, InspectionJobSummary.SampleSize, InspectionJobSummary.TotalInspectedItems, InspectionJobSummary.AQL_Level, InspectionJobSummary.WorkRoom, InspectionJobSummary.WOQuantity From dbo.InspectionJobSummary INNER JOIN dbo.TemplateName ON InspectionJobSummary.TemplateId=TemplateName.TemplateId WHERE JobNumber='" & WO & "' ORDER BY TemplateName.LineType DESC, InspectionJobSummary.id ASC"
             Command.CommandType = CommandType.Text 'sets the type of the sql
             Command.Connection = Connection 'sets the connection of our sql command to MyDB
             Command.CommandText = SQL 'sets the statement that executes at the data source to our string
