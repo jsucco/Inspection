@@ -1,9 +1,7 @@
-﻿<%@ Page Title="APR" Language="VB" MasterPageFile="~/APP/MasterPage/Site.master" AutoEventWireup="false" CodeFile="SPCInspectionUtility.aspx.vb" Inherits="core.APP_DataEntry_SPCInspectionUtility" %>
+﻿<%@ Page Title="APR" Language="VB" MasterPageFile="~/APP/MasterPage/blank.master" AutoEventWireup="false" CodeFile="SPCInspectionUtility.aspx.vb" Inherits="core.APP_DataEntry_SPCInspectionUtility" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
-</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
-    <div id="SectionRibbon" style="position: absolute; left: 385px; width: 78%; height: 100%;">
+    <div id="SectionRibbon" style="position: absolute; left: 385px; width: 1000px; height: 896px;">
         <ul>
             <li><a href="#ButtonManagerTab">Button Manager</a></li>
             <li><a href="#SpecManagerTab">Spec Manager</a></li>
@@ -21,7 +19,6 @@
             <div id="PNInput" style="left: 30px; top: 80px; position: absolute; border-style: solid; border-bottom-color: #869EB1; width: 68%; border-top-color: white; border-right-color: white; border-left-color: white; height: 70px;">
                 <input id="add" type="button" class="export" style="height: 40px; width: 110px" value="ADD TAB" />
                 <input id="addbutton" type="button" class="export" style="height: 40px; width: 110px; position: absolute; top: 0px; left: 138px" value="ADD BUTTON" />
-                <input id="BUDelete" class="export" style="height: 40px; width: 110px; position: absolute; top: 0px; left: 276px" value="Delete Tab" />
                 <div id="LineTypeDiv" class="SheetClass1" style="position: absolute; top: -20px; left: 408px; width: 300px">
                     LineType: 
                         
@@ -32,7 +29,7 @@
                      </select>
 
                 </div>
-                <div id="ColCountdiv" style="position: absolute; top: 28px; left: 403px; width: 300px;">
+                <div id="ColCountdiv" style="position: absolute; top: 28px; left: 400px; width: 300px;">
                     Column Count:
                        
                      <select id="ColumnCount" name="ColCount" style="width: 162px; height: 35px;">
@@ -42,10 +39,10 @@
                      </select>
                 </div>
                 <div style="position: relative; float: right; top: -30px; right: 200px;">
-                    <input id="ActiveTemplateTitle" type="text" style="height: 40px; width: 200px; position: absolute; top: -80px; border: none; left: 100px; font-family: initial; font-size: large; font-weight: 700; /* border: gray; */" value="">
+                    <input id="ActiveTemplateTitle" type="text" style="height: 40px; width: 200px; position: absolute; top: -80px; border: none; left: 100px; font-family: initial; font-size: large; font-weight: 700; background: transparent; /* border: gray; */" value="">
 
 
-                    <asp:Button ID="TemplateSubmit" CssClass="export" Style="position: absolute; left: 425px; height: 40px; width: 110px; top: 1px;" Text="SAVE" runat="server" />
+                    <asp:Button ID="TemplateSubmit" CssClass="export" Style="position: absolute; left: 325px; height: 40px; width: 110px; top: -6px;" Text="SAVE" runat="server" />
                 </div>
 
             </div>
@@ -72,7 +69,7 @@
 
         </div>
     </div>
-    <div style="z-index: 102; left: -15px; position: relative; top: 102px; width: 330px; border-right-color: #869EB1; border-style: solid; border-top-color: white; border-left-color: white; border-bottom-color: white; height: 250px;">
+    <div style="z-index: 102; left: 15px; position: relative; top: 102px; width: 330px;  height: 250px;">
         <div id="tablehold" style="position: relative; z-index: 104; top: 0px; width: 285px; left: 0px;">
 
             <table id="wijgrid" style="font-size: smaller; z-index: 104; font-weight: 800;">
@@ -221,7 +218,7 @@
 
     <!--Wijmo Widgets CSS-->
     <link href="http://cdn.wijmo.com/jquery.wijmo-pro.all.3.20141.34.min.css" rel="stylesheet" type="text/css" />
-
+    <link href="../../Styles/Site.css" rel="stylesheet" type="text/css" />
 
     <!--Wijmo Widgets JavaScript-->
     <script src="http://cdn.wijmo.com/jquery.wijmo-open.all.3.20141.34.min.js" type="text/javascript"></script>
@@ -327,7 +324,7 @@
             $("a").addClass("nooutlineclass")
             $('.dialogdiv').css({ display: "inline" });
             $('.main').css({ height: $(window).height() + 300 + "px" });
-            $('#SectionRibbon').css({ height: $(window).height() + 300 + "px" });
+            $('#SectionRibbon').css({ height: $(window).height() - 100 + "px" });
             document.getElementById("PNInput").style.visibility = "hidden"; //sets the panel all controls are on to invisible
             datahandler.selectedtab = Number(0)
         });
@@ -2232,7 +2229,7 @@
                 editurl: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionUtility_Spec.ashx',
                 colNames: ['SpecId', 'TabTemplateId', 'DataNo', 'ProductType', 'Spec Description', 'HowTo', 'value', 'Upper_Spec_Value', 'Lower_Spec_Value', 'GlobalSpec', 'SpecSource'],
                 colModel: [
-                    { name: 'SpecId', index: 'SpecId', hidden: true },
+                    { name: 'SpecId', index: 'SpecId', editable: true, hidden: true },
                     { name: 'TabTemplateId', index: 'TabtemplateId', hidden: true },
                     { name: 'DataNo', index: 'DataNo', editable: true },
                     { name: 'ProductType', index: 'PrudctType', editable: true },

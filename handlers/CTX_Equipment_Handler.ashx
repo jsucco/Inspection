@@ -50,7 +50,7 @@ Namespace core
 
             End Select
 
-            Equipment = DAO.getEquipment(sqlstring)
+            'Equipment = DAO.getEquipment(sqlstring)
             returnstring = jser.Serialize(Equipment.ToArray())
 
             Return returnstring

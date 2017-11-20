@@ -141,6 +141,37 @@ Namespace core
 
         End Sub
 
+        Public Sub SendAlertMail(ByVal Subject As String, ByVal body As String, ByVal reciever As String)
+            Dim [to] As String = reciever
+            Dim [from] As String = "SPC@standardtextile.com"
+            Dim message As New MailMessage([from], [to])
+
+
+            Try
+                message.IsBodyHtml = True
+                message.Subject = Subject
+                message.Body = body
+            Catch ex As Exception
+                newlogobj.Message = "message attachment failer: " + ex.Message
+                Log()
+            End Try
+
+            Dim client As New SmtpClient("10.100.10.97")
+            client.Port = 25
+            client.UseDefaultCredentials = False
+            Try
+                client.Send(message)
+                newlogobj.Message = "Emails Sent to " + reciever
+
+            Catch ex As Exception
+                newlogobj.Message = "Email Failure: " + ex.Message
+
+            End Try
+
+            Log()
+
+        End Sub
+
         Public Sub Log()
             Try
                 If IsNothing(newlogobj) = False Then

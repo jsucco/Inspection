@@ -22,11 +22,6 @@ Namespace core
         Public Property FilterListstring As String
     End Class
 
-    Public Class FilterColumnValues
-        Public Property col As Object
-        Public Property val As Object
-    End Class
-
     Public Class JobSummary_Load : Implements IHttpHandler, IRequiresSessionState
 
         Private II As New InspectionInputDAO
@@ -222,7 +217,7 @@ Namespace core
             Dim colcnt As Integer = 1
 
             Dim jqobj As New jqgridFilterList
-            Dim Filterarray = jser.Deserialize(Of List(Of FilterColumnValues))(objdm.SelectFilterValues)
+            Dim Filterarray = jser.Deserialize(Of List(Of SPCInspection.FilterColumnValues))(objdm.SelectFilterValues)
 
             If Filterarray.Count > 0 Then
                 For Each info As PropertyInfo In jqobj.GetType().GetProperties()

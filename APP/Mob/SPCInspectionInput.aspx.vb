@@ -493,16 +493,12 @@ Namespace core
         Private Sub sendEmailAlerts(ByVal curijs As InspectionJobSummary, ByVal ijsnum As Integer, ByVal JobPassFail As String, Optional ByVal DHY As Decimal = 0)
 
             Dim listso As New List(Of SingleObject)
-            Dim emaillist As New List(Of Emails)
-            Dim listem As New List(Of Emails)
-            Dim listemex As New List(Of Emails)
-            Dim bmapem As New BMappers(Of Emails)
+            Dim emaillist() As SPCInspection.AlertEmails
+            Dim recievers() As SPCInspection.AlertEmails
+            Dim dao As New AprManagerDAO
 
-            'emaillist = bmapem.GetAprMangObject("SELECT Address, INS_ALERT_EMAIL, ADMIN, HomeLocation FROM EmailMaster")
-            emaillist.Add(New Emails With {.Address = "jsucco@standardtextile.com", .INS_ALERT_EMAIL = 1, .HomeLocation = "ALL"})
-            emaillist.Add(New Emails With {.Address = "John.Succo@gmail.com", .INS_ALERT_EMAIL = 1, .HomeLocation = "ALL"})
-            emaillist.Add(New Emails With {.Address = "kbredwell@standardtextile.com", .INS_ALERT_EMAIL = 1, .HomeLocation = "ALL"})
-            emaillist.Add(New Emails With {.Address = "jaho@standardtextile.com", .INS_ALERT_EMAIL = 1, .HomeLocation = "ALL"})
+            emaillist = dao.GetInsAlerts()
+
             Try
                 If IsNothing(curijs) = True Then
                     Return
@@ -512,16 +508,24 @@ Namespace core
                     Return
                 End If
                 If emaillist.Count > 0 Then
-                    Dim bmapso As New BMappers(Of SingleObject)
-                    listso = bmapso.GetAprMangObject("SELECT Name AS Object1 FROM LocationMaster WHERE (CID = '000" & LastLocation & "')")
-                    Dim locationString = ""
-                    listso.Clear()
-                    If listso.Count > 0 Then
-                        locationString = "AT " + listso.ToArray()(0).Object1
-                        listem = (From v In emaillist Where v.HomeLocation.Trim() = listso.ToArray()(0).Object1.ToString().Trim() Or v.HomeLocation.ToString().Trim() = "ALL").ToList()
+                    Dim cidv = curijs.CID.Trim()
+
+                    recievers = (From v In emaillist
+                                 Where (v.CID.Trim() = "000" + cidv And v.INSCOMP = True) Or (v.INSCOMP = True And v.CID.Trim() = "000000")
+                                 Select v).ToArray()
+
+                    Dim locStr = (From v In emaillist
+                                  Where v.CID = "000" + cidv And v.INSCOMP = True
+                                  Select v.Loc).FirstOrDefault()
+
+                    Dim locationString As String
+
+                    If IsNothing(locStr) = False Then
+                        locationString = "AT " + locStr.Trim()
                     Else
-                        listem = (From v In emaillist Where v.HomeLocation.Trim() = "ALL").ToList()
+                        locationString = ""
                     End If
+
                     Dim DHUCalc As Decimal = InspectInput.CalculateDHU(InspectionState.Value, curijs.JobNumber, ijsnum, curijs.TotalInspectedItems)
                     Dim body As String
                     If InspectionState.Value = "WorkOrder" Then
@@ -533,18 +537,25 @@ Namespace core
 
                     Dim subject As String = "ALERT JOB " + JobPassFail + "ed " + locationString
 
-                    If listem.Count > 0 Then
-                        util.SendMail(subject, body, listem)
+                    If recievers.Count > 0 Then
+                        For Each r In recievers
+                            util.SendAlertMail(subject, body, r.Email)
+                        Next
                     End If
+
                     EmailJobSummId = ijsnum
                     If DHUCalc > 50 And InspectionState.Value = "WorkOrder" Then
-                        listemex = (From v In emaillist Where v.HomeLocation.ToString().Trim() = "EX" Or v.HomeLocation.ToString().Trim() = "ALL").ToList()
-                        If listemex.Count > 0 Then
-                            util.SendMail(subject, body, listemex)
+                        recievers = (From v In emaillist
+                                     Where (v.CID = "000" + cidv And v.INSCOMPEX = True) Or (v.INSCOMPEX = True And v.CID = "000000")
+                                     Select v).ToArray()
+
+                        If recievers.Count > 0 Then
+                            For Each r In recievers
+                                util.SendAlertMail(subject, body, r.Email)
+                            Next
                         End If
                     End If
                 End If
-
 
             Catch ex As Exception
                 Elmah.ErrorSignal.FromCurrentContext().Raise(ex)
@@ -862,9 +873,42 @@ Namespace core
             End If
 
         End Sub
+
         Public Sub initializeWorkrooms(CID As String)
-            WorkRoomArr = WorkRoomsApi.GetResult(CID)
+            'WorkRoomArr = WorkRoomsApi.GetResult(CID)
+
+            Try
+                WorkRoomArr = getWorkrooms(CID)
+            Catch ex As Exception
+                Elmah.ErrorSignal.FromCurrentContext.Raise(ex)
+            End Try
         End Sub
+
+        Private Function getWorkrooms(CID As String) As String
+            Dim co() As SPCInspection.Workroom
+
+            Try
+                co = HttpRuntime.Cache("INS-WR-" + CID)
+            Catch ex As Exception
+
+            End Try
+
+            If IsNothing(co) = False Then
+                If co.Length > 0 Then
+                    Return jser.Serialize(co)
+                End If
+            End If
+
+            co = InspectInput.GetWorkrooms(CID)
+
+            If co.Length > 0 Then
+                HttpRuntime.Cache.Insert("INS-WR-" + CID, co, Nothing, Date.Now.AddDays(1), System.Web.Caching.Cache.NoSlidingExpiration)
+            End If
+
+            Return jser.Serialize(co)
+
+        End Function
+
         Private Sub SetTightSamplesSize(ByVal lotsizenumber As Integer, ByVal AQLevel As Decimal)
             If AQLevel = 1 Then
                 If (lotsizenumber >= 2) And (lotsizenumber <= 8) Then

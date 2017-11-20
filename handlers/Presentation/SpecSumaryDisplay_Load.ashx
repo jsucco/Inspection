@@ -21,17 +21,12 @@ Namespace core
         Public Property LocationArrayString As String
         Public Property FilterListstring As String
     End Class
-    
-    Public Class FilterColumnValues
-        Public Property col As Object
-        Public Property val As Object
-    End Class
-   
+
     Public Class SpecSummary_Load : Implements IHttpHandler, IRequiresSessionState
-        
+
         Private II As New InspectionInputDAO
         Private IU As New InspectionUtilityDAO
-        
+
         Dim jser As New JavaScriptSerializer
         Dim objdm As New SpecSummaryLoad
         Dim fromdate As DateTime
@@ -39,12 +34,12 @@ Namespace core
         Dim jsonData As New jsonData
         Public Sub ProcessRequest(ByVal context As HttpContext) Implements IHttpHandler.ProcessRequest
             Dim RequestParams As NameValueCollection = context.Request.Params
-            
+
             Dim listdm As New List(Of SPCInspection.SpecSummaryDisplay)
             Dim listret As New List(Of SPCInspection.SpecSummaryDisplay)
             If RequestParams.Count > 0 Then
                 Dim bmapsl As New BMappers(Of SpecSummaryLoad)
-                
+
                 objdm = bmapsl.GetReqParamAsObject(RequestParams)
                 If Len(objdm.fromdate) > 0 And Len(objdm.todate) > 0 And Len(objdm.CID_Posted) > 0 Then
                     Dim FilterList As New List(Of ActiveFilterObject)
@@ -60,7 +55,7 @@ Namespace core
                         ElseIf FilterList.Count > 0 And IsNothing(objdm.FilterListstring) = False Then
                             If IsNothing(listdm) = False Then
                                 listdm = AssembleObject()
-                                
+
                                 If objdm.FilterListstring.Length > 0 Then
                                     listdm = FilterObjectByType(listdm, FilterList)
                                 End If
@@ -79,7 +74,7 @@ Namespace core
                     If listdm.Count = 0 Then
 
                         listdm = IU.GetSpecSummary(fromdate, todate)
-                        
+
                     End If
                     If objdm.NextFlag = "false" And IsNothing(FilterList) = True Then
                         InsertIntoCache(listdm)
@@ -89,22 +84,22 @@ Namespace core
                     If objdm.LocationArrayString.Length > 0 Then
                         Dim locationarray = jser.Deserialize(Of List(Of ActiveLocations))(objdm.LocationArrayString)
                         Dim listso As New List(Of SingleObject)
-                        
+
                         If IsNothing(locationarray) = False Then
                             If locationarray.ToArray().Length > 0 Then
                                 listdm = FilterObjectByLocation(listdm, locationarray)
                             End If
                         End If
-                        
+
                         listso = getBoudingIds(objdm.rowNum, objdm.FlagCnt, (From v In listdm Select v Order By v.id Descending).ToList())
                         If listso.Count > 0 Then
-                            
+
                             listret = (From v In listdm Where v.id <= listso.ToArray()(0).Object2 And v.id >= listso.ToArray()(0).Object1 Select v).ToList()
-                
-                        HttpRuntime.Cache.Insert("TableSpecSummary." + objdm.SessionId, listdm, Nothing, Date.Now.AddHours(3), System.Web.Caching.Cache.NoSlidingExpiration)
+
+                            HttpRuntime.Cache.Insert("TableSpecSummary." + objdm.SessionId, listdm, Nothing, Date.Now.AddHours(3), System.Web.Caching.Cache.NoSlidingExpiration)
                         End If
                     End If
-                    
+
                     jsonData.total = Math.Round(listdm.Count / objdm.rowNum)
                     jsonData.page = objdm.FlagCnt
                     jsonData.userdata = jser.Serialize(GetFilterColumnNames(listdm))
@@ -115,13 +110,13 @@ Namespace core
             Dim teststring As String = jser.Serialize(jsonData)
             context.Response.Write(jser.Serialize(jsonData))
         End Sub
-        
+
         Public Function FilterObjectByType(ByRef listijs As List(Of SPCInspection.SpecSummaryDisplay), filterlist As List(Of ActiveFilterObject)) As List(Of SPCInspection.SpecSummaryDisplay)
-            
+
             filterlist = (From v In filterlist Select v Order By v.id Ascending).ToList()
-            
+
             For Each item In filterlist
-          
+
                 Select Case item.Name
                     Case "gs_Specgrid_JobNumber"
                         listijs = (From v In listijs Where v.JobNumber = item.value Select v).ToList()
@@ -136,27 +131,27 @@ Namespace core
                     Case "pf_DataNumber"
                         listijs = (From v In listijs Where v.DataNo = item.value Select v).ToList()
                 End Select
-                
+
             Next
-            
+
             Return listijs
         End Function
-        
+
         Public Function FilterObjectByLocation(ByRef listijs As List(Of SPCInspection.SpecSummaryDisplay), locationarray As List(Of ActiveLocations)) As List(Of SPCInspection.SpecSummaryDisplay)
-            
-            
+
+
             For Each item In locationarray
                 If item.status = "False" Then
                     listijs = (From v In listijs Where v.CID <> item.CID Select v).ToList()
                 End If
             Next
-            
+
             Return listijs
-            
+
         End Function
-        
+
         Private Function FilterObject(ByVal ColumnName As String, ByVal qvalue As Object, ByRef listin As List(Of SPCInspection.SpecSummaryDisplay)) As List(Of SPCInspection.SpecSummaryDisplay)
-            
+
             If listin.Count > 0 And ColumnName.Length > 0 Then
                 Select Case ColumnName
                     Case "gs_Specgrid_JobNumber"
@@ -169,20 +164,20 @@ Namespace core
                         listin = (From v In listin Where v.DataNo = qvalue Select v).ToList()
                 End Select
             End If
-          
+
             Return listin
-            
+
         End Function
-        
+
         Private Function GetFilterColumnNames(listin As List(Of SPCInspection.SpecSummaryDisplay)) As Object
             Dim colcnt As Integer = 1
 
             Dim jqobj As New jqgridFilterList
-            Dim Filterarray = jser.Deserialize(Of List(Of FilterColumnValues))(objdm.SelectFilterValues)
-            
+            Dim Filterarray = jser.Deserialize(Of List(Of SPCInspection.FilterColumnValues))(objdm.SelectFilterValues)
+
             If Filterarray.Count > 0 Then
                 For Each info As PropertyInfo In jqobj.GetType().GetProperties()
-                
+
                     Select Case info.Name.ToUpper()
                         Case "COL1"
                             jqobj.Col1 = (From v In listin Select v.id Distinct).ToArray()
@@ -203,11 +198,11 @@ Namespace core
 
                     End Select
                 Next
-                
+
             End If
             Return jqobj
         End Function
- 
+
         Private Function getBoudingIds(ByVal rowNum As Integer, ByVal pagecnt As Integer, ByVal listin As List(Of SPCInspection.SpecSummaryDisplay)) As List(Of SingleObject)
             Dim arraydm = listin.ToArray()
             Dim retobj As New List(Of SingleObject)
@@ -223,10 +218,10 @@ Namespace core
                     End If
                 End If
             End If
-            
+
             Return retobj
         End Function
-        
+
         Private Sub InsertIntoCache(ByVal listijs As List(Of SPCInspection.SpecSummaryDisplay))
             Dim intdate As DateTime = objdm.fromdate
             Dim Cachestring As String
@@ -240,29 +235,29 @@ Namespace core
                 intdate = intdate.AddDays(1)
             Loop
         End Sub
-        
+
         Public Function AssembleObject() As List(Of SPCInspection.SpecSummaryDisplay)
             Dim listret As New List(Of SPCInspection.SpecSummaryDisplay)
             Dim listdc As New List(Of DayCache)
             listdc = RetrieveCacheObjects()
-            
+
             For Each item In listdc
                 If IsNothing(item.ListObj) = False Then
                     listret.AddRange(UpdateJSList2(item.ListObj, item.UnitDate))
-                    
+
                 Else
                     Return New List(Of SPCInspection.SpecSummaryDisplay)
                 End If
             Next
-            
+
             Return (From v In listret Select v Order By v.Inspection_Started Ascending).ToList()
         End Function
-        
+
         Private Function UpdateJSList2(ByVal list As List(Of SPCInspection.SpecSummaryDisplay), ByVal intdate As DateTime) As List(Of SPCInspection.SpecSummaryDisplay)
             Dim listret As New List(Of SPCInspection.SpecSummaryDisplay)
-            
+
             listret = (From v In list Where v.Inspection_Finished.Length > 0 Select v).ToList()
-            
+
             Try
                 If listret.Count <> list.Count Then
                     listret.AddRange(IU.GetSpecSummaryUnFinished(intdate, intdate))
@@ -270,13 +265,13 @@ Namespace core
             Catch ex As Exception
 
             End Try
-            
+
             listret = (From v In list Select v Order By v.id Descending).ToList()
-            
+
             Return listret
-            
+
         End Function
-        
+
         Private Function RetrieveCacheObjects() As List(Of DayCache)
             Dim intdate As DateTime = objdm.fromdate
             Dim daycache As New List(Of DayCache)
@@ -287,10 +282,10 @@ Namespace core
 
                 intdate = intdate.AddDays(1)
             Loop
-            
+
             Return daycache
         End Function
- 
+
         Public ReadOnly Property IsReusable() As Boolean Implements IHttpHandler.IsReusable
             Get
                 Return False
@@ -298,6 +293,6 @@ Namespace core
         End Property
 
     End Class
-    
-    
+
+
 End Namespace

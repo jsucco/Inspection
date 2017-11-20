@@ -23,6 +23,7 @@ Namespace core
         Public Property RejectLimiter As Integer
         Public Property CPNumber As Integer
         Public Property SpecItemCount As Integer
+        Public Property Workroom As String
     End Class
 
     Public Class SPC_InspectionInput_SpecSave : Implements IHttpHandler, IRequiresSessionState
@@ -30,7 +31,7 @@ Namespace core
         Dim ErrorMessage As String
         Dim pssObj As PSpecSave
         Dim util As New Utilities
-        
+
         Public Sub ProcessRequest(ByVal context As HttpContext) Implements IHttpHandler.ProcessRequest
             Dim RequestParams As NameValueCollection = context.Request.Params
             Dim DefectId As Object = 0
@@ -40,7 +41,7 @@ Namespace core
             If RequestParams.Count > 0 Then
                 Dim bmappss As New BMappers(Of PSpecSave)
                 pssObj = bmappss.GetReqParamAsObject(RequestParams)
-               
+
                 If IsNothing(pssObj) = False Then
                     Dim listps As New List(Of SPCInspection.ProductSpecs)
                     Dim bmapps As New BMappers(Of SPCInspection.ProductSpecs)
@@ -48,9 +49,9 @@ Namespace core
                     Dim SpecDefect As New SPCInspection.DefectMaster
                     Dim MajorDefectFlag As Boolean = False
                     Dim DefectList As New List(Of SPCInspection.DefectMaster)
-                    
+
                     listps = bmapps.GetInspectObject("SELECT top(1) SpecId, DataNo, Spec_Description, value, Upper_Spec_Value, Lower_Spec_Value  FROM  ProductSpecification  WHERE    (SpecId = " & pssObj.SpecId.ToString() & ")")
-                    
+
                     If listps.Count > 0 Then
                         SpecDelta = pssObj.Measured_Value - listps.ToArray()(0).value
 
@@ -61,9 +62,9 @@ Namespace core
                             MajorDefectFlag = True
                             pssObj.DefectDesc = "MEASUREMENT BELOW SPEC"
                         End If
-                        
+
                         If MajorDefectFlag = True Then
-                            DefectList.Add(New SPCInspection.DefectMaster With {.WorkOrder = pssObj.WorkOrder, .TemplateId = pssObj.TemplateId, .TotalLotPieces = pssObj.WOQuantity, .AQL = pssObj.AQL, .Location = pssObj.Location, .DataNo = pssObj.DataNo, .Inspector = "", .InspectionJobSummaryId = pssObj.InspectionSummaryId, .InspectionId = pssObj.InspectionId, .SampleSize = pssObj.SampleSize, .InspectionState = pssObj.InspectionState, .DefectClass = "MINOR", .Tablet = "Browser", .DefectTime = Date.Now, .DataType = "Spec", .DefectDesc = pssObj.DefectDesc, .Product = "", .RejectLimiter = pssObj.RejectLimiter, .POnumber = pssObj.CPNumber, .EmployeeNo = pssObj.Inspector, .LotNo = "", .Comment = "", .ItemNumber = "", .WorkRoom = "", .ThisPieceNo = "", .Dimensions = "", .RollNumber = ""})
+                            DefectList.Add(New SPCInspection.DefectMaster With {.WorkOrder = pssObj.WorkOrder, .TemplateId = pssObj.TemplateId, .TotalLotPieces = pssObj.WOQuantity, .AQL = pssObj.AQL, .Location = pssObj.Location, .DataNo = pssObj.DataNo, .Inspector = "", .InspectionJobSummaryId = pssObj.InspectionSummaryId, .InspectionId = pssObj.InspectionId, .SampleSize = pssObj.SampleSize, .InspectionState = pssObj.InspectionState, .DefectClass = "MINOR", .Tablet = "Browser", .DefectTime = Date.Now, .DataType = "Spec", .DefectDesc = pssObj.DefectDesc, .Product = "", .RejectLimiter = pssObj.RejectLimiter, .POnumber = pssObj.CPNumber, .EmployeeNo = pssObj.Inspector, .LotNo = "", .Comment = "", .ItemNumber = "", .WorkRoom = pssObj.Workroom, .ThisPieceNo = "", .Dimensions = "", .RollNumber = ""})
                             DefectId = II.InsertDefects(DefectList)
                         End If
                     End If
@@ -73,21 +74,21 @@ Namespace core
                     Catch ex As Exception
                         context.Response.Write(ex.Message)
                     End Try
-                    
+
                     If returnval = True Then
                         context.Response.Write("success")
                     Else
                         context.Response.Write("failure")
                     End If
-                    
+
                 Else
                     context.Response.Write("All Required Parameters not Sent")
                 End If
             End If
 
-        
+
         End Sub
-        
+
         Public ReadOnly Property IsReusable() As Boolean Implements IHttpHandler.IsReusable
             Get
                 Return False
@@ -95,6 +96,6 @@ Namespace core
         End Property
 
     End Class
-    
+
 
 End Namespace

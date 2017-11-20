@@ -1408,6 +1408,46 @@ Namespace core
             Return retobj
         End Function
 
+        Public Function GetWorkrooms(ByVal CID As String) As SPCInspection.Workroom()
+            Dim rs() As SPCInspection.Workroom = {}
+
+            If CID = Nothing Then
+                Return rs
+            End If
+
+            If CID.Length <> 6 Then
+                Return rs
+            End If
+
+            Dim con As New SqlConnection(dlayer.InspectConnectionString())
+            Dim cmd As SqlCommand = con.CreateCommand()
+            Dim listso As New List(Of SPCInspection.Workroom)
+            Dim bmap As New BMappers(Of SPCInspection.Workroom)
+            Dim retobj As Double = 0
+            Try
+                Using con
+                    con.Open()
+                    Using cmd
+                        cmd = New SqlCommand("GetWorkrooms", con)
+                        cmd.CommandType = CommandType.StoredProcedure
+                        cmd.Parameters.Add("@istest", SqlDbType.Bit).Direction = ParameterDirection.Input
+                        cmd.Parameters.Add("@cid", SqlDbType.Char, 6).Direction = ParameterDirection.Input
+                        cmd.Parameters("@istest").Value = 0
+                        cmd.Parameters("@cid").Value = CID
+
+                        cmd.CommandTimeout = 10000
+
+                        listso = bmap.GetSpcSP(cmd)
+                    End Using
+                End Using
+            Catch ex As Exception
+
+            End Try
+
+            Return listso.ToArray()
+
+        End Function
+
         Public Function GetDefectCountByType(ByVal JobSummaryId As String, ByVal DefectClass As String) As Integer
             Dim listso1 As New List(Of SingleObject)
             Dim bmapso As New BMappers(Of SingleObject)

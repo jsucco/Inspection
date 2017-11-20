@@ -304,6 +304,25 @@ Namespace core
             Public Property WorkRoom As String
         End Class
 
+        Public Class Workroom
+            Public Property Id As Integer
+            Public Property Name As String
+            Public Property Abbreviation As String
+            Public Property Status As Boolean
+        End Class
+
+        Public Class AlertEmails
+            Public Property Id As Integer
+            Public Property Code As String
+            Public Property CID As String
+            Public Property Loc As String
+            Public Property Email As String
+            Public Property ACTIVE As Boolean
+            Public Property AUTOCOMP As Boolean
+            Public Property INSCOMP As Boolean
+            Public Property INSCOMPEX As Boolean
+        End Class
+
         Public Class OpenRollInfo
             Public Property JobNumber As String
             Public Property WOQuantity As Integer
@@ -614,6 +633,11 @@ Namespace core
         Public Class RollLoom
             Public Property LoomNo As String
             Public Property RollNo As String
+        End Class
+
+        Public Class FilterColumnValues
+            Public Property col As Object
+            Public Property val As Object
         End Class
 
         Public Class JobSummary_old

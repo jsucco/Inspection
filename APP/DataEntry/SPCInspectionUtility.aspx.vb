@@ -12,7 +12,7 @@ Namespace core
         Public PostedTemplateId As Integer = 0
         Public PostedName As String = "TitleError"
         Public DefectCodeList As String = "[0]"
-        Public HasAuthorization As Boolean = False
+        Public HasAuthorization As Boolean = True
         Public ProductSpecifications As String
         Dim ProductSpecscache As New List(Of SPCInspection.ProductSpecs)
         Dim jser As New JavaScriptSerializer
@@ -39,28 +39,28 @@ Namespace core
             End If
 
             InspectionTypesArray = jser.Serialize(II.GetInspectionTypes())
-            Dim authCookie = Request.Cookies(FormsAuthentication.FormsCookieName)
-            If IsNothing(authCookie) = False Then
-                Dim ticket As FormsAuthenticationTicket = FormsAuthentication.Decrypt(authCookie.Value)
-                If ticket.Name <> "" Then
-                    Dim bmap_so As New BMappers(Of core.SingleObject)
-                    Dim list_so As New List(Of core.SingleObject)
-                    Dim sql As String = "SELECT Address AS Object1 FROM EmailMaster WHERE ADMIN = 1"
-                    list_so = bmap_so.GetAprMangObject(sql)
-                    If list_so.Count > 0 Then
-                        Dim soarray = list_so.ToArray()
-                        Dim TicketUserName = FormatUserName(ticket.Name)
-                        For Each item In soarray
-                            Dim splitar = item.Object1.ToString().Split("@")
-                            If splitar.Count > 1 Then
-                                If TicketUserName = splitar(0) Then
-                                    HasAuthorization = True
-                                End If
-                            End If
-                        Next
-                    End If
-                End If
-            End If
+            'Dim authCookie = Request.Cookies(FormsAuthentication.FormsCookieName)
+            'If IsNothing(authCookie) = False Then
+            '    Dim ticket As FormsAuthenticationTicket = FormsAuthentication.Decrypt(authCookie.Value)
+            '    If ticket.Name <> "" Then
+            '        Dim bmap_so As New BMappers(Of core.SingleObject)
+            '        Dim list_so As New List(Of core.SingleObject)
+            '        Dim sql As String = "SELECT Address AS Object1 FROM EmailMaster WHERE ADMIN = 1"
+            '        list_so = bmap_so.GetAprMangObject(sql)
+            '        If list_so.Count > 0 Then
+            '            Dim soarray = list_so.ToArray()
+            '            Dim TicketUserName = FormatUserName(ticket.Name)
+            '            For Each item In soarray
+            '                Dim splitar = item.Object1.ToString().Split("@")
+            '                If splitar.Count > 1 Then
+            '                    If TicketUserName = splitar(0) Then
+            '                        HasAuthorization = True
+            '                    End If
+            '                End If
+            '            Next
+            '        End If
+            '    End If
+            'End If
 
             Dim buttonlib As List(Of SPCInspection.ButtonLibrarygrid) = IU.GetLibraryGrid()
             If buttonlib.Count > 0 Then
