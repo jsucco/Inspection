@@ -2129,12 +2129,12 @@
             $("#PrevWOsGrid").jqGrid({
                 datatype: "local",
                 editurl: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionUtility_DefTyp.ashx',
-                colNames: ['ID', 'WO', 'AuditType', 'SampleSize', 'Inspected', 'AQLLevel', 'WorkRoom', 'WOQuantity', 'LinkToInspection'],
+                colNames: ['ID', 'WO', 'LineType', 'SampleSize', 'Inspected', 'AQLLevel', 'WorkRoom', 'WOQuantity', 'LinkToInspection'],
                 colModel: [
 
                     { name: 'ID', index: 'ID', editable: false, width: 200 },
                     { name: 'WO', index: 'WO', editable: false, width: 200 },
-                    { name: 'AuditType', index: 'AuditType', sortable: false, width: 200, editable: false },
+                    { name: 'LineType', index: 'LineType', sortable: false, width: 200, editable: false },
                     { name: 'SampleSize', index: 'SampleSize', sortable: false, width: 200, editable: false },
                     { name: 'Inspected', index: 'Inspected', sortable: false, width: 200, editable: false },
                     { name: 'AQLLevel', index: 'AQLLevel', editable: false, hidden: true },

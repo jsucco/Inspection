@@ -142,7 +142,7 @@ Namespace core
         End Function
         Public Function GetPrevWOGrid(ByVal WO As String) As List(Of String)
             Dim retval As New List(Of String)()
-            Dim SQL As String = "SELECT id, JobNumber, JobType, SampleSize, TotalInspectedItems, AQL_Level, WorkRoom, WOQuantity From dbo.InspectionJobSummary WHERE JobNumber='" & WO & "'"
+            Dim SQL As String = "SELECT InspectionJobSummary.id, InspectionJobSummary.JobNumber,TemplateName.LineType, InspectionJobSummary.SampleSize, InspectionJobSummary.TotalInspectedItems, InspectionJobSummary.AQL_Level, InspectionJobSummary.WorkRoom, InspectionJobSummary.WOQuantity From dbo.InspectionJobSummary INNER JOIN dbo.TemplateName ON InspectionJobSummary.TemplateId=TemplateName.TemplateId WHERE JobNumber='" & WO & "'"
             Command.CommandType = CommandType.Text 'sets the type of the sql
             Command.Connection = Connection 'sets the connection of our sql command to MyDB
             Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -151,7 +151,7 @@ Namespace core
             If DR.HasRows = True Then 'Check whether the SqlDataReader has 1 or more rows
                 '['ID', 'WO', 'AuditType', 'SampleSize', 'Inspected',
                 While DR.Read()
-                    Dim Mid As String = String.Format("ID: '{0}', WO: '{1}', AuditType: '{2}', SampleSize: '{3}', Inspected: '{4}', AQLLevel: '{5}', WorkRoom: '{6}', WOQuantity: '{7}'", DR.GetInt32(0), DR.GetString(1), DR.GetString(2), DR.GetInt32(3), DR.GetInt32(4), DR.GetDecimal(5), DR.GetString(6), DR.GetInt32(7))
+                    Dim Mid As String = String.Format("ID: '{0}', WO: '{1}', LineType: '{2}', SampleSize: '{3}', Inspected: '{4}', AQLLevel: '{5}', WorkRoom: '{6}', WOQuantity: '{7}'", DR.GetInt32(0), DR.GetString(1), DR.GetString(2), DR.GetInt32(3), DR.GetInt32(4), DR.GetDecimal(5), DR.GetString(6), DR.GetInt32(7))
                     retval.Add("{" + Mid + "}")
                 End While 'The default position of the SqlDataReader is before the first record. Therefore, you must call Read to begin accessing any data.  The reader has moved down to the first row.
                 'Response.Write(DR("Cust_Name")) 'Writes a string to an HTTP response output stream.  In this case, just Cust_Name
