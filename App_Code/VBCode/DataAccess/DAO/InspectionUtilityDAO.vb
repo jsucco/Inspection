@@ -116,6 +116,39 @@ Namespace core
             End If
             Return False
         End Function
+        Public Function getComment(ByVal rowId As Integer) As String
+            Dim retval As String = "Error"
+            Dim SQL As String = "SELECT Comments as COMM From dbo.InspectionJobSummary WHERE id=" & rowId.ToString()
+            Command.CommandType = CommandType.Text 'sets the type of the sql
+            Command.Connection = Connection 'sets the connection of our sql command to MyDB
+            Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+            Connection.Open() 'opens the connction
+            DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+            If DR.HasRows = True Then 'Check whether the SqlDataReader has 1 or more rows
+                DR.Read() 'The default position of the SqlDataReader is before the first record. Therefore, you must call Read to begin accessing any data.  The reader has moved down to the first row.
+                'Response.Write(DR("Cust_Name")) 'Writes a string to an HTTP response output stream.  In this case, just Cust_Name
+
+                retval = Convert.ToString(DR("COMM")) '
+
+            Else
+                Return retval
+
+
+            End If
+
+            Connection.Close() 'closes the connection
+            DR.Close() 'closes the reader
+            Return retval
+        End Function
+        Public Function setComment(ByVal rowId As Integer, ByVal Comment As String) As Integer
+            Dim Outcome As String = ""
+            Dim SQL As String = "UPDATE dbo.InspectionJobSummary SET Comments='" & Comment & "' WHERE id =  " & rowId.ToString()
+            Outcome = ExecuteSQL(SQL, 1)
+            If Outcome = "Successful" Then
+                Return True
+            End If
+            Return False
+        End Function
         Public Function getIncrement(ByVal rowId As Integer) As Integer
             Dim retval As Integer = -1
             Dim SQL As String = "SELECT TotalInspectedItems as INSITEMS From dbo.InspectionJobSummary WHERE id=" & rowId.ToString()

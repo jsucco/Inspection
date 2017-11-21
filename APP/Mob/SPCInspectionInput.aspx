@@ -188,6 +188,9 @@
         <input id="BUIncrement" type="button" value="+" class="export" style="position:absolute; top:25px; left: 145px; width:40px; height: 40px; "" />
         <input id="BUPlusOne" type="button" value="+1" class="export" style="position:absolute; top:25px; left: 190px; width:40px; height: 40px; "" />
     </div>
+    <div id="CommentDiv" style="position:absolute; left: 900px; top: 15px; width: 350px;" class="">
+        <input id="EditComment" type="button" value="EDIT" class="export" style="position:relative; width:90px; height: 52px; ""></input>
+    </div>
     <div id="scorelabels" style="position:absolute; left:85%; top:-5px; width: 400px; height: 100px; display:none;">
         <label id="DHULabel" style="position:absolute; top:3px; left: 0px; font-size:medium; z-index:100; color:black; width: 150px;">DHU</label>
         <input id="DHU" readonly  class="inputelement inputbox" type="text" style="top:25px; left: 0px; width: 60px; height: 53px;" value="0" runat="server"  />
@@ -372,7 +375,10 @@
         <div id="itemdiv" class="inputpad leftsidepanel" style="display: none;">
             <label for="itemL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">ITEM NUMBER</label>           
         </div>
-        <input type="hidden" runat="server" id="DefectID_Value" value ="0" />      
+        <input type="hidden" runat="server" id="DefectID_Value" value ="0" />
+        <div id="EditCommentDialog" style="display: block" title="Edit Comment">
+           <textarea id="EditCommentTextArea" name="JobMessage" style="width:90%;height:55px; position: absolute; left:1%;" runat="server"></textarea>
+        </div>
         <div id="dialog" style="display: block" title="SPC Inspection">
             <section>
                 <label id ="LAFlawType"> </label>
@@ -666,6 +672,7 @@
         dialogs.InitDefectsEntry();
         dialogs.LimitReached()
         dialogs.InitAuditorName();
+        dialogs.EditCommentsEntry();
         controls.InitTemplateDropDown(<%=TemplateNames%>);
         controls.InitLocationDropDown(<%=LocationNames%>, selectedCIDnum, selectedCID);
         controls.InitMachineNameDropdowns(<%=MachineNames%>);
@@ -696,6 +703,39 @@
 
                         $goodcount.val(data.toString());
                         //$("#PassCountValue").text(Number($("#MainContent_Good").val()) - Number($("#MainContent_Bad_Group").val()));
+
+                    },
+                    error: function (a, b, c) {
+                        alert(c);
+                    }
+                });
+
+            },
+            getComment: function (id) {
+                $.ajax({
+
+                    url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
+                    type: 'GET',
+                    data: { method: 'getComment', args: { ID: id } },
+                    success: function (data) {
+                        $("#MainContent_JobMessage").val(data);
+                        $("#MainContent_EditCommentTextArea").val(data);
+                    },
+                    error: function (a, b, c) {
+                        alert(c);
+                    }
+                });
+
+            },
+            setComment: function (id, comment) {
+                $.ajax({
+
+                    url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
+                    type: 'GET',
+                    data: { method: 'setIncrement', args: { ID: id, Comment: comment } },
+                    success: function (data) {
+
+                        dbtrans.getComment(id);
 
                     },
                     error: function (a, b, c) {
@@ -1229,9 +1269,13 @@
 
         });
 
-
+        $("#EditComment").click(function (e) {
+            dbtrans2.getComment(new Number($("#MainContent_InspectionId").val()));
+            $("#EditCommentDialog").wijdialog("open");
+        });
         //$('.ui-spinner-button').css('font-size','1px');
         $(".endjob").click(function (e) {
+            dbtrans2.getComment(new Number($("#MainContent_InspectionId").val()));
             var buttonid_ = $(this).attr('id');
             if (IsSPCMachine == true) {
                 alert("This Page is currently Linked to an Machine. End the Job at the Machine PC. Click NEW or Exit the page to escape");
@@ -1896,6 +1940,7 @@
                                                     $("#FailCountValue").text(RejCount.toString())
                                                     $("#PassCountValue").text(Number($("#MainContent_Good").val()) - Number($("#MainContent_Bad_Group").val()));
                                                     //$("#TotalCountValue").val($SampleSize.val());
+                                                    $("#TotalCountValue").val($("#FailCountValue").val() + $("#PassCountValue").val());
                                                     $("#TotalCountValue").wijinputnumber("option", "value", $('#MainContent_Good').val());
                                                     $("#TotalCountValue").wijinputnumber('option', "minValue", RejCount);
                                                     $('#MainContent_totalinspecteditems').val($('#MainContent_Good').val());
@@ -1976,6 +2021,38 @@
                 },
                 create: function (e) {
 
+                }
+            });
+        },
+        EditCommentsEntry: function () {
+            $("#EditCommentDialog").wijdialog({
+                buttons: {
+                    Confirm: function () {
+                        dbtrans2.setComment($("#MainContent_InspectionId").val(), $("#MainContent_EditCommentTextArea").val());
+                        $(this).wijdialog("close");
+                    },
+                    Cancel: function () {
+                        $(this).wijdialog("close");
+                    }
+                },
+                captionButtons: {
+                    pin: { visible: false },
+                    refresh: { visible: false },
+                    toggle: { visible: false },
+                    minimize: { visible: false },
+                    maximize: { visible: false }
+                },
+                height: 244,
+                autoOpen: false,
+                open: function (e) {
+                    $("#Skip").prop('checked', AutoConfirm);
+                },
+                create: function (e) {
+                    $('#Skip').change(function (e) {
+
+                        var value = e.currentTarget.checked;
+                        AutoConfirm = value;
+                    });
                 }
             });
         },
@@ -2940,6 +3017,39 @@
             .replace(/'([^']+)'/g, function (_, $1) { return '"' + $1 + '"' })
     };
     var dbtrans2 = {
+        getComment: function (id) {
+            $.ajax({
+
+                url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
+                type: 'GET',
+                data: { method: 'getComment', args: { ID: id } },
+                success: function (data) {
+                    $("#MainContent_JobMessage").val(data);
+                    $("#MainContent_EditCommentTextArea").val(data);
+                },
+                error: function (a, b, c) {
+                    alert(c);
+                }
+            });
+
+        },
+        setComment: function (id, comment) {
+            $.ajax({
+
+                url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
+                 type: 'GET',
+                 data: { method: 'setComment', args: { ID: id, Comment: comment } },
+                 success: function (data) {
+
+                     dbtrans2.getComment(id);
+
+                 },
+                 error: function (a, b, c) {
+                     alert(c);
+                 }
+             });
+
+         },
         RecordSource: function (id, mop, loc) {
             $.ajax({
 
@@ -3249,7 +3359,7 @@
             }
         },
         InitNumbers: function () {
-            var limit = parseInt($('#MainContent_SampleSize').val());
+            var limit = new Number($('#MainContent_SampleSize').val());
             $("#TotalCountValue").wijinputnumber({
                 type: 'numeric',
                 minValue: 0,

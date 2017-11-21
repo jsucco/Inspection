@@ -148,6 +148,31 @@ Namespace core
                 Exit Function
             End If
         End Function
+        Public Function getComment(ByVal ID As Integer) As String
+            If ID <> 0 Then
+
+
+                Return IU.getComment(ID)
+            Else
+                Return "Error"
+            End If
+
+
+        End Function
+        Public Function setComment(ByVal ID As Integer, ByVal Comment As String) As Boolean
+            If ID <> 0 Then
+
+
+                If IU.setComment(ID, Comment) Then
+
+                    Return True
+                Else
+                    Return False
+                End If
+            Else
+                Return False
+            End If
+        End Function
         Public Function getIncrement(ByVal IncrementId As Integer) As Integer
             If IncrementId <> 0 Then
 
