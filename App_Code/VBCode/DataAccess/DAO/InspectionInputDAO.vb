@@ -1410,6 +1410,11 @@ Namespace core
 
         Public Function GetWorkrooms(ByVal CID As String) As SPCInspection.Workroom()
             Dim rs() As SPCInspection.Workroom = {}
+            Dim istest As Int16 = 0
+
+            If ConfigurationManager.AppSettings("PointToTest") = "true" Then
+                istest = 1
+            End If
 
             If CID = Nothing Then
                 Return rs
@@ -1432,7 +1437,7 @@ Namespace core
                         cmd.CommandType = CommandType.StoredProcedure
                         cmd.Parameters.Add("@istest", SqlDbType.Bit).Direction = ParameterDirection.Input
                         cmd.Parameters.Add("@cid", SqlDbType.Char, 6).Direction = ParameterDirection.Input
-                        cmd.Parameters("@istest").Value = 0
+                        cmd.Parameters("@istest").Value = istest
                         cmd.Parameters("@cid").Value = CID
 
                         cmd.CommandTimeout = 10000

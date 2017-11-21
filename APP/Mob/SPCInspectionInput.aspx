@@ -80,7 +80,7 @@
             <ASP:LABEL id="lblJobTotalCount" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: 145px"
 			runat="server" Font-Size="medium">Total Items Inspected:</ASP:LABEL>
             <div id="TotalCountValueDiv" style="position:absolute; top:130px; left:50%;">
-                <input type="text" id="TotalCountValue" value=0 style="width: 157px; height: 57px; position:relative; top: -3px;" />
+                <input type="number" id="TotalCountValue" value="0" min="0" step="10" style="width: 157px; height: 57px; position:relative; top: -3px; font-size: 25px;" />
             </div>
             <label id="LAEqualCheck" style="font-size:medium; position: absolute; top:185px; left:10px;">WARNING: TOTAL INSPECTED ITEMS NOT EQUAL TO SAMPLE SIZE</label>
         </div>
@@ -1223,11 +1223,13 @@
                                         jobnumber = $workorder.val();
                                         //$("#MainContent_Good").val(SampleCount - RejCount);
                                         //alert('on switch of inspection state: ' + $('#MainContent_Good').val());
-                                        $("#FailCountValue").text(RejCount.toString())
+                                        $("#FailCountValue").text(RejCount.toString());
+
                                         $("#PassCountValue").text(Number($("#MainContent_Good").val()) - Number($("#MainContent_Bad_Group").val()));
                                         //$("#TotalCountValue").val($SampleSize.val());
-                                        $("#TotalCountValue").wijinputnumber("option", "value", $('#MainContent_Good').val());
-                                        $("#TotalCountValue").wijinputnumber('option', "minValue", RejCount);
+                                       // $("#TotalCountValue").wijinputnumber("option", "value", $('#MainContent_Good').val());
+                                        $("#TotalCountValue").val($('#MainContent_Good').val()); 
+                                        //$("#TotalCountValue").wijinputnumber('option', "minValue", RejCount);
                                         $('#MainContent_totalinspecteditems').val($('#MainContent_Good').val());
                                         $("#JobNumberValue").text(jobnumber);
                                         $("#LocationSelection").css("display", "none");
@@ -1859,11 +1861,13 @@
                                                     jobnumber = $workorder.val();
                                                     //$("#MainContent_Good").val(SampleCount - RejCount);
                                                     //alert('on switch of inspection state: ' + $('#MainContent_Good').val());
-                                                    $("#FailCountValue").text(RejCount.toString())
+                                                    $("#FailCountValue").text(RejCount.toString());
+
                                                     $("#PassCountValue").text(Number($("#MainContent_Good").val()) - Number($("#MainContent_Bad_Group").val()));
                                                     //$("#TotalCountValue").val($SampleSize.val());
-                                                    $("#TotalCountValue").wijinputnumber("option", "value", $('#MainContent_Good').val());
-                                                    $("#TotalCountValue").wijinputnumber('option', "minValue", RejCount);
+                                                    //$("#TotalCountValue").wijinputnumber("option", "value", $('#MainContent_Good').val());
+                                                    //$("#TotalCountValue").wijinputnumber('option', "minValue", RejCount);
+                                                    $("#TotalCountValue").val($('#MainContent_Good').val()); 
                                                     $('#MainContent_totalinspecteditems').val($('#MainContent_Good').val());
                                                     $("#JobNumberValue").text(jobnumber);
                                                     $("#LocationSelection").css("display", "none");
@@ -3123,32 +3127,18 @@
             }
         },
         InitNumbers: function () {
+            console.log("InitNumber init"); 
             var limit = parseInt($('#MainContent_SampleSize').val());
-            $("#TotalCountValue").wijinputnumber({
-                type: 'numeric',
-                minValue: 0,
-                maxValue: limit,
-                decimalPlaces: 0,
-                showSpinner: true,
-                valueChanged: function (e, data) {
 
-
+            $("#TotalCountValue").on('change', function(e) { 
                     var rejcount = new Number($("#MainContent_Bad_Group").val());
-                    var Inspected = new Number(data.value);
+                    var Inspected = new Number($(this).val());
                     var PassCount = new Number(Inspected - rejcount);
 
-
-
-
                     $("#PassCountValue").text(PassCount);
-                    //$("#MainContent_Good").val(PassCount);
-                    //alert('shenananigans afoot');
-                    //alert('On initNumbers: ' + $('#MainContent_Good').val());
-                    $('#MainContent_totalinspecteditems').val(data.value);
-
-
-                }
+                    $('#MainContent_totalinspecteditems').val($(this).val());
             });
+
             $("#TotalCountValue").height(50);
             $("#TotalYardValue").wijinputnumber({
                 type: 'numeric',
@@ -3762,6 +3752,16 @@
             }
             console.log("InspectionArray", InspectionArray);
             $("#MainContent_inspectionjobsummaryid_hidden").val(InspectionJobSummaryIdPage);
+
+            var oExists = ($("#workroom_select option[value='" + InspectionArray[0].WorkRoom + "']").length > 0);
+
+            console.log("oExists", oExists); 
+            console.log("val", InspectionArray[0].WorkRoom); 
+
+            if (!oExists) { 
+                $('#workroom_select').append("<option value='"+ InspectionArray[0].WorkRoom + "'>"+ InspectionArray[0].WorkRoom + "</option>");
+            }
+
             $("#workroom_select").val(InspectionArray[0].WorkRoom);
             $("#AQ_Level").val(InspectionArray[0].AQL_Level);
             $("#AQ_Level").prop('disabled', true);
