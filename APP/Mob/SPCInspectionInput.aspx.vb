@@ -644,7 +644,7 @@ Namespace core
             Dim bmapijs As New BMappers(Of SPCInspection.OpenRollInfo)
             Dim listijs As New List(Of SPCInspection.OpenRollInfo)
             Dim sql As String
-            sql = "SELECT ijs.JobNumber, ijs.WOQuantity, ijs.AQL_Level, ijs.Standard, ijs.EmployeeNo FROM InspectionJobSummary WHERE ijs.id = " & ijsid.ToString() + " order by ShiftId desc"
+            sql = "SELECT ijs.JobNumber, ijs.DataNo, ijs.WOQuantity, ijs.AQL_Level, ijs.Standard, ijs.EmployeeNo FROM InspectionJobSummary ijs WHERE ijs.id = " & ijsid.ToString()
 
             listijs = bmapijs.GetInspectObject(sql)
             If listijs.Count > 0 Then
@@ -653,6 +653,9 @@ Namespace core
                 DataNumber.Value = as400.GetRollDataNumber(rollnumberinput)
                 rolllist = as400.GetGriegeNo(rollnumberinput, False)
                 Inspector.Value = listijs.ToArray()(0).EmployeeNo
+                RollNumber.Value = listijs.ToArray()(0).JobNumber
+                WOQuantityValue = listijs.ToArray()(0).WOQuantity
+                DataNumber.Value = listijs.ToArray()(0).DataNo
 
                 If rolllist.Count = 0 Then
                     rolllist = as400.GetGriegeNo(rollnumberinput, True)
