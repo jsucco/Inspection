@@ -19,6 +19,7 @@
             <div id="PNInput" style="left: 30px; top: 80px; position: absolute; border-style: solid; border-bottom-color: #869EB1; width: 68%; border-top-color: white; border-right-color: white; border-left-color: white; height: 70px;">
                 <input id="add" type="button" class="export" style="height: 40px; width: 110px" value="ADD TAB" />
                 <input id="addbutton" type="button" class="export" style="height: 40px; width: 110px; position: absolute; top: 0px; left: 138px" value="ADD BUTTON" />
+                <input id="BUDelete" class="export" style="height: 40px; width: 110px; position:absolute; top: 0px; left: 276px" value="Delete Tab"/>
                 <div id="LineTypeDiv" class="SheetClass1" style="position: absolute; top: -20px; left: 408px; width: 300px">
                     LineType: 
                         
