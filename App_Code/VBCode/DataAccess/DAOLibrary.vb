@@ -325,6 +325,7 @@ Namespace core
 
         Public Class OpenRollInfo
             Public Property JobNumber As String
+            Public Property DataNo As String
             Public Property WOQuantity As Integer
             Public Property AQL_Level As Decimal
             Public Property Standard As String
