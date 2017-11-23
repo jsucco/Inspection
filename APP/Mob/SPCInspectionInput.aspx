@@ -1303,9 +1303,9 @@
                                         //alert('on switch of inspection state: ' + $('#MainContent_Good').val());
                                         $("#FailCountValue").text(RejCount.toString());
                                         $("#PassCountValue").text(Number($("#MainContent_Good").val()) - Number($("#MainContent_Bad_Group").val()));
-                                        $("#TotalCountValue").val($("#FailCountValue").val()+$("#PassCountValue").val());
-                                        //$("#TotalCountValue").wijinputnumber("option", "value", $('#MainContent_Good').val());
-                                        //$("#TotalCountValue").wijinputnumber('option', "minValue", RejCount);
+                                        
+                                        $("#TotalCountValue").wijinputnumber("option", "value", $("#MainContent_Good").val());
+                                        $("#TotalCountValue").wijinputnumber('option', "minValue", RejCount);
                                         $('#MainContent_totalinspecteditems').val($('#MainContent_Good').val());
                                         $("#JobNumberValue").text(jobnumber);
                                         $("#LocationSelection").css("display", "none");
@@ -1939,10 +1939,9 @@
                                                     //alert('on switch of inspection state: ' + $('#MainContent_Good').val());
                                                     $("#FailCountValue").text(RejCount.toString())
                                                     $("#PassCountValue").text(Number($("#MainContent_Good").val()) - Number($("#MainContent_Bad_Group").val()));
-                                                    //$("#TotalCountValue").val($SampleSize.val());
-                                                    $("#TotalCountValue").val($("#FailCountValue").val() + $("#PassCountValue").val());
-                                                    //$("#TotalCountValue").wijinputnumber("option", "value", $('#MainContent_Good').val());
-                                                    //$("#TotalCountValue").wijinputnumber('option', "minValue", RejCount);
+                                                    
+                                                    $("#TotalCountValue").wijinputnumber("option", "value", $('#MainContent_Good').val());
+                                                    $("#TotalCountValue").wijinputnumber('option', "minValue", RejCount);
                                                     $('#MainContent_totalinspecteditems').val($('#MainContent_Good').val());
                                                     $("#JobNumberValue").text(jobnumber);
                                                     $("#LocationSelection").css("display", "none");
@@ -3360,6 +3359,13 @@
         },
         InitNumbers: function () {
             var limit = new Number($('#MainContent_SampleSize').val());
+
+            $("#TotalCountValue").wijinputnumber({
+                type: 'numeric', 
+                minValue: 0, 
+                decimalPlaces: 0, 
+                showSpinner: true
+            })
             
             $("#TotalCountValue").on('change', function(e) { 
                 var rejcount = new Number($("#MainContent_Bad_Group").val());
