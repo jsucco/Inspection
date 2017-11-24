@@ -171,7 +171,7 @@
    <%-- <div style="position:absolute; width: 90px; height: 35px;font-size: .85em; left: 60%; top:5px;">
         <img src="../../Images/global-technical-specs.jpg" id="GlobalSpecsImage" style="height:80px; z-index: 1000;" />
     </div>--%>
-    <div id="NewPageDiv" style="position:absolute; left: 560px; top: 15px; width: 350px;" class="">
+    <div id="NewPageDiv" style="position:absolute; left: 545px; top: 15px; width: 350px;" class="">
         <input id="NewPage" type="button" value="NEW" class="export" style="position:relative; width:90px; height: 52px; ""></input>
     </div>
     <div id="boxes">
@@ -188,8 +188,8 @@
         <input id="BUIncrement" type="button" value="+" class="export" style="position:absolute; top:25px; left: 145px; width:40px; height: 40px; "" />
         <input id="BUPlusOne" type="button" value="+1" class="export" style="position:absolute; top:25px; left: 190px; width:40px; height: 40px; "" />
     </div>
-    <div id="CommentDiv" style="position:absolute; left: 900px; top: 15px; width: 350px;" class="">
-        <input id="EditComment" type="button" value="EDIT" class="export" style="position:relative; width:90px; height: 52px; ""></input>
+    <div id="CommentDiv" style="position:absolute; left: 860px; top: 15px; width: 350px;" class="">
+        <input id="EditComment" type="button" value="NOTE" class="export" style="position:relatve; width:60px; height: 52px; ""></input>
     </div>
     <div id="scorelabels" style="position:absolute; left:85%; top:-5px; width: 400px; height: 100px; display:none;">
         <label id="DHULabel" style="position:absolute; top:3px; left: 0px; font-size:medium; z-index:100; color:black; width: 150px;">DHU</label>
@@ -643,19 +643,19 @@
         var $_aql = $('#MainContent__AQLevel');
 
         var warr = <%=WorkRoomArr%>
-        TemplateCollection = <%=TemplateCollection%>
-        SpecCollection = <%=ProductSpecCollection%>
-        SelectedId = <%=SelectedId%>
-        SelectedName = "<%=SelectedName%>"
+            TemplateCollection = <%=TemplateCollection%>
+            SpecCollection = <%=ProductSpecCollection%>
+            SelectedId = <%=SelectedId%>
+            SelectedName = "<%=SelectedName%>"
         LocationNames = <%=LocationNames%>
-        LastLocation = '<%=LastLocation%>'
+            LastLocation = '<%=LastLocation%>'
         TemplateTabCount = <%=TemplateTabCount%>
-        AQLValue = '<%=AQL%>';
+            AQLValue = '<%=AQL%>';
         IsSPCMachine = new Boolean(<%=IsSPCMacine%>);
         IsMobile = new Boolean(<%=IsMobile%>);
         HasTargetCount = "<%=HasTargetCount%>";
         WOQuantity = <%=WOQuantityValue%>
-        selectedCID = '<%=CID%>';
+            selectedCID = '<%=CID%>';
         selectedCIDnum = '<%=CIDnum%>';
         HasCID = '<%=HasCID%>';
         OpenOrderFlag = '<%=OpenOrderLoadFlag%>';
@@ -664,7 +664,7 @@
         pageBehindInspectionStarted = '<%=InspectionStartedFlag%>';
         datahandler.ColumnCount = <%=ColumnCount%>
 
-        RenderEngine.SizeChecker();
+            RenderEngine.SizeChecker();
         eventshandler.UserKeyPress.Init();
         $(".scrollWrap, .wijmo-wijsuperpanel, .ui-widget, .ui-widget-content, .ui-corner-all").css("height", "60px");
         dialogs.InitProductSpecEntry();
@@ -1303,7 +1303,7 @@
                                         //alert('on switch of inspection state: ' + $('#MainContent_Good').val());
                                         $("#FailCountValue").text(RejCount.toString());
                                         $("#PassCountValue").text(Number($("#MainContent_Good").val()) - Number($("#MainContent_Bad_Group").val()));
-                                        $("#TotalCountValue").val($("#FailCountValue").val()+$("#PassCountValue").val());
+                                        $("#TotalCountValue").val($("#FailCountValue").val() + $("#PassCountValue").val());
                                         //$("#TotalCountValue").wijinputnumber("option", "value", $('#MainContent_Good').val());
                                         //$("#TotalCountValue").wijinputnumber('option', "minValue", RejCount);
                                         $('#MainContent_totalinspecteditems').val($('#MainContent_Good').val());
@@ -1608,10 +1608,11 @@
             if (TemplateCollection.length > 0) { Template.Load(); }
             $("#mendiv").css({ display: 'none' });
             $("#ActionHolder").css({ top: '120px', display: 'block' });
-            $("#NewPageDiv").css({ display: 'block', left: '255px' });
+            $("#NewPageDiv").css({ display: 'block', left: '245px' });
             $('#NewPage').css('width', (screen.width * .28).toString() + 'px');
             $('#completeInspect').css('width', (screen.width * .55).toString() + 'px');
             $("#workorderDiv").css({ display: 'none' });
+
 
         },
         ShowUnActiveMobile: function () {
@@ -1662,14 +1663,16 @@
                 $("#NewPageDiv").css("left", "200px");
                 $("#scorelabels").css({ display: 'block', left: "300px" });
                 $("#PNIncrementDiv").css({ display: 'block', left: "655px" });
+                $("#CommentDiv").css({ display: 'block', left: "845px" });
                 $("body").css("min-width", "900px");
                 if (TemplateCollection.length > 0) { Template.Load(); }
             } else {
                 $("#CompleteDiv").css("left", "360px");
-                $("#NewPageDiv").css("left", "560px");
+                $("#NewPageDiv").css("left", "545px");
                 $("#Image1").css("display", "block");
-                $("#scorelabels").css({ display: 'block', left: "69%" });
-                $("#PNIncrementDiv").css({ display: 'block', left: "625px" });
+                $("#scorelabels").css({ display: 'block', left: "71%" });
+                $("#PNIncrementDiv").css({ display: 'block', left: "610px" });
+                $("#CommentDiv").css({ display: 'block', left: "845px" });
                 $("#menudiv").css("display", "block");
                 $("body").css("min-width", "900px");
                 $("#tabs_holder").css("width", "83%");
@@ -2658,8 +2661,8 @@
                                             var rowclass = $('.ui-state-highlight');
                                             if (specnum > uppnum || specnum < lownum) {
 
-                                                rowclass.css('border', '1px solid #333');
-                                                rowclass.css('background', 'rgb(116, 0, 0) 50% 50% repeat-x');
+                                                rowclass.css('border', '1px solid #333');
+                                                rowclass.css('background', 'rgb(116, 0, 0) 50% 50% repeat-x');
                                                 rowclass.css('background-color', 'rgba(114, 0, 0, 0.48)');
                                                 rowclass.css('color', '#363636');
                                             } else {
@@ -2705,14 +2708,14 @@
                     SpecGridEditId = id;
 
                 },
-                onSelectRow: function(rowid, status, e) { 
- 
+                onSelectRow: function (rowid, status, e) {
+
                     var ID_cell = $("#" + rowid).find("td[aria-describedby='Specgrid_SpecId']").html();
-                    console.log("ID_Cell", $.isNumeric(ID_cell)); 
+                    console.log("ID_Cell", $.isNumeric(ID_cell));
                     if ($.isNumeric(ID_cell))
                         controlhandler.SelectedSpecId = ID_cell;
 
-                    console.log("gridselected ", controlhandler.SelectedSpecId );
+                    console.log("gridselected ", controlhandler.SelectedSpecId);
                 },
                 gridComplete: function () {
                     var mydata = $("#Specgrid").jqGrid('getGridParam', 'data');
@@ -2777,7 +2780,7 @@
                     keys: true,
                     extraparam: {
                         SpecId: function () {
-                            console.log("selectedspecid", controlhandler.SelectedSpecId); 
+                            console.log("selectedspecid", controlhandler.SelectedSpecId);
                             return controlhandler.SelectedSpecId;
                         },
                         InspectionSummaryId: function () {
@@ -2822,7 +2825,7 @@
                         SpecItemCount: function () {
                             return SpecItemCounter;
                         },
-                        Workroom: function () { 
+                        Workroom: function () {
                             return $("#MainContent_workroom_hidden").val();
                         },
                     },
@@ -2840,8 +2843,8 @@
                             if (specdelta <= Uvalue && specdelta >= 0) {
 
                                 var rowclass = $('.ui-state-highlight');
-                                rowclass.css('border', '1px solid #333');
-                                rowclass.css('background', 'rgba(16, 168, 28, 0.478431) 50% 50% repeat-x');
+                                rowclass.css('border', '1px solid #333');
+                                rowclass.css('background', 'rgba(16, 168, 28, 0.478431) 50% 50% repeat-x');
                                 rowclass.css('background-color', 'rgba(16, 168, 28, 0.478431);');
                                 rowclass.css('color', '#363636');
 
@@ -2849,16 +2852,16 @@
                             if (specdelta >= Lvalue && specdelta < 0) {
 
                                 var rowclass = $('.ui-state-highlight');
-                                rowclass.css('border', '1px solid #333');
-                                rowclass.css('background', 'rgba(16, 168, 28, 0.478431) 50% 50% repeat-x');
+                                rowclass.css('border', '1px solid #333');
+                                rowclass.css('background', 'rgba(16, 168, 28, 0.478431) 50% 50% repeat-x');
                                 rowclass.css('background-color', 'rgba(16, 168, 28, 0.478431);');
                                 rowclass.css('color', '#363636');
 
                             }
                             if (Mvalue == Svalue) {
                                 var rowclass = $('.ui-state-highlight');
-                                rowclass.css('border', '1px solid #333');
-                                rowclass.css('background', 'rgb(116, 0, 0) 50% 50% repeat-x');
+                                rowclass.css('border', '1px solid #333');
+                                rowclass.css('background', 'rgb(116, 0, 0) 50% 50% repeat-x');
                                 rowclass.css('background-color', 'rgba(16, 168, 28, 0.478431);');
                                 rowclass.css('color', '#363636');
                             }
@@ -3037,19 +3040,19 @@
             $.ajax({
 
                 url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
-                 type: 'GET',
-                 data: { method: 'setComment', args: { ID: id, Comment: comment } },
-                 success: function (data) {
+                type: 'GET',
+                data: { method: 'setComment', args: { ID: id, Comment: comment } },
+                success: function (data) {
 
-                     dbtrans2.getComment(id);
+                    dbtrans2.getComment(id);
 
-                 },
-                 error: function (a, b, c) {
-                     alert(c);
-                 }
-             });
+                },
+                error: function (a, b, c) {
+                    alert(c);
+                }
+            });
 
-         },
+        },
         RecordSource: function (id, mop, loc) {
             $.ajax({
 
@@ -3360,15 +3363,15 @@
         },
         InitNumbers: function () {
             var limit = new Number($('#MainContent_SampleSize').val());
-            
-            $("#TotalCountValue").on('change', function(e) { 
+
+            $("#TotalCountValue").on('change', function (e) {
                 var rejcount = new Number($("#MainContent_Bad_Group").val());
                 var Inspected = new Number($(this).val());
                 var PassCount = new Number(Inspected - rejcount);
-  
+
                 $("#PassCountValue").text(PassCount);
                 $('#MainContent_totalinspecteditems').val($(this).val());
-             });
+            });
 
             $("#TotalCountValue").height(50);
             $("#TotalYardValue").wijinputnumber({
@@ -4046,8 +4049,8 @@
 
             var oExists = ($("#workroom_select option[value='" + InspectionArray[0].WorkRoom + "']").length > 0);
 
-            if (!oExists) { 
-                $('#workroom_select').append("<option value='"+ InspectionArray[0].WorkRoom + "'>"+ InspectionArray[0].WorkRoom + "</option>");
+            if (!oExists) {
+                $('#workroom_select').append("<option value='" + InspectionArray[0].WorkRoom + "'>" + InspectionArray[0].WorkRoom + "</option>");
             }
 
             $("#workroom_select").val(InspectionArray[0].WorkRoom);
