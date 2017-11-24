@@ -64,7 +64,7 @@ Namespace core
                             End If
 
                     End Select
-                    ProductSpecscache = AddWeightSpec(ProductSpecscache)
+                    'ProductSpecscache = AddWeightSpec(ProductSpecscache)
                 End If
             End If
 
