@@ -218,8 +218,6 @@ Namespace core
                 End If
             End If
 
-
-
         End Sub
         Private Function getLastUserInputs(SessionId As String) As core.SPCInspection.UserInputs
             Dim UserData As New core.SPCInspection.UserInputs
@@ -394,11 +392,15 @@ Namespace core
             Try
                 Using _db As New Inspection_Entities
                     curijs = (From v In _db.InspectionJobSummaries Where v.id = ijsnum).FirstOrDefault()
+                    curijs.Comments = JobMessage.Value
+                    curijs.UserConfirm_PassFail = True
+                    curijs.UserConfirm_PassFail_Timestamp = Date.Now
+                    curijs.Inspection_Finished = Date.Now
+                    curijs.JobType = InspectionState.Value
 
                     If IsNothing(curijs) = False Then
                         Select Case InspectionState.Value
                             Case "WorkOrder"
-
                                 curijs.ItemFailCount = GetFailCount(ijsnum.ToString(), InspectionState.Value.Trim())
                                 curijs.TotalInspectedItems = util.ConvertType(totalinspecteditems.Value, "Integer") ' CType(totalinspecteditems.Value, Integer)
 
@@ -412,29 +414,14 @@ Namespace core
                                 curijs.ItemPassCount = curijs.TotalInspectedItems - curijs.ItemFailCount
 
                             Case "RollNumber"
-
-                                DHY = util.ConvertType(DHYHidden.Value, "Decimal")
-                                curijs.ItemFailCount = GetFailCount(ijsnum.ToString(), InspectionState.Value.Trim())
-                                curijs.ItemPassCount = -1
-                                If DHY > 10 Then
-                                    curijs.Technical_PassFail = False
-                                    JobPassFail = "Fail"
-                                Else
-                                    curijs.Technical_PassFail = True
-                                    JobPassFail = "Pass"
-                                End If
-                                curijs.TotalInspectedItems = CType(totalinspectedyards.Value, Integer)
+                                setRollItems(curijs, ijsnum, DHY, JobPassFail)
 
                         End Select
+
                         curijs.MajorsCount = InspectInput.GetDefectCountByType(ijsnum.ToString(), "MAJOR")
                         curijs.MinorsCount = InspectInput.GetDefectCountByType(ijsnum.ToString(), "MINOR")
                         curijs.RepairsCount = InspectInput.GetDefectCountByType(ijsnum.ToString(), "REPAIRS")
                         curijs.ScrapCount = InspectInput.GetDefectCountByType(ijsnum.ToString(), "SCRAP")
-                        curijs.UserConfirm_PassFail = True
-                        curijs.UserConfirm_PassFail_Timestamp = Date.Now
-                        curijs.Inspection_Finished = Date.Now
-                        curijs.JobType = InspectionState.Value
-                        curijs.Comments = JobMessage.Value
 
                         Dim rowsaff As Integer = IU.setISRow(ijsnum, curijs.ItemFailCount, curijs.TotalInspectedItems, curijs.Technical_PassFail, curijs.ItemPassCount, curijs.MajorsCount, curijs.MinorsCount, curijs.RepairsCount, curijs.ScrapCount, curijs.UserConfirm_PassFail, curijs.UserConfirm_PassFail_Timestamp, curijs.Inspection_Finished, curijs.JobType, curijs.Comments)
 
@@ -483,6 +470,32 @@ Namespace core
 
         End Sub
 
+        Private Sub setRollItems(curijs As InspectionJobSummary, ijsnum As Integer, DHY As Decimal, JobPassFail As String)
+            Dim shiftId As Integer
+
+            DHY = util.ConvertType(DHYHidden.Value, "Decimal")
+            curijs.ItemFailCount = GetFailCount(ijsnum.ToString(), InspectionState.Value.Trim())
+            curijs.ItemPassCount = -1
+
+            If DHY > 10 Then
+                curijs.Technical_PassFail = False
+                JobPassFail = "Fail"
+            Else
+                curijs.Technical_PassFail = True
+                JobPassFail = "Pass"
+            End If
+            curijs.TotalInspectedItems = CType(totalinspectedyards.Value, Integer)
+            Int32.TryParse(WeaverShiftId_hidden.Value, shiftId)
+
+            If shiftId > 0 Then
+                Dim syards As Integer
+
+                Int32.TryParse(WeaverShiftYards_hidden.Value, syards)
+                Inspect.setShiftEnd(shiftId, RollMessage.Value)
+                Inspect.setYards(shiftId, syards)
+            End If
+        End Sub
+
         Private Sub SendEmailAlertsAsync(ByVal curijs As InspectionJobSummary, ByVal ijsnum As Integer, ByVal JobPassFail As String, Optional ByVal DHY As Decimal = 0)
             'sendEmailAlerts(curijs, ijsnum, JobPassFail, DHY)
             Dim t As System.Threading.Tasks.Task = System.Threading.Tasks.Task.Run(Sub()
@@ -526,9 +539,12 @@ Namespace core
                         locationString = ""
                     End If
 
-                    Dim DHUCalc As Decimal = InspectInput.CalculateDHU(InspectionState.Value, curijs.JobNumber, ijsnum, curijs.TotalInspectedItems)
+                    Dim DHUCalc As Decimal
                     Dim body As String
                     If InspectionState.Value = "WorkOrder" Then
+
+                        DHUCalc = InspectInput.CalculateDHU(InspectionState.Value, curijs.JobNumber, ijsnum, curijs.TotalInspectedItems)
+
                         body = "[" + curijs.JobType + ": " & curijs.JobNumber & "][WOQuantity: " & curijs.WOQuantity.ToString() & "][AQL Level: " & curijs.AQL_Level.ToString() & "][TemplateName: " & Templatename.Value.ToString() & "][PassCount: " & curijs.ItemPassCount.ToString() & "][FailCount: " & curijs.ItemFailCount.ToString() & "][SampleSize: " & curijs.SampleSize.ToString() & "][RejectLimitor: " & curijs.RejectLimiter & "][DHU: " & DHUCalc.ToString("F2") & " %][Auditor Name: " & AuditorNameHidden.Value.ToString() & "]<br /><br /> Comments: " + curijs.Comments
                     Else
                         DHY = CType(DHYHidden.Value, Decimal)
@@ -651,19 +667,20 @@ Namespace core
                 Dim rollnumberinput = listijs.ToArray()(0).JobNumber
                 Dim rolllist As New List(Of SPCInspection.Roll_Ledge)
                 DataNumber.Value = as400.GetRollDataNumber(rollnumberinput)
-                rolllist = as400.GetGriegeNo(rollnumberinput, False)
+                'rolllist = as400.GetGriegeNo(rollnumberinput, False)
                 Inspector.Value = listijs.ToArray()(0).EmployeeNo
                 RollNumber.Value = listijs.ToArray()(0).JobNumber
                 WOQuantityValue = listijs.ToArray()(0).WOQuantity
                 DataNumber.Value = listijs.ToArray()(0).DataNo
-
-                If rolllist.Count = 0 Then
-                    rolllist = as400.GetGriegeNo(rollnumberinput, True)
-                End If
-                If rolllist.Count > 0 Then
-                    RollNumber.Value = rollnumberinput.ToString()
-                    WOQuantityValue = rolllist.ToArray()(0).TICKETYARDS
-                End If
+                LoomNumber.Value = InspectInput.GetLM(ijsid)
+                Weaver_Names.Value = InspectInput.GetWeaverInit(ijsid)
+                'If rolllist.Count = 0 Then
+                '    rolllist = as400.GetGriegeNo(rollnumberinput, True)
+                'End If
+                'If rolllist.Count > 0 Then
+                '    RollNumber.Value = rollnumberinput.ToString()
+                '    WOQuantityValue = rolllist.ToArray()(0).TICKETYARDS
+                'End If
             End If
         End Sub
         Private Function SetRollNumberInfo(ByVal rollnumberinput As String) As Boolean

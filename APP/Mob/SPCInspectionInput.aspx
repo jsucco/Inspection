@@ -329,7 +329,7 @@
                 <label for="LocationL" style="position:absolute; top:3px; left:10px; font-size:smaller; z-index:100; color:white;">LOCATION</label>
                 <select id="Location" disabled runat="server" style="width:185px;"    class="inputelement inputbox leftsidedropobj"></select>
             </div>
-            <div class="inputpad leftsidepanel" style="position:relative; margin-top:5px;" id="LotSizeDiv">
+            <div class="inputpad leftsidepanel" style="position:relative; margin-top:5px; margin-bottom: 15px;" id="LotSizeDiv">
                 <label for="WOQuantity" id="WOQuantityL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">WO QUANTITY</label>
                 <div style="position: relative; top:15px; left:10px;">
                     <input id="WOQuantity" class="inputelement leftsidedropobj" style="height:30px; width:149px; padding-left: 30px; text-align: left;" type="text" value ="0"   />
@@ -643,19 +643,19 @@
         var $_aql = $('#MainContent__AQLevel');
 
         var warr = <%=WorkRoomArr%>
-            TemplateCollection = <%=TemplateCollection%>
-            SpecCollection = <%=ProductSpecCollection%>
-            SelectedId = <%=SelectedId%>
-            SelectedName = "<%=SelectedName%>"
+        TemplateCollection = <%=TemplateCollection%>
+        SpecCollection = <%=ProductSpecCollection%>
+        SelectedId = <%=SelectedId%>
+        SelectedName = "<%=SelectedName%>"
         LocationNames = <%=LocationNames%>
-            LastLocation = '<%=LastLocation%>'
+        LastLocation = '<%=LastLocation%>'
         TemplateTabCount = <%=TemplateTabCount%>
-            AQLValue = '<%=AQL%>';
+        AQLValue = '<%=AQL%>';
         IsSPCMachine = new Boolean(<%=IsSPCMacine%>);
         IsMobile = new Boolean(<%=IsMobile%>);
         HasTargetCount = "<%=HasTargetCount%>";
         WOQuantity = <%=WOQuantityValue%>
-            selectedCID = '<%=CID%>';
+        selectedCID = '<%=CID%>';
         selectedCIDnum = '<%=CIDnum%>';
         HasCID = '<%=HasCID%>';
         OpenOrderFlag = '<%=OpenOrderLoadFlag%>';
@@ -664,7 +664,7 @@
         pageBehindInspectionStarted = '<%=InspectionStartedFlag%>';
         datahandler.ColumnCount = <%=ColumnCount%>
 
-            RenderEngine.SizeChecker();
+        RenderEngine.SizeChecker();
         eventshandler.UserKeyPress.Init();
         $(".scrollWrap, .wijmo-wijsuperpanel, .ui-widget, .ui-widget-content, .ui-corner-all").css("height", "60px");
         dialogs.InitProductSpecEntry();
@@ -754,7 +754,8 @@
                         console.log(data);
                         Inc_Num = data;
 
-                        $goodcount.val(data.toString());
+                        if (data >= 0)   // if data is -1 then inspection wont start.
+                            $goodcount.val(data.toString());
                         //$("#PassCountValue").text(Number($("#MainContent_Good").val()) - Number($("#MainContent_Bad_Group").val()));
 
                     },
@@ -1869,11 +1870,15 @@
                                 ErrorMessage = "Inspection Must include an Auditor.";
                         }
 
+                        console.log("CanStart", InspectionCanStart); 
 
                         if (InspectionCanStart == true) {
                             $("#selectNames").prop("disabled", true);
+                            console.log("total", total); 
+                            console.log("OPenOrder", OpenOrderFlag)
                             if (total == 0 && OpenOrderFlag == "False") {
                                 $.when(datahandler.GetInspectionId()).done(function () {//when GetInspectionId finishes...
+                                    console.log("XXXXXX"); 
                                     if (InspectionJobSummaryIdPage == 0) {
                                         //alert('JobSummaryId is 0');
                                         datahandler.GetInspectionJobSummaryId(TargetOrderInput.val(), false);
@@ -2167,6 +2172,7 @@
                     },
                     'Close': function () {
                         Inspection.SetWeaversHTML();
+
                         $(this).wijdialog('close');
                     }
                 },
@@ -2186,7 +2192,8 @@
                     //$("#PreConfirmWeaver1Label").text('');
                     //$("#PreConfirmWeaver2Label").text('');
                     Inspection.SetWeaversHTML();
-                    //Inspection.PreConfirmWeavers = { Weaver1ID: 0, Weaver1Initials: "", Weaver2ID: 0, Weaver2Initials: "" };
+
+                    Inspection.PreConfirmWeavers = { Weaver1ID: 0, Weaver1Initials: "", Weaver2ID: 0, Weaver2Initials: "" };
                 }
             });
         }
@@ -2225,7 +2232,6 @@
                     { name: 'AQLLevel', index: 'AQLLevel', editable: false, hidden: true },
                     { name: 'WorkRoom', index: 'WorkRoom', editable: false, hidden: true },
                     { name: 'WOQuantity', index: 'WOQuantity', editable: false, hidden: true },
-
                     {
                         name: "LinkToInspection", formatter: InspectionButtonFormatter, width: 200,
                         search: false, sortable: false, hidedlg: true, resizable: false,
@@ -3392,6 +3398,7 @@
                 minValue: 0,
                 maxValue: 10000000,
                 decimalPlaces: 0,
+                increment: 100,
                 showSpinner: true,
                 valueChanged: function (e, data) {
                     $('#MainContent_totalinspectedyards').val(data.value);
@@ -3404,6 +3411,7 @@
                 minValue: 0,
                 maxValue: 10000000,
                 decimalPlaces: 0,
+                increment: 100,
                 showSpinner: true,
                 valueChanged: function (e, data) {
                     $('#MainContent_WeaverShiftYards_hidden').val(data.value);
