@@ -414,6 +414,7 @@
                     }
                     
                 });
+                console.log("selList", selList); 
                 $locSelect.val(selList).trigger("change"); 
                 datahandler.LocationChangeEvent(selList); 
             });
@@ -1167,7 +1168,7 @@
 
                     },
                     gridComplete: function () { 
-                        console.log("Grid complete"); 
+                        
 
                         var listdata = $("#ijsgrid").jqGrid('getGridParam', 'userData');
 
@@ -1254,7 +1255,7 @@
 
                             subgridquerystr = "ijsid=" + rowdata[id - 1].innerText;
                             grids.Selected_ijs_id = rowdata[id - 1].innerText;
-                            console.log("ijs_id", grids.Selected_ijs_id); 
+                            
                         }                      
                     },
                     subGrid: true,
@@ -1331,7 +1332,7 @@
                     }, 
                     loadComplete: function () {
                         var iCol = grids.getColumnIndexByName($("#ijsgrid"), 'delete');
-                        console.log("iCol", iCol); 
+                         
                         $(this).find(">tbody>tr.jqgrow>td:nth-child(" + (iCol + 1) + ")")
                             .each(function() {
                                 $("<div>", {
@@ -1404,7 +1405,7 @@
                                                 }
                                             }, 
                                             open: function(event, ui) { 
-                                                console.log("selected CID", grids.RSSelectedRowCID); 
+                                                 
                                                 if ($.ui && $.ui.dialog && !$.ui.dialog.prototype._allowInteractionRemapped && $(this).closest(".ui-dialog").length) {
                                                     if ($.ui.dialog.prototype._allowInteraction) {
                                                         $.ui.dialog.prototype._allowInteraction = function (e) {
@@ -1460,14 +1461,14 @@
                                 delay:  250, 
                                 dataType: 'json', 
                                 data: function(params) { 
-                                    console.log("term", params.term); 
+                                    
                                     return { 
                                         q: (params.term != null ? params.term : ""),
                                         cid: grids.RSSelectedRowCID
                                     };
                                 },
                                 processResults: function(data, params) { 
-                                    console.log("results", data); 
+                                     
                                     return { 
                                         results: data
                                     };
@@ -1480,7 +1481,7 @@
                 jQuery("#ijsgrid").jqGrid('inlineNav', '#ijsgrid',{
                     editParams: {
                         successfunc: function( response ) {
-                            console.log('success save!')
+                            
                         }
                     }
                 });
@@ -1613,7 +1614,7 @@
 
                         var listdata = $("#Specgrid").jqGrid('getGridParam', 'userData');
 
-                        console.log("Listdata", listdata); 
+                         
                         if (listdata && listdata.length > 0) { 
                             var parsedata = $.parseJSON(listdata);
 
@@ -2118,7 +2119,7 @@
                     newarray.push(Rowarray)
                 });   
                 
-                console.log($("#GrapBorder").width(), $("#GrapBorder").height());
+                
                 data.addColumn('string', 'DefectDesc');
                 $.each(titleArr, function(index, value) { 
                     data.addColumn('number', value.Object3);
@@ -2621,6 +2622,7 @@
                 return returnarray;
             },
             GetDHULine: function () { 
+                console.log("GETDHULINE", LocationsStringArray)
                 $.ajax({
                     url: "<%=Session("BaseUri")%>" + '/handlers/Presentation/SPC_InspectionVisualizer.ashx',
                     type: 'GET',

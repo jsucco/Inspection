@@ -1431,7 +1431,7 @@ Namespace core
             Dim cmd As SqlCommand = con.CreateCommand()
             Dim rglist As New List(Of SPCInspection.LocationLineChart)
             Dim retlist As New List(Of SPCInspection.LocationLineChart)
-            Dim teststrg As String = GetLocationMasterFilter(LocArray)
+            'Dim teststrg As String = GetLocationMasterFilter(LocArray)
             Try
                 Using con
                     con.Open()
@@ -1472,7 +1472,7 @@ Namespace core
             Try
                 For Each item In LocArray
                     If item.status = "False" And item.CID <> "999" Then
-                        retstrg = retstrg + " SUBSTRING(lm.CID,4,3) <> '" & item.CID & "' AND "
+                        retstrg = retstrg + " CAST(CAST(lm.CID AS INT) AS VARCHAR) <> '" & item.CID & "' AND "
                     End If
 
                 Next

@@ -14,7 +14,7 @@ Namespace core
             Dim corp As corporate = New corporate
             Dim strURLCustomer As String = Nothing
             If Env.AppIsAvailable Then
-                strURLCustomer = "000578" 'Me.Request.QueryString("UC")
+                strURLCustomer = Me.Request.QueryString("UC")
 
                 If Not strURLCustomer Is Nothing Then
                     Me.Session("CID") = strURLCustomer
