@@ -149,6 +149,26 @@ Namespace core
             End If
             Return False
         End Function
+        Public Function setYards(ByVal shiftId As Integer, ByVal Yards As Integer) As Integer
+            Dim Outcome As String = ""
+            Dim SQL As String = "UPDATE dbo.WeaverProduction SET Yards = " + Yards.ToString() + " WHERE  ShiftId = " & shiftId.ToString()
+            Outcome = ExecuteSQL(SQL, 1)
+            If Outcome = "Successful" Then
+                Return True
+            End If
+            Return False
+        End Function
+        Public Function setShiftEnd(ByVal rowId As Integer, ByVal Comment As String) As Boolean
+            Dim Outcome As String = ""
+            Dim SQL As String = "UPDATE dbo.WeaverShifts SET Finish = getdate(), Comments='" & Comment & "' WHERE  Id = " & rowId.ToString()
+            Outcome = ExecuteSQL(SQL, 1)
+            If Outcome = "Successful" Then
+                Return True
+            End If
+            Return False
+        End Function
+
+
         Public Function getIncrement(ByVal rowId As Integer) As Integer
             Dim retval As Integer = -1
             Dim SQL As String = "SELECT TotalInspectedItems as INSITEMS From dbo.InspectionJobSummary WHERE id=" & rowId.ToString()
@@ -3135,37 +3155,6 @@ Namespace core
             Return retlist
 
         End Function
-        'Public Function GetWorkOrderdata() As Object
-        '    Dim conn As New iDB2Connection("Datasource=Prod;userid=SUCCO_T;password=SUCCO_T;")
-        '    Dim cmd As New iDB2Command("select * from devdatas.f4801 where  WADOCO = 1447255", conn)
-        '    Dim record As IDataRecord
-        '    Dim dr As iDB2DataReader
-        '    Dim itemlist As New List(Of Object)
-
-
-
-
-
-        'Using connection As New iDB2Connection("Datasource=Prod;userid=PCSUSER;password=PCSUSER;")
-
-        '    Using Command As New iDB2Command("select * from stcdata.f4801 where  WADOCO = 1447255", connection)
-        '        Dim dr As iDB2DataReader
-        '        Dim record As IDataRecord
-        '        dr = Command.ExecuteReader()
-        '        While dr.Read
-        '            record = CType(dr, IDataRecord)
-        '            Dim test As Object = record
-
-
-        '        End While
-
-
-        '    End Using
-
-        'End Using
-
-
-        'End Function
 
     End Class
 

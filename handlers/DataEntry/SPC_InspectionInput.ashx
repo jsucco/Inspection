@@ -236,6 +236,7 @@ Namespace core
 
 
         End Function
+
         Private Function GetDefectType(ByVal ButtonTemplateId As Integer) As Object
             Dim bmap_dt As New BMappers(Of SingleObject)
             Dim defecttype_obj As New List(Of SingleObject)
@@ -687,10 +688,10 @@ Namespace core
                 '    JobAPI.UpdateJobSuggestionsAsync(New JobHeader With {.id = JobObj.JobSummaryId, .Name = jsobj.JobNumber, .cid = "000" + jsobj.CID})
                 'End If
 
-                'If jsobj.JobType <> "WorkOrder" Then
-                '    JobObj.WeaverShiftId = RecordWeaverProduction(WeaverNamesString, JobObj.JobSummaryId)
+                If jsobj.JobType <> "WorkOrder" Then
+                    JobObj.WeaverShiftId = RecordWeaverProduction(WeaverNamesString, JobObj.JobSummaryId)
 
-                'End If
+                End If
 
             End If
             Return jser.Serialize(JobObj)
@@ -741,9 +742,10 @@ Namespace core
             Dim ShiftId As Integer = 0
 
             If WeaverString.Length > 0 Then
-                Dim weaverObj = jser.Deserialize(Of SPCInspection.Weavers)(WeaverString)
-                If IsNothing(weaverObj) = False Then
-                    Try
+                Try
+                    Dim weaverObj = jser.Deserialize(Of SPCInspection.Weavers)(WeaverString)
+                    If IsNothing(weaverObj) = False Then
+
                         Using _db As New Inspection_Entities
                             Dim shiftRec = New WeaverShift()
                             shiftRec.Shift = 1
@@ -773,10 +775,11 @@ Namespace core
 
                             _db.SaveChanges()
                         End Using
-                    Catch ex As Exception
-                        Elmah.ErrorSignal.FromCurrentContext.Raise(ex)
-                    End Try
-                End If
+
+                    End If
+                Catch ex As Exception
+                    Elmah.ErrorSignal.FromCurrentContext.Raise(ex)
+                End Try
             End If
             Return ShiftId
         End Function

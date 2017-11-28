@@ -1408,6 +1408,46 @@ Namespace core
             Return retobj
         End Function
 
+        Public Function GetLM(ByVal jobid As Integer) As String
+            Dim listso As New List(Of SingleObject)
+            Dim bmapso As New BMappers(Of SingleObject)
+
+            Try
+                Dim sql = "select top(1) LoomNo as Object1 from DefectMaster where InspectionJobSummaryId = " + jobid.ToString()
+
+                listso = bmapso.GetInspectObject(sql)
+
+                If listso.Count > 0 Then
+                    Return listso.ToArray()(0).Object1
+                End If
+            Catch ex As Exception
+                Elmah.ErrorSignal.FromCurrentContext().Raise(ex)
+            End Try
+
+            Return ""
+
+        End Function
+
+        Public Function GetWeaverInit(ByVal jobid As Integer) As String
+            Dim listso As New List(Of SingleObject)
+            Dim bmapso As New BMappers(Of SingleObject)
+
+            Try
+                Dim sql = "select top(1) en.Initials as Object1 from WeaverProduction wp inner join EmployeeNo en on wp.EmployeeNoId = en.Id where wp.JobSummaryId = " + jobid.ToString() + " order by wp.Id desc"
+
+                listso = bmapso.GetInspectObject(sql)
+
+                If listso.Count > 0 Then
+                    Return listso.ToArray()(0).Object1
+                End If
+            Catch ex As Exception
+                Elmah.ErrorSignal.FromCurrentContext().Raise(ex)
+            End Try
+
+            Return ""
+
+        End Function
+
         Public Function GetWorkrooms(ByVal CID As String) As SPCInspection.Workroom()
             Dim rs() As SPCInspection.Workroom = {}
             Dim istest As Int16 = 0
