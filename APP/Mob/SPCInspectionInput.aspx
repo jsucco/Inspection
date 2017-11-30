@@ -82,7 +82,7 @@
             <ASP:LABEL id="lblJobTotalCount" style="Z-INDEX: 104; LEFT: 10px; POSITION: absolute; TOP: 145px"
 			runat="server" Font-Size="medium">Total Items Inspected:</ASP:LABEL>
             <div id="TotalCountValueDiv" style="position:absolute; top:130px; left:50%;">
-                <input type="number" id="TotalCountValue" value="0" min="0" step="10" style="width: 157px; height: 57px; position:relative; top: -3px; font-size: 25px;" />
+                <input type="text" id="TotalCountValue"  style="width: 157px; height: 57px; position:relative; top: -3px; font-size: 25px;" />
             </div>
             <label id="LAEqualCheck" style="font-size:medium; position: absolute; top:185px; left:10px;">WARNING: TOTAL INSPECTED ITEMS NOT EQUAL TO SAMPLE SIZE</label>
         </div>
@@ -690,7 +690,6 @@
         $(".de_container").fadeIn(150);
 
         var dbtrans = {
-            //dbtrans.RecordSource(InspectionId, $("#DDSourceSelection option:selected").text(), $("#MainContent_Location option:selected").text(), DateTime.now());
             RecordSource: function (id, mop, loc, time) {
                 $.ajax({
 
@@ -702,8 +701,6 @@
                         Inc_Num = data;
 
                         $goodcount.val(data.toString());
-                        //$("#PassCountValue").text(Number($("#MainContent_Good").val()) - Number($("#MainContent_Bad_Group").val()));
-
                     },
                     error: function (a, b, c) {
                         alert(c);
@@ -727,23 +724,6 @@
                 });
 
             },
-            setComment: function (id, comment) {
-                $.ajax({
-
-                    url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
-                    type: 'GET',
-                    data: { method: 'setIncrement', args: { ID: id, Comment: comment } },
-                    success: function (data) {
-
-                        dbtrans.getComment(id);
-
-                    },
-                    error: function (a, b, c) {
-                        alert(c);
-                    }
-                });
-
-            },
             getIncrement: function (id) {
                 $.ajax({
 
@@ -756,8 +736,6 @@
 
                         if (data >= 0)   // if data is -1 then inspection wont start.
                             $goodcount.val(data.toString());
-                        //$("#PassCountValue").text(Number($("#MainContent_Good").val()) - Number($("#MainContent_Bad_Group").val()));
-
                     },
                     error: function (a, b, c) {
                         alert(c);
@@ -827,7 +805,6 @@
 
             if (originalamount + amount >= limit) {
                 dbtrans.setIncrement(id, limit - originalamount);
-                //alert('Warning: Sample size reached');
                 $("#LimitReachedDialog").wijdialog("open");
             } else {
                 dbtrans.setIncrement(id, amount);
@@ -835,6 +812,14 @@
             document.getElementById("BUIncrement").disabled = true;
             setTimeout(function () {
                 document.getElementById("BUIncrement").disabled = false;
+            }, 3000);
+            document.getElementById("BUDecrement").disabled = true;
+            setTimeout(function () {
+                document.getElementById("BUDecrement").disabled = false;
+            }, 3000);
+            document.getElementById("BUPlusOne").disabled = true;
+            setTimeout(function () {
+                document.getElementById("BUPlusOne").disabled = false;
             }, 3000);
         });
         $("#BUDecrement").click(function (e) {
@@ -848,9 +833,17 @@
             } else {
                 dbtrans.setIncrement(id, amount * (-1));
             }
+            document.getElementById("BUIncrement").disabled = true;
+            setTimeout(function () {
+                document.getElementById("BUIncrement").disabled = false;
+            }, 3000);
             document.getElementById("BUDecrement").disabled = true;
             setTimeout(function () {
                 document.getElementById("BUDecrement").disabled = false;
+            }, 3000);
+            document.getElementById("BUPlusOne").disabled = true;
+            setTimeout(function () {
+                document.getElementById("BUPlusOne").disabled = false;
             }, 3000);
         });
         $("#BUPlusOne").click(function (e) {
@@ -858,7 +851,6 @@
             var limit = parseInt($('#MainContent_SampleSize').val());
             var originalamount = parseInt($('#MainContent_Good').val());
             if (originalamount + 1 > limit) {
-                //alert('Warning: Sample size reached');
                 $("#LimitReachedDialog").wijdialog("open");
             } else {
                 dbtrans.setIncrement(id, 1);
@@ -867,14 +859,19 @@
             setTimeout(function () {
                 document.getElementById("BUPlusOne").disabled = false;
             }, 3000);
+            document.getElementById("BUDecrement").disabled = true;
+            setTimeout(function () {
+                document.getElementById("BUDecrement").disabled = false;
+            }, 3000);
+            document.getElementById("BUIncrement").disabled = true;
+            setTimeout(function () {
+                document.getElementById("BUIncrement").disabled = false;
+            }, 3000);
         });
         setInterval(function () {
             var id = $('#MainContent_InspectionId').val();
             dbtrans.getIncrement(id);
         }, 30000);
-        //$('#TBIncrementTextBox').bind('input', function () {
-        //    alert('hi');
-        //});
         if (InspectionConfirmFlag == 'true') {
             alert(InspectionConfirmMessage);
         }
@@ -987,14 +984,12 @@
         }
         $(".ui-tabs-panel").on('click', '.buttontemplate', function (e) {
             var buttonid_ = $(this).attr('id');
-            //var buttonvalue_ = $(this).attr('value');
             var buttonvalue_ = $(this).text();
             var idnum = $("#" + buttonid_ + "_hidden").val();
             var button_lib_id = $("#ButtonLibraryId_" + idnum).val();
             var buttonname_ = $(this).attr('name');
             var $c = $(this).css("background-color");
             hexc($c);
-            //alert(color);
             if ($Location.val() != "" || $LotSize.val() != "" || $AuditorName.Val() != "" || $DataNo.Val() != "") {
                 if (buttonvalue_) {
                     $('#DefectFlag').text('[' + button_lib_id + "." + buttonvalue_ + ']');
@@ -1009,7 +1004,6 @@
                         if (AutoConfirm == false) {
                             buttonid = buttonid_;
                             buttonname = buttonname_;
-                            //alert(buttonvalue_);
                             if (color === "#b7b328") {
                                 $("#LAFlawType").text("MINOR");
                             } else if (color === "#cf0d39") {
@@ -1173,12 +1167,7 @@
                                 if (!TemplateName) {
                                     TemplateName = "NoName";
                                 }
-                                // var date = new Date(JSON.parse(name.Inspection_Started));
-
                                 var MachineCheckVal = $("#MachineLinkCheck").prop('checked');
-
-                                // var str = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + " " +  date.getHours() + ":" + date.getMinutes();
-
                                 if (name.JobNumber == "SELECT OPTION") {
                                     html3.push('<option value="' + name.id + '">' + name.JobNumber + '</option>');
                                 } else {
@@ -1196,10 +1185,6 @@
                             var selectedid = $(this).val();
                             console.log(selectedid);
                             var selectedtext = $(this).text();
-                            //dbtrans.getIncrement(selectedid);
-
-
-
                             var selectedIndex = 0;
                             var SelectedTemplateId = 0;
 
@@ -1300,19 +1285,12 @@
                                 switch (InspectionState) {
                                     case 0:
                                         jobnumber = $workorder.val();
-                                        //$("#MainContent_Good").val(SampleCount - RejCount);
-                                        //alert('on switch of inspection state: ' + $('#MainContent_Good').val());
                                         $("#FailCountValue").text(RejCount.toString());
                                         $("#PassCountValue").text(Number($("#MainContent_Good").val()) - Number($("#MainContent_Bad_Group").val()));
-
-                                        
                                         $("#TotalCountValue").wijinputnumber("option", "value", $('#MainContent_Good').val());
                                         $("#TotalCountValue").wijinputnumber('option', "minValue", RejCount);
-
-                                        
                                         $("#TotalCountValue").wijinputnumber("option", "value", $("#MainContent_Good").val());
                                         $("#TotalCountValue").wijinputnumber('option', "minValue", RejCount);
-
                                         $('#MainContent_totalinspecteditems').val($('#MainContent_Good').val());
                                         $("#JobNumberValue").text(jobnumber);
                                         $("#LocationSelection").css("display", "none");
@@ -3031,6 +3009,50 @@
             .replace(/'([^']+)'/g, function (_, $1) { return '"' + $1 + '"' })
     };
     var dbtrans2 = {
+        getIncrement: function (id) {
+            $.ajax({
+
+                url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
+                type: 'GET',
+                data: { method: 'getIncrement', args: { IncrementId: id } },
+                success: function (data) {
+                    console.log(data);
+                    Inc_Num = data;
+
+                    if (data >= 0)   
+                        $goodcount.val(data.toString());
+                    if (Number($('#MainContent_Good').val()) != Number($('#MainContent_SampleSize').val())) {
+                        $("#LAEqualCheck").css("display", "block");
+                    }
+                    if (Number($('#MainContent_Good').val()) == Number($('#MainContent_SampleSize').val())) {
+                        $("#LAEqualCheck").css("display", "none");
+                    }
+
+                },
+                error: function (a, b, c) {
+                    alert(c);
+                }
+            });
+
+        },
+        
+        setIncrement: function (id, amount) {
+            $.ajax({
+
+                url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
+                    type: 'GET',
+                    data: { method: 'setIncrement', args: { IncrementId: id, IncrementAmount: amount } },
+                    success: function (data) {
+
+                        dbtrans2.getIncrement(id);
+
+                    },
+                    error: function (a, b, c) {
+                        alert(c);
+                    }
+                });
+
+            },
         getComment: function (id) {
             $.ajax({
 
@@ -3378,7 +3400,8 @@
 
             $("#TotalCountValue").wijinputnumber({
                 type: 'numeric', 
-                minValue: 0, 
+                minValue: 0,
+                maxValue: limit,
                 decimalPlaces: 0, 
                 showSpinner: true
             })
@@ -3390,6 +3413,8 @@
 
                 $("#PassCountValue").text(PassCount);
                 $('#MainContent_totalinspecteditems').val($(this).val());
+                dbtrans2.setIncrement($("#MainContent_InspectionId").val(), $(this).val() - $('#MainContent_Good').val());
+                
             });
 
             $("#TotalCountValue").height(50);
