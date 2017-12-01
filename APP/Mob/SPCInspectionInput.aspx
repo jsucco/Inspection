@@ -298,9 +298,12 @@
                 <label for="LoomNumberL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">LOOM NUMBER</label>
                 <input id="LoomNumber" class="inputelement inputbox leftsideobj" type="text" runat="server"   />
             </div>
-            <div id="cpdiv" class="inputpad leftsidepanel workorder-inspection" style="position:relative; margin-top:5px;">
-                <label for="CPNumberL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">SOURCE</label>
-                <select id="CPNumber_Select" class="inputelement inputbox leftsidedropobj" style="width:185px;"></select>
+            <div id="cpdiv" class="inputpad leftsidepanel workorder-inspection" style="display:block; position:relative; margin-top:5px;">
+                <label for="CPNumber_Select" style="display:block; position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">
+                    SOURCE
+                    <br>
+                    <select id="CPNumber_Select" class="inputelement inputbox leftsidedropobj" style="top: 10px; left: 10px; width:185px;"></select>
+                </label>
             </div>
             <div id="inspectordiv" class="inputpad leftsidepanel roll-inspection" style="position:relative; margin-top:5px; display:none;">
                 <label for="InspectorL" style="position:absolute; top:3px; left: 10px; font-size:smaller; z-index:100; color:white;">INSPECTOR</label>
@@ -387,15 +390,19 @@
                 <label id="LAFlawName"> </label>
             </section>
             
-            
-            <label for="DDSourceSelection" style=" font-size:smaller; z-index:100; color:black;">Source:</label>
-            <select id="DDSourceSelection" name = "sources" style="width: 280px" />
-            
-            <div id = "Chk1" style="display: block; position:absolute; top: 100px; left: 5px; padding: 0px;">
+            <section>
+                <label for="DDSourceSelection" style=" font-size:smaller; z-index:100; color:black;">
+                    Source: <br />
+                    <select id="DDSourceSelection" name = "sources" style="width: 280px" />
+                </label>
+            </section>
+            <section>
+                <div id = "Chk1" style="display: block; position:absolute; top: 100px; left: 5px; padding: 0px;">
                                        
-                <input id="Skip" name="ChkBx1" type="checkbox" />Skip All Confirmations.
+                    <input id="Skip" name="ChkBx1" type="checkbox" />Skip All Confirmations.
 
-            </div>
+                </div>
+            </section>
         </div>
         <div id="LimitReachedDialog" style="display:none;" title="Limit Reached!">
             <p>Go directly to confirmation?</p>
@@ -499,7 +506,8 @@
 <asp:PlaceHolder runat="server">
     <%: Scripts.Render("~/bundles/InspectionInput_groupB") %>
 </asp:PlaceHolder>
-
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 <%--<script src="//oss.maxcdn.com/jquery.form/3.50/jquery.form.min.js"></script>--%>
 <script type="text/javascript">
 
@@ -673,6 +681,7 @@
         dialogs.LimitReached()
         dialogs.InitAuditorName();
         dialogs.EditCommentsEntry();
+        
         controls.InitTemplateDropDown(<%=TemplateNames%>);
         controls.InitLocationDropDown(<%=LocationNames%>, selectedCIDnum, selectedCID);
         controls.InitMachineNameDropdowns(<%=MachineNames%>);
@@ -688,7 +697,7 @@
         controls.InitMachineLocation();
         eventshandler.InitPageEventHandlers();
         $(".de_container").fadeIn(150);
-
+        
         var dbtrans = {
             RecordSource: function (id, mop, loc, time) {
                 $.ajax({
@@ -3140,6 +3149,7 @@
                     }
                     console.log(SourceArray);
                     var html = [];
+                   
                     html.push('<option selected value="0">SELECT OPTION</option>');
                     html.push('<option value="1">NOT APPLICABLE</option>');
 
@@ -3151,18 +3161,20 @@
                         //console.log('hello');
                         var index = $('#CPNumber_Select').prop('selectedIndex');
                         console.log(index);
-                        $('#DDSourceSelection').val('' + index);
+                        $('#DDSourceSelection').val('' + index).trigger("change");
                     });
+                    //$("#CPNumber_Select").select2();
                     $("#DDSourceSelection").html(html.join('')).bind("change", function () {
                         //console.log('hello');
 
                     });
+                    //$('#DDSourceSelection').select2();
                 },
                 error: function (a, b, c) {
                     alert(c);
                 }
             });
-
+            
         }
     };
     var controls = {
@@ -3449,7 +3461,12 @@
             //alert($('#MainContent_Location').val());
             var strLoc = $('#MainContent_Location option:selected').text();
             dbtrans2.GetMachineLocation(strLoc)
-
+            $("#CPNumber_Select").select2({
+                width: '145'
+            });
+            $("#DDSourceSelection").select2({
+                width: '100%'
+            });
         },
         InitWorkRooms: function (warr) {
             if (warr == null || warr.length == 0) {
