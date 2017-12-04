@@ -651,19 +651,19 @@
         var $_aql = $('#MainContent__AQLevel');
 
         var warr = <%=WorkRoomArr%>
-        TemplateCollection = <%=TemplateCollection%>
-        SpecCollection = <%=ProductSpecCollection%>
-        SelectedId = <%=SelectedId%>
-        SelectedName = "<%=SelectedName%>"
+            TemplateCollection = <%=TemplateCollection%>
+            SpecCollection = <%=ProductSpecCollection%>
+            SelectedId = <%=SelectedId%>
+            SelectedName = "<%=SelectedName%>"
         LocationNames = <%=LocationNames%>
-        LastLocation = '<%=LastLocation%>'
+            LastLocation = '<%=LastLocation%>'
         TemplateTabCount = <%=TemplateTabCount%>
-        AQLValue = '<%=AQL%>';
+            AQLValue = '<%=AQL%>';
         IsSPCMachine = new Boolean(<%=IsSPCMacine%>);
         IsMobile = new Boolean(<%=IsMobile%>);
         HasTargetCount = "<%=HasTargetCount%>";
         WOQuantity = <%=WOQuantityValue%>
-        selectedCID = '<%=CID%>';
+            selectedCID = '<%=CID%>';
         selectedCIDnum = '<%=CIDnum%>';
         HasCID = '<%=HasCID%>';
         OpenOrderFlag = '<%=OpenOrderLoadFlag%>';
@@ -672,7 +672,7 @@
         pageBehindInspectionStarted = '<%=InspectionStartedFlag%>';
         datahandler.ColumnCount = <%=ColumnCount%>
 
-        RenderEngine.SizeChecker();
+            RenderEngine.SizeChecker();
         eventshandler.UserKeyPress.Init();
         $(".scrollWrap, .wijmo-wijsuperpanel, .ui-widget, .ui-widget-content, .ui-corner-all").css("height", "60px");
         dialogs.InitProductSpecEntry();
@@ -681,7 +681,7 @@
         dialogs.LimitReached()
         dialogs.InitAuditorName();
         dialogs.EditCommentsEntry();
-        
+
         controls.InitTemplateDropDown(<%=TemplateNames%>);
         controls.InitLocationDropDown(<%=LocationNames%>, selectedCIDnum, selectedCID);
         controls.InitMachineNameDropdowns(<%=MachineNames%>);
@@ -697,7 +697,7 @@
         controls.InitMachineLocation();
         eventshandler.InitPageEventHandlers();
         $(".de_container").fadeIn(150);
-        
+
         var dbtrans = {
             RecordSource: function (id, mop, loc, time) {
                 $.ajax({
@@ -745,7 +745,8 @@
 
                         if (data >= 0)   // if data is -1 then inspection wont start.
                             $goodcount.val(data.toString());
-                        $("#TotalCountValue").wijinputnumber("option", "value", $('#MainContent_Good').val());
+                        //$("#TotalCountValue").wijinputnumber("option", "value", new Number($('#FailCountValue').val()) + new Number($('#PassCountValue').val()));
+                        //controls.InitNumbers();
                     },
                     error: function (a, b, c) {
                         alert(c);
@@ -983,13 +984,13 @@
         var color = '';
         function hexc(colorval) {
             var parts = colorval.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-            
-	    if (parts == null) { 
+
+            if (parts == null) {
                 color = colorval;
-                return color; 
-            }							     
-										   
-	    delete (parts[0]);
+                return color;
+            }
+
+            delete (parts[0]);
             for (var i = 1; i <= 3; ++i) {
                 parts[i] = parseInt(parts[i]).toString(16);
                 if (parts[i].length == 1) parts[i] = '0' + parts[i];
@@ -1303,8 +1304,7 @@
                                         jobnumber = $workorder.val();
                                         $("#FailCountValue").text(RejCount.toString());
                                         $("#PassCountValue").text(Number($("#MainContent_Good").val()) - Number($("#MainContent_Bad_Group").val()));
-                                        $("#TotalCountValue").wijinputnumber("option", "value", $('#MainContent_Good').val());
-                                        $("#TotalCountValue").wijinputnumber('option', "minValue", RejCount);
+                                        
                                         $('#MainContent_totalinspecteditems').val($('#MainContent_Good').val());
                                         $("#JobNumberValue").text(jobnumber);
                                         $("#LocationSelection").css("display", "none");
@@ -1317,9 +1317,11 @@
                                         if (Number($('#MainContent_Good').val()) == Number($('#MainContent_SampleSize').val())) {
                                             $("#LAEqualCheck").css("display", "none");
                                         }
-                                        $("#TotalCountValue").wijinputnumber("option", "value", $('#MainContent_Good').val());
-                                        $("#JobConfirmation").css("display", "block");
                                         
+                                        $("#JobConfirmation").css("display", "block");
+                                        $("#TotalCountValue").wijinputnumber("option", "value", new Number($('#MainContent_Good').val()));
+                                        $("#TotalCountValue").wijinputnumber("option", "minValue", RejCount);
+                                        controls.InitNumbers();
                                         if (RejCount >= LimiterNo) {
                                             $("#MainContent_AddEmailFlag").prop("checked", true);
                                         }
@@ -1862,15 +1864,15 @@
                                 ErrorMessage = "Inspection Must include an Auditor.";
                         }
 
-                        console.log("CanStart", InspectionCanStart); 
+                        console.log("CanStart", InspectionCanStart);
 
                         if (InspectionCanStart == true) {
                             $("#selectNames").prop("disabled", true);
-                            console.log("total", total); 
+                            console.log("total", total);
                             console.log("OPenOrder", OpenOrderFlag)
                             if (total == 0 && OpenOrderFlag == "False") {
                                 $.when(datahandler.GetInspectionId()).done(function () {//when GetInspectionId finishes...
-                                    console.log("XXXXXX"); 
+                                    console.log("XXXXXX");
                                     if (InspectionJobSummaryIdPage == 0) {
                                         //alert('JobSummaryId is 0');
                                         datahandler.GetInspectionJobSummaryId(TargetOrderInput.val(), false);
@@ -1881,7 +1883,8 @@
                                     datahandler.SetSampleSize();
                                 }
                             }
-                            $("#TotalCountValue").wijinputnumber("option", "value", $('#MainContent_Good').val());
+                            $("#TotalCountValue").wijinputnumber("option", "value", new Number($('#MainContent_Good').val()));
+                            controls.InitNumbers();
                         } else {
                             alert(ErrorMessage);
                         }
@@ -1924,7 +1927,7 @@
                         } else {
                             $("#MainContent_JobConfirmation_hidden").val(buttonid_);
                             var samesizenum = new Number($('#MainContent_SampleSizeHidden').val());
-                            
+
                             if (InspectionTypeState == 'WorkOrder' && samesizenum == 0) {
                                 alert('Sample Size Not Set');
                                 return;
@@ -1945,9 +1948,8 @@
                                                     //alert('on switch of inspection state: ' + $('#MainContent_Good').val());
                                                     $("#FailCountValue").text(RejCount.toString())
                                                     $("#PassCountValue").text(Number($("#MainContent_Good").val()) - Number($("#MainContent_Bad_Group").val()));
-                                                    
-                                                    $("#TotalCountValue").wijinputnumber("option", "value", $('#MainContent_Good').val());
-                                                    $("#TotalCountValue").wijinputnumber('option', "minValue", RejCount);
+
+                                                   
                                                     $('#MainContent_totalinspecteditems').val($('#MainContent_Good').val());
                                                     $("#JobNumberValue").text(jobnumber);
                                                     $("#LocationSelection").css("display", "none");
@@ -1960,9 +1962,12 @@
                                                     if (Number($('#MainContent_Good').val()) == Number($('#MainContent_SampleSize').val())) {
                                                         $("#LAEqualCheck").css("display", "none");
                                                     }
-
+                                                    
                                                     $("#JobConfirmation").css("display", "block");
-                                                    $("#TotalCountValue").wijinputnumber("option", "value", $('#MainContent_Good').val());
+                                                    $("#TotalCountValue").wijinputnumber("option", "value", new Number($('#MainContent_Good').val()));
+                                                    $("#TotalCountValue").wijinputnumber("option", "minValue", RejCount);
+                                                    controls.InitNumbers();
+                                                    
                                                     if (RejCount >= LimiterNo) {
                                                         $("#MainContent_AddEmailFlag").prop("checked", true);
                                                     }
@@ -3033,7 +3038,7 @@
                     console.log(data);
                     Inc_Num = data;
 
-                    if (data >= 0)   
+                    if (data >= 0)
                         $goodcount.val(data.toString());
                     if (Number($('#MainContent_Good').val()) != Number($('#MainContent_SampleSize').val())) {
                         $("#LAEqualCheck").css("display", "block");
@@ -3041,7 +3046,8 @@
                     if (Number($('#MainContent_Good').val()) == Number($('#MainContent_SampleSize').val())) {
                         $("#LAEqualCheck").css("display", "none");
                     }
-                    $("#TotalCountValue").wijinputnumber("option", "value", $('#MainContent_Good').val());
+                    //$("#TotalCountValue").wijinputnumber("option", "value", new Number($('#FailCountValue').val()) + new Number($('#PassCountValue').val()));
+                    //controls.InitNumbers();
                 },
                 error: function (a, b, c) {
                     alert(c);
@@ -3049,24 +3055,24 @@
             });
 
         },
-        
+
         setIncrement: function (id, amount) {
             $.ajax({
 
                 url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
-                    type: 'GET',
-                    data: { method: 'setIncrement', args: { IncrementId: id, IncrementAmount: amount } },
-                    success: function (data) {
+                type: 'GET',
+                data: { method: 'setIncrement', args: { IncrementId: id, IncrementAmount: amount } },
+                success: function (data) {
 
-                        dbtrans2.getIncrement(id);
+                    dbtrans2.getIncrement(id);
 
-                    },
-                    error: function (a, b, c) {
-                        alert(c);
-                    }
-                });
+                },
+                error: function (a, b, c) {
+                    alert(c);
+                }
+            });
 
-            },
+        },
         getComment: function (id) {
             $.ajax({
 
@@ -3154,7 +3160,7 @@
                     }
                     console.log(SourceArray);
                     var html = [];
-                   
+
                     html.push('<option selected value="0">SELECT OPTION</option>');
                     html.push('<option value="1">NOT APPLICABLE</option>');
 
@@ -3179,7 +3185,7 @@
                     alert(c);
                 }
             });
-            
+
         }
     };
     var controls = {
@@ -3421,20 +3427,40 @@
                 maxValue: limit,
                 value: init,
                 decimalPlaces: 0,
-                showSpinner: true
-            });
-            
-            $("#TotalCountValue").on('change', function(e) { 
-                var rejcount = new Number($("#MainContent_Bad_Group").val());
-                var Inspected = new Number($(this).val());
-                var PassCount = new Number(Inspected - rejcount);
-                
-                $("#PassCountValue").text(PassCount);
-                $('#MainContent_totalinspecteditems').val($(this).val());
-                dbtrans2.setIncrement($("#MainContent_InspectionId").val(), $(this).val() - $('#MainContent_Good').val());
-                $("#TotalCountValue").wijinputnumber("option", "value", $('#MainContent_Good').val());
-                
-            });
+                showSpinner: true,
+                valueChanged: function (e, data) {
+
+
+                    var rejcount = new Number($("#MainContent_Bad_Group").val());
+                    var Inspected = new Number(data.value);
+                    var PassCount = new Number(Inspected - rejcount);
+
+                    if (Number($('#TotalCountValue').val()) != Number($('#MainContent_SampleSize').val())) {
+                        $("#LAEqualCheck").css("display", "block");
+                    }
+                    if (Number($('#TotalCountValue').val()) == Number($('#MainContent_SampleSize').val())) {
+                        $("#LAEqualCheck").css("display", "none");
+
+
+                    $("#PassCountValue").text(PassCount);
+                    //$("#MainContent_Good").val(PassCount);
+                    //alert('shenananigans afoot');
+                    //alert('On initNumbers: ' + $('#MainContent_Good').val());
+                    $('#MainContent_totalinspecteditems').val(data.value);
+                }
+                });
+
+            //$("#TotalCountValue").on('change', function (e) {
+            //    var rejcount = new Number($("#MainContent_Bad_Group").val());
+            //    var Inspected = new Number($(this).val());
+            //    var PassCount = new Number(Inspected - rejcount);
+
+            //    $("#PassCountValue").text(PassCount);
+            //    $('#MainContent_totalinspecteditems').val($(this).val());
+            //    dbtrans2.setIncrement($("#MainContent_InspectionId").val(), $(this).val() - $('#MainContent_Good').val());
+            //    $("#TotalCountValue").wijinputnumber("option", "value", $('#MainContent_Good').val());
+
+            //});
 
             $("#TotalCountValue").height(50);
             $("#TotalYardValue").wijinputnumber({
