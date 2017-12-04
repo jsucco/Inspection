@@ -821,15 +821,15 @@
             document.getElementById("BUIncrement").disabled = true;
             setTimeout(function () {
                 document.getElementById("BUIncrement").disabled = false;
-            }, 3000);
+            }, 1500);
             document.getElementById("BUDecrement").disabled = true;
             setTimeout(function () {
                 document.getElementById("BUDecrement").disabled = false;
-            }, 3000);
+            }, 1500);
             document.getElementById("BUPlusOne").disabled = true;
             setTimeout(function () {
                 document.getElementById("BUPlusOne").disabled = false;
-            }, 3000);
+            }, 1500);
         });
         $("#BUDecrement").click(function (e) {
             var id = parseInt($('#MainContent_InspectionId').val());
@@ -845,15 +845,15 @@
             document.getElementById("BUIncrement").disabled = true;
             setTimeout(function () {
                 document.getElementById("BUIncrement").disabled = false;
-            }, 3000);
+            }, 1500);
             document.getElementById("BUDecrement").disabled = true;
             setTimeout(function () {
                 document.getElementById("BUDecrement").disabled = false;
-            }, 3000);
+            }, 1500);
             document.getElementById("BUPlusOne").disabled = true;
             setTimeout(function () {
                 document.getElementById("BUPlusOne").disabled = false;
-            }, 3000);
+            }, 1500);
         });
         $("#BUPlusOne").click(function (e) {
             var id = parseInt($('#MainContent_InspectionId').val());
@@ -867,15 +867,15 @@
             document.getElementById("BUPlusOne").disabled = true;
             setTimeout(function () {
                 document.getElementById("BUPlusOne").disabled = false;
-            }, 3000);
+            }, 1500);
             document.getElementById("BUDecrement").disabled = true;
             setTimeout(function () {
                 document.getElementById("BUDecrement").disabled = false;
-            }, 3000);
+            }, 1500);
             document.getElementById("BUIncrement").disabled = true;
             setTimeout(function () {
                 document.getElementById("BUIncrement").disabled = false;
-            }, 3000);
+            }, 1500);
         });
         setInterval(function () {
             var id = $('#MainContent_InspectionId').val();
