@@ -1499,7 +1499,7 @@
             if (LocationNames[0] != 0) {
                 for (var i = 0; i < LocationNames.length; i++) {
                     name = LocationNames[i];
-                    html.push('<option value="' + name.CID + '">' + name.text + '</option>');
+                    html.push('<option value="' + name.fCID + '">' + name.text + '</option>');
                 }
             }
 
