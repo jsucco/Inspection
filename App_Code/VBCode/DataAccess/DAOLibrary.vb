@@ -1348,7 +1348,6 @@ Namespace core
         Public Property ProdAbreviation As String
         Public Property Abreviation As String
         Public Property CID As String
-        Public Property fCID As String
     End Class
     Public Class ActiveLocations
         Public Property value As String

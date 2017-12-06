@@ -354,7 +354,7 @@ Namespace core
             Dim selectValues As New List(Of Locationarray)()
             Dim bmap As New BMappers(Of Locationarray)
 
-            sqlstring = "SELECT id as id, Name as text, Abreviation as Abreviation, CAST(CAST(CID AS INT) AS VARCHAR) as CID, RTRIM(CID) as fCID, AS400_Abr as ProdAbreviation FROM  LocationMaster WHERE  (InspectionResults = 1) ORDER BY text ASC"
+            sqlstring = "SELECT id as id, Name as text, Abreviation as Abreviation, CAST(CAST(CID AS INT) AS VARCHAR) as CID, AS400_Abr as ProdAbreviation FROM  LocationMaster WHERE  (InspectionResults = 1) ORDER BY text ASC"
             Try
 
             
@@ -365,7 +365,7 @@ Namespace core
 
                     Dim object1 As Object = (From x In selectValues Order By x.id Descending Select x.id).ToArray()
 
-                        selectValues.Add(New Locationarray With {.id = object1(0) + 1, .CID = 999, .fCID = "000999", .text = "ALL SITES", .Abreviation = "ALL", .ProdAbreviation = "ALL"})
+                        selectValues.Add(New Locationarray With {.id = object1(0) + 1, .CID = 999, .text = "ALL SITES", .Abreviation = "ALL", .ProdAbreviation = "ALL"})
 
 
 

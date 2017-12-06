@@ -262,7 +262,7 @@ Namespace core
                         CID = cidqs
                         CIDnum = Convert.ToInt32(cidqs)
                         HasCID = True
-                        SetCookie("APRKeepMeIn", "CID_Print", CID)
+                        SetCookie("APRKeepMeIn", "CID_Print", CIDnum)
                     End If
                 End If
             End If

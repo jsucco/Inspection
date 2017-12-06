@@ -3420,35 +3420,67 @@
         InitNumbers: function () {
             var limit = new Number($('#MainContent_SampleSize').val());
             var init = new Number($('#MainContent_Good').val());
+            if ($('#AQ_Level option:selected').text() === '100% Inspection') {
+                $("#TotalCountValue").wijinputnumber({
+                    type: 'numeric',
+                    minValue: 0,
+                    maxValue: limit,
+                    value: limit,
+                    decimalPlaces: 0,
+                    showSpinner: true,
+                    valueChanged: function (e, data) {
 
-            $("#TotalCountValue").wijinputnumber({
-                type: 'numeric',
-                minValue: 0,
-                maxValue: limit,
-                value: init,
-                decimalPlaces: 0,
-                showSpinner: true,
-                valueChanged: function (e, data) {
 
+                        var rejcount = new Number($("#MainContent_Bad_Group").val());
+                        var Inspected = new Number(data.value);
+                        var PassCount = new Number(Inspected - rejcount);
 
-                    var rejcount = new Number($("#MainContent_Bad_Group").val());
-                    var Inspected = new Number(data.value);
-                    var PassCount = new Number(Inspected - rejcount);
+                        if (Number($('#TotalCountValue').val()) != Number($('#MainContent_SampleSize').val())) {
+                            $("#LAEqualCheck").css("display", "block");
+                        }
+                        if (Number($('#TotalCountValue').val()) == Number($('#MainContent_SampleSize').val())) {
+                            $("#LAEqualCheck").css("display", "none");
 
-                    if (Number($('#TotalCountValue').val()) != Number($('#MainContent_SampleSize').val())) {
-                        $("#LAEqualCheck").css("display", "block");
+                        }
+                        $("#PassCountValue").text(PassCount);
+                        //$("#MainContent_Good").val(PassCount);
+                        //alert('shenananigans afoot');
+                        //alert('On initNumbers: ' + $('#MainContent_Good').val());
+                        $('#MainContent_totalinspecteditems').val(data.value);
                     }
-                    if (Number($('#TotalCountValue').val()) == Number($('#MainContent_SampleSize').val())) {
-                        $("#LAEqualCheck").css("display", "none");
-
-
-                    $("#PassCountValue").text(PassCount);
-                    //$("#MainContent_Good").val(PassCount);
-                    //alert('shenananigans afoot');
-                    //alert('On initNumbers: ' + $('#MainContent_Good').val());
-                    $('#MainContent_totalinspecteditems').val(data.value);
-                }
                 });
+            }
+            else {
+                $("#TotalCountValue").wijinputnumber({
+                    type: 'numeric',
+                    minValue: 0,
+                    maxValue: limit,
+                    value: init,
+                    decimalPlaces: 0,
+                    showSpinner: true,
+                    valueChanged: function (e, data) {
+
+
+                        var rejcount = new Number($("#MainContent_Bad_Group").val());
+                        var Inspected = new Number(data.value);
+                        var PassCount = new Number(Inspected - rejcount);
+
+                        if (Number($('#TotalCountValue').val()) != Number($('#MainContent_SampleSize').val())) {
+                            $("#LAEqualCheck").css("display", "block");
+                        }
+                        if (Number($('#TotalCountValue').val()) == Number($('#MainContent_SampleSize').val())) {
+                            $("#LAEqualCheck").css("display", "none");
+
+                        }
+                        $("#PassCountValue").text(PassCount);
+                        //$("#MainContent_Good").val(PassCount);
+                        //alert('shenananigans afoot');
+                        //alert('On initNumbers: ' + $('#MainContent_Good').val());
+                        $('#MainContent_totalinspecteditems').val(data.value);
+                    }
+                });
+            }
+           
 
             //$("#TotalCountValue").on('change', function (e) {
             //    var rejcount = new Number($("#MainContent_Bad_Group").val());
