@@ -36,6 +36,7 @@ Namespace core
 
             Catch ex As Exception
                 ErrorMessage = ex.Message
+                Elmah.ErrorSignal.FromCurrentContext.Raise(ex)
             End Try
 
             Return returnlist
@@ -56,6 +57,7 @@ Namespace core
 
             Catch ex As Exception
                 ErrorMessage = ex.Message
+                Elmah.ErrorSignal.FromCurrentContext.Raise(ex)
             End Try
 
             Return returnlist
@@ -77,6 +79,7 @@ Namespace core
 
             Catch ex As Exception
                 ErrorMessage = ex.Message
+                Elmah.ErrorSignal.FromCurrentContext.Raise(ex)
             End Try
 
             Return returnlist
@@ -98,6 +101,7 @@ Namespace core
 
             Catch ex As Exception
                 ErrorMessage = ex.Message
+                Elmah.ErrorSignal.FromCurrentContext.Raise(ex)
             End Try
 
             Return returnlist
@@ -118,6 +122,7 @@ Namespace core
 
             Catch ex As Exception
                 ErrorMessage = ex.Message
+                Elmah.ErrorSignal.FromCurrentContext.Raise(ex)
             End Try
 
             Return returnlist
@@ -137,6 +142,7 @@ Namespace core
                 
             Catch ex As Exception
                 ErrorMessage = ex.Message
+                Elmah.ErrorSignal.FromCurrentContext.Raise(ex)
             End Try
 
             Return returnlist
@@ -238,7 +244,7 @@ Namespace core
 
 
                 Catch ex As Exception
-
+                    Elmah.ErrorSignal.FromCurrentContext.Raise(ex)
                 End Try
             End Using
             'End If
@@ -318,7 +324,7 @@ Namespace core
                     returnint = Convert.ToInt32(cmd.ExecuteNonQuery())
 
                 Catch ex As Exception
-
+                    Elmah.ErrorSignal.FromCurrentContext.Raise(ex)
                 End Try
             End Using
             'End If

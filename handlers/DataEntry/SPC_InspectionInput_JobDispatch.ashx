@@ -1,24 +1,22 @@
 ﻿<%@ WebHandler Language="VB" Class="SPC_InspectionInput_JobDispatch" %>
 
-Imports System
-Imports System.Web
 Imports App.Utilities.Web.Handlers
 Imports System.Web.Script.Serialization
-Imports System.Data.SqlClient
 Imports System.Data
-Imports System.Globalization
 Imports System.Data.Entity
 Imports System.Object
-Imports System.Data.Objects
 
 Public Class SPC_InspectionInput_JobDispatch
     Inherits BaseHandler
     Private JobNumber As String
     Private que As List(Of dispatchJob)
     Dim jser As New JavaScriptSerializer
+    Dim JobType As String
+
     Public Function OpenJobIfExists(TargetNumber As String, TemplateId As Integer, ByVal InspectionType As String, ByVal AQLVAL As String) As String
         Dim returnMessage As String = "NOJOBS"
         If IsNothing(TargetNumber) = False And TargetNumber.Length > 0 Then
+            JobType = InspectionType
             JobNumber = TargetNumber
             loadQueWithJobs(TemplateId)
             If que.Count > 0 Then
@@ -154,7 +152,7 @@ Public Class SPC_InspectionInput_JobDispatch
                    Where x.JobNumber = JobNumber And x.TemplateId = TemplateId And x.WOQuantity <> 0 Order By x.Inspection_Started Descending
                    Select New dispatchJob With {.id = x.id, .JobNumber = x.JobNumber, .TemplateId = x.TemplateId, .LineType = t.LineType, .InspectionStarted = x.Inspection_Started,
                        .Technical_PassFail = x.Technical_PassFail, .InspectionFinished = x.Technical_PassFail_Timestamp, .WOQuantity = x.WOQuantity, .AQL_Level = x.AQL_Level, .ItemFailCount = x.ItemFailCount,
-                       .RejectLimiter = x.RejectLimiter, .SampleSize = x.SampleSize, .Standard = x.Standard, .WorkRoom = x.WorkRoom}).ToList()
+                       .RejectLimiter = x.RejectLimiter, .SampleSize = x.SampleSize, .Standard = x.Standard, .WorkRoom = x.WorkRoom, .CasePack = x.CasePack, .DataNo = x.DataNo}).ToList()
         End Using
     End Sub
 
@@ -184,15 +182,19 @@ Public Class SPC_InspectionInput_JobDispatch
     Private Function ProcessJobsInQue(ByVal AQLVAL As String) As String
         Dim returnmsg As String = "NOJOBS"
         Try
-            Dim Aql As Decimal = 0
+            If JobType <> "ROLL" Then
 
-            If Decimal.TryParse(AQLVAL, Aql) = True Then
-                Dim matchcnt = (From x In que Where x.AQL_Level = Aql Select x).Count()
+                Dim Aql As Decimal = 0
 
-                If matchcnt > 0 Then
-                    que = (From x In que Where x.AQL_Level = Aql Select x).Take(1).ToList()
-                    Return jser.Serialize(que)
+                If Decimal.TryParse(AQLVAL, Aql) = True Then
+                    Dim matchcnt = (From x In que Where x.AQL_Level = Aql Select x).Count()
+
+                    If matchcnt > 0 Then
+                        que = (From x In que Where x.AQL_Level = Aql Select x).Take(1).ToList()
+                        Return jser.Serialize(que)
+                    End If
                 End If
+
             End If
 
             que = (From o In que Order By o.InspectionStarted Descending Select o).Take(1).ToList()
@@ -226,4 +228,6 @@ Public Class dispatchJob
     Public Property InspectionFinished As DateTime?
     Public Property Technical_PassFail As Boolean?
     Public Property WorkRoom As String
+    Public Property CasePack As String
+    Public Property DataNo As String
 End Class

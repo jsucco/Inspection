@@ -189,7 +189,7 @@ Namespace core
             End If
 
         End Sub
-        Public Function CalculateDHU(ByVal TargetState As String, ByVal TargetNumber As String, ByVal InspectionJobSummaryId As Integer, ByVal TotalInspected As Integer) As Decimal
+        Public Function CalculateDHU(ByVal TargetNumber As String, ByVal InspectionJobSummaryId As Integer, ByVal TotalInspected As Integer) As Decimal
             Dim DHU As Decimal = 0
             Try
                 Dim sqlis As String = ""
@@ -199,16 +199,17 @@ Namespace core
                 Dim listso As New List(Of SingleObject)
                 Dim bmapso As New BMappers(Of SingleObject)
 
-                sqlis = "SELECT COUNT(DefectID) AS Object1 FROM DefectMaster  INNER JOIN ButtonTemplate ON DefectMaster.ButtonTemplateId = ButtonTemplate.id WHERE DefectMaster." & TargetState & " = '" & TargetNumber & "' AND InspectionJobSummaryId = " & InspectionJobSummaryId.ToString() & " and DefectMaster.DefectClass <> 'TIME' AND DefectMaster.DefectClass <> 'FIX' AND DefectMaster.DefectClass <> 'UPGRADE'"
+                'sqlis = "SELECT COUNT(DefectID) AS Object1 FROM DefectMaster  INNER JOIN ButtonTemplate ON DefectMaster.ButtonTemplateId = ButtonTemplate.id WHERE DefectMaster." & TargetState & " = '" & TargetNumber & "' AND InspectionJobSummaryId = " & InspectionJobSummaryId.ToString() & " and DefectMaster.DefectClass <> 'TIME' AND DefectMaster.DefectClass <> 'FIX' AND DefectMaster.DefectClass <> 'UPGRADE'"
+                sqlis = "SELECT COUNT(DefectID) AS Object1 FROM DefectMaster  INNER JOIN ButtonTemplate ON DefectMaster.ButtonTemplateId = ButtonTemplate.id WHERE InspectionJobSummaryId = " & InspectionJobSummaryId.ToString() & " and DefectMaster.DefectClass <> 'TIME' AND DefectMaster.DefectClass <> 'FIX' AND DefectMaster.DefectClass <> 'UPGRADE'"
+
                 listso = bmapso.GetInspectObject(sqlis)
-                If listso.Count > 0 And TargetState = "WorkOrder" Then
+                If listso.Count > 0 Then
                     AllTypesDefectCount = listso.ToArray()(0).Object1
 
                     If TotalInspected > 0 Then
                         DHU = (AllTypesDefectCount * 100) / TotalInspected
                     End If
                 End If
-
 
             Catch ex As Exception
 

@@ -405,7 +405,77 @@ Namespace core
 
         End Function
 
+        Public Function LoadOpenWorkOrders(ByVal InspectionState As String, ByVal PassCID As String) As String
+            Dim bmapis As New BMappers(Of SPCInspection.InspectionJobSummary)
+            Dim listis As New List(Of SPCInspection.InspectionJobSummary)
+            Dim listret As New List(Of SPCInspection.InspectionJobSummary)
+            Dim listspcret As New List(Of SPCInspection.InspectionJobSummary)
+            Dim jser As New JavaScriptSerializer()
+            Dim DefaultId As Integer = 1
+            Dim sql As String = "SELECT ijs.id, ijs.JobNumber, ijs.JobType, ijs.ItemFailCount, ijs.TemplateId, tn.Name, ijs.AQL_Level, ijs.Standard, ijs.SampleSize, ijs.RejectLimiter, convert(varchar(25), ijs.Inspection_Started, 100) as Inspection_StartedString FROM InspectionJobSummary ijs LEFT OUTER JOIN TemplateName tn ON ijs.TemplateId = tn.TemplateId " & vbCrLf &
+                                    "WHERE (Technical_PassFail IS NULL) AND (Inspection_Started >= GETDATE() - 3) AND (LEN(JobNumber) > 0) AND (CID = '" & PassCID & "')"
+            listis = bmapis.GetInspectObject(sql)
 
+            If listis.Count > 0 Then
+                Dim listar = listis.ToArray()
+                DefaultId = listar(listar.Length - 1).id
+                listspcret = LoadOpenSPCMachine(PassCID)
+                For Each item In listspcret
+                    listis.Add(item)
+                Next
+
+                listis.Add(New SPCInspection.InspectionJobSummary With {.id = 1000, .JobNumber = "SELECT OPTION"})
+                listret = (From x In listis Select x Order By x.id Descending).ToList()
+            Else
+                listspcret = LoadOpenSPCMachine(PassCID)
+
+                For Each item In listspcret
+                    listis.Add(item)
+                Next
+                listis.Add(New SPCInspection.InspectionJobSummary With {.id = 1000, .JobNumber = "SELECT OPTION"})
+                listret = (From x In listis Select x Order By x.id Descending).ToList()
+            End If
+
+            Return jser.Serialize(listret)
+
+        End Function
+
+        Private Function LoadOpenSPCMachine(ByVal PassCID As String) As List(Of SPCInspection.InspectionJobSummary)
+            Dim bmapis As New BMappers(Of SPCInspection.InspectionJobSummary)
+            Dim listis As New List(Of SPCInspection.InspectionJobSummary)
+            Dim bmapso As New BMappers(Of SingleObject)
+            Dim listso As New List(Of SingleObject)
+            Dim ijssql As String = ""
+            Dim sql As String
+            Dim SQL2 As String = "SELECT InspectionSummaryId AS Object1, Machine AS Object3 FROM LiveProduction WHERE InspectionSummaryId > 0 AND LocationCID = '" & PassCID & "'"
+            listso = bmapso.GetInspectObject(SQL2)
+            If listso.Count > 0 Then
+
+                Dim cnt As Integer = 0
+                For Each item In listso
+                    Dim addsql As String = " id = " & item.Object1 & ""
+                    If cnt < listso.Count - 1 Then
+                        ijssql = ijssql + addsql + " OR "
+                    Else
+                        ijssql = ijssql + addsql
+                    End If
+                    cnt += 1
+                Next
+                sql = "SELECT ijs.id, ijs.JobNumber, ijs.ItemFailCount, ijs.TemplateId, tn.Name, ijs.AQL_Level, ijs.Standard, ijs.SampleSize, ijs.RejectLimiter, convert(varchar(25), ijs.Inspection_Started, 100) as Inspection_StartedString FROM InspectionJobSummary ijs LEFT OUTER JOIN TemplateName tn ON ijs.TemplateId = tn.TemplateId " & vbCrLf &
+                                        "WHERE (ijs.JobNumber IS NOT NULL) AND ( " + ijssql + ")"
+                listis = bmapis.GetInspectObject(sql)
+
+                For Each itme In listis
+                    Dim name As Object = (From v In listso Where v.Object1 = itme.id Select v.Object3).ToArray()
+                    If Not IsNothing(name) Then
+                        itme.ProdMachineName = name(0)
+                        itme.IsSPC = True
+                    End If
+                Next
+            End If
+            Return listis
+
+        End Function
 
         Public Function GetTemplateCollection(ByVal TemplateId As Integer) As List(Of SPCInspection.TemplateCollection)
             Dim sqlstring As String

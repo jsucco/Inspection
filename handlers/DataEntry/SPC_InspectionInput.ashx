@@ -127,9 +127,15 @@ Namespace core
                             Dim TotalInspected As Integer
                             TotalInspected = CType(dictionary.Item("MainContent_SampleSize"), Integer)
                             If TotalInspected > 0 Then
-                                DHU = DA.CalculateDHU(TargetState, TargetNumber, InspectionJobSummaryIdret, TotalInspected)
+                                DHU = DA.CalculateDHU(TargetNumber, InspectionJobSummaryIdret, TotalInspected)
                             End If
-                            'End If
+                        Else
+                            Dim ROLLY As Integer
+
+                            If Integer.TryParse(dictionary.Item("MainContent_woquantity_hidden"), ROLLY) = True Then
+                                DHU = DA.CalculateDHU(TargetNumber, InspectionJobSummaryIdret, ROLLY)
+                            End If
+
                         End If
                     Catch ex As Exception
                         Throw New Exception("Error updating InspectionJobSummary Table: " + ex.Message)
@@ -234,6 +240,16 @@ Namespace core
                 Return Nothing
             End If
 
+
+        End Function
+
+        Public Function LoadOpenWorkOrders(ByVal InspectionState As String, ByVal PassCID As String) As String
+
+            If PassCID <> Nothing Then
+                Return IU.LoadOpenWorkOrders(InspectionState, PassCID)
+            Else
+                Return Nothing
+            End If
 
         End Function
 
@@ -406,40 +422,6 @@ Namespace core
             Return "[0]"
 
         End Function
-        Public Function LoadOpenWorkOrders(ByVal InspectionState As String, ByVal PassCID As String) As String
-            Dim bmapis As New BMappers(Of SPCInspection.InspectionJobSummary)
-            Dim listis As New List(Of SPCInspection.InspectionJobSummary)
-            Dim listret As New List(Of SPCInspection.InspectionJobSummary)
-            Dim listspcret As New List(Of SPCInspection.InspectionJobSummary)
-            Dim jser As New JavaScriptSerializer()
-            Dim DefaultId As Integer = 1
-            Dim sql As String = "SELECT ijs.id, ijs.JobNumber, ijs.ItemFailCount, ijs.TemplateId, tn.Name, ijs.AQL_Level, ijs.Standard, ijs.SampleSize, ijs.RejectLimiter, convert(varchar(25), ijs.Inspection_Started, 100) as Inspection_StartedString FROM InspectionJobSummary ijs LEFT OUTER JOIN TemplateName tn ON ijs.TemplateId = tn.TemplateId " & vbCrLf &
-                                    "WHERE (Technical_PassFail IS NULL) AND (JobType = '" & InspectionState & "') AND (Inspection_Started >= GETDATE() - 3) AND (LEN(JobNumber) > 0) AND (CID = '" & PassCID & "')"
-            listis = bmapis.GetInspectObject(sql)
-
-            If listis.Count > 0 Then
-                Dim listar = listis.ToArray()
-                DefaultId = listar(listar.Length - 1).id
-                listspcret = LoadOpenSPCMachine(PassCID)
-                For Each item In listspcret
-                    listis.Add(item)
-                Next
-                'listis.AddRange(LoadClosedInline(PassCID))
-                listis.Add(New SPCInspection.InspectionJobSummary With {.id = 1000, .JobNumber = "SELECT OPTION"})
-                listret = (From x In listis Select x Order By x.id Descending).ToList()
-            Else
-                listspcret = LoadOpenSPCMachine(PassCID)
-                'listis.AddRange(LoadClosedInline(PassCID))
-                For Each item In listspcret
-                    listis.Add(item)
-                Next
-                listis.Add(New SPCInspection.InspectionJobSummary With {.id = 1000, .JobNumber = "SELECT OPTION"})
-                listret = (From x In listis Select x Order By x.id Descending).ToList()
-            End If
-
-            Return jser.Serialize(listret)
-
-        End Function
 
         Public Function RemoveCompletedProperties(ByVal Id As String) As Boolean
             If Id = "0" Or Id = "" Then
@@ -456,17 +438,6 @@ Namespace core
             End Using
             Return True
         End Function
-
-        'Public Function RemoveCompletedProperties(ByVal Id As Int64) As Boolean
-        '    Try
-        '        Dim t As System.Threading.Tasks.Task = System.Threading.Tasks.Task.Run(Sub()
-        '                                                                                   ReOpenJob(Id)
-        '                                                                               End Sub)
-        '    Catch ex As Exception
-        '        Elmah.ErrorSignal.FromCurrentContext().Raise(ex)
-        '    End Try
-        '    Return True
-        'End Function
 
         Private Function LoadClosedInline(ByVal CID As String) As List(Of SPCInspection.InspectionJobSummary)
             Dim closedInline As New List(Of SPCInspection.InspectionJobSummary)
@@ -668,6 +639,7 @@ Namespace core
                     jsobj.SampleSize = jsobj.WOQuantity
                     jsobj.ItemPassCount = -1
                     jsobj.UnitCost = 0
+                    jsobj.CasePack = CasePack
 
                 End If
 
@@ -942,7 +914,18 @@ Namespace core
 
                 If InspectionState <> "" Then
 
-                    Dim sql As String = "SELECT COUNT(*) AS Object1 FROM DefectMaster INNER JOIN ButtonTemplate ON DefectMaster.ButtonTemplateId = ButtonTemplate.id WHERE (DefectMaster.InspectionJobSummaryId = " & InspectionJobSummaryId.ToString() & ") AND (DefectMaster." & InspectionState.Trim() & " = '" & TargetOrder & "') AND (ButtonTemplate.DefectType <> '0') AND (ButtonTemplate.DefectType <> 'Upgrade') AND (ButtonTemplate.DefectType <> 'Fix') AND (ButtonTemplate.DefectType <> 'Time')"
+                    Dim sql As String
+
+                    'sql = "SELECT COUNT(*) AS Object1 FROM DefectMaster INNER JOIN ButtonTemplate ON DefectMaster.ButtonTemplateId = ButtonTemplate.id " & vbCrLf &
+                    '        "WHERE (DefectMaster.InspectionJobSummaryId = " & InspectionJobSummaryId.ToString() & ") " & vbCrLf &
+                    '        "And (DefectMaster." & InspectionState.Trim() & " = '" & TargetOrder & "') AND (ButtonTemplate.DefectType <> '0') " & vbCrLf &
+                    '        "And (ButtonTemplate.DefectType <> 'Upgrade') AND (ButtonTemplate.DefectType <> 'Fix') AND (ButtonTemplate.DefectType <> 'Time')"
+
+                    sql = "SELECT COUNT(*) AS Object1 FROM DefectMaster INNER JOIN ButtonTemplate ON DefectMaster.ButtonTemplateId = ButtonTemplate.id " & vbCrLf &
+                            "WHERE (DefectMaster.InspectionJobSummaryId = " & InspectionJobSummaryId.ToString() & ") " & vbCrLf &
+                            "And (ButtonTemplate.DefectType <> '0') " & vbCrLf &
+                            "And (ButtonTemplate.DefectType <> 'Upgrade') AND (ButtonTemplate.DefectType <> 'Fix') AND (ButtonTemplate.DefectType <> 'Time')"
+
                     list_rc = bmap_rc.GetInspectObject(sql)
                     If list_rc.Count > 0 Then
                         RejectionCount = CType(list_rc.ToArray()(0).Object1, Integer)

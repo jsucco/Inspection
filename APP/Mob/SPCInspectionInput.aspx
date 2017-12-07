@@ -216,7 +216,6 @@
             <li><a>INSPECTION</a>
                 <ul>
                    <li><a>INPUT DEFECTS</a></li>
-                   <li><a>TEMPLATE UTILITY</a></li>
                    <li><a>RESULTS</a></li>
                 </ul>
             </li>       
@@ -1164,7 +1163,6 @@
                     ErrorMessage = "Inspection Must include an Auditor.";
             }
 
-
             if (InspectionCanStart == true) {
                 var OpenWOArray = new Array();
                 $.ajax({
@@ -1189,36 +1187,35 @@
                                     html3.push('<option value="' + name.id + '">' + name.JobNumber + '</option>');
                                 } else {
                                     if (name.IsSPC == true && MachineCheckVal == true) {
-                                        html3.push('<option value="' + name.id + '">SPCMachine ' + name.ProdMachineName + ' ID: ' + name.id + ' WO: ' + name.JobNumber + ' -> ' + TemplateName + ' Started: ' + name.Inspection_StartedString + '</option>');
+                                        html3.push('<option value="' + name.id + '_' + name.JobType + '">SPCMachine ' + name.ProdMachineName + ' ID: ' + name.id + ' WO: ' + name.JobNumber + ' -> ' + TemplateName + ' Started: ' + name.Inspection_StartedString + '</option>');
                                     }
                                     if (name.IsSPC == false && MachineCheckVal == false) {
-                                        html3.push('<option value="' + name.id + '">ID: ' + name.id + ' WO: ' + name.JobNumber + ' -> ' + TemplateName + ' Started: ' + name.Inspection_StartedString + '</option>');
+                                        html3.push('<option value="' + name.id + '_' + name.JobType + '">ID: ' + name.id + ' WO: ' + name.JobNumber + ' -> ' + TemplateName + ' Started: ' + name.Inspection_StartedString + '</option>');
                                     }
                                 }
                             }
                         }
                         $("#WorkOrder_pop").html(html3.join('')).bind("change", function () {
-
-                            var selectedid = $(this).val();
-                            console.log(selectedid);
+                            var idPair = $(this).val().split('_'); 
+                            var selectedid = idPair[0];
+                            var selectedJobType = (idPair.length > 1) ? idPair[1] : "WorkOrder";  
                             var selectedtext = $(this).text();
                             var selectedIndex = 0;
                             var SelectedTemplateId = 0;
 
                             if (selectedid) {
-                                var selectId = new Number($(this).val());
+                                var selectId = new Number(selectedid);
                                 for (var j = 0; j < OpenWorkOrderArray.length; j++) {
 
                                     if (selectId == OpenWorkOrderArray[j].id) {
                                         SelectedTemplateId = OpenWorkOrderArray[j].TemplateId;
-
                                     }
                                 }
                                 if (SelectedTemplateId == 0) {
                                     SelectedTemplateId = SelectedId.toString();
                                 }
 
-                                switch (InspectionTypeState) {
+                                switch (selectedJobType) {
                                     case "WorkOrder":
 
                                         var SelectedWorkOrder = "";
@@ -1229,11 +1226,13 @@
                                         }
 
                                         var querystring = "TemplateId=" + SelectedTemplateId.toString() + "&IJS=" + selectedid.toString() + "&Username=" + $auditorname.val().toString() + "&400REQ=OPENWO&LocationId=" + $("#MainContent_Location").val() + "&OpenWO=True&CID_Info=000" + selectedCIDnum;
+                                        
                                         window.location.assign("<%=Session("BaseUri")%>" + "/APP/Mob/SPCInspectionInput.aspx?" + querystring)
 
                                         break;
                                     case "RollNumber":
                                         var querystring = "TemplateId=" + SelectedTemplateId.toString() + "&IJS=" + selectedid.toString() + "&Username=" + $auditorname.val().toString() + "&400REQ=OPENRL&LocationId=" + $("#MainContent_Location").val() + "&OpenWO=True&CID_Info=000" + selectedCIDnum;
+                                        
                                         window.location.assign("<%=Session("BaseUri")%>" + "/APP/Mob/SPCInspectionInput.aspx?" + querystring)
 
                                         break;
@@ -3684,8 +3683,6 @@
                             InspectionJobSummaryIdPage = datarray[0].InspectionJobSummary
                             DefectID = datarray[0].DefectId
 
-                            var dhunumber = new Number(datarray[0].DHU);
-                            $("#MainContent_DHU").val(dhunumber.toFixed(3).toString());
                             $("#<%=InspectionId.ClientID%>").val(datarray[0].InspectionJobSummary);
                             if (FirstInspectionFlag == true) {
                                 setInterval(
@@ -3698,6 +3695,8 @@
                             if (returnnum != -1 || returnnum != 0) {
                                 var $bad = $('#MainContent_Bad_Local');
                                 var $bad_Group = $('#MainContent_Bad_Group');
+                                var dhunumber = new Number(datarray[0].DHU);
+
                                 if (datarray[0].DefectType != 'MINOR' && datarray[0].DefectType != 'TIME' && datarray[0].DefectType != 'FIX' && datarray[0].DefectType != 'UPGRADE') {
                                     LocalCounts++;
 
@@ -3707,15 +3706,19 @@
                                 }
                                 $("#" + ButtonId).css("background-color", mycolor)
                                 $("#MainContent_InspectionState").val(InspectionTypes[InspectionState]);
+                                
                                 if (InspectionState == 1) {
-                                    DefectsPerhundredYards = (badval / (RollYards / 100));
-                                    $("#MainContent_SampleSize").val(DefectsPerhundredYards);
-                                    $("#MainContent_DHYHidden").val(DefectsPerhundredYards);
+
+                                    $("#MainContent_SampleSize").val(dhunumber.toFixed(3).toString());
+                                    $("#MainContent_DHYHidden").val(dhunumber.toFixed(3).toString());
+
                                     if (DefectsPerhundredYards > 10) {
                                         $("#MainContent_SampleSize").css("background-color", "red");
                                         $("#MainContent_SampleSize").css("color", "white");
                                         $("#MainContent_SampleSize").css("font-weight", "900");
                                     }
+                                } else {                              
+                                    $("#MainContent_DHU").val(dhunumber.toFixed(3).toString());
                                 }
                                 var WOQuantityval = $("#WOQuantity").val();
                                 if (WOQuantityval) {
@@ -4005,7 +4008,14 @@
                             if (InspectionArray[0].AQL_Level.trim() == "100.0" && AQLValue == '100') {
                                 userconfirm = true;
                                 alert("This WorkOrder already has an Inspection open.  Since the AQL is 100 it will be auto loaded.");
-                                datahandler.LoadExistingJob();
+
+                                switch(LineType) { 
+                                    case "ROLL" : 
+                                        datahandler.LoadExistingRollJob();
+                                        break; 
+                                    default:
+                                        datahandler.LoadExistingJob();
+                                }
 
                             } else {
                                 $("#JobStart-confirm-jobid").text(returnnum.toString());
@@ -4015,68 +4025,6 @@
                                 //userconfirm = confirm("This WorkOrder is already open and has the ID: " + returnnum.toString() + ", AQL: " + InspectionArray[0].AQL_Level.toString() + ".  Click OK to load or cancel to create another InspectionID");
                             }
                         }
-
-                        //else if ( IsSPCMachine == false && InspectionJobSummaryIdPage == 0 && InspectionArray[0].LineType != "IL") { 
-                        //    alert("This WorkOrder is already open and has the ID: " + returnnum.toString() + ", AQL: " + InspectionArray[0].AQL_Level.toString() + ".  This Inspection is automatically being loaded.");
-                        //    userconfirm = true;
-                        //} else { 
-                        //    userconfirm = true;
-                        //}
-                        //code detached 4.20.17 JJS
-                        //if (userconfirm == true) { 
-
-                        //    pageBehindInspectionStarted = "true";
-                        //    InspectionJobSummaryIdPage = returnnum;
-                        //    $("#MainContent_inspectionjobsummaryid_hidden").val(InspectionJobSummaryIdPage);
-                        //    InspectionStartedVal = true; 
-                        //    var AQLNumber;
-                        //    if (InspectionArray[0].AQL_Level != null) { 
-                        //        AQLNumber = new Number(InspectionArray[0].AQL_Level); 
-                        //    }
-
-                        //    if (AQLNumber != null && AQLNumber == 100) { 
-                        //        InspectionArray[0].AQL_Level = '100'; 
-                        //    }                             
-
-                        //    $("#AQ_Level").val(InspectionArray[0].AQL_Level);
-                        //    $("#AQ_Level").prop('disabled', true);
-                        //    $("#Auditor_Name").prop('disabled', true); 
-                        //    $("#MainContent__AQLevel").val(InspectionArray[0].AQL_Level);
-                        //    AQLValue = InspectionArray[0].AQL_Level;
-                        //    $("#WOQuantity").val(InspectionArray[0].WOQuantity);
-                        //    $("#Specgrid").jqGrid('setGridParam', 
-                        //      { datatype: 'json' }).trigger('reloadGrid');
-
-                        //    var mydata = $("#Specgrid").jqGrid('getGridParam','data');
-
-                        //    if (mydata.length > 0) { 
-                        //        $("#EnterSpec").val("Specs (" + mydata.length + ")");
-                        //    }
-                        //    if (IsPhoneSize == true) { 
-                        //        RenderEngine.ShowActiveInspectionMobile();
-                        //    }
-                        //    //if (IsDefect == true) { 
-                        //    //    datahandler.SubmitDefect(buttonid, buttonvalue, buttonname, returnnum, InspectionId);
-                        //    //}
-                        //    if (OpenOrderFlag == "false") { 
-                        //        datahandler.SetSampleSize();
-                        //    }
-                        //    datahandler.GetOpenTimers();
-                        //    datahandler.UpdateRejectionCount(InspectionState, InspectionJobSummaryIdPage)
-                        //    setInterval(
-                        //    function () { 
-                        //        datahandler.UpdateRejectionCount(InspectionState, InspectionJobSummaryIdPage) }
-                        //    , 10000);
-                        //    $("#MainContent_inspectionjobsummaryid_hidden").val(returnnum);
-                        //    $("#jobIdSpinner").css('display', 'none');
-                        //} else { 
-                        //    if (data) { 
-                        //        datahandler.CreateInspectionJobSummaryId(IsDefect);
-                        //    } else { 
-                        //        alert("invalid server response.  Refresh network may be slow.")
-                        //    }
-                        //}
-
 
                     } else {
                         if (OpenOrderFlag == "False" && data) {
@@ -4151,6 +4099,39 @@
             $("#jobIdSpinner").css('display', 'none');
             datahandler.InspectionArray = new Array();
 
+
+        },
+        LoadExistingRollJob: function() { 
+            var InspectionArray = datahandler.InspectionArray;
+
+            if (InspectionArray == null || InspectionArray.Length == 0)
+                alert("Failed loading existing job.  Error loading job info.");
+
+            console.log("load job", InspectionArray);
+
+            var returnnum = InspectionArray[0].id;
+            pageBehindInspectionStarted = "true";
+            InspectionJobSummaryIdPage = returnnum;
+            InspectionStartedVal = true;
+            datahandler.RemoveCompletedProperties();
+            $("#MainContent_inspectionjobsummaryid_hidden").val(InspectionJobSummaryIdPage);
+            $("#MainContent_LoomNumber").val(InspectionArray[0].CasePack); 
+            $("#MainContent_DataNumber").val(InspectionArray[0].DataNo);
+            $("#WOQuantity").val(InspectionArray[0].WOQuantity);
+
+            if (IsPhoneSize == true) {
+                RenderEngine.ShowActiveInspectionMobile();
+            }
+
+            datahandler.UpdateRejectionCount(InspectionState, InspectionJobSummaryIdPage)
+            setInterval(
+                function () {
+                    datahandler.UpdateRejectionCount(InspectionState, InspectionJobSummaryIdPage)
+                }
+                , 10000);
+            $("#MainContent_inspectionjobsummaryid_hidden").val(returnnum);
+            $("#jobIdSpinner").css('display', 'none');
+            datahandler.InspectionArray = new Array();
 
         },
         LoadExistingJob: function () {
@@ -4231,18 +4212,22 @@
             var JobNumber = '';
             var Datanumber = '';
             var AuditorName = $('#Auditor_Name').val();
+            var vCasePack = $('#CPNumber_Select option:selected').text(); 
+
             if (LineType == 'ROLL') {
                 JobNumber = $rollnumber.val();
+                vCasePack = $("#MainContent_LoomNumber").val(); 
                 AuditorName = $("#MainContent_Inspector").val().toString().trim();
             } else {
                 JobNumber = $workorder.val();
             }
+
             $.ajax({
                 url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
                 type: 'GET',
                 data: {
                     method: 'CreateJobSummaryId',
-                    args: { jobtype: InspectionTypeState, AQLStandard: $("#MainContent_aqlstandard").val(), IsDefect: IsDefect, JobNumber: JobNumber, WOQuantity: $LotSize.val(), AQL: AQLValue, Location: $Location.val(), TemplateId: SelectedId, DataNo: $DataNo.val().trim(), CID: selectedCIDnum, Auditor: AuditorName, CasePack: $('#CPNumber_Select option:selected').text(), WorkRoom: $WorkRoom.val(), WeaverNamesString: JSON.stringify(Inspection.Weavers) }
+                    args: { jobtype: InspectionTypeState, AQLStandard: $("#MainContent_aqlstandard").val(), IsDefect: IsDefect, JobNumber: JobNumber, WOQuantity: $LotSize.val(), AQL: AQLValue, Location: $Location.val(), TemplateId: SelectedId, DataNo: $DataNo.val().trim(), CID: selectedCIDnum, Auditor: AuditorName, CasePack: vCasePack, WorkRoom: $WorkRoom.val(), WeaverNamesString: JSON.stringify(Inspection.Weavers) }
                 },
                 success: function (data) {
                     var JobObj = JSON.parse(data);
@@ -4764,7 +4749,15 @@
                 modal: true,
                 buttons: {
                     "CONTINUE": function () {
-                        datahandler.LoadExistingJob();
+                        
+                        switch(LineType) { 
+                            case "ROLL" : 
+                                datahandler.LoadExistingRollJob();
+                                break; 
+                            default:
+                                datahandler.LoadExistingJob();
+                        }
+
                         $(this).dialog("close");
                     },
                     "NEW AQL": function () {
