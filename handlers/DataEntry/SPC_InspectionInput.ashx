@@ -173,6 +173,11 @@ Namespace core
                 Return False
             End If
         End Function
+        Public Function getLatestDefectId() As Integer
+            Return IU.getLatestDefectId()
+
+
+        End Function
         Public Function getIncrement(ByVal IncrementId As Integer) As Integer
             If IncrementId <> 0 Then
 
@@ -198,11 +203,11 @@ Namespace core
                 Return False
             End If
         End Function
-        Public Function RecordSource(ByVal ID As Integer, ByVal MOP As String, ByVal LOC As String) As Boolean
+        Public Function RecordSource(ByVal ID As Integer, ByVal MOP As String, ByVal LOC As String, ByVal DID As Integer) As Boolean
             If ID <> 0 Then
 
 
-                If IU.RecordSource(ID, MOP, LOC) Then
+                If IU.RecordSource(ID, MOP, LOC, DID) Then
 
                     Return True
                 Else

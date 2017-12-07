@@ -145,6 +145,7 @@
         </fieldset>
         </div>
     <input type="hidden" id="HiddenProduct" runat="server" />
+    <input type="hidden" id="HiddenDefectNo" runat="server" />
     <input type="hidden" id="TBIncrementTextBox_Hidden" runat="server" value="-1" />
     <input type="hidden" id="InspectionState" class="inputelement" runat="server" />
     <input type="hidden" id="workorder_hidden" runat="server" />
@@ -512,6 +513,8 @@
 <script type="text/javascript">
 
     //window.alert = function(e) {alert(e)};
+    
+    
     var TemplateCollection;
     var SpecCollection;
     var PrevWOs = [];
@@ -998,8 +1001,14 @@
             color = '#' + parts.join('');
 
             return color;
-        }
+        };
+        var IsFirstTime = true;
+        
+        
+        var clicksAllowed = true;
         $(".ui-tabs-panel").on('click', '.buttontemplate', function (e) {
+            dbtrans2.getLatestDefectId();
+            
             var buttonid_ = $(this).attr('id');
             var buttonvalue_ = $(this).text();
             var idnum = $("#" + buttonid_ + "_hidden").val();
@@ -1017,8 +1026,9 @@
                     buttonvalue = buttonvalue_;
                     if (InspectionStartedVal == false) {
                         alert("Please Start an Inspection by Filling in Required info and Clicking Start");
-                    } else {
-                        if (AutoConfirm == false) {
+                    }
+                else {
+                        if (AutoConfirm == false ) {
                             buttonid = buttonid_;
                             buttonname = buttonname_;
                             if (color === "#b7b328") {
@@ -1040,7 +1050,19 @@
                             $("#LAFlawName").text(buttonvalue_);
                             $("#dialog").wijdialog("open");
                         } else {
-                            datahandler.SubmitDefect(buttonid_, buttonvalue, buttonname_, InspectionJobSummaryIdPage, InspectionId);
+                            
+                            if (clicksAllowed) {
+                               
+                                   
+                                datahandler.SubmitDefect(buttonid, buttonvalue, buttonname, InspectionJobSummaryIdPage, InspectionId);
+                                clicksAllowed = false;
+                                setTimeout(function () {
+                                    //disable click for class "box"
+                                    clicksAllowed = true;
+                                }, 3000);
+                            }
+
+                            
                         }
                     }
 
@@ -2070,14 +2092,16 @@
             $("#dialog").wijdialog({
                 buttons: {
                     Confirm: function () {
+                        SourceHolder = $("#DDSourceSelection option:selected").text();
                         var GoodCount = new Number($goodcount.val());
                         var BadCount = new Number($badcount.val());
                         var total = GoodCount + BadCount;
                         if (InspectionJobSummaryIdPage > 0) {
                             if ($("#DDSourceSelection option:selected").text() !== "SELECT OPTION") {
+                                
                                 datahandler.SubmitDefect(buttonid, buttonvalue, buttonname, InspectionJobSummaryIdPage, InspectionId);
-                                dbtrans2.RecordSource($("#<%=InspectionId.ClientID%>").val(), $("#DDSourceSelection option:selected").text(), $("#MainContent_Location option:selected").text());
-                            }
+                                
+                             }
                             else {
                                 alert("Please select an option.")
                             }
@@ -3027,7 +3051,25 @@
             // replacing single quote wrapped ones to double quote 
             .replace(/'([^']+)'/g, function (_, $1) { return '"' + $1 + '"' })
     };
+    
     var dbtrans2 = {
+        getLatestDefectId: function () {
+            $.ajax({
+
+                url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
+                type: 'GET',
+                data: { method: 'getLatestDefectId'},
+                success: function (data) {
+                    LatestDefectId = data;
+                    console.log("data Recorded");
+                    return data;
+                },
+                error: function (a, b, c) {
+                    alert(c);
+                }
+            });
+
+        },
         getIncrement: function (id) {
             $.ajax({
 
@@ -3106,12 +3148,12 @@
             });
 
         },
-        RecordSource: function (id, mop, loc) {
+        RecordSource: function (id, mop, loc, did) {
             $.ajax({
 
                 url: "<%=Session("BaseUri")%>" + '/handlers/DataEntry/SPC_InspectionInput.ashx',
                 type: 'GET',
-                data: { method: 'RecordSource', args: { ID: id, MOP: mop, LOC: loc } },
+                data: { method: 'RecordSource', args: { ID: id, MOP: mop, LOC: loc, DID: did } },
                 success: function (data) {
 
                     //$("#PassCountValue").text(Number($("#MainContent_Good").val()) - Number($("#MainContent_Bad_Group").val()));
@@ -3188,6 +3230,9 @@
 
         }
     };
+   
+    var LatestDefectId = 0;
+    dbtrans2.getLatestDefectId();
     var controls = {
 
         InitTemplateDropDown: function (TemplateNames) {
@@ -3676,7 +3721,9 @@
                     data: { method: 'InsertDefect', args: { id: ButtonId, text: ButtonValue, JsonString: JsonString, ButtonTemplateId: ButtonName, InspectionJobSummaryId: InspectionJobSummaryId, InspectionId: InspectionId, WeaverShiftIdVal: Inspection.WeaverShiftId } },
                     success: function (data) {
 
-                        returnnum = new Number(data[0].DefectId);
+                        returnnum = new Number(data[0].DefectID);
+                        console.log(data[0].defectID);
+                        
                         var datarray = JSON.parse(data);
 
                         if (data && data != -1) {
@@ -3728,6 +3775,7 @@
 
 
                         $('#MainContent_DefectID_Value').val(returnnum.toString());
+                        dbtrans2.RecordSource($("#<%=InspectionId.ClientID%>").val(), $("#DDSourceSelection option:selected").text(), $("#MainContent_Location option:selected").text(), (JSON.parse(data))[0].DefectId);
                     },
                     error: function (a, b, c) {
                         alert(c);
