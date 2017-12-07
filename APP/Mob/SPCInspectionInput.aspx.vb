@@ -543,12 +543,13 @@ Namespace core
                     Dim body As String
                     If InspectionState.Value = "WorkOrder" Then
 
-                        DHUCalc = InspectInput.CalculateDHU(InspectionState.Value, curijs.JobNumber, ijsnum, curijs.TotalInspectedItems)
+                        DHUCalc = InspectInput.CalculateDHU(curijs.JobNumber, ijsnum, curijs.TotalInspectedItems)
 
                         body = "[" + curijs.JobType + ": " & curijs.JobNumber & "][WOQuantity: " & curijs.WOQuantity.ToString() & "][AQL Level: " & curijs.AQL_Level.ToString() & "][TemplateName: " & Templatename.Value.ToString() & "][PassCount: " & curijs.ItemPassCount.ToString() & "][FailCount: " & curijs.ItemFailCount.ToString() & "][SampleSize: " & curijs.SampleSize.ToString() & "][RejectLimitor: " & curijs.RejectLimiter & "][DHU: " & DHUCalc.ToString("F2") & " %][Auditor Name: " & AuditorNameHidden.Value.ToString() & "]<br /><br /> Comments: " + curijs.Comments
                     Else
-                        DHY = CType(DHYHidden.Value, Decimal)
-                        body = "[" + curijs.JobType + ": " & curijs.JobNumber & "][Yards: " & curijs.WOQuantity.ToString() & "][TemplateName: " & Templatename.Value.ToString() & "][FailCount: " & curijs.ItemFailCount.ToString() & "][DHY: " & DHY.ToString("F2") & " %][Auditor Name: " & AuditorNameHidden.Value.ToString() & "]<br /><br /> Comments: " + curijs.Comments
+                        DHUCalc = InspectInput.CalculateDHU(curijs.JobNumber, ijsnum, curijs.WOQuantity)
+
+                        body = "[" + curijs.JobType + ": " & curijs.JobNumber & "][Yards: " & curijs.WOQuantity.ToString() & "][TemplateName: " & Templatename.Value.ToString() & "][FailCount: " & curijs.ItemFailCount.ToString() & "][DHY: " & DHUCalc.ToString("F2") & " %][Auditor Name: " & AuditorNameHidden.Value.ToString() & "]<br /><br /> Comments: " + RollMessage.Value
                     End If
 
                     Dim subject As String = "ALERT JOB " + JobPassFail + "ed " + locationString
@@ -660,7 +661,7 @@ Namespace core
             Dim bmapijs As New BMappers(Of SPCInspection.OpenRollInfo)
             Dim listijs As New List(Of SPCInspection.OpenRollInfo)
             Dim sql As String
-            sql = "SELECT ijs.JobNumber, ijs.DataNo, ijs.WOQuantity, ijs.AQL_Level, ijs.Standard, ijs.EmployeeNo FROM InspectionJobSummary ijs WHERE ijs.id = " & ijsid.ToString()
+            sql = "SELECT ijs.JobNumber, ijs.DataNo, ijs.WOQuantity, ijs.AQL_Level, ijs.Standard, ijs.EmployeeNo, ijs.CasePack FROM InspectionJobSummary ijs WHERE ijs.id = " & ijsid.ToString()
 
             listijs = bmapijs.GetInspectObject(sql)
             If listijs.Count > 0 Then
@@ -672,7 +673,7 @@ Namespace core
                 RollNumber.Value = listijs.ToArray()(0).JobNumber
                 WOQuantityValue = listijs.ToArray()(0).WOQuantity
                 DataNumber.Value = listijs.ToArray()(0).DataNo
-                LoomNumber.Value = InspectInput.GetLM(ijsid)
+                LoomNumber.Value = listijs.ToArray()(0).CasePack
                 Weaver_Names.Value = InspectInput.GetWeaverInit(ijsid)
                 'If rolllist.Count = 0 Then
                 '    rolllist = as400.GetGriegeNo(rollnumberinput, True)
@@ -895,7 +896,6 @@ Namespace core
         End Sub
 
         Public Sub initializeWorkrooms(CID As String)
-            'WorkRoomArr = WorkRoomsApi.GetResult(CID)
 
             Try
                 WorkRoomArr = getWorkrooms(CID)
@@ -908,7 +908,7 @@ Namespace core
             Dim co() As SPCInspection.Workroom
 
             Try
-                co = HttpRuntime.Cache("INS-WR-" + CID)
+                co = Nothing 'HttpRuntime.Cache("INS-WR-" + CID) 
             Catch ex As Exception
 
             End Try

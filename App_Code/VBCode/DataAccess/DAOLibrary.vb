@@ -333,6 +333,7 @@ Namespace core
             Public Property Initials As String
             Public Property EmployeeNo As String
             Public Property ShiftId As Integer
+            Public Property CasePack As String
         End Class
         Public Class StartJobInfo
             Public Property JobSummaryId As Integer = -99
