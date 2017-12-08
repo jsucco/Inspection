@@ -1001,13 +1001,7 @@
 
             return color;
         };
-        var IsFirstTime = true;
-        
-        
-        var clicksAllowed = true;
         $(".ui-tabs-panel").on('click', '.buttontemplate', function (e) {
-            dbtrans2.getLatestDefectId();
-            
             var buttonid_ = $(this).attr('id');
             var buttonvalue_ = $(this).text();
             var idnum = $("#" + buttonid_ + "_hidden").val();
@@ -1049,19 +1043,7 @@
                             $("#LAFlawName").text(buttonvalue_);
                             $("#dialog").wijdialog("open");
                         } else {
-                            
-                            if (clicksAllowed) {
-                               
-                                   
-                                datahandler.SubmitDefect(buttonid, buttonvalue, buttonname, InspectionJobSummaryIdPage, InspectionId);
-                                clicksAllowed = false;
-                                setTimeout(function () {
-                                    //disable click for class "box"
-                                    clicksAllowed = true;
-                                }, 3000);
-                            }
-
-                            
+                          datahandler.SubmitDefect(buttonid, buttonvalue, buttonname, InspectionJobSummaryIdPage, InspectionId);
                         }
                     }
 
@@ -2091,7 +2073,6 @@
             $("#dialog").wijdialog({
                 buttons: {
                     Confirm: function () {
-                        SourceHolder = $("#DDSourceSelection option:selected").text();
                         var GoodCount = new Number($goodcount.val());
                         var BadCount = new Number($badcount.val());
                         var total = GoodCount + BadCount;
