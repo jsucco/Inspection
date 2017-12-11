@@ -1043,8 +1043,9 @@
                             $("#LAFlawName").text(buttonvalue_);
                             $("#dialog").wijdialog("open");
                         } else {
-                          buttonid = buttonid_;
-                          datahandler.SubmitDefect(buttonid, buttonvalue, buttonname, InspectionJobSummaryIdPage, InspectionId);
+
+                            datahandler.SubmitDefect(buttonid_, buttonvalue, buttonname_, InspectionJobSummaryIdPage, InspectionId);
+
                         }
                     }
 
@@ -1382,7 +1383,7 @@
                 var jobnumber_label = $("#jobnumber_label").val();
                 if (!$("#jobnumber_stat_tag").is(":visible") && (jobnumber_label.trim().length <= 1 || e.currentTarget.value.trim().length > 0))
                     $("#jobnumber_stat_tag").fadeIn(200);
-                if (e.currentTarget.id === "MainContent_WorkOrder")
+                if (e.currentTarget.id === "MainContent_WorkOrder" || e.currentTarget.id == "MainContent_RollNumber")
                     $("#jobnumber_label").val(e.currentTarget.value);
 
             }
@@ -3684,9 +3685,12 @@
         SubmitDefect: function (ButtonId, ButtonValue, ButtonName, InspectionJobSummaryId, InspectionId) {
             var FirstInspectionFlag = false;
             var returnnum = new Number(0);
+
             if (InspectionJobSummaryId == -99) {
                 FirstInspectionFlag = true;
             }
+
+            console.log("ButtonId", ButtonId); 
 
             var mycolor = $("#" + ButtonId).css("background-color");
             if (mycolor) {
@@ -3703,8 +3707,9 @@
                     data: { method: 'InsertDefect', args: { id: ButtonId, text: ButtonValue, JsonString: JsonString, ButtonTemplateId: ButtonName, InspectionJobSummaryId: InspectionJobSummaryId, InspectionId: InspectionId, WeaverShiftIdVal: Inspection.WeaverShiftId } },
                     success: function (data) {
 
-                        returnnum = new Number(data[0].DefectID);
-                        console.log(data[0].defectID);
+                        console.log(data);
+
+                        returnnum = new Number(data[0].DefectId);                   
                         
                         var datarray = JSON.parse(data);
 

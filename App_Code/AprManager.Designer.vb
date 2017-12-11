@@ -1,4 +1,4 @@
-﻿' T4 code generation is enabled for model 'C:\GitRepos\inspect-master\Inspection-updated12617\Inspection\App_Code\AprManager.edmx'. 
+﻿' T4 code generation is enabled for model 'C:\GitRepos\inspect-master\Inspection-updated121117\Inspection\App_Code\AprManager.edmx'. 
 ' To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 ' property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 ' is open in the designer.
