@@ -380,7 +380,7 @@
         </div>
         <input type="hidden" runat="server" id="DefectID_Value" value ="0" />
         <div id="EditCommentDialog" style="display: block" title="Edit Comment">
-           <textarea id="EditCommentTextArea" name="JobMessage" style="width:90%;height:55px; position: absolute; left:1%;" runat="server"></textarea>
+           <textarea id="EditCommentTextArea" name="JobMessage" style="width:90%;height:250px; position: absolute; left:1%;" runat="server"></textarea>
         </div>
         <div id="dialog" style="display: block" title="SPC Inspection">
             <section>
@@ -1043,6 +1043,7 @@
                             $("#LAFlawName").text(buttonvalue_);
                             $("#dialog").wijdialog("open");
                         } else {
+                          buttonid = buttonid_;
                           datahandler.SubmitDefect(buttonid, buttonvalue, buttonname, InspectionJobSummaryIdPage, InspectionId);
                         }
                     }
@@ -2040,7 +2041,7 @@
         EditCommentsEntry: function () {
             $("#EditCommentDialog").wijdialog({
                 buttons: {
-                    Confirm: function () {
+                    Save: function () {
                         dbtrans2.setComment($("#MainContent_InspectionId").val(), $("#MainContent_EditCommentTextArea").val());
                         $(this).wijdialog("close");
                     },
@@ -2055,7 +2056,8 @@
                     minimize: { visible: false },
                     maximize: { visible: false }
                 },
-                height: 244,
+                height: 488,
+                width:488,
                 autoOpen: false,
                 open: function (e) {
                     $("#Skip").prop('checked', AutoConfirm);
