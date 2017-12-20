@@ -1043,8 +1043,12 @@
                             $("#LAFlawName").text(buttonvalue_);
                             $("#dialog").wijdialog("open");
                         } else {
-
-                            datahandler.SubmitDefect(buttonid_, buttonvalue, buttonname_, InspectionJobSummaryIdPage, InspectionId);
+                            if ($("#CPNumber_Select option:selected").text() !== "SELECT OPTION") {
+                                datahandler.SubmitDefect(buttonid_, buttonvalue, buttonname_, InspectionJobSummaryIdPage, InspectionId);
+                            }
+                            else {
+                                alert("Please select a valid source before submitting a defect.");
+                            }
 
                         }
                     }
@@ -2924,6 +2928,7 @@
                     $("#AQL_Level_Dialog option:selected").attr('disabled', 'disabled');
                     $("#AQ_Level option:selected").attr('disabled', 'disabled');
                     $("#AQL_Standard_Dialog option:selected").attr('disabled', 'true');
+                    $("#cpdiv").css('display', 'block');
                     InspectionTypeSelector = 1;
                     datahandler.GetWeaverNames();
                     break;
@@ -2994,7 +2999,7 @@
                     TargetOrderInput = $('#MainContent_RollNumber');
                     $(".roll-inspection").css('display', 'block');
                     $(".workorder-inspection").css('display', 'none');
-                    $("#CPNumber_Select").prop('disabled', true);
+                    $("#CPNumber_Select").prop('disabled', false);
                     $("#InspectionType").prop('innerText', "ROLL");
                     $("#WOQuantityL").text("YARDS");
                     $("#DataNumberL").prop('innerText', "RM #");
@@ -3004,6 +3009,7 @@
                     $("#WOQuantity").change(function () {
                         RollYards = new Number($("#WOQuantity").val());
                     });
+                    $("#cpdiv").css('display', 'block');
                     InspectionState = 1;
                     $("#SampleSizeLabel").text("DHY");
                     break;

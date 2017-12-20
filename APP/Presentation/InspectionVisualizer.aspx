@@ -2480,7 +2480,9 @@
                 //$("#defectCarousel").empty();
                 
             },
-            LocationChangeEvent: function(cidArray) { 
+            LocationChangeEvent: function (cidArray) {
+                console.log('cidArray:'+cidArray);
+                alert('Location Changed!');
                 var newarray = $.map(FullLocationsArray, function (e,v) { 
                     var locobj = null; 
 
