@@ -311,6 +311,12 @@
                 shrinkToFit: true,
                 beforeSelectRow: function () {
                     return false;
+                },
+                ondblClickRow: function (rowid, iRow, iCol, e) {
+                    var colNames = $(this).jqGrid("getGridParam", "colNames");
+                    var colName = colNames[iCol];
+                    var colVal = $(this).jqGrid("getCell", rowid, iCol);
+                    alert('the value of this cell is ' + colVal);
                 }
             });
             fchtml.push('<option value="000" >Foreign Locations</option>');
