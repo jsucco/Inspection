@@ -262,16 +262,21 @@
             var html = [];
             var fchtml = [];
             var dchtml = [];
+            var ihtml = [];
+            var dhtml = [];
             var dcid = [];
             var fcid = [];
-            var mydata = [
-                { id: "1", Facility: "Thomaston", Time_Period: "Past 30 Days", No_of_Defects: 100, No_of_Rejects: 1, No_of_Inspections: 10, No_of_Rejected_Lots: 12, DHU: 0.55, Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: { Facility: { rowspan: "3" } } },
-                { id: "2", Facility: "Thomaston", Time_Period: "Past 12 Months", No_of_Defects: 100, No_of_Rejects: 1, No_of_Inspections: 10, No_of_Rejected_Lots: 12, DHU: 0.55, Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: { Facility: { display: "none" } } },
-                { id: "3", Facility: "Thomaston", Time_Period: "Custom", No_of_Defects: 100, No_of_Rejects: 1, No_of_Inspections: 10, No_of_Rejected_Lots: 12, DHU: 0.55, Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: { Facility: { display: "none" } } },
-                { id: "4", Facility: "Carolina", Time_Period: "Past 30 Days", No_of_Defects: 100, No_of_Rejects: 1, No_of_Inspections: 10, No_of_Rejected_Lots: 12, DHU: 0.55, Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: { Facility: { rowspan: "3" } } },
-                { id: "5", Facility: "Carolina", Time_Period: "Past 12 Months", No_of_Defects: 100, No_of_Rejects: 1, No_of_Inspections: 10, No_of_Rejected_Lots: 12, DHU: 0.55, Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: { Facility: { display: "none" } } },
-                { id: "6", Facility: "Carolina", Time_Period: "Custom", No_of_Defects: 100, No_of_Rejects: 1, No_of_Inspections: 10, No_of_Rejected_Lots: 12, DHU: 0.55, Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: { Facility: { display: "none" } } },
-            ],
+            var iid = [];
+            var did = [];
+            //var mydata = [
+            //    { id: "1", Facility: "Thomaston", Time_Period: "Past 30 Days", No_of_Defects: 100, No_of_Rejects: 1, No_of_Inspections: 10, No_of_Rejected_Lots: 12, DHU: 0.55, Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: { Facility: { rowspan: "3" } } },
+            //    { id: "2", Facility: "Thomaston", Time_Period: "Past 12 Months", No_of_Defects: 100, No_of_Rejects: 1, No_of_Inspections: 10, No_of_Rejected_Lots: 12, DHU: 0.55, Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: { Facility: { display: "none" } } },
+            //    { id: "3", Facility: "Thomaston", Time_Period: "Custom", No_of_Defects: 100, No_of_Rejects: 1, No_of_Inspections: 10, No_of_Rejected_Lots: 12, DHU: 0.55, Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: { Facility: { display: "none" } } },
+            //    { id: "4", Facility: "Carolina", Time_Period: "Past 30 Days", No_of_Defects: 100, No_of_Rejects: 1, No_of_Inspections: 10, No_of_Rejected_Lots: 12, DHU: 0.55, Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: { Facility: { rowspan: "3" } } },
+            //    { id: "5", Facility: "Carolina", Time_Period: "Past 12 Months", No_of_Defects: 100, No_of_Rejects: 1, No_of_Inspections: 10, No_of_Rejected_Lots: 12, DHU: 0.55, Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: { Facility: { display: "none" } } },
+            //    { id: "6", Facility: "Carolina", Time_Period: "Custom", No_of_Defects: 100, No_of_Rejects: 1, No_of_Inspections: 10, No_of_Rejected_Lots: 12, DHU: 0.55, Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: { Facility: { display: "none" } } },
+            //];
+            
                 arrtSetting = function (rowId, val, rawObject, cm) {
                     var attr = rawObject.attr[cm.name], result;
                     if (attr.rowspan) {
@@ -284,7 +289,6 @@
 
             $("#MainGrid").jqGrid({
                 datatype: 'local',
-                data: mydata,
                 colNames: ['Facility', 'Time_Period', 'No. of Defects', 'No. of Rejects', 'No. of Inspections', 'No. of Rejected Lots', 'DHU', 'Reject Rate', 'Lot Acceptance'],
                 colModel: [
                     { name: 'Facility', width: 200, align: 'center', cellattr: arrtSetting },
@@ -303,7 +307,7 @@
                 //pager: '#pager',
                 gridview: true,
                 hoverrows: false,
-                autoencode: true,
+                
                 ignoreCase: true,
                 viewrecords: true,
                 height: '100%',
@@ -319,21 +323,32 @@
                     alert('the value of this cell is ' + colVal);
                 }
             });
-            fchtml.push('<option value="000" >Foreign Locations</option>');
-            dchtml.push('<option value="001" >Domestic Locations</option>');
+            fchtml.push('<option value="000" >Global Manufacturing</option>');
+            dchtml.push('<option value="001" >Domestic Manufacturing</option>');
+            dhtml.push('<option value="002" >Distribution</option>');
+            ihtml.push('<option value="003" >Interiors</option>');
             $.each(LocationNames, function (index, value) {
                 FullLocationsArray.push({ value: value.Abreviation.trim(), status: true, CID: value.CID, ProdAbreviation: value.ProdAbreviation });
                 if (value.text.trim() === 'Pakistan' || value.text.trim() === 'El Salvador' || value.text.trim() === 'India' || value.text.trim() === 'China' || value.text.trim() === 'Jordan') {
                     fchtml.push('<option value = "' + value.CID.trim() + '" class="l1">' + value.text.trim() + ' (' + value.Abreviation.trim() + ')</option>');
                     fcid.push(value.CID.trim());
                 }
-                else {
+                else if (value.text.trim() === 'Augusta' || value.text.trim() === 'Carolina' || value.text.trim() === 'Thomaston' || value.Abreviation.trim() === 'PCE' || value.Abreviation.trim() === 'STM' || value.Abreviation.trim() === 'SAT'){
                     dchtml.push('<option value = "' + value.CID.trim() + '" class="l1">' + value.text.trim() + ' (' + value.Abreviation.trim() + ')</option>');
                     dcid.push(value.CID.trim());
                 }
+                else if (value.Abreviation.trim() === 'FNL' || value.Abreviation.trim() === 'FPC' || value.Abreviation.trim() === 'FSK') {
+                    ihtml.push('<option value = "' + value.CID.trim() + '" class="l1">' + value.text.trim() + ' (' + value.Abreviation.trim() + ')</option>');
+                    iid.push(value.CID.trim());
+                }
+                else if (value.Abreviation.trim() !== 'ALL'){
+                    dhtml.push('<option value = "' + value.CID.trim() + '" class="l1">' + value.text.trim() + ' (' + value.Abreviation.trim() + ')</option>');
+                    did.push(value.CID.trim());
+                }
             });
-
-            var cchtml = fchtml.concat(dchtml);
+            var cchtml = [];
+            cchtml.push('<option value="999" >ALL SITES (ALL)</option>');
+            cchtml = cchtml.concat(((fchtml.concat(dchtml)).concat(ihtml)).concat(dhtml));
             LocationsStringArray = JSON.stringify(FullLocationsArray);
             $("#MainContent_SelectedCID").val(LocationsStringArray);
             $("#select-Location_fc").html(cchtml.join(''));
@@ -367,14 +382,24 @@
                     var opttext = $(value).text();
                     console.log(optval);
                     console.log(opttext);
-                    if (opttext === "Foreign Locations") {
+                    if (opttext === "Global Manufacturing") {
                         selList=selList.concat(fcid);
                         console.log(fcid);
 
                     }
-                    else if (opttext === "Domestic Locations") {
+                    else if (opttext === "Domestic Manufacturing") {
                         selList=selList.concat(dcid);
                         console.log(dcid);
+
+                    }
+                    else if (opttext === "Interiors") {
+                        selList = selList.concat(iid);
+                        console.log(iid);
+
+                    }
+                    else if (opttext === "Distribution") {
+                        selList = selList.concat(did);
+                        console.log(did);
 
                     }
                     else if (optval != "999" && selval != "999") {
@@ -2127,6 +2152,14 @@
                 $('#loading').toggle();
             }
         };
+        function FixJson(str) {
+            return str
+                // wrap keys without quote with valid double quote
+                .replace(/([\$\w]+)\s*:/g, function (_, $1) { return '"' + $1 + '":' })
+                // replacing single quote wrapped ones to double quote 
+                .replace(/'([^']+)'/g, function (_, $1) { return '"' + $1 + '"' })
+        };
+        var mydata = [];
         var datahandler = {
             GetDefectImages: function (CID) {
 
@@ -2459,33 +2492,26 @@
             LocationChangeEvent: function (cidArray) {
                 console.log('cidArray:' + cidArray);
                 //alert('Location Changed!');
-                var newarray = $.map(FullLocationsArray, function (e, v) {
-                    var locobj = null;
-
-                    $.each(cidArray, function (key, value) {
-
-                        if (value == "999") {
-                            locobj = { value: e.value, status: true, CID: e.CID, ProdAbreviation: e.ProdAbreviation }
-                            return;
-                        } else if (value == e.CID) {
-                            locobj = { value: e.value, status: true, CID: e.CID, ProdAbreviation: e.ProdAbreviation }
-                            return;
+                $.ajax({
+                    url: "<%=Session("BaseUri")%>" + '/handlers/Presentation/SPC_InspectionVisualizer.ashx',
+                    type: 'GET',
+                    data: { method: 'GetDataArray', args: {array: cidArray} },
+                    success: function (data) {
+                        mydata = [];
+                        console.log(data);
+                        var conversion = JSON.parse(data);
+                        for (i = 0; i < conversion.length; i++) {
+                            mydata.push(JSON.parse(FixJson(conversion[i])));
                         }
-
-
-                    });
-                    if (locobj == null) {
-                        return { value: e.value, status: false, CID: e.CID, ProdAbreviation: e.ProdAbreviation }
-                    } else {
-                        return locobj
+                        console.log(mydata);
+                        $('#MainGrid').jqGrid("clearGridData");
+                        $('#MainGrid').jqGrid('setGridParam', { data: mydata });
+                        $('#MainGrid').trigger('reloadGrid');
+                    },
+                    error: function (a, b, c) {
+                        alert(c);
                     }
-
                 });
-                FullLocationsArray = newarray;
-                LocationsStringArray = JSON.stringify(FullLocationsArray);
-                console.log("LocationsEventdata", newarray);
-                $("#MainContent_SelectedCID").val(LocationsStringArray);
-                datahandler.FilterEvent("485", "Location")
             },
             SelectFilterPictureArray: function (field) {
                 var NewDefectPictureArray = DefectDescListF = jQuery.extend(true, [], DefectPictureArray);

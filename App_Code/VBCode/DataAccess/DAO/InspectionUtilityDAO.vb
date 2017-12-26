@@ -217,6 +217,35 @@ Namespace core
             DR.Close() 'closes the reader
             Return retval
         End Function
+        Public Function GetDataArray(ByVal array As List(Of Integer)) As List(Of String)
+            '{ id: "1", Facility: "Thomaston", Time_Period: "Past 30 Days", No_of_Defects: 100, No_of_Rejects: 1, No_of_Inspections: 10, No_of_Rejected_Lots: 12, DHU: 0.55, Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: { Facility: { rowspan: "3" } } },
+            Dim retval As New List(Of String)()
+            For Each CID As Integer In array
+
+
+
+                Dim SQL As String = "Select Name from dbo.Locations Where NCID=" & CID
+                Command.CommandType = CommandType.Text
+                Command.Connection = Connection
+                Command.CommandText = SQL
+                Connection.Open()
+                DR = Command.ExecuteReader
+                If DR.HasRows = True Then
+                    DR.Read()
+                    Dim Top As String = String.Format("Facility: '{0}', Time_Period: 'Past 30 Days', No_of_Defects: '100', No_of_Rejects: '1', No_of_Inspections: '10', No_of_Rejected_Lots: '12', DHU: '0.55', Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: {{ Facility: {{ rowspan: '3' }} }}", DR.GetString(0))
+                    retval.Add("{" + Top + "}")
+                    Dim Mid As String = String.Format("Facility: '{0}', Time_Period: 'Past Year', No_of_Defects: '100', No_of_Rejects: '1', No_of_Inspections: 10, No_of_Rejected_Lots: '12', DHU: '0.55', Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: {{ Facility: {{ display: 'none' }} }}", DR.GetString(0))
+                    retval.Add("{" + Mid + "}")
+                    Dim Bottom As String = String.Format("Facility: '{0}', Time_Period: 'Custom', No_of_Defects: '100', No_of_Rejects: '1', No_of_Inspections: '10', No_of_Rejected_Lots: '12', DHU: '0.55', Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: {{ Facility: {{ display: 'none' }} }}", DR.GetString(0))
+                    retval.Add("{" + Bottom + "}")
+                End If
+                Connection.Close()
+                DR.Close()
+            Next
+
+
+            Return retval
+        End Function
         Public Function GetPrevWOGrid(ByVal WO As String) As List(Of String)
             Dim retval As New List(Of String)()
             Dim SQL As String = "SELECT InspectionJobSummary.id, InspectionJobSummary.JobNumber,TemplateName.LineType, InspectionJobSummary.SampleSize, InspectionJobSummary.TotalInspectedItems, InspectionJobSummary.AQL_Level, InspectionJobSummary.WorkRoom, InspectionJobSummary.WOQuantity From dbo.InspectionJobSummary INNER JOIN dbo.TemplateName ON InspectionJobSummary.TemplateId=TemplateName.TemplateId WHERE JobNumber='" & WO & "' ORDER BY TemplateName.LineType DESC, InspectionJobSummary.id ASC"

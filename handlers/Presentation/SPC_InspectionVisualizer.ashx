@@ -7,7 +7,7 @@ Imports System.Web.Script.Serialization
 Imports System.Data.SqlClient
 Imports System.Data
 Imports System.Globalization
-
+Imports Newtonsoft.Json
 Namespace core
 
     Public Class SPC_InspectionVisualizer
@@ -27,7 +27,16 @@ Namespace core
 
             Return jser.Serialize(listds)
         End Function
+        Public Function GetDataArray(ByVal array As List(Of Integer)) As String
+            If array IsNot Nothing Then
 
+
+                Return JsonConvert.SerializeObject(Inspect.GetDataArray(array))
+            Else
+                Return Nothing
+            End If
+
+        End Function
         Public Function GetStackedDefectLineType(ByVal fromdate As String, ByVal todate As String, ByVal DataNo As String, ByVal AuditType As String, ByVal LocArray As String) As String
             Dim _todate As DateTime = DateTime.Parse(todate)
             Dim _formdate As DateTime = DateTime.Parse(fromdate)
