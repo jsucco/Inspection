@@ -800,7 +800,7 @@ Namespace core
                     End If
                     Location.Value = workorderarray(0).LOCATION.Trim()
                     WOQuantityValue = workorderarray(0).WOQUANTITY
-                    workroom_hidden.Value = Trim(workorderarray(0).WORKROOM)
+                    workroom_hidden.Value = "" 'Trim(workorderarray(0).WORKROOM) removed to force full name selection
                     wopieces_hidden.Value = workorderarray(0).WOPIECES
                 End If
 
