@@ -406,13 +406,19 @@
                         selList.push(optval);
                     }
                     else if (selval == "999" && optval == "999") {
-                        selList.push(optval);
+                        selList = ((((selList.concat(dcid))).concat(iid)).concat(fcid)).concat(did);
                     }
 
                 });
                 console.log("selList", selList);
-                $locSelect.val(selList).trigger("change");
-                datahandler.LocationChangeEvent(selList);
+                if (selList.length > 0) {
+                    $locSelect.val(selList).trigger("change");
+                    datahandler.LocationChangeEvent(selList);  
+                } else {
+                    $('#MainGrid').jqGrid("clearGridData")
+                    $('#MainGrid').trigger('reloadGrid');
+                }
+               
             });
             $locSelect.on("select2:unselect", function (e) {
                 var selectedItems = e.currentTarget.selectedOptions;
@@ -421,7 +427,13 @@
                     var optval = $(value).val();
                     selList.push(optval);
                 });
-                datahandler.LocationChangeEvent(selList);
+                if (selList.length > 0) {
+                    $locSelect.val(selList).trigger("change");
+                    datahandler.LocationChangeEvent(selList);
+                } else {
+                    $('#MainGrid').jqGrid("clearGridData")
+                    $('#MainGrid').trigger('reloadGrid');
+                }
             });
             //$("#Locations").html(html.join(''));
             var html = [];
@@ -650,7 +662,8 @@
 
             $('.actionButton').on('click', function (event) {
                 $locSelect.val([]).trigger("change");
-                datahandler.LocationChangeEvent([]);
+                $('#MainGrid').jqGrid("clearGridData")
+                $('#MainGrid').trigger('reloadGrid');
             });
             $('#backdiv').on('click', function (event) {
 
