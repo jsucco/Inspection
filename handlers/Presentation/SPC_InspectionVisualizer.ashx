@@ -27,11 +27,11 @@ Namespace core
 
             Return jser.Serialize(listds)
         End Function
-        Public Function GetDataArray(ByVal array As List(Of Integer)) As String
+        Public Function GetDataArray(ByVal array As List(Of Integer), ByVal from As String, ByVal toDate As String) As String
             If array IsNot Nothing Then
 
 
-                Return JsonConvert.SerializeObject(Inspect.GetDataArray(array))
+                Return JsonConvert.SerializeObject(Inspect.GetDataArray(array, from, toDate))
             Else
                 Return Nothing
             End If

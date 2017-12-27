@@ -283,12 +283,43 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
+        Public Function GetCustomDefectTotal(ByVal CID As Integer, ByVal fromdate As DateTime, ByVal todate As DateTime) As Integer
+            Dim retval As Integer = 0
+            Dim DR2 As SqlDataReader
+            Dim Command2 As New SqlCommand
+            Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
+            Dim SQL As String = "Select SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " AND Inspection_Finished BETWEEN '" & fromdate & "' AND '" & todate & "'"
+            Command2.CommandType = CommandType.Text 'sets the type of the sql
+            Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
+            Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
+            If (Connection2.State = ConnectionState.Closed) Then
+                Connection2.Open()
+            End If
+            DR2 = Command2.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+            If DR2.HasRows = True Then 'Check whether the SqlDataReader has 1 or more rows
+                DR2.Read() 'The default position of the SqlDataReader is before the first record. Therefore, you must call Read to begin accessing any data.  The reader has moved down to the first row.
+                'Response.Write(DR("Cust_Name")) 'Writes a string to an HTTP response output stream.  In this case, just Cust_Name
+
+                If Not DR2.IsDBNull(DR2.GetOrdinal("Total")) Then
+                    retval = Convert.ToInt32(DR2("Total"))
+                End If
+
+            Else
+                Return retval
+
+
+            End If
+
+            Connection2.Close() 'closes the connection
+            DR2.Close() 'closes the reader
+            Return retval
+        End Function
         Public Function GetMonthlyInspectionTotal(ByVal CID As Integer) As Integer
             Dim retval As Integer = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select COUNT(id) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " AND Inspection_Finished >= DATEADD(month,-1,GETDATE())"
+            Dim SQL As String = "Select COUNT(id) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -345,12 +376,44 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
+
+        Public Function GetCustomInspectionTotal(ByVal CID As Integer, ByVal fromdate As DateTime, ByVal todate As DateTime) As Integer
+            Dim retval As Integer = 0
+            Dim DR2 As SqlDataReader
+            Dim Command2 As New SqlCommand
+            Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
+            Dim SQL As String = "Select COUNT(id) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " AND Inspection_Finished BETWEEN '" & fromdate & "' AND '" & todate & "'"
+            Command2.CommandType = CommandType.Text 'sets the type of the sql
+            Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
+            Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
+            If (Connection2.State = ConnectionState.Closed) Then
+                Connection2.Open()
+            End If
+            DR2 = Command2.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+            If DR2.HasRows = True Then 'Check whether the SqlDataReader has 1 or more rows
+                DR2.Read() 'The default position of the SqlDataReader is before the first record. Therefore, you must call Read to begin accessing any data.  The reader has moved down to the first row.
+                'Response.Write(DR("Cust_Name")) 'Writes a string to an HTTP response output stream.  In this case, just Cust_Name
+
+                If Not DR2.IsDBNull(DR2.GetOrdinal("Total")) Then
+                    retval = Convert.ToInt32(DR2("Total"))
+                End If
+
+            Else
+                Return retval
+
+
+            End If
+
+            Connection2.Close() 'closes the connection
+            DR2.Close() 'closes the reader
+            Return retval
+        End Function
         Public Function GetMonthlyRejectTotal(ByVal CID As Integer) As Integer
             Dim retval As Integer = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select SUM(MajorsCount+RepairsCount+ScrapCount) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " AND Inspection_Finished >= DATEADD(month,-1,GETDATE())"
+            Dim SQL As String = "Select SUM(MajorsCount+RepairsCount+ScrapCount) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -407,12 +470,44 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
+
+        Public Function GetCustomRejectTotal(ByVal CID As Integer, ByVal fromdate As DateTime, ByVal todate As DateTime) As Integer
+            Dim retval As Integer = 0
+            Dim DR2 As SqlDataReader
+            Dim Command2 As New SqlCommand
+            Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
+            Dim SQL As String = "Select SUM(MajorsCount+RepairsCount+ScrapCount) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " AND Inspection_Finished BETWEEN '" & fromdate & "' AND '" & todate & "'"
+            Command2.CommandType = CommandType.Text 'sets the type of the sql
+            Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
+            Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
+            If (Connection2.State = ConnectionState.Closed) Then
+                Connection2.Open()
+            End If
+            DR2 = Command2.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+            If DR2.HasRows = True Then 'Check whether the SqlDataReader has 1 or more rows
+                DR2.Read() 'The default position of the SqlDataReader is before the first record. Therefore, you must call Read to begin accessing any data.  The reader has moved down to the first row.
+                'Response.Write(DR("Cust_Name")) 'Writes a string to an HTTP response output stream.  In this case, just Cust_Name
+
+                If Not DR2.IsDBNull(DR2.GetOrdinal("Total")) Then
+                    retval = Convert.ToInt32(DR2("Total"))
+                End If
+
+            Else
+                Return retval
+
+
+            End If
+
+            Connection2.Close() 'closes the connection
+            DR2.Close() 'closes the reader
+            Return retval
+        End Function
         Public Function GetMonthlyRejectLotTotal(ByVal CID As Integer) As Integer
             Dim retval As Integer = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select COUNT(id) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " AND Technical_PassFail = 0 AND Inspection_Finished >= DATEADD(month,-1,GETDATE())"
+            Dim SQL As String = "Select COUNT(id) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " And Technical_PassFail = 0 And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -443,7 +538,38 @@ Namespace core
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select COUNT(id) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " AND Technical_PassFail = 0"
+            Dim SQL As String = "Select COUNT(id) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " And Technical_PassFail = 0"
+            Command2.CommandType = CommandType.Text 'sets the type of the sql
+            Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
+            Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
+            If (Connection2.State = ConnectionState.Closed) Then
+                Connection2.Open()
+            End If
+            DR2 = Command2.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+            If DR2.HasRows = True Then 'Check whether the SqlDataReader has 1 or more rows
+                DR2.Read() 'The default position of the SqlDataReader is before the first record. Therefore, you must call Read to begin accessing any data.  The reader has moved down to the first row.
+                'Response.Write(DR("Cust_Name")) 'Writes a string to an HTTP response output stream.  In this case, just Cust_Name
+
+                If Not DR2.IsDBNull(DR2.GetOrdinal("Total")) Then
+                    retval = Convert.ToInt32(DR2("Total"))
+                End If
+
+            Else
+                Return retval
+
+
+            End If
+
+            Connection2.Close() 'closes the connection
+            DR2.Close() 'closes the reader
+            Return retval
+        End Function
+        Public Function GetCustomRejectLotTotal(ByVal CID As Integer, ByVal fromdate As DateTime, ByVal todate As DateTime) As Integer
+            Dim retval As Double = 0
+            Dim DR2 As SqlDataReader
+            Dim Command2 As New SqlCommand
+            Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
+            Dim SQL As String = "Select COUNT(id) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " And Technical_PassFail = 0 AND Inspection_Finished BETWEEN '" & fromdate & "' AND '" & todate & "'"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -474,7 +600,7 @@ Namespace core
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select (CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " AND Inspection_Finished >= DATEADD(month,-1,GETDATE())"
+            Dim SQL As String = "Select (CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -531,12 +657,43 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
+        Public Function GetCustomDHU(ByVal CID As Integer, ByVal fromdate As DateTime, ByVal todate As DateTime) As Double
+            Dim retval As Double = 0
+            Dim DR2 As SqlDataReader
+            Dim Command2 As New SqlCommand
+            Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
+            Dim SQL As String = "Select (CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " AND Inspection_Finished BETWEEN '" & fromdate & "' AND '" & todate & "'"
+            Command2.CommandType = CommandType.Text 'sets the type of the sql
+            Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
+            Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
+            If (Connection2.State = ConnectionState.Closed) Then
+                Connection2.Open()
+            End If
+            DR2 = Command2.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+            If DR2.HasRows = True Then 'Check whether the SqlDataReader has 1 or more rows
+                DR2.Read() 'The default position of the SqlDataReader is before the first record. Therefore, you must call Read to begin accessing any data.  The reader has moved down to the first row.
+                'Response.Write(DR("Cust_Name")) 'Writes a string to an HTTP response output stream.  In this case, just Cust_Name
+
+                If Not DR2.IsDBNull(DR2.GetOrdinal("Total")) Then
+                    retval = Math.Round(Convert.ToDouble(DR2("Total")), 2)
+                End If
+
+            Else
+                Return retval
+
+
+            End If
+
+            Connection2.Close() 'closes the connection
+            DR2.Close() 'closes the reader
+            Return retval
+        End Function
         Public Function GetMonthlyRejectionRate(ByVal CID As Integer) As Double
             Dim retval As Integer = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select (CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " AND Inspection_Finished >= DATEADD(month,-1,GETDATE())"
+            Dim SQL As String = "Select (CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -568,6 +725,37 @@ Namespace core
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
             Dim SQL As String = "Select (CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID
+            Command2.CommandType = CommandType.Text 'sets the type of the sql
+            Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
+            Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
+            If (Connection2.State = ConnectionState.Closed) Then
+                Connection2.Open()
+            End If
+            DR2 = Command2.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+            If DR2.HasRows = True Then 'Check whether the SqlDataReader has 1 or more rows
+                DR2.Read() 'The default position of the SqlDataReader is before the first record. Therefore, you must call Read to begin accessing any data.  The reader has moved down to the first row.
+                'Response.Write(DR("Cust_Name")) 'Writes a string to an HTTP response output stream.  In this case, just Cust_Name
+
+                If Not DR2.IsDBNull(DR2.GetOrdinal("Total")) Then
+                    retval = Math.Round(Convert.ToDouble(DR2("Total")), 2)
+                End If
+
+            Else
+                Return retval
+
+
+            End If
+
+            Connection2.Close() 'closes the connection
+            DR2.Close() 'closes the reader
+            Return retval
+        End Function
+        Public Function GetCustomRejectionRate(ByVal CID As Integer, ByVal fromdate As DateTime, ByVal todate As DateTime) As Double
+            Dim retval As Double = 0
+            Dim DR2 As SqlDataReader
+            Dim Command2 As New SqlCommand
+            Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
+            Dim SQL As String = "Select (CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " AND Inspection_Finished BETWEEN '" & fromdate & "' AND '" & todate & "'"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -655,9 +843,43 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function GetDataArray(ByVal array As List(Of Integer)) As List(Of String)
+        Public Function GetCustomLotAcceptance(ByVal CID As Integer, ByVal fromdate As DateTime, ByVal todate As DateTime) As String
+            Dim retval As String = "'0.00%'"
+            Dim DR2 As SqlDataReader
+            Dim Command2 As New SqlCommand
+            Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
+            Dim SQL As String = "Select Top (1) (CAST( (Select COUNT(id) from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " AND Technical_PassFail=1 AND Inspection_Finished BETWEEN '" & fromdate & "' AND '" & todate & "') AS Decimal(10,2))/CAST((Select COUNT(id) from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & "AND Inspection_Finished BETWEEN '" & fromdate & "' AND '" & todate & "') AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly"
+            Command2.CommandType = CommandType.Text 'sets the type of the sql
+            Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
+            Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
+            If (Connection2.State = ConnectionState.Closed) Then
+                Connection2.Open()
+            End If
+            DR2 = Command2.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+            If DR2.HasRows = True Then 'Check whether the SqlDataReader has 1 or more rows
+                DR2.Read() 'The default position of the SqlDataReader is before the first record. Therefore, you must call Read to begin accessing any data.  The reader has moved down to the first row.
+                'Response.Write(DR("Cust_Name")) 'Writes a string to an HTTP response output stream.  In this case, just Cust_Name
+
+                If Not DR2.IsDBNull(DR2.GetOrdinal("Total")) Then
+                    retval = "'" + Convert.ToString(Math.Round(Convert.ToDouble(DR2("Total")), 2)) + "%'"
+                End If
+
+            Else
+                Return retval
+
+
+            End If
+
+            Connection2.Close() 'closes the connection
+            DR2.Close() 'closes the reader
+            Return retval
+        End Function
+        Public Function GetDataArray(ByVal array As List(Of Integer), ByVal fromDate As String, ByVal toDate As String) As List(Of String)
             '{ id: "1", Facility: "Thomaston", Time_Period: "Past 30 Days", No_of_Defects: 100, No_of_Rejects: 1, No_of_Inspections: 10, No_of_Rejected_Lots: 12, DHU: 0.55, Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: { Facility: { rowspan: "3" } } },
             Dim retval As New List(Of String)()
+            Dim startDate As DateTime = Convert.ToDateTime(fromDate)
+            Dim oDate As DateTime = Convert.ToDateTime(toDate)
+
             For Each CID As Integer In array
 
 
@@ -674,7 +896,7 @@ Namespace core
                     retval.Add("{" + Top + "}")
                     Dim Mid As String = String.Format("Facility: '{0}', Time_Period: 'Past Year', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", DR.GetString(0), GetYearlyDefectTotal(CID), GetYearlyInspectionTotal(CID), GetYearlyRejectTotal(CID), GetYearlyRejectLotTotal(CID), GetYearlyDHU(CID), GetYearlyRejectionRate(CID), GetYearlyLotAcceptance(CID))
                     retval.Add("{" + Mid + "}")
-                    Dim Bottom As String = String.Format("Facility: '{0}', Time_Period: 'Custom', No_of_Defects: '100', No_of_Rejects: '1', No_of_Inspections: '10', No_of_Rejected_Lots: '12', DHU: '0.55', Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: {{ Facility: {{ display: 'none' }} }}", DR.GetString(0))
+                    Dim Bottom As String = String.Format("Facility: '{0}', Time_Period: 'Custom', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", DR.GetString(0), GetCustomDefectTotal(CID, startDate, oDate), GetCustomInspectionTotal(CID, startDate, oDate), GetCustomRejectTotal(CID, startDate, oDate), GetCustomRejectLotTotal(CID, startDate, oDate), GetCustomDHU(CID, startDate, oDate), GetCustomRejectionRate(CID, startDate, oDate), GetCustomLotAcceptance(CID, startDate, oDate))
                     retval.Add("{" + Bottom + "}")
                 End If
                 Connection.Close()

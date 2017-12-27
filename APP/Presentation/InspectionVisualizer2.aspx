@@ -175,6 +175,8 @@
 
     <script type="text/javascript">
         var ScatterPlotJson;
+        var todate;
+        var fromdate;
         var DefectMasterHistogram;
         var $Todateval;
         var $Fromdateval;
@@ -413,7 +415,9 @@
                 console.log("selList", selList);
                 if (selList.length > 0) {
                     $locSelect.val(selList).trigger("change");
-                    datahandler.LocationChangeEvent(selList);  
+                    console.log(fromdate);
+                    console.log(todate);
+                    datahandler.LocationChangeEvent(selList, fromdate, todate);  
                 } else {
                     $('#MainGrid').jqGrid("clearGridData")
                     $('#MainGrid').trigger('reloadGrid');
@@ -429,7 +433,9 @@
                 });
                 if (selList.length > 0) {
                     $locSelect.val(selList).trigger("change");
-                    datahandler.LocationChangeEvent(selList);
+                    console.log(fromdate);
+                    console.log(todate);
+                    datahandler.LocationChangeEvent(selList, fromdate, todate);
                 } else {
                     $('#MainGrid').jqGrid("clearGridData")
                     $('#MainGrid').trigger('reloadGrid');
@@ -694,6 +700,7 @@
                 dateChanged: function (e, data) {
                     var formatted_Fromdate = (data.date.getMonth() + 1) + "/" + data.date.getDate() + "/" + data.date.getFullYear();
                     FilterSource = 'PageFilter';
+                    fromdate = formatted_Fromdate;
                     $("#MainContent_DateFrom_Hidden").val(formatted_Fromdate);
                     $Fromdateval = formatted_Fromdate;
                     LineGraphldcnt = 0;
@@ -707,6 +714,7 @@
                 dateFormat: 'd',
                 dateChanged: function (e, data) {
                     var formatted_Todate = (data.date.getMonth() + 1) + "/" + data.date.getDate() + "/" + data.date.getFullYear();
+                    todate = formatted_Todate;
                     FilterSource = 'PageFilter';
                     $("#MainContent_DateTo_Hidden").val(formatted_Todate);
                     $Todateval = formatted_Todate;
@@ -2502,13 +2510,13 @@
                 //$("#defectCarousel").empty();
 
             },
-            LocationChangeEvent: function (cidArray) {
+            LocationChangeEvent: function (cidArray, fromdate, todate) {
                 console.log('cidArray:' + cidArray);
                 //alert('Location Changed!');
                 $.ajax({
                     url: "<%=Session("BaseUri")%>" + '/handlers/Presentation/SPC_InspectionVisualizer.ashx',
                     type: 'GET',
-                    data: { method: 'GetDataArray', args: {array: cidArray} },
+                    data: { method: 'GetDataArray', args: {array: cidArray, from: fromdate, toDate: todate} },
                     success: function (data) {
                         mydata = [];
                         console.log(data);
