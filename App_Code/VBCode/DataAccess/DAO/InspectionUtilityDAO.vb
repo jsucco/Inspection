@@ -874,7 +874,7 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function GetDataArray(ByVal array As List(Of Integer), ByVal fromDate As String, ByVal toDate As String, ByVal DN As String) As List(Of String)
+        Public Function GetDataArray(ByVal array As List(Of Integer), ByVal fromDate As String, ByVal toDate As String, ByVal DN As String, ByVal WO As String) As List(Of String)
             '{ id: "1", Facility: "Thomaston", Time_Period: "Past 30 Days", No_of_Defects: 100, No_of_Rejects: 1, No_of_Inspections: 10, No_of_Rejected_Lots: 12, DHU: 0.55, Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: { Facility: { rowspan: "3" } } },
             Dim retval As New List(Of String)()
             Dim startDate As DateTime = Convert.ToDateTime(fromDate)
@@ -882,6 +882,9 @@ Namespace core
             Dim WhereString As String = " AND Inspection_Finished BETWEEN '" & startDate & "' AND '" & oDate & "'"
             If DN <> "ALL" Then
                 WhereString = WhereString & " AND DataNo = '" & DN & "'"
+            End If
+            If WO <> "ALL" Then
+                WhereString = WhereString & " AND JobNumber = '" & WO & "'"
             End If
             For Each CID As Integer In array
 
