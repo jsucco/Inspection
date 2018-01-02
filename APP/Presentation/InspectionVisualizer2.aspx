@@ -7,14 +7,145 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
     <style type="text/css">
+        .ui-widget-content td {
+            font-size: 1.2em;
+        }
+
         .l1 {
             padding-left: 1em;
+        }
+
+        .loading {
+            position: fixed;
+            z-index: 999;
+            height: 2em;
+            width: 2em;
+            overflow: show;
+            margin: auto;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+        }
+
+            /* Transparent Overlay */
+            .loading:before {
+                content: '';
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.3);
+            }
+
+            /* :not(:required) hides these rules from IE9 and below */
+            .loading:not(:required) {
+                /* hide "loading..." text */
+                font: 0/0 a;
+                color: transparent;
+                text-shadow: none;
+                background-color: transparent;
+                border: 0;
+            }
+
+                .loading:not(:required):after {
+                    content: '';
+                    display: block;
+                    font-size: 10px;
+                    width: 1em;
+                    height: 1em;
+                    margin-top: -0.5em;
+                    -webkit-animation: spinner 1500ms infinite linear;
+                    -moz-animation: spinner 1500ms infinite linear;
+                    -ms-animation: spinner 1500ms infinite linear;
+                    -o-animation: spinner 1500ms infinite linear;
+                    animation: spinner 1500ms infinite linear;
+                    border-radius: 0.5em;
+                    -webkit-box-shadow: rgba(0, 0, 0, 0.75) 1.5em 0 0 0, rgba(0, 0, 0, 0.75) 1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) 0 1.5em 0 0, rgba(0, 0, 0, 0.75) -1.1em 1.1em 0 0, rgba(0, 0, 0, 0.5) -1.5em 0 0 0, rgba(0, 0, 0, 0.5) -1.1em -1.1em 0 0, rgba(0, 0, 0, 0.75) 0 -1.5em 0 0, rgba(0, 0, 0, 0.75) 1.1em -1.1em 0 0;
+                    box-shadow: rgba(0, 0, 0, 0.75) 1.5em 0 0 0, rgba(0, 0, 0, 0.75) 1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) 0 1.5em 0 0, rgba(0, 0, 0, 0.75) -1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) -1.5em 0 0 0, rgba(0, 0, 0, 0.75) -1.1em -1.1em 0 0, rgba(0, 0, 0, 0.75) 0 -1.5em 0 0, rgba(0, 0, 0, 0.75) 1.1em -1.1em 0 0;
+                }
+
+        /* Animation */
+
+        @-webkit-keyframes spinner {
+            0% {
+                -webkit-transform: rotate(0deg);
+                -moz-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+                -o-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+                -moz-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                -o-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
+        @-moz-keyframes spinner {
+            0% {
+                -webkit-transform: rotate(0deg);
+                -moz-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+                -o-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+                -moz-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                -o-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
+        @-o-keyframes spinner {
+            0% {
+                -webkit-transform: rotate(0deg);
+                -moz-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+                -o-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+                -moz-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                -o-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spinner {
+            0% {
+                -webkit-transform: rotate(0deg);
+                -moz-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+                -o-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+                -moz-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                -o-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
         }
     </style>
     <div style="position: absolute; top: 69px; z-index: 1000" id="backdiv">
         <a href="<%=Session("BaseUri")%>/APP/APR_SiteEntry.aspx" title="Back to MENU" id="menuLnkBack">M</a>
     </div>
-
+    <div class="loading" id="loading" style="display: none;">Loading&#8230;</div>
+    
     <div style="position: absolute; left: 50px; width: 75%; height: 150px;">
         <div id="LcustomersSlider" style="top: 10px; left: 100px; display: none; position: relative; height: 150px;">
             <div id="LcustomersWrapper" style="width: 1690px;" class="">
@@ -142,35 +273,35 @@
         </div>
     </div>
 
-    </asp:Content>
+</asp:Content>
 
-    <asp:Content ID="Content3" ContentPlaceHolderID="ControlOptions" runat="Server">
-        <link href="../../Styles/InspectionVisualizer.css" rel="stylesheet" type="text/css" />
-        <link href="http://cdn.wijmo.com/themes/aristo/jquery-wijmo.css" rel="stylesheet" type="text/css" />
-        <script src="http://underscorejs.org/underscore-min.js"></script>
-        <script src="http://code.jquery.com/jquery-1.11.1.min.js" type="text/javascript"></script>
-        <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.min.js" type="text/javascript"></script>
-        <link href="../../Styles/ui.jqgrid.css" rel="stylesheet" type="text/css" />
-        <link href="http://cdn.wijmo.com/jquery.wijmo-pro.all.3.20153.83.min.css" rel="stylesheet" type="text/css" />
-        <%--<script src="http://cdn.wijmo.com/jquery.wijmo-open.all.3.20153.83.min.js" type="text/javascript"></script>
+<asp:Content ID="Content3" ContentPlaceHolderID="ControlOptions" runat="Server">
+    <link href="../../Styles/InspectionVisualizer.css" rel="stylesheet" type="text/css" />
+    <link href="http://cdn.wijmo.com/themes/aristo/jquery-wijmo.css" rel="stylesheet" type="text/css" />
+    <script src="http://underscorejs.org/underscore-min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.min.js" type="text/javascript"></script>
+    <link href="../../Styles/ui.jqgrid.css" rel="stylesheet" type="text/css" />
+    <link href="http://cdn.wijmo.com/jquery.wijmo-pro.all.3.20153.83.min.css" rel="stylesheet" type="text/css" />
+    <%--<script src="http://cdn.wijmo.com/jquery.wijmo-open.all.3.20153.83.min.js" type="text/javascript"></script>
 <script src="http://cdn.wijmo.com/jquery.wijmo-pro.all.3.20153.83.min.js" type="text/javascript"></script>
 <script src="http://cdn.wijmo.com/interop/wijmo.data.ajax.3.20153.83.js" type="text/javascript"></script>--%>
-        <asp:PlaceHolder runat="server">
-            <%: Scripts.Render("~/bundles/InspectionVisualizer") %>
-        </asp:PlaceHolder>
-        <%--<script src="../../Scripts/grid.locale-en.js" type="text/javascript"></script>
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/bundles/InspectionVisualizer") %>
+    </asp:PlaceHolder>
+    <%--<script src="../../Scripts/grid.locale-en.js" type="text/javascript"></script>
 <script src="../../Scripts/jquery.jqGrid.min.js" type="text/javascript"></script>--%>
-        <%--<script src="../../Scripts/select2/select2.min.js" type="text/javascript" ></script>--%>
-        <link href="../../Styles/select2/select2.css" rel="stylesheet" />
-        <style type="text/css">
-            .ui-widget-overlay {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 1350px;
-            }
-        </style>
+    <%--<script src="../../Scripts/select2/select2.min.js" type="text/javascript" ></script>--%>
+    <link href="../../Styles/select2/select2.css" rel="stylesheet" />
+    <style type="text/css">
+        .ui-widget-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1350px;
+        }
+    </style>
     <script src="../../Scripts/Gcharts/jsapi.js"></script>
 
     <script type="text/javascript">
@@ -246,8 +377,9 @@
 
             $("#PageType").text("Inspection")
                 .attr('href', '../Mob/SPCInspectionInput.aspx');
-            $("#loading").toggle();
+            todate = '<%=todate%>';
             $Todateval = '<%=todate%>';
+            fromdate = '<%=fromdate%>';
             $Fromdateval = '<%=fromdate%>';
             exytd_DateFrom_fc = '<%=ytdfromdate%>';
             exmtd_DateFrom_fc = '<%=mtdfromdate%>';
@@ -260,6 +392,7 @@
             LocationNamesDrop = '<%=LocationNamesDrop%>';
             DefectTypes = '<%=DefectTypes%>';
             $("article").css("height", (2 * screen.availHeight).toString() + "px");
+            var selList = ["661", "662", "482", "486", "485", "578", "113", "112", "111", "1001", "115", "114", "627", "590", "643", "488"];
             var numi = document.getElementById('Locations');
             var html = [];
             var fchtml = [];
@@ -278,16 +411,16 @@
             //    { id: "5", Facility: "Carolina", Time_Period: "Past 12 Months", No_of_Defects: 100, No_of_Rejects: 1, No_of_Inspections: 10, No_of_Rejected_Lots: 12, DHU: 0.55, Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: { Facility: { display: "none" } } },
             //    { id: "6", Facility: "Carolina", Time_Period: "Custom", No_of_Defects: 100, No_of_Rejects: 1, No_of_Inspections: 10, No_of_Rejected_Lots: 12, DHU: 0.55, Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: { Facility: { display: "none" } } },
             //];
-            
-                arrtSetting = function (rowId, val, rawObject, cm) {
-                    var attr = rawObject.attr[cm.name], result;
-                    if (attr.rowspan) {
-                        result = ' rowspan=' + '"' + attr.rowspan + '"';
-                    } else if (attr.display) {
-                        result = ' style="display:' + attr.display + '"';
-                    }
-                    return result;
-                };
+
+            arrtSetting = function (rowId, val, rawObject, cm) {
+                var attr = rawObject.attr[cm.name], result;
+                if (attr.rowspan) {
+                    result = ' rowspan=' + '"' + attr.rowspan + '"';
+                } else if (attr.display) {
+                    result = ' style="display:' + attr.display + '"';
+                }
+                return result;
+            };
 
             $("#MainGrid").jqGrid({
                 datatype: 'local',
@@ -309,7 +442,7 @@
                 //pager: '#pager',
                 gridview: true,
                 hoverrows: false,
-                
+
                 ignoreCase: true,
                 viewrecords: true,
                 height: '100%',
@@ -335,7 +468,7 @@
                     fchtml.push('<option value = "' + value.CID.trim() + '" class="l1">' + value.text.trim() + ' (' + value.Abreviation.trim() + ')</option>');
                     fcid.push(value.CID.trim());
                 }
-                else if (value.text.trim() === 'Augusta' || value.text.trim() === 'Carolina' || value.text.trim() === 'Thomaston' || value.Abreviation.trim() === 'PCE' || value.Abreviation.trim() === 'STM' || value.Abreviation.trim() === 'SAT'){
+                else if (value.text.trim() === 'Augusta' || value.text.trim() === 'Carolina' || value.text.trim() === 'Thomaston' || value.Abreviation.trim() === 'PCE' || value.Abreviation.trim() === 'STM' || value.Abreviation.trim() === 'SAT') {
                     dchtml.push('<option value = "' + value.CID.trim() + '" class="l1">' + value.text.trim() + ' (' + value.Abreviation.trim() + ')</option>');
                     dcid.push(value.CID.trim());
                 }
@@ -343,7 +476,7 @@
                     ihtml.push('<option value = "' + value.CID.trim() + '" class="l1">' + value.text.trim() + ' (' + value.Abreviation.trim() + ')</option>');
                     iid.push(value.CID.trim());
                 }
-                else if (value.Abreviation.trim() !== 'ALL'){
+                else if (value.Abreviation.trim() !== 'ALL') {
                     dhtml.push('<option value = "' + value.CID.trim() + '" class="l1">' + value.text.trim() + ' (' + value.Abreviation.trim() + ')</option>');
                     did.push(value.CID.trim());
                 }
@@ -374,9 +507,13 @@
                     return $wrapper;
                 }
             });
+            document.getElementById("loading").style.display = "block";
+            datahandler.LocationChangeEvent(selList, fromdate, todate);
+            $locSelect.val(selList).trigger("change");
             $locSelect.on("select2:select", function (e) {
+                document.getElementById("loading").style.display = "block";
                 var selectedItems = e.currentTarget.selectedOptions;
-                var selList = [];
+                selList = [];
                 var combined;
                 var selval = e.params.data.id;
                 $.each(selectedItems, function (key, value) {
@@ -385,12 +522,12 @@
                     console.log(optval);
                     console.log(opttext);
                     if (opttext === "Global Manufacturing") {
-                        selList=selList.concat(fcid);
+                        selList = selList.concat(fcid);
                         console.log(fcid);
 
                     }
                     else if (opttext === "Domestic Manufacturing") {
-                        selList=selList.concat(dcid);
+                        selList = selList.concat(dcid);
                         console.log(dcid);
 
                     }
@@ -417,16 +554,17 @@
                     $locSelect.val(selList).trigger("change");
                     console.log(fromdate);
                     console.log(todate);
-                    datahandler.LocationChangeEvent(selList, fromdate, todate);  
+                    datahandler.LocationChangeEvent(selList, fromdate, todate);
                 } else {
                     $('#MainGrid').jqGrid("clearGridData")
                     $('#MainGrid').trigger('reloadGrid');
                 }
-               
+                
             });
             $locSelect.on("select2:unselect", function (e) {
+                document.getElementById("loading").style.display = "block";
                 var selectedItems = e.currentTarget.selectedOptions;
-                var selList = [];
+                selList = [];
                 $.each(selectedItems, function (key, value) {
                     var optval = $(value).val();
                     selList.push(optval);
@@ -440,6 +578,7 @@
                     $('#MainGrid').jqGrid("clearGridData")
                     $('#MainGrid').trigger('reloadGrid');
                 }
+                
             });
             //$("#Locations").html(html.join(''));
             var html = [];
@@ -647,7 +786,7 @@
                         $('#Graph2Holder').css("display", "none");
                         $('#Graph1Holder').css("display", "Block");
                         if (LineGraphldcnt == 0) {
-                            $('#loading').toggle();
+                            //$('#loading').toggle();
                             $('#linegraph1').empty();
                             datahandler.GetDHULine();
                         }
@@ -657,7 +796,7 @@
                         $('#Graph1Holder').css("display", "none");
                         $('#Graph2Holder').css("display", "Block");
                         if (BreakOutldcnt == 0) {
-                            $('#loading').toggle();
+                            //$('#loading').toggle();
                             $('#linegraph2').empty();
                             datahandler.GetDefectCountBreakdown();
                         }
@@ -698,6 +837,7 @@
             $("#TxtDateFrom").wijinputdate({
                 dateFormat: 'd',
                 dateChanged: function (e, data) {
+                    document.getElementById("loading").style.display = "block";
                     var formatted_Fromdate = (data.date.getMonth() + 1) + "/" + data.date.getDate() + "/" + data.date.getFullYear();
                     FilterSource = 'PageFilter';
                     fromdate = formatted_Fromdate;
@@ -705,6 +845,7 @@
                     $Fromdateval = formatted_Fromdate;
                     LineGraphldcnt = 0;
                     BreakOutldcnt = 0;
+                    datahandler.LocationChangeEvent(selList, fromdate, todate);
                     datahandler.FilterEvent(formatted_Fromdate, "Date");
                 },
                 date: $Fromdateval
@@ -713,6 +854,7 @@
             $("#TxtDateTo").wijinputdate({
                 dateFormat: 'd',
                 dateChanged: function (e, data) {
+                    document.getElementById("loading").style.display = "block";
                     var formatted_Todate = (data.date.getMonth() + 1) + "/" + data.date.getDate() + "/" + data.date.getFullYear();
                     todate = formatted_Todate;
                     FilterSource = 'PageFilter';
@@ -720,6 +862,7 @@
                     $Todateval = formatted_Todate;
                     LineGraphldcnt = 0;
                     BreakOutldcnt = 0;
+                    datahandler.LocationChangeEvent(selList, fromdate, todate);
                     datahandler.FilterEvent(formatted_Todate, "Date");
                 },
                 date: $Todateval
@@ -2170,7 +2313,7 @@
                 $('#linegraph2').empty();
                 var chart = new google.visualization.BarChart(document.getElementById('linegraph2'));
                 chart.draw(data, options);
-                $('#loading').toggle();
+                //$('#loading').toggle();
             }
         };
         function FixJson(str) {
@@ -2472,7 +2615,7 @@
                     case 'Overview':
                         OwFilterFlag = true;
                         var selectgr = $('#select-graph').val();
-                        $('#loading').toggle();
+                        //$('#loading').toggle();
                         if (selectgr == 'LineGraph') {
                             $('#linegraph1').empty();
                             datahandler.GetDHULine();
@@ -2516,7 +2659,7 @@
                 $.ajax({
                     url: "<%=Session("BaseUri")%>" + '/handlers/Presentation/SPC_InspectionVisualizer.ashx',
                     type: 'GET',
-                    data: { method: 'GetDataArray', args: {array: cidArray, from: fromdate, toDate: todate} },
+                    data: { method: 'GetDataArray', args: { array: cidArray, from: fromdate, toDate: todate } },
                     success: function (data) {
                         mydata = [];
                         console.log(data);
@@ -2528,6 +2671,7 @@
                         $('#MainGrid').jqGrid("clearGridData");
                         $('#MainGrid').jqGrid('setGridParam', { data: mydata });
                         $('#MainGrid').trigger('reloadGrid');
+                        document.getElementById("loading").style.display = "none";
                     },
                     error: function (a, b, c) {
                         alert(c);

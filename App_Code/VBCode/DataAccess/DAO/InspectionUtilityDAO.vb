@@ -888,6 +888,7 @@ Namespace core
                 Command.CommandType = CommandType.Text
                 Command.Connection = Connection
                 Command.CommandText = SQL
+                Command.CommandTimeout = 0
                 Connection.Open()
                 DR = Command.ExecuteReader
                 If DR.HasRows = True Then
