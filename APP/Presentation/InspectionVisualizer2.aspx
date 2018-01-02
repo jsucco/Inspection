@@ -508,7 +508,7 @@
                 }
             });
             document.getElementById("loading").style.display = "block";
-            datahandler.LocationChangeEvent(selList, fromdate, todate);
+            datahandler.LocationChangeEvent(selList, fromdate, todate, $DataNo);
             $locSelect.val(selList).trigger("change");
             $locSelect.on("select2:select", function (e) {
                 document.getElementById("loading").style.display = "block";
@@ -554,7 +554,7 @@
                     $locSelect.val(selList).trigger("change");
                     console.log(fromdate);
                     console.log(todate);
-                    datahandler.LocationChangeEvent(selList, fromdate, todate);
+                    datahandler.LocationChangeEvent(selList, fromdate, todate, $DataNo);
                 } else {
                     $('#MainGrid').jqGrid("clearGridData")
                     $('#MainGrid').trigger('reloadGrid');
@@ -573,12 +573,18 @@
                     $locSelect.val(selList).trigger("change");
                     console.log(fromdate);
                     console.log(todate);
-                    datahandler.LocationChangeEvent(selList, fromdate, todate);
+                    datahandler.LocationChangeEvent(selList, fromdate, todate, $DataNo);
                 } else {
                     $('#MainGrid').jqGrid("clearGridData")
                     $('#MainGrid').trigger('reloadGrid');
                 }
                 
+            });
+            $("#select-DataNo").change(function () {
+                $DataNo = $("#select-DataNo :selected").text();
+                console.log($DataNo);
+                document.getElementById("loading").style.display = "block";
+                datahandler.LocationChangeEvent(selList, fromdate, todate, $DataNo);
             });
             //$("#Locations").html(html.join(''));
             var html = [];
@@ -845,7 +851,7 @@
                     $Fromdateval = formatted_Fromdate;
                     LineGraphldcnt = 0;
                     BreakOutldcnt = 0;
-                    datahandler.LocationChangeEvent(selList, fromdate, todate);
+                    datahandler.LocationChangeEvent(selList, fromdate, todate, $DataNo);
                     datahandler.FilterEvent(formatted_Fromdate, "Date");
                 },
                 date: $Fromdateval
@@ -862,7 +868,7 @@
                     $Todateval = formatted_Todate;
                     LineGraphldcnt = 0;
                     BreakOutldcnt = 0;
-                    datahandler.LocationChangeEvent(selList, fromdate, todate);
+                    datahandler.LocationChangeEvent(selList, fromdate, todate, $DataNo);
                     datahandler.FilterEvent(formatted_Todate, "Date");
                 },
                 date: $Todateval
@@ -2653,13 +2659,13 @@
                 //$("#defectCarousel").empty();
 
             },
-            LocationChangeEvent: function (cidArray, fromdate, todate) {
+            LocationChangeEvent: function (cidArray, fromdate, todate, DataNo) {
                 console.log('cidArray:' + cidArray);
                 //alert('Location Changed!');
                 $.ajax({
                     url: "<%=Session("BaseUri")%>" + '/handlers/Presentation/SPC_InspectionVisualizer.ashx',
                     type: 'GET',
-                    data: { method: 'GetDataArray', args: { array: cidArray, from: fromdate, toDate: todate } },
+                    data: { method: 'GetDataArray', args: { array: cidArray, from: fromdate, toDate: todate, DN: DataNo} },
                     success: function (data) {
                         mydata = [];
                         console.log(data);
