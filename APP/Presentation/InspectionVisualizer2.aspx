@@ -145,7 +145,7 @@
         <a href="<%=Session("BaseUri")%>/APP/APR_SiteEntry.aspx" title="Back to MENU" id="menuLnkBack">M</a>
     </div>
     <div class="loading" id="loading" style="display: none;">Loading&#8230;</div>
-    
+
     <div style="position: absolute; left: 50px; width: 75%; height: 150px;">
         <div id="LcustomersSlider" style="top: 10px; left: 100px; display: none; position: relative; height: 150px;">
             <div id="LcustomersWrapper" style="width: 1690px;" class="">
@@ -343,6 +343,7 @@
         var DefectPictureArrayF = [];
         var selectFiltervalues = [{ col: "id", val: "ALL" }, { col: "JobNumber", val: "ALL" }, { col: "UnitDesc", val: "ALL" }, { col: "Name", val: "ALL" }, { col: "Technical_PassFail", val: "ALL" }];
         var selectSpecFiltervalues = [{ col: "id", val: "ALL" }, { col: "JobNumber", val: "ALL" }, { col: "UnitDesc", val: "ALL" }, { col: "DataNo", val: "ALL" }];
+        var selList = ["661", "662", "482", "486", "485", "578", "113", "112", "111", "1001", "115", "114", "627", "590", "643", "488"];
         var startX;
         var initialMouseX;
         var draggedObject;
@@ -392,7 +393,7 @@
             LocationNamesDrop = '<%=LocationNamesDrop%>';
             DefectTypes = '<%=DefectTypes%>';
             $("article").css("height", (2 * screen.availHeight).toString() + "px");
-            var selList = ["661", "662", "482", "486", "485", "578", "113", "112", "111", "1001", "115", "114", "627", "590", "643", "488"];
+            
             var numi = document.getElementById('Locations');
             var html = [];
             var fchtml = [];
@@ -403,6 +404,7 @@
             var fcid = [];
             var iid = [];
             var did = [];
+            
             //var mydata = [
             //    { id: "1", Facility: "Thomaston", Time_Period: "Past 30 Days", No_of_Defects: 100, No_of_Rejects: 1, No_of_Inspections: 10, No_of_Rejected_Lots: 12, DHU: 0.55, Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: { Facility: { rowspan: "3" } } },
             //    { id: "2", Facility: "Thomaston", Time_Period: "Past 12 Months", No_of_Defects: 100, No_of_Rejects: 1, No_of_Inspections: 10, No_of_Rejected_Lots: 12, DHU: 0.55, Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: { Facility: { display: "none" } } },
@@ -421,13 +423,13 @@
                 }
                 return result;
             };
-
+            var rowsToColor = [];
             $("#MainGrid").jqGrid({
                 datatype: 'local',
                 colNames: ['Facility', 'Time_Period', 'No. of Defects', 'No. of Rejects', 'No. of Inspections', 'No. of Rejected Lots', 'DHU', 'Reject Rate', 'Lot Acceptance'],
                 colModel: [
                     { name: 'Facility', width: 200, align: 'center', cellattr: arrtSetting },
-                    { name: 'Time_Period', width: 200 },
+                    { name: 'Time_Period', width: 200, formatter: rowColorFormatter },
                     { name: 'No_of_Defects', width: 200 },
                     { name: 'No_of_Rejects', width: 200 },
                     { name: 'No_of_Inspections', width: 200 },
@@ -456,8 +458,21 @@
                     var colName = colNames[iCol];
                     var colVal = $(this).jqGrid("getCell", rowid, iCol);
                     alert('the value of this cell is ' + colVal);
+                },
+                gridComplete: function () {
+                    for (var i = 0; i < rowsToColor.length; i++) {
+
+                        $("#" + rowsToColor[i]).find("td").css("background-color", "LawnGreen");
+
+                    }
                 }
+
             });
+            function rowColorFormatter(cellValue, options, rowObject) {
+                if (cellValue === 'Custom')
+                    rowsToColor[rowsToColor.length] = options.rowId;
+                return cellValue;
+            }
             fchtml.push('<option value="000" >Global Manufacturing</option>');
             dchtml.push('<option value="001" >Domestic Manufacturing</option>');
             dhtml.push('<option value="002" >Distribution</option>');
@@ -508,7 +523,7 @@
                 }
             });
             document.getElementById("loading").style.display = "block";
-            datahandler.LocationChangeEvent(selList, fromdate, todate, $DataNo, $WorkOrder);
+            datahandler.LocationChangeEvent(selList, fromdate, todate, $DataNo, $WorkOrder, $AuditType);
             $locSelect.val(selList).trigger("change");
             $locSelect.on("select2:select", function (e) {
                 document.getElementById("loading").style.display = "block";
@@ -554,12 +569,14 @@
                     $locSelect.val(selList).trigger("change");
                     console.log(fromdate);
                     console.log(todate);
-                    datahandler.LocationChangeEvent(selList, fromdate, todate, $DataNo, $WorkOrder);
+                    
+                    datahandler.LocationChangeEvent(selList, fromdate, todate, $DataNo, $WorkOrder, $AuditType);
+                   
                 } else {
                     $('#MainGrid').jqGrid("clearGridData")
                     $('#MainGrid').trigger('reloadGrid');
                 }
-                
+
             });
             $locSelect.on("select2:unselect", function (e) {
                 document.getElementById("loading").style.display = "block";
@@ -573,24 +590,32 @@
                     $locSelect.val(selList).trigger("change");
                     console.log(fromdate);
                     console.log(todate);
-                    datahandler.LocationChangeEvent(selList, fromdate, todate, $DataNo, $WorkOrder);
+                    
+                    datahandler.LocationChangeEvent(selList, fromdate, todate, $DataNo, $WorkOrder, $AuditType);
+                    
                 } else {
                     $('#MainGrid').jqGrid("clearGridData")
                     $('#MainGrid').trigger('reloadGrid');
                 }
-                
+
             });
             $("#select-DataNo").change(function () {
                 $DataNo = $("#select-DataNo :selected").text();
                 console.log($DataNo);
                 document.getElementById("loading").style.display = "block";
-                datahandler.LocationChangeEvent(selList, fromdate, todate, $DataNo, $WorkOrder);
+                datahandler.LocationChangeEvent(selList, fromdate, todate, $DataNo, $WorkOrder, $AuditType);
             });
             $("#select-WorkOrder").change(function () {
                 $WorkOrder = $("#select-WorkOrder :selected").text();
                 console.log($WorkOrder);
                 document.getElementById("loading").style.display = "block";
-                datahandler.LocationChangeEvent(selList, fromdate, todate, $DataNo, $WorkOrder);
+                datahandler.LocationChangeEvent(selList, fromdate, todate, $DataNo, $WorkOrder, $AuditType);
+            });
+            $("#select-AuditType").change(function () {
+                $AuditType = $("#select-AuditType :selected").text();
+                console.log($AuditType);
+                document.getElementById("loading").style.display = "block";
+                datahandler.LocationChangeEvent(selList, fromdate, todate, $DataNo, $WorkOrder, $AuditType);
             });
             //$("#Locations").html(html.join(''));
             var html = [];
@@ -857,7 +882,7 @@
                     $Fromdateval = formatted_Fromdate;
                     LineGraphldcnt = 0;
                     BreakOutldcnt = 0;
-                    datahandler.LocationChangeEvent(selList, fromdate, todate, $DataNo, $WorkOrder);
+                    datahandler.LocationChangeEvent(selList, fromdate, todate, $DataNo, $WorkOrder, $AuditType);
                     datahandler.FilterEvent(formatted_Fromdate, "Date");
                 },
                 date: $Fromdateval
@@ -874,7 +899,7 @@
                     $Todateval = formatted_Todate;
                     LineGraphldcnt = 0;
                     BreakOutldcnt = 0;
-                    datahandler.LocationChangeEvent(selList, fromdate, todate, $DataNo, $WorkOrder);
+                    datahandler.LocationChangeEvent(selList, fromdate, todate, $DataNo, $WorkOrder, $AuditType);
                     datahandler.FilterEvent(formatted_Todate, "Date");
                 },
                 date: $Todateval
@@ -976,9 +1001,9 @@
             $("#tabs").wijtabs("select", 0);
             $("#Graphs .owl-item").css("height", ($('#tabs').height() - 125).toString() + "px")
             //datahandler.GetDefectImages("999");
-            datahandler.GetDHULine();
-            datahandler.GetDataNos();
-            datahandler.GetWorkOrders();
+            //datahandler.GetDHULine();
+            //datahandler.GetDataNos();
+            //datahandler.GetWorkOrders();
             //datahandler.GetREJLine();
             grids.RenderOvsgrid();
 
@@ -2621,8 +2646,8 @@
             },
             FilterEvent: function (value, field) {
                 //console.log(field + ' : ' + value); 
-                datahandler.GetDataNos();
-                datahandler.GetWorkOrders();
+                //datahandler.GetDataNos();
+                //datahandler.GetWorkOrders();
                 switch (SelectedTab) {
                     case 'Overview':
                         OwFilterFlag = true;
@@ -2665,13 +2690,13 @@
                 //$("#defectCarousel").empty();
 
             },
-            LocationChangeEvent: function (cidArray, fromdate, todate, DataNo, WorkOrder) {
+            LocationChangeEvent: function (cidArray, fromdate, todate, DataNo, WorkOrder, AuditType) {
                 console.log('cidArray:' + cidArray);
                 //alert('Location Changed!');
                 $.ajax({
                     url: "<%=Session("BaseUri")%>" + '/handlers/Presentation/SPC_InspectionVisualizer.ashx',
                     type: 'GET',
-                    data: { method: 'GetDataArray', args: { array: cidArray, from: fromdate, toDate: todate, DN: DataNo, WO: WorkOrder} },
+                    data: { method: 'GetDataArray', args: { array: cidArray, from: fromdate, toDate: todate, DN: DataNo, WO: WorkOrder, AT: AuditType } },
                     success: function (data) {
                         mydata = [];
                         console.log(data);
@@ -2683,6 +2708,8 @@
                         $('#MainGrid').jqGrid("clearGridData");
                         $('#MainGrid').jqGrid('setGridParam', { data: mydata });
                         $('#MainGrid').trigger('reloadGrid');
+                        datahandler.GetDataNos(fromdate, todate, cidArray, AuditType);
+                        datahandler.GetWorkOrders(fromdate, todate, cidArray, AuditType);
                         document.getElementById("loading").style.display = "none";
                     },
                     error: function (a, b, c) {
@@ -2873,11 +2900,11 @@
 
 
             },
-            GetWorkOrders: function () {
+            GetWorkOrders: function (FD, TD, cidArray, AT) {
                 $.ajax({
                     url: "<%=Session("BaseUri")%>" + '/handlers/Presentation/SPC_InspectionVisualizer.ashx',
                     type: 'GET',
-                    data: { method: 'GetWorkOrders', args: { fromdate: $Fromdateval, todate: $Todateval, LocArray: LocationsStringArray, AuditType: $AuditType } },
+                    data: { method: 'GetWorkOrders', args: { fromdate: FD, todate: TD, LocArray: cidArray, AuditType: AT } },
                     success: function (data) {
                         var json = $.parseJSON(data);
 
@@ -2903,11 +2930,11 @@
                 });
 
             },
-            GetDataNos: function () {
+            GetDataNos: function (FD, TD, cidArray, AT) {
                 $.ajax({
                     url: "<%=Session("BaseUri")%>" + '/handlers/Presentation/SPC_InspectionVisualizer.ashx',
                     type: 'GET',
-                    data: { method: 'GetDataNos', args: { fromdate: $Fromdateval, todate: $Todateval, LocArray: LocationsStringArray, AuditType: $AuditType } },
+                    data: { method: 'GetDataNos', args: { fromdate: FD, todate: TD, LocArray: cidArray, AuditType: AT } },
                     success: function (data) {
                         var json = $.parseJSON(data);
 
