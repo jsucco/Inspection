@@ -444,7 +444,45 @@
                 //pager: '#pager',
                 gridview: true,
                 hoverrows: false,
-
+                subGrid: true,
+                subGridRowColapsed: function (pID, id) {
+                    
+                },
+                subGridRowExpanded: function (subgrid_id, row_id) {
+                    var grid = $("#MainGrid");
+                    prase = new DOMParser();
+                    var rowdata = [$("#MainGrid #" + row_id).find("td[aria-describedby='MainGrid_Facility']").html(), $("#MainGrid #" + row_id).find("td[aria-describedby='MainGrid_Time_Period']").html()];
+                    console.log(rowdata);
+                    if (rowdata) {
+                        if (rowdata.length > 1) {
+                            subgridquerystr = "Facility=" + rowdata[0].trim() + "&Time_Period=" + rowdata[1];
+                            console.log(subgridquerystr);
+                        }
+                    }
+                    var subgrid_table_id;
+                    subgrid_table_id = subgrid_id + "_t";
+                    jQuery("#" + subgrid_id).html("<table id='" + subgrid_table_id + "' class='scroll'></table>");
+                    jQuery("#" + subgrid_table_id).jqGrid({
+                        url: "<%=Session("BaseUri")%>" + '/handlers/Presentation/MainGrid_SubgridLoad.ashx?' + subgridquerystr,
+                        datatype: "json",
+                        colNames: ['WorkRoom', 'No. of Defects', 'No. of Rejects', 'No. of Inspections', 'No. of Rejected Lots', 'DHU', 'Reject Rate', 'Lot Acceptance'],
+                        colModel: [
+                            { name: 'WorkRoom', width: 200 },
+                            { name: 'No_of_Defects', width: 200 },
+                            { name: 'No_of_Rejects', width: 200 },
+                            { name: 'No_of_Inspections', width: 200 },
+                            { name: 'No_of_Rejected_Lots', width: 200 },
+                            { name: 'DHU', width: 200 },
+                            { name: 'Reject_Rate', width: 200 },
+                            { name: 'Lot_Acceptance', width: 200 }
+                        ],
+                        rowNum: 20,
+                        sortname: 'num',
+                        sortorder: "asc",
+                        height: '100%'
+                    });
+                    jQuery("#" + subgrid_table_id).jqGrid('navGrid', { edit: false, add: false, del: false })
+                },
                 ignoreCase: true,
                 viewrecords: true,
                 height: '100%',

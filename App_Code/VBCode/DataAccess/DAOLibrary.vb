@@ -424,6 +424,16 @@ Namespace core
             Public Property DefectClass As String
             Public Property WorkRoom As String
         End Class
+        Public Class MainGridSubgrid
+            Public Property FacilityWorkroom As String
+            Public Property No_of_Defects As Integer
+            Public Property No_of_Rejects As Integer
+            Public Property No_of_Inspections As Integer
+            Public Property No_of_Rejected_Lots As Integer
+            Public Property DHU As Double
+            Public Property Reject_Rate As Double
+            Public Property Lot_Acceptance As String
+        End Class
         Public Class SpecsSubgrid
             Public Property SMid As Integer
             Public Property JobNumber As String

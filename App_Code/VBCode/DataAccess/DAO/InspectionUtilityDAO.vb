@@ -1999,7 +1999,22 @@ Namespace core
             Return returnlist2
 
         End Function
+        Public Function GetMainGridSubGrid(ByVal Facility As String, ByVal Time_Period As String) As List(Of SPCInspection.MainGridSubgrid)
+            Dim SQL As String
+            Dim returnlist As New List(Of SPCInspection.MainGridSubgrid)
+            Dim bmap As New BMappers(Of SPCInspection.MainGridSubgrid)
 
+            SQL = ""
+
+            Try
+                returnlist = bmap.GetInspectObject(SQL)
+            Catch ex As Exception
+
+            End Try
+
+            Return returnlist
+
+        End Function
         Public Function GetDefectMasterById(ByVal ijsid As Integer) As List(Of SPCInspection.DefectMasterSubgrid)
             Dim SQL As String
             Dim returnlist As New List(Of SPCInspection.DefectMasterSubgrid)
