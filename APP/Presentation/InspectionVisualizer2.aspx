@@ -467,7 +467,7 @@
                         datatype: "json",
                         colNames: ['WorkRoom', 'No. of Defects', 'No. of Rejects', 'No. of Inspections', 'No. of Rejected Lots', 'DHU', 'Reject Rate', 'Lot Acceptance'],
                         colModel: [
-                            { name: 'WorkRoom', width: 200 },
+                            { name: 'FacilityWorkroom', width: 200 },
                             { name: 'No_of_Defects', width: 200 },
                             { name: 'No_of_Rejects', width: 200 },
                             { name: 'No_of_Inspections', width: 200 },
@@ -479,7 +479,13 @@
                         rowNum: 20,
                         sortname: 'num',
                         sortorder: "asc",
-                        height: '100%'
+                        height: '100%',
+                        loadonce: true,
+                        postData: {
+                            SessionId: function () {
+                                return SessionId;
+                            }
+                        },
                     });
                     jQuery("#" + subgrid_table_id).jqGrid('navGrid', { edit: false, add: false, del: false })
                 },
