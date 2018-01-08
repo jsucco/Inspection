@@ -640,6 +640,7 @@
                 } else {
                     $('#MainGrid').jqGrid("clearGridData")
                     $('#MainGrid').trigger('reloadGrid');
+                    document.getElementById("loading").style.display = "none";
                 }
 
             });
