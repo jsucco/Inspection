@@ -451,11 +451,11 @@
                 subGridRowExpanded: function (subgrid_id, row_id) {
                     var grid = $("#MainGrid");
                     prase = new DOMParser();
-                    var rowdata = [$("#MainGrid #" + row_id).find("td[aria-describedby='MainGrid_Facility']").html(), $("#MainGrid #" + row_id).find("td[aria-describedby='MainGrid_Time_Period']").html()];
+                    var rowdata = [$("#MainGrid #" + row_id).find("td[aria-describedby='MainGrid_Facility']").html(), $("#MainGrid #" + row_id).find("td[aria-describedby='MainGrid_Time_Period']").html(), $Fromdateval, $Todateval, $("#select-DataNo option:selected").text(), $("#select-WorkOrder option:selected").text(), $("#select-AuditType option:selected").text()];
                     console.log(rowdata);
                     if (rowdata) {
                         if (rowdata.length > 1) {
-                            subgridquerystr = "Facility=" + rowdata[0].trim() + "&Time_Period=" + rowdata[1];
+                            subgridquerystr = "Facility=" + rowdata[0].trim() + "&Time_Period=" + rowdata[1] + "&From_date=" + rowdata[2] + "&To_date=" + rowdata[3] + "&DataNo=" + rowdata[4] + "&WorkOrder=" + rowdata[5] + "&AuditType=" + rowdata[6];
                             console.log(subgridquerystr);
                         }
                     }

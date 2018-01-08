@@ -569,7 +569,7 @@ Namespace core
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select COUNT(id) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & WS
+            Dim SQL As String = "Select COUNT(id) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " And Technical_PassFail = 0 " & WS
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -2061,12 +2061,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function WRGetCustomDefectTotal(ByVal CID As Integer, ByVal WS As String) As Integer
+        Public Function WRGetCustomDefectTotal(ByVal Facility As String, ByVal WR As String, ByVal WS As String) As Integer
             Dim retval As Integer = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & WS
+            Dim SQL As String = "Select SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS TOTAL from dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "' AND WorkRoom='" & WR & "'" & WS
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -2155,12 +2155,12 @@ Namespace core
             Return retval
         End Function
 
-        Public Function WRGetCustomInspectionTotal(ByVal CID As Integer, ByVal WS As String) As Integer
+        Public Function WRGetCustomInspectionTotal(ByVal Facility As String, ByVal WR As String, ByVal WS As String) As Integer
             Dim retval As Integer = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select COUNT(id) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & WS
+            Dim SQL As String = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL from dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "' AND WorkRoom='" & WR & "'" & WS
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -2249,12 +2249,12 @@ Namespace core
             Return retval
         End Function
 
-        Public Function WRGetCustomRejectTotal(ByVal CID As Integer, ByVal WS As String) As Integer
+        Public Function WRGetCustomRejectTotal(ByVal Facility As String, ByVal WR As String, ByVal WS As String) As Integer
             Dim retval As Integer = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select SUM(MajorsCount+RepairsCount+ScrapCount) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & WS
+            Dim SQL As String = "Select SUM(MajorsCount+RepairsCount+ScrapCount) AS TOTAL from dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "' AND WorkRoom='" & WR & "'" & WS
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -2342,12 +2342,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function WRGetCustomRejectLotTotal(ByVal CID As Integer, ByVal WS As String) As Integer
+        Public Function WRGetCustomRejectLotTotal(ByVal Facility As String, ByVal WR As String, ByVal WS As String) As Integer
             Dim retval As Double = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select COUNT(id) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & WS
+            Dim SQL As String = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL from dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "' AND WorkRoom='" & WR & "' And Technical_PassFail = 0" & WS
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -2435,12 +2435,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function WRGetCustomDHU(ByVal CID As Integer, ByVal WS As String) As Double
+        Public Function WRGetCustomDHU(ByVal Facility As String, ByVal WR As String, ByVal WS As String) As Double
             Dim retval As Double = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select (CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & WS
+            Dim SQL As String = "Select (CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "' AND WorkRoom='" & WR & "'" & WS
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -2528,12 +2528,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function WRGetCustomRejectionRate(ByVal CID As Integer, ByVal WS As String) As Double
+        Public Function WRGetCustomRejectionRate(ByVal Facility As String, ByVal WR As String, ByVal WS As String) As Double
             Dim retval As Double = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select (CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & WS
+            Dim SQL As String = "Select (CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "' AND WorkRoom='" & WR & "'" & WS
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -2621,12 +2621,13 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function WRGetCustomLotAcceptance(ByVal CID As Integer, ByVal WS As String) As String
+        Public Function WRGetCustomLotAcceptance(ByVal Facility As String, ByVal WR As String, ByVal WS As String) As String
             Dim retval As String = "'0.00%'"
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select Top (1) (CAST( (Select COUNT(id) from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & WS & ") AS Decimal(10,2))/CAST((Select COUNT(id) from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & WS & ") AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly"
+
+            Dim SQL As String = "Select Top (1) (CAST( (Select COUNT(InspectionJobSummaryYearly.id) from dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "' AND WorkRoom='" & WR & "' AND Technical_PassFail=1" & WS & ") AS Decimal(10,2))/CAST((Select COUNT(InspectionJobSummaryYearly.id) from dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "' AND WorkRoom='" & WR & "'" & WS & ") AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -2652,10 +2653,28 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function GetMainGridSubGrid(ByVal Facility As String, ByVal Time_Period As String) As List(Of SPCInspection.MainGridSubgrid)
+        Public Function GetMainGridSubGrid(ByVal Facility As String, ByVal Time_Period As String, ByVal Fromdate As String, ByVal Todate As String, ByVal DataNo As String, ByVal WorkOrder As String, ByVal AuditType As String) As List(Of SPCInspection.MainGridSubgrid)
 
             Dim retList As New List(Of SPCInspection.MainGridSubgrid)()
             Dim WRList As New List(Of String)()
+            Dim WhereString As String = " AND Inspection_Finished BETWEEN '" & Fromdate & "' AND '" & Todate & "'"
+            If AuditType = "ALL" Then
+
+            ElseIf AuditType = "FINAL AUDIT" Then
+                WhereString = WhereString & " AND InspectionType = 'EOL'"
+            ElseIf AuditType = "IN LINE" Then
+                WhereString = WhereString & " AND InspectionType = 'IL'"
+            Else
+                WhereString = WhereString & " AND InspectionType = '" & AuditType & "'"
+            End If
+            If DataNo <> "ALL" Then
+                WhereString = WhereString & " AND DataNo = '" & DataNo & "'"
+            End If
+            If WorkOrder <> "ALL" Then
+                WhereString = WhereString & " AND JobNumber = '" & WorkOrder & "'"
+            End If
+
+
             Dim SQL As String = "Select Distinct WorkRoom from dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "'"
             Command.CommandType = CommandType.Text
             Command.Connection = Connection
@@ -2664,9 +2683,9 @@ Namespace core
             Connection.Open()
             DR = Command.ExecuteReader
             While DR.Read()
-                WRList.Add(DR.GetString(0))
+                'WRList.Add(DR.GetString(0))
                 Dim Subrow As New SPCInspection.MainGridSubgrid()
-                If Time_Period = "Past Year" Then
+                If Time_Period = "Past Year" And DR.GetString(0) <> Nothing Then
                     Subrow.FacilityWorkroom = DR.GetString(0)
                     Subrow.DHU = WRGetYearlyDHU(Facility, DR.GetString(0))
                     Subrow.Lot_Acceptance = WRGetYearlyLotAcceptance(Facility, DR.GetString(0))
@@ -2675,8 +2694,9 @@ Namespace core
                     Subrow.No_of_Rejects = WRGetYearlyRejectTotal(Facility, DR.GetString(0))
                     Subrow.Reject_Rate = WRGetYearlyRejectionRate(Facility, DR.GetString(0))
                     Subrow.No_of_Inspections = WRGetYearlyInspectionTotal(Facility, DR.GetString(0))
+                    retList.Add(Subrow)
                 End If
-                If Time_Period = "Past 30 Days" Then
+                If Time_Period = "Past 30 Days" And DR.GetString(0) <> Nothing Then
                     Subrow.FacilityWorkroom = DR.GetString(0)
                     Subrow.DHU = WRGetMonthlyDHU(Facility, DR.GetString(0))
                     Subrow.Lot_Acceptance = WRGetMonthlyLotAcceptance(Facility, DR.GetString(0))
@@ -2685,18 +2705,20 @@ Namespace core
                     Subrow.No_of_Rejects = WRGetMonthlyRejectTotal(Facility, DR.GetString(0))
                     Subrow.Reject_Rate = WRGetMonthlyRejectionRate(Facility, DR.GetString(0))
                     Subrow.No_of_Inspections = WRGetMonthlyInspectionTotal(Facility, DR.GetString(0))
+                    retList.Add(Subrow)
                 End If
-                If Time_Period = "Custom" Then
+                If Time_Period = "Custom" And DR.GetString(0) <> Nothing Then
                     Subrow.FacilityWorkroom = DR.GetString(0)
-                    Subrow.DHU = WRGetYearlyDHU(Facility, DR.GetString(0))
-                    Subrow.Lot_Acceptance = WRGetYearlyLotAcceptance(Facility, DR.GetString(0))
-                    Subrow.No_of_Defects = WRGetYearlyDefectTotal(Facility, DR.GetString(0))
-                    Subrow.No_of_Rejected_Lots = WRGetYearlyRejectLotTotal(Facility, DR.GetString(0))
-                    Subrow.No_of_Rejects = WRGetYearlyRejectTotal(Facility, DR.GetString(0))
-                    Subrow.Reject_Rate = WRGetYearlyRejectionRate(Facility, DR.GetString(0))
-                    Subrow.No_of_Inspections = WRGetYearlyInspectionTotal(Facility, DR.GetString(0))
+                    Subrow.DHU = WRGetCustomDHU(Facility, DR.GetString(0), WhereString)
+                    Subrow.Lot_Acceptance = WRGetCustomLotAcceptance(Facility, DR.GetString(0), WhereString)
+                    Subrow.No_of_Defects = WRGetCustomDefectTotal(Facility, DR.GetString(0), WhereString)
+                    Subrow.No_of_Rejected_Lots = WRGetCustomRejectLotTotal(Facility, DR.GetString(0), WhereString)
+                    Subrow.No_of_Rejects = WRGetCustomRejectTotal(Facility, DR.GetString(0), WhereString)
+                    Subrow.Reject_Rate = WRGetCustomRejectionRate(Facility, DR.GetString(0), WhereString)
+                    Subrow.No_of_Inspections = WRGetCustomInspectionTotal(Facility, DR.GetString(0), WhereString)
+                    retList.Add(Subrow)
                 End If
-                retList.Add(Subrow)
+
             End While
             Return retList
         End Function
