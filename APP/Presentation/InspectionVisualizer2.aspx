@@ -343,7 +343,7 @@
         var DefectPictureArrayF = [];
         var selectFiltervalues = [{ col: "id", val: "ALL" }, { col: "JobNumber", val: "ALL" }, { col: "UnitDesc", val: "ALL" }, { col: "Name", val: "ALL" }, { col: "Technical_PassFail", val: "ALL" }];
         var selectSpecFiltervalues = [{ col: "id", val: "ALL" }, { col: "JobNumber", val: "ALL" }, { col: "UnitDesc", val: "ALL" }, { col: "DataNo", val: "ALL" }];
-        var selList = ["661", "662", "482", "486", "485", "578", "113", "112", "111", "1001", "115", "114", "627", "590", "643", "488"];
+        var selList = ["661", "662", "482", "485", "578", "113", "112", "111", "1001", "115", "114", "627", "590", "643", "488"];
         var startX;
         var initialMouseX;
         var draggedObject;
@@ -527,7 +527,7 @@
                     fchtml.push('<option value = "' + value.CID.trim() + '" class="l1">' + value.text.trim() + ' (' + value.Abreviation.trim() + ')</option>');
                     fcid.push(value.CID.trim());
                 }
-                else if (value.text.trim() === 'Augusta' || value.text.trim() === 'Carolina' || value.text.trim() === 'Thomaston' || value.Abreviation.trim() === 'PCE' || value.Abreviation.trim() === 'STM' || value.Abreviation.trim() === 'SAT') {
+                else if (value.text.trim() === 'Carolina' || value.text.trim() === 'Thomaston' || value.Abreviation.trim() === 'PCE' || value.Abreviation.trim() === 'STM' || value.Abreviation.trim() === 'SAT') {
                     dchtml.push('<option value = "' + value.CID.trim() + '" class="l1">' + value.text.trim() + ' (' + value.Abreviation.trim() + ')</option>');
                     dcid.push(value.CID.trim());
                 }
@@ -535,7 +535,7 @@
                     ihtml.push('<option value = "' + value.CID.trim() + '" class="l1">' + value.text.trim() + ' (' + value.Abreviation.trim() + ')</option>');
                     iid.push(value.CID.trim());
                 }
-                else if (value.Abreviation.trim() !== 'ALL') {
+                else if (value.Abreviation.trim() !== 'ALL' && value.text.trim() !== 'Augusta') {
                     dhtml.push('<option value = "' + value.CID.trim() + '" class="l1">' + value.text.trim() + ' (' + value.Abreviation.trim() + ')</option>');
                     did.push(value.CID.trim());
                 }
