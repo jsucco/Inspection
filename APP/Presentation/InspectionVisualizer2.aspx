@@ -335,7 +335,8 @@
         var Filterqvalue = "ALL";
         var BreakOutldcnt = 0;
         var LineGraphldcnt = 0;
-        var $AuditType = "ALL";
+        var $AuditType = "FINAL AUDIT";
+        $("#select-AuditType option:selected").val("FINAL AUDIT");
         var $DataNo = "ALL";
         var $WorkOrder = "ALL";
         var ActiveFilter = "ALL";
@@ -684,6 +685,7 @@
                     ithtml.push('<option value="' + value.Abreviation + '">' + value.Name + '</option>');
                 });
                 $("#select-AuditType").html(ithtml.join(''));
+                document.getElementById("select-AuditType").selectedIndex = 1;
             }
             $("#filter-dialog").wijdialog({
                 autoOpen: true,
