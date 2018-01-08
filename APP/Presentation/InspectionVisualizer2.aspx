@@ -343,7 +343,7 @@
         var DefectPictureArrayF = [];
         var selectFiltervalues = [{ col: "id", val: "ALL" }, { col: "JobNumber", val: "ALL" }, { col: "UnitDesc", val: "ALL" }, { col: "Name", val: "ALL" }, { col: "Technical_PassFail", val: "ALL" }];
         var selectSpecFiltervalues = [{ col: "id", val: "ALL" }, { col: "JobNumber", val: "ALL" }, { col: "UnitDesc", val: "ALL" }, { col: "DataNo", val: "ALL" }];
-        var selList = ["661", "662", "482", "485", "578", "113", "112", "111", "1001", "115", "114", "627", "590", "643", "488"];
+        var selList = ["1001", "115", "114", "627", "590", "661", "482", "485", "578", "113", "112", "111"];
         var startX;
         var initialMouseX;
         var draggedObject;
