@@ -402,19 +402,7 @@
             
             function drawChart(Facility, GridType, TimePeriod) {
                 datahandler.DrawChart(Facility, GridType, TimePeriod);
-                var data = google.visualization.arrayToDataTable(GraphData);
-
-                var options = {
-                    title: 'Graph of ' + Facility + ' and ' + GridType + ' over ' + TimePeriod,
-                    curveType: 'function',
-                    width: 488,
-                    height: 488,
-                    legend: { position: 'bottom' }
-                };
-
-                var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-
-                chart.draw(data, options);
+                
             }
             var numi = document.getElementById('Locations');
             var html = [];

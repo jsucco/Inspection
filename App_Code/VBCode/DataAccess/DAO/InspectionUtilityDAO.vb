@@ -947,11 +947,150 @@ Namespace core
                 Connection.Close() 'closes the connection
                 DR.Close() 'closes the reader
                 Return retval
+            ElseIf gt = "No. of Defects" And tp = "Past 30 Days" Then
+                Dim segment As New List(Of String)()
+                SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                Command.CommandType = CommandType.Text 'sets the type of the sql
+                Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                Connection.Open() 'opens the connction
+                DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
 
+                    segment = New List(Of String)()
+                    segment.Add(DR("Comp_Date"))
+                    segment.Add(DR("TOTAL"))
+                    retval.Add(segment)
+
+
+                End While
+                Connection.Close() 'closes the connection
+                DR.Close() 'closes the reader
+                Return retval
+            ElseIf gt = "No. of Rejects" And tp = "Past Year" Then
+                Dim segment As New List(Of String)()
+                SQL = "Select ISNULL(SUM(MajorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                Command.CommandType = CommandType.Text 'sets the type of the sql
+                Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                Connection.Open() 'opens the connction
+                DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                    segment = New List(Of String)()
+                    segment.Add(DR("Comp_Date"))
+                    segment.Add(DR("TOTAL"))
+                    retval.Add(segment)
+
+
+                End While
+                Connection.Close() 'closes the connection
+                DR.Close() 'closes the reader
+                Return retval
+            ElseIf gt = "No. of Rejects" And tp = "Past 30 Days" Then
+                Dim segment As New List(Of String)()
+                SQL = "Select ISNULL(SUM(MajorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                Command.CommandType = CommandType.Text 'sets the type of the sql
+                Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                Connection.Open() 'opens the connction
+                DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                    segment = New List(Of String)()
+                    segment.Add(DR("Comp_Date"))
+                    segment.Add(DR("TOTAL"))
+                    retval.Add(segment)
+
+
+                End While
+                Connection.Close() 'closes the connection
+                DR.Close() 'closes the reader
+                Return retval
+            ElseIf gt = "No. of Inspections" And tp = "Past Year" Then
+                Dim segment As New List(Of String)()
+                SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                Command.CommandType = CommandType.Text 'sets the type of the sql
+                Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                Connection.Open() 'opens the connction
+                DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                    segment = New List(Of String)()
+                    segment.Add(DR("Comp_Date"))
+                    segment.Add(DR("TOTAL"))
+                    retval.Add(segment)
+
+
+                End While
+                Connection.Close() 'closes the connection
+                DR.Close() 'closes the reader
+                Return retval
+            ElseIf gt = "No. of Inspections" And tp = "Past 30 Days" Then
+                Dim segment As New List(Of String)()
+                SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                Command.CommandType = CommandType.Text 'sets the type of the sql
+                Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                Connection.Open() 'opens the connction
+                DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                    segment = New List(Of String)()
+                    segment.Add(DR("Comp_Date"))
+                    segment.Add(DR("TOTAL"))
+                    retval.Add(segment)
+
+
+                End While
+                Connection.Close() 'closes the connection
+                DR.Close() 'closes the reader
+                Return retval
+            ElseIf gt = "No. of Rejected Lots" And tp = "Past Year" Then
+                Dim segment As New List(Of String)()
+                SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND Technical_PassFail=0 Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                Command.CommandType = CommandType.Text 'sets the type of the sql
+                Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                Connection.Open() 'opens the connction
+                DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                    segment = New List(Of String)()
+                    segment.Add(DR("Comp_Date"))
+                    segment.Add(DR("TOTAL"))
+                    retval.Add(segment)
+
+
+                End While
+                Connection.Close() 'closes the connection
+                DR.Close() 'closes the reader
+                Return retval
+            ElseIf gt = "No. of Rejected Lots" And tp = "Past 30 Days" Then
+                Dim segment As New List(Of String)()
+                SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) AND Technical_PassFail=0 Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                Command.CommandType = CommandType.Text 'sets the type of the sql
+                Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                Connection.Open() 'opens the connction
+                DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                    segment = New List(Of String)()
+                    segment.Add(DR("Comp_Date"))
+                    segment.Add(DR("TOTAL"))
+                    retval.Add(segment)
+
+
+                End While
+                Connection.Close() 'closes the connection
+                DR.Close() 'closes the reader
+                Return retval
             End If
 
 
-
+            Return retval
         End Function
         Public Function GetPrevWOGrid(ByVal WO As String) As List(Of String)
             Dim retval As New List(Of String)()
