@@ -923,9 +923,39 @@ Namespace core
             retval = retval.Distinct().ToList
             Return retval
         End Function
+        Public Function DrawChart(ByVal fac As String, ByVal gt As String, ByVal tp As String) As List(Of List(Of String))
+            Dim retval As New List(Of List(Of String))()
+            Dim SQL As String = ""
+
+            If gt = "No. of Defects" And tp = "Past Year" Then
+                Dim segment As New List(Of String)()
+                SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                Command.CommandType = CommandType.Text 'sets the type of the sql
+                Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                Connection.Open() 'opens the connction
+                DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                    segment = New List(Of String)()
+                    segment.Add(DR("Comp_Date"))
+                    segment.Add(DR("TOTAL"))
+                    retval.Add(segment)
+
+
+                End While
+                Connection.Close() 'closes the connection
+                DR.Close() 'closes the reader
+                Return retval
+
+            End If
+
+
+
+        End Function
         Public Function GetPrevWOGrid(ByVal WO As String) As List(Of String)
             Dim retval As New List(Of String)()
-            Dim SQL As String = "SELECT InspectionJobSummary.id, InspectionJobSummary.JobNumber,TemplateName.LineType, InspectionJobSummary.SampleSize, InspectionJobSummary.TotalInspectedItems, InspectionJobSummary.AQL_Level, InspectionJobSummary.WorkRoom, InspectionJobSummary.WOQuantity From dbo.InspectionJobSummary INNER JOIN dbo.TemplateName ON InspectionJobSummary.TemplateId=TemplateName.TemplateId WHERE JobNumber='" & WO & "' ORDER BY TemplateName.LineType DESC, InspectionJobSummary.id ASC"
+            Dim SQL As String = "Select InspectionJobSummary.id, InspectionJobSummary.JobNumber,TemplateName.LineType, InspectionJobSummary.SampleSize, InspectionJobSummary.TotalInspectedItems, InspectionJobSummary.AQL_Level, InspectionJobSummary.WorkRoom, InspectionJobSummary.WOQuantity From dbo.InspectionJobSummary INNER JOIN dbo.TemplateName On InspectionJobSummary.TemplateId=TemplateName.TemplateId WHERE JobNumber='" & WO & "' ORDER BY TemplateName.LineType DESC, InspectionJobSummary.id ASC"
             Command.CommandType = CommandType.Text 'sets the type of the sql
             Command.Connection = Connection 'sets the connection of our sql command to MyDB
             Command.CommandText = SQL 'sets the statement that executes at the data source to our string

@@ -221,7 +221,9 @@
             </table>
         </div>
     </div>
-
+    <div id="GraphDialog" style="display: block" title="Graph Generated">
+       <div id="chart_div"></div>     
+    </div>
 
     <div id="reportOptions" style="left: 50%; display: none; z-index: 1000;">
         <div id="options">
@@ -281,6 +283,7 @@
     <script src="http://underscorejs.org/underscore-min.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.min.js" type="text/javascript"></script>
     <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <link href="../../Styles/ui.jqgrid.css" rel="stylesheet" type="text/css" />
     <link href="http://cdn.wijmo.com/jquery.wijmo-pro.all.3.20153.83.min.css" rel="stylesheet" type="text/css" />
     <%--<script src="http://cdn.wijmo.com/jquery.wijmo-open.all.3.20153.83.min.js" type="text/javascript"></script>
@@ -305,6 +308,7 @@
     <script src="../../Scripts/Gcharts/jsapi.js"></script>
 
     <script type="text/javascript">
+        var GraphData = [];
         var ScatterPlotJson;
         var todate;
         var fromdate;
@@ -394,7 +398,24 @@
             LocationNamesDrop = '<%=LocationNamesDrop%>';
             DefectTypes = '<%=DefectTypes%>';
             $("article").css("height", (2 * screen.availHeight).toString() + "px");
+            google.charts.load('current', { 'packages': ['corechart'] });
             
+            function drawChart(Facility, GridType, TimePeriod) {
+                datahandler.DrawChart(Facility, GridType, TimePeriod);
+                var data = google.visualization.arrayToDataTable(GraphData);
+
+                var options = {
+                    title: 'Graph of ' + Facility + ' and ' + GridType + ' over ' + TimePeriod,
+                    curveType: 'function',
+                    width: 488,
+                    height: 488,
+                    legend: { position: 'bottom' }
+                };
+
+                var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+                chart.draw(data, options);
+            }
             var numi = document.getElementById('Locations');
             var html = [];
             var fchtml = [];
@@ -425,6 +446,31 @@
                 return result;
             };
             var rowsToColor = [];
+            $("#GraphDialog").wijdialog({
+                buttons: {
+
+                    Close: function () {
+                        $(this).wijdialog("close");
+                    }
+                },
+                open: function () {
+
+                },
+                close: function (event, ui) {
+
+                },
+                captionButtons: {
+                    pin: { visible: false },
+                    refresh: { visible: false },
+                    toggle: { visible: false },
+                    minimize: { visible: false },
+                    maximize: { visible: false }
+                },
+                height: 1000,
+                width: 1000,
+                autoOpen: false,
+            });
+           
             $("#MainGrid").jqGrid({
                 datatype: 'local',
                 colNames: ['Facility', 'Time_Period', 'No. of Defects', 'No. of Rejects', 'No. of Inspections', 'No. of Rejected Lots', 'DHU', 'Reject Rate', 'Lot Acceptance'],
@@ -500,9 +546,13 @@
                 },
                 ondblClickRow: function (rowid, iRow, iCol, e) {
                     var colNames = $(this).jqGrid("getGridParam", "colNames");
-                    var colName = colNames[iCol];
+                    var GridType = colNames[iCol];
+                    var rowNames = $(this).jqGrid("getRowData", iRow);
+                    var TP = rowNames.Time_Period;
+                    var Fac = rowNames.Facility;
                     var colVal = $(this).jqGrid("getCell", rowid, iCol);
-                    alert('the value of this cell is ' + colVal);
+                    drawChart(Fac, GridType, TP);
+                    $("#GraphDialog").wijdialog("open");
                 },
                 gridComplete: function () {
                     for (var i = 0; i < rowsToColor.length; i++) {
@@ -2736,6 +2786,48 @@
                 };
                 //$("#defectCarousel").empty();
 
+            },
+            DrawChart: function (Facility, GridType, TimePeriod) {
+                $.ajax({
+                    url: "<%=Session("BaseUri")%>" + '/handlers/Presentation/SPC_InspectionVisualizer.ashx',
+                    type: 'GET',
+                    data: { method: 'DrawChart', args: { fac: Facility, gt: GridType, tp: TimePeriod } },
+                    success: function (data) {
+                        var conversion = JSON.parse(data);
+                        console.log(conversion);
+                        var dataarray = new google.visualization.DataTable();
+                        dataarray.addColumn('date', 'Days');
+                        dataarray.addColumn('number', GridType);
+                        GraphData = [];
+                        var dummy = [];
+                        for (i = 0; i < conversion.length; i++) {
+                            console.log(conversion[i]);
+                            dummy = [];
+                            dummy.push(new Date(conversion[i][0]))
+                            dummy.push(parseInt(conversion[i][1]))
+                            console.log(dummy);
+                            GraphData.push(dummy);
+                        }
+                        console.log(GraphData);
+                        dataarray.addRows(GraphData);
+
+                        var options = {
+                            title: 'Graph of ' + Facility + ' and ' + GridType + ' over ' + TimePeriod,
+                            curveType: 'function',
+                            width: 1000,
+                            height: 1000,
+                            legend: { position: 'bottom' }
+                        };
+
+                        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+                        chart.draw(dataarray, options);
+                        
+                    },
+                    error: function (a, b, c) {
+                        alert(c);
+                    }
+                });
             },
             LocationChangeEvent: function (cidArray, fromdate, todate, DataNo, WorkOrder, AuditType) {
                 console.log('cidArray:' + cidArray);
