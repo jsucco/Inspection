@@ -401,7 +401,7 @@
             google.charts.load('current', { 'packages': ['corechart'] });
             
             function drawChart(Facility, GridType, TimePeriod) {
-                datahandler.DrawChart(Facility, GridType, TimePeriod);
+                datahandler.DrawChart(Facility, GridType, TimePeriod, fromdate, todate, $DataNo, $WorkOrder, $AuditType);
                 
             }
             var numi = document.getElementById('Locations');
@@ -2775,11 +2775,11 @@
                 //$("#defectCarousel").empty();
 
             },
-            DrawChart: function (Facility, GridType, TimePeriod) {
+            DrawChart: function (Facility, GridType, TimePeriod, fromdate, todate, DataNo, WorkOrder, AuditType) {
                 $.ajax({
                     url: "<%=Session("BaseUri")%>" + '/handlers/Presentation/SPC_InspectionVisualizer.ashx',
                     type: 'GET',
-                    data: { method: 'DrawChart', args: { fac: Facility, gt: GridType, tp: TimePeriod } },
+                    data: { method: 'DrawChart', args: { fac: Facility, gt: GridType, tp: TimePeriod, from: fromdate, toDate: todate, DN: DataNo, WO: WorkOrder, AT: AuditType  } },
                     success: function (data) {
                         var conversion = JSON.parse(data);
                         console.log(conversion);
@@ -2792,7 +2792,7 @@
                             console.log(conversion[i]);
                             dummy = [];
                             dummy.push(new Date(conversion[i][0]))
-                            dummy.push(parseInt(conversion[i][1]))
+                            dummy.push(parseFloat(conversion[i][1]))
                             console.log(dummy);
                             GraphData.push(dummy);
                         }
@@ -2801,7 +2801,7 @@
 
                         var options = {
                             title: 'Graph of ' + Facility + ' and ' + GridType + ' over ' + TimePeriod,
-                            curveType: 'function',
+                            
                             width: 1000,
                             height: 1000,
                             legend: { position: 'bottom' }

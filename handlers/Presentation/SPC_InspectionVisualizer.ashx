@@ -27,11 +27,11 @@ Namespace core
 
             Return jser.Serialize(listds)
         End Function
-        Public Function DrawChart(ByVal fac As String, ByVal gt As String, ByVal tp As String) As String
+        Public Function DrawChart(ByVal fac As String, ByVal gt As String, ByVal tp As String, ByVal from As String, ByVal toDate As String, ByVal DN As String, ByVal WO As String, ByVal AT As String) As String
 
 
 
-            Return JsonConvert.SerializeObject(Inspect.DrawChart(fac, gt, tp))
+            Return JsonConvert.SerializeObject(Inspect.DrawChart(fac, gt, tp, from, toDate, DN, WO, AT))
 
 
         End Function
