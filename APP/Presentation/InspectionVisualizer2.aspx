@@ -220,11 +220,13 @@
             <table id="MainGrid" style="width: 100%;">
             </table>
         </div>
-    </div>
-    <div id="GraphDialog" style="display: block" title="Graph Generated">
-       <div id="chart_div"></div>     
-    </div>
+        
+        <div id="GraphDialog" style="position: relative; display: block; z-index: 1000;">
+            <div id="chart_div" style="position: relative; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 10000;"></div>
 
+        </div>
+    </div>
+    
     <div id="reportOptions" style="left: 50%; display: none; z-index: 1000;">
         <div id="options">
             <div style="position: absolute; bottom: 3px; right: 3px"><span id="lblReport" style="font-size: 0.8em; font-weight: bold"></span></div>
@@ -399,10 +401,10 @@
             DefectTypes = '<%=DefectTypes%>';
             $("article").css("height", (2 * screen.availHeight).toString() + "px");
             google.charts.load('current', { 'packages': ['corechart'] });
-            
+
             function drawChart(Facility, GridType, TimePeriod) {
                 datahandler.DrawChart(Facility, GridType, TimePeriod, fromdate, todate, $DataNo, $WorkOrder, $AuditType);
-                
+
             }
             var numi = document.getElementById('Locations');
             var html = [];
@@ -414,7 +416,7 @@
             var fcid = [];
             var iid = [];
             var did = [];
-            
+
             //var mydata = [
             //    { id: "1", Facility: "Thomaston", Time_Period: "Past 30 Days", No_of_Defects: 100, No_of_Rejects: 1, No_of_Inspections: 10, No_of_Rejected_Lots: 12, DHU: 0.55, Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: { Facility: { rowspan: "3" } } },
             //    { id: "2", Facility: "Thomaston", Time_Period: "Past 12 Months", No_of_Defects: 100, No_of_Rejects: 1, No_of_Inspections: 10, No_of_Rejected_Lots: 12, DHU: 0.55, Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: { Facility: { display: "none" } } },
@@ -454,11 +456,15 @@
                     minimize: { visible: false },
                     maximize: { visible: false }
                 },
-                height: 1000,
-                width: 1000,
+                draggable: false,
+                resizable: false,
+                width: 800,
+                height: 650,
                 autoOpen: false,
+                position: 'fixed',
+                modal: true
             });
-           
+
             $("#MainGrid").jqGrid({
                 datatype: 'local',
                 colNames: ['Facility', 'Time_Period', 'No. of Defects', 'No. of Rejects', 'No. of Inspections', 'No. of Rejected Lots', 'DHU', 'Reject Rate', 'Lot Acceptance'],
@@ -481,7 +487,7 @@
                 hoverrows: false,
                 subGrid: true,
                 subGridRowColapsed: function (pID, id) {
-                    
+
                 },
                 subGridRowExpanded: function (subgrid_id, row_id) {
                     var grid = $("#MainGrid");
@@ -652,9 +658,9 @@
                     $locSelect.val(selList).trigger("change");
                     console.log(fromdate);
                     console.log(todate);
-                    
+
                     datahandler.LocationChangeEvent(selList, fromdate, todate, $DataNo, $WorkOrder, $AuditType);
-                   
+
                 } else {
                     $('#MainGrid').jqGrid("clearGridData")
                     $('#MainGrid').trigger('reloadGrid');
@@ -673,9 +679,9 @@
                     $locSelect.val(selList).trigger("change");
                     console.log(fromdate);
                     console.log(todate);
-                    
+
                     datahandler.LocationChangeEvent(selList, fromdate, todate, $DataNo, $WorkOrder, $AuditType);
-                    
+
                 } else {
                     $('#MainGrid').jqGrid("clearGridData")
                     $('#MainGrid').trigger('reloadGrid');
@@ -2779,7 +2785,7 @@
                 $.ajax({
                     url: "<%=Session("BaseUri")%>" + '/handlers/Presentation/SPC_InspectionVisualizer.ashx',
                     type: 'GET',
-                    data: { method: 'DrawChart', args: { fac: Facility, gt: GridType, tp: TimePeriod, from: fromdate, toDate: todate, DN: DataNo, WO: WorkOrder, AT: AuditType  } },
+                    data: { method: 'DrawChart', args: { fac: Facility, gt: GridType, tp: TimePeriod, from: fromdate, toDate: todate, DN: DataNo, WO: WorkOrder, AT: AuditType } },
                     success: function (data) {
                         var conversion = JSON.parse(data);
                         console.log(conversion);
@@ -2801,16 +2807,16 @@
 
                         var options = {
                             title: 'Graph of ' + Facility + ' and ' + GridType + ' over ' + TimePeriod,
-                            
-                            width: 1000,
-                            height: 1000,
-                            legend: { position: 'bottom' }
+                            focusTarget: 'datum',
+                            legend: 'none',
+                           
+                            forceIFrame: true
                         };
 
                         var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
 
                         chart.draw(dataarray, options);
-                        
+
                     },
                     error: function (a, b, c) {
                         alert(c);
