@@ -401,7 +401,10 @@
             DefectTypes = '<%=DefectTypes%>';
             $("article").css("height", (2 * screen.availHeight).toString() + "px");
             google.charts.load('current', { 'packages': ['corechart'] });
+            function drawWRChart(Facility, GridType, TimePeriod, WorkRoom) {
+                datahandler.DrawWRChart(Facility, GridType, TimePeriod, WorkRoom, fromdate, todate, $DataNo, $WorkOrder, $AuditType);
 
+            }
             function drawChart(Facility, GridType, TimePeriod) {
                 datahandler.DrawChart(Facility, GridType, TimePeriod, fromdate, todate, $DataNo, $WorkOrder, $AuditType);
 
@@ -521,6 +524,18 @@
                         sortname: 'num',
                         sortorder: "asc",
                         height: '100%',
+                        onCellSelect: function (row, col, content, event) {
+                            var cm = jQuery("#" + subgrid_table_id).jqGrid("getGridParam", "colModel");
+                            var GridType = cm[col].name;
+                            console.log(GridType);
+                            var WorkRoom = jQuery("#" + subgrid_table_id).getLocalRow(row).FacilityWorkroom;
+                            console.log(WorkRoom);
+                            var TP = rowdata[1];
+                            var Fac = rowdata[0].trim();
+                            console.log(TP);
+                            console.log(Fac);
+                            drawWRChart(Fac, GridType, TP, WorkRoom);
+                        },
                         loadonce: true,
                         postData: {
                             SessionId: function () {
@@ -539,6 +554,7 @@
                     return false;
                 },
                 ondblClickRow: function (rowid, iRow, iCol, e) {
+                    
                     var colNames = $(this).jqGrid("getGridParam", "colNames");
                     var GridType = colNames[iCol];
                     var rowNames = $(this).jqGrid("getRowData", iRow);
@@ -546,7 +562,7 @@
                     var Fac = rowNames.Facility;
                     var colVal = $(this).jqGrid("getCell", rowid, iCol);
                     drawChart(Fac, GridType, TP);
-                    $("#GraphDialog").wijdialog("open");
+                    
                 },
                 gridComplete: function () {
                     for (var i = 0; i < rowsToColor.length; i++) {
@@ -2781,6 +2797,48 @@
                 //$("#defectCarousel").empty();
 
             },
+            DrawWRChart: function (Facility, GridType, TimePeriod, WorkRoom, fromdate, todate, DataNo, WorkOrder, AuditType) {
+                $.ajax({
+                    url: "<%=Session("BaseUri")%>" + '/handlers/Presentation/SPC_InspectionVisualizer.ashx',
+                    type: 'GET',
+                    data: { method: 'DrawWRChart', args: { fac: Facility, gt: GridType, tp: TimePeriod, wr: WorkRoom, from: fromdate, toDate: todate, DN: DataNo, WO: WorkOrder, AT: AuditType } },
+                    success: function (data) {
+                        var conversion = JSON.parse(data);
+                        console.log(conversion);
+                        var dataarray = new google.visualization.DataTable();
+                        dataarray.addColumn('date', 'Days');
+                        dataarray.addColumn('number', GridType);
+                        GraphData = [];
+                        var dummy = [];
+                        for (i = 0; i < conversion.length; i++) {
+                            console.log(conversion[i]);
+                            dummy = [];
+                            dummy.push(new Date(conversion[i][0]))
+                            dummy.push(parseFloat(conversion[i][1]))
+                            console.log(dummy);
+                            GraphData.push(dummy);
+                        }
+                        console.log(GraphData);
+                        dataarray.addRows(GraphData);
+
+                        var options = {
+                            title: 'Graph of ' + Facility + ' and ' + GridType + ' over ' + TimePeriod + ' in ' +WorkRoom,
+                            focusTarget: 'datum',
+                            legend: 'none',
+
+                            forceIFrame: true
+                        };
+
+                        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+                        chart.draw(dataarray, options);
+                        $("#GraphDialog").wijdialog("open");
+                    },
+                    error: function (a, b, c) {
+                        alert(c);
+                    }
+                });
+            },
             DrawChart: function (Facility, GridType, TimePeriod, fromdate, todate, DataNo, WorkOrder, AuditType) {
                 $.ajax({
                     url: "<%=Session("BaseUri")%>" + '/handlers/Presentation/SPC_InspectionVisualizer.ashx',
@@ -2816,7 +2874,7 @@
                         var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
 
                         chart.draw(dataarray, options);
-
+                        $("#GraphDialog").wijdialog("open");
                     },
                     error: function (a, b, c) {
                         alert(c);
