@@ -220,13 +220,22 @@
             <table id="MainGrid" style="width: 100%;">
             </table>
         </div>
-        
-        <div id="GraphDialog" style="position: relative; display: block; z-index: 1000;">
-            <div id="chart_div" style="position: relative; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 10000;"></div>
+
+        <div id="GraphDialog" class="GDIV" style="position: relative; display: block; z-index: 1000;">
+            <section>
+                <div id="chart_div" style="position: absolute; left: 0px; top: 0px; width: 90%; height: 90%; z-index: 10000;"></div>
+            </section>
+           
+
+        </div>
+
+
+        <div id="TableDialog" style="position: relative; display: block; z-index: 1000;">
+            <div id="table_div" style="position: absolute; left: 0px; top: 0px; width: 90%; height: 90%; z-index: 10000;"></div>
 
         </div>
     </div>
-    
+
     <div id="reportOptions" style="left: 50%; display: none; z-index: 1000;">
         <div id="options">
             <div style="position: absolute; bottom: 3px; right: 3px"><span id="lblReport" style="font-size: 0.8em; font-weight: bold"></span></div>
@@ -310,7 +319,9 @@
     <script src="../../Scripts/Gcharts/jsapi.js"></script>
 
     <script type="text/javascript">
+        var URIString;
         var GraphData = [];
+        var NodeGraphData = [];
         var ScatterPlotJson;
         var todate;
         var fromdate;
@@ -401,6 +412,7 @@
             DefectTypes = '<%=DefectTypes%>';
             $("article").css("height", (2 * screen.availHeight).toString() + "px");
             google.charts.load('current', { 'packages': ['corechart'] });
+            google.charts.load('current', { 'packages': ['table'] });
             function drawWRChart(Facility, GridType, TimePeriod, WorkRoom) {
                 datahandler.DrawWRChart(Facility, GridType, TimePeriod, WorkRoom, fromdate, todate, $DataNo, $WorkOrder, $AuditType);
 
@@ -439,7 +451,42 @@
                 return result;
             };
             var rowsToColor = [];
-            $("#GraphDialog").wijdialog({
+            $(".GDIV").wijdialog({
+                buttons: {
+
+                    Close: function () {
+                        $(this).wijdialog("close");
+                    },
+                    Get_Printer_Friendly_Version: function () {
+                        var iframe = "<iframe width='100%' height='100%' src='" + URIString + "'></iframe>";
+                        var x = window.open();
+                        x.document.open();
+                        x.document.write(iframe);
+                        x.document.close();
+                    }
+                },
+                open: function () {
+
+                },
+                close: function (event, ui) {
+
+                },
+                captionButtons: {
+                    pin: { visible: false },
+                    refresh: { visible: false },
+                    toggle: { visible: false },
+                    minimize: { visible: false },
+                    maximize: { visible: false }
+                },
+
+                resizable: false,
+                width: 1200,
+                height: 700,
+                autoOpen: false,
+                position: 'fixed',
+
+            });
+            $("#TableDialog").wijdialog({
                 buttons: {
 
                     Close: function () {
@@ -459,10 +506,10 @@
                     minimize: { visible: false },
                     maximize: { visible: false }
                 },
-                draggable: false,
+
                 resizable: false,
-                width: 800,
-                height: 650,
+                width: 1200,
+                height: 700,
                 autoOpen: false,
                 position: 'fixed',
                 modal: true
@@ -554,7 +601,7 @@
                     return false;
                 },
                 ondblClickRow: function (rowid, iRow, iCol, e) {
-                    
+
                     var colNames = $(this).jqGrid("getGridParam", "colNames");
                     var GridType = colNames[iCol];
                     var rowNames = $(this).jqGrid("getRowData", iRow);
@@ -562,7 +609,7 @@
                     var Fac = rowNames.Facility;
                     var colVal = $(this).jqGrid("getCell", rowid, iCol);
                     drawChart(Fac, GridType, TP);
-                    
+
                 },
                 gridComplete: function () {
                     for (var i = 0; i < rowsToColor.length; i++) {
@@ -2797,6 +2844,119 @@
                 //$("#defectCarousel").empty();
 
             },
+            DrillDownWR: function (Date, Facility, GridType, TimePeriod, WorkRoom, fromdate, todate, DataNo, WorkOrder, AuditType) {
+                $.ajax({
+                    url: "<%=Session("BaseUri")%>" + '/handlers/Presentation/SPC_InspectionVisualizer.ashx',
+                    type: 'GET',
+                    data: { method: 'DrillDownWR', args: { dt: Date, fac: Facility, gt: GridType, tp: TimePeriod, wr: WorkRoom, from: fromdate, toDate: todate, DN: DataNo, WO: WorkOrder, AT: AuditType } },
+                    success: function (data) {
+                        var conversion = JSON.parse(data);
+                        console.log(conversion);
+                        var dataarray = new google.visualization.DataTable();
+                        if (GridType === 'No_of_Defects') {
+                            dataarray.addColumn('string', 'Type');
+                            dataarray.addColumn('number', GridType);
+                            NodeGraphData = [];
+                            var dummy = [];
+
+                            for (i = 0; i < conversion.length; i++) {
+                                dummy = [];
+                                dummy.push(conversion[i][0]);
+                                dummy.push(parseFloat(conversion[i][1]));
+                                NodeGraphData.push(dummy);
+                            }
+                            dataarray.addRows(NodeGraphData);
+                            var options = {
+                                title: 'Defects',
+                                width: 1000,
+                                height: 520,
+                                forceIFrame: true
+                            };
+                            var chart = new google.visualization.Table(document.getElementById('table_div'));
+                            chart.draw(dataarray, options);
+                            $("#TableDialog").wijdialog("open");
+                        }
+                        if (GridType === 'No_of_Rejects') {
+                            dataarray.addColumn('string', 'Type');
+                            dataarray.addColumn('number', GridType);
+                            NodeGraphData = [];
+                            var dummy = [];
+
+                            for (i = 0; i < conversion.length; i++) {
+                                dummy = [];
+                                dummy.push(conversion[i][0]);
+                                dummy.push(parseFloat(conversion[i][1]));
+                                NodeGraphData.push(dummy);
+                            }
+                            dataarray.addRows(NodeGraphData);
+                            var options = {
+                                title: 'Defects',
+                                width: 1000,
+                                height: 520,
+                                forceIFrame: true
+                            };
+                            var chart = new google.visualization.Table(document.getElementById('table_div'));
+                            chart.draw(dataarray, options);
+                            $("#TableDialog").wijdialog("open");
+                        }
+                        if (GridType === 'No_of_Inspections') {
+                            dataarray.addColumn('string', 'Id');
+                            dataarray.addColumn('string', 'Job Number');
+                            dataarray.addColumn('string', 'Data Number');
+
+                            NodeGraphData = [];
+                            var dummy = [];
+
+                            for (i = 0; i < conversion.length; i++) {
+                                dummy = [];
+                                dummy.push(conversion[i][0]);
+                                dummy.push(conversion[i][1]);
+                                dummy.push(conversion[i][2]);
+                                NodeGraphData.push(dummy);
+                            }
+                            dataarray.addRows(NodeGraphData);
+                            var options = {
+                                title: 'Defects',
+                                width: 1000,
+                                height: 520,
+                                forceIFrame: true
+                            };
+                            var chart = new google.visualization.Table(document.getElementById('table_div'));
+                            chart.draw(dataarray, options);
+                            $("#TableDialog").wijdialog("open");
+                        }
+                        if (GridType === 'No_of_Rejected_Lots') {
+                            dataarray.addColumn('string', 'Id');
+                            dataarray.addColumn('string', 'Job Number');
+                            dataarray.addColumn('string', 'Data Number');
+
+                            NodeGraphData = [];
+                            var dummy = [];
+
+                            for (i = 0; i < conversion.length; i++) {
+                                dummy = [];
+                                dummy.push(conversion[i][0]);
+                                dummy.push(conversion[i][1]);
+                                dummy.push(conversion[i][2]);
+                                NodeGraphData.push(dummy);
+                            }
+                            dataarray.addRows(NodeGraphData);
+                            var options = {
+                                title: 'Defects',
+                                width: 1000,
+                                height: 520,
+                                forceIFrame: true
+                            };
+                            var chart = new google.visualization.Table(document.getElementById('table_div'));
+                            chart.draw(dataarray, options);
+                            $("#TableDialog").wijdialog("open");
+                        }
+                    },
+                    error: function (a, b, c) {
+                        alert(c);
+                    }
+                });
+            },
             DrawWRChart: function (Facility, GridType, TimePeriod, WorkRoom, fromdate, todate, DataNo, WorkOrder, AuditType) {
                 $.ajax({
                     url: "<%=Session("BaseUri")%>" + '/handlers/Presentation/SPC_InspectionVisualizer.ashx',
@@ -2822,17 +2982,146 @@
                         dataarray.addRows(GraphData);
 
                         var options = {
-                            title: 'Graph of ' + Facility + ' and ' + GridType + ' over ' + TimePeriod + ' in ' +WorkRoom,
+                            title: 'Graph of ' + Facility + ' and ' + GridType + ' over ' + TimePeriod + ' in ' + WorkRoom,
                             focusTarget: 'datum',
                             legend: 'none',
-
+                            width: 1000,
+                            height: 520,
                             forceIFrame: true
                         };
-
+                        
                         var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
 
+
+                        google.visualization.events.addListener(chart, 'ready', function () {
+                            URIString = chart.getImageURI();
+                        });
+
                         chart.draw(dataarray, options);
-                        $("#GraphDialog").wijdialog("open");
+                        google.visualization.events.addListener(chart, 'select', selectHandler);
+                        function selectHandler() {
+                            var selection = chart.getSelection();
+                            var message = '';
+
+                            var item = selection[0];
+                            if (item.row != null) {
+                                datahandler.DrillDownWR((GraphData[item.row][0].getMonth() + 1) + "/" + GraphData[item.row][0].getDate() + "/" + (GraphData[item.row][0].getYear() + 1900), Facility, GridType, TimePeriod, WorkRoom, fromdate, todate, DataNo, WorkOrder, AuditType);
+                            }
+                        }
+                        $(".GDIV").wijdialog("open");
+                    },
+                    error: function (a, b, c) {
+                        alert(c);
+                    }
+                });
+            },
+            DrillDown: function (Date, Facility, GridType, TimePeriod, fromdate, todate, DataNo, WorkOrder, AuditType) {
+                $.ajax({
+                    url: "<%=Session("BaseUri")%>" + '/handlers/Presentation/SPC_InspectionVisualizer.ashx',
+                    type: 'GET',
+                    data: { method: 'DrillDown', args: { dt: Date, fac: Facility, gt: GridType, tp: TimePeriod, from: fromdate, toDate: todate, DN: DataNo, WO: WorkOrder, AT: AuditType } },
+                    success: function (data) {
+                        var conversion = JSON.parse(data);
+                        console.log(conversion);
+                        var dataarray = new google.visualization.DataTable();
+                        if (GridType === 'No. of Defects') {
+                            dataarray.addColumn('string', 'Type');
+                            dataarray.addColumn('number', GridType);
+                            NodeGraphData = [];
+                            var dummy = [];
+                            
+                            for (i = 0; i < conversion.length; i++) {
+                                dummy = [];
+                                dummy.push(conversion[i][0]);
+                                dummy.push(parseFloat(conversion[i][1]));
+                                NodeGraphData.push(dummy);
+                            }
+                            dataarray.addRows(NodeGraphData);
+                            var options = {
+                                title: 'Defects',
+                                width: 1000,
+                                height: 520,
+                                forceIFrame: true
+                            };
+                            var chart = new google.visualization.Table(document.getElementById('table_div'));
+                            chart.draw(dataarray, options);
+                            $("#TableDialog").wijdialog("open");
+                        }
+                        if (GridType === 'No. of Rejects') {
+                            dataarray.addColumn('string', 'Type');
+                            dataarray.addColumn('number', GridType);
+                            NodeGraphData = [];
+                            var dummy = [];
+
+                            for (i = 0; i < conversion.length; i++) {
+                                dummy = [];
+                                dummy.push(conversion[i][0]);
+                                dummy.push(parseFloat(conversion[i][1]));
+                                NodeGraphData.push(dummy);
+                            }
+                            dataarray.addRows(NodeGraphData);
+                            var options = {
+                                title: 'Defects',
+                                width: 1000,
+                                height: 520,
+                                forceIFrame: true
+                            };
+                            var chart = new google.visualization.Table(document.getElementById('table_div'));
+                            chart.draw(dataarray, options);
+                            $("#TableDialog").wijdialog("open");
+                        }
+                        if (GridType === 'No. of Inspections') {
+                            dataarray.addColumn('string', 'Id');
+                            dataarray.addColumn('string', 'Job Number');
+                            dataarray.addColumn('string', 'Data Number');
+                            
+                            NodeGraphData = [];
+                            var dummy = [];
+
+                            for (i = 0; i < conversion.length; i++) {
+                                dummy = [];
+                                dummy.push(conversion[i][0]);
+                                dummy.push(conversion[i][1]);
+                                dummy.push(conversion[i][2]);
+                                NodeGraphData.push(dummy);
+                            }
+                            dataarray.addRows(NodeGraphData);
+                            var options = {
+                                title: 'Defects',
+                                width: 1000,
+                                height: 520,
+                                forceIFrame: true
+                            };
+                            var chart = new google.visualization.Table(document.getElementById('table_div'));
+                            chart.draw(dataarray, options);
+                            $("#TableDialog").wijdialog("open");
+                        }
+                        if (GridType === 'No. of Rejected Lots') {
+                            dataarray.addColumn('string', 'Id');
+                            dataarray.addColumn('string', 'Job Number');
+                            dataarray.addColumn('string', 'Data Number');
+
+                            NodeGraphData = [];
+                            var dummy = [];
+
+                            for (i = 0; i < conversion.length; i++) {
+                                dummy = [];
+                                dummy.push(conversion[i][0]);
+                                dummy.push(conversion[i][1]);
+                                dummy.push(conversion[i][2]);
+                                NodeGraphData.push(dummy);
+                            }
+                            dataarray.addRows(NodeGraphData);
+                            var options = {
+                                title: 'Defects',
+                                width: 1000,
+                                height: 520,
+                                forceIFrame: true
+                            };
+                            var chart = new google.visualization.Table(document.getElementById('table_div'));
+                            chart.draw(dataarray, options);
+                            $("#TableDialog").wijdialog("open");
+                        }
                     },
                     error: function (a, b, c) {
                         alert(c);
@@ -2867,14 +3156,31 @@
                             title: 'Graph of ' + Facility + ' and ' + GridType + ' over ' + TimePeriod,
                             focusTarget: 'datum',
                             legend: 'none',
-                           
+                            width: 1000,
+                            height: 520,
+
                             forceIFrame: true
                         };
-
+                        var chart_div = document.getElementById('chart_div');
                         var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
 
+
+                        google.visualization.events.addListener(chart, 'ready', function () {
+                            URIString = chart.getImageURI();
+                        });
                         chart.draw(dataarray, options);
-                        $("#GraphDialog").wijdialog("open");
+                        google.visualization.events.addListener(chart, 'select', selectHandler);
+                        function selectHandler() {
+                            var selection = chart.getSelection();
+                            var message = '';
+
+                            var item = selection[0];
+                            if (item.row != null) {
+                                //GraphData[item.row][0]
+                                datahandler.DrillDown((GraphData[item.row][0].getMonth()+1) + "/" + GraphData[item.row][0].getDate() + "/" + (GraphData[item.row][0].getYear()+1900), Facility, GridType, TimePeriod, fromdate, todate, DataNo, WorkOrder, AuditType);
+                            }
+                        }
+                        $(".GDIV").wijdialog("open");
                     },
                     error: function (a, b, c) {
                         alert(c);

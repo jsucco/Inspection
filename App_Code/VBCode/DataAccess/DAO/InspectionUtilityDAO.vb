@@ -1374,6 +1374,224 @@ Namespace core
 
             Return retval
         End Function
+        Public Function DrillDownWR(ByVal dt As String, ByVal fac As String, ByVal gt As String, ByVal tp As String, ByVal wr As String, ByVal Fromdate As String, ByVal Todate As String, ByVal DataNo As String, ByVal WorkOrder As String, ByVal AuditType As String) As List(Of List(Of String))
+            Dim retval As New List(Of List(Of String))()
+            Dim WhereString As String = " AND Inspection_Finished BETWEEN '" & Fromdate & "' AND '" & Todate & "'"
+            If AuditType = "ALL" Then
+
+            ElseIf AuditType = "FINAL AUDIT" Then
+                WhereString = WhereString & " AND InspectionType = 'EOL'"
+            ElseIf AuditType = "IN LINE" Then
+                WhereString = WhereString & " AND InspectionType = 'IL'"
+            Else
+                WhereString = WhereString & " AND InspectionType = '" & AuditType & "'"
+            End If
+            If DataNo <> "ALL" Then
+                WhereString = WhereString & " AND DataNo = '" & DataNo & "'"
+            End If
+            If WorkOrder <> "ALL" Then
+                WhereString = WhereString & " AND JobNumber = '" & WorkOrder & "'"
+            End If
+            Dim SQL As String = ""
+            ' AND InspectionJobSummaryYearly.WorkRoom = '" & wr & "' 
+            If gt = "No_of_Defects" Then
+                Dim segment As New List(Of String)()
+                SQL = "select DefectDesc as DefectName, COUNT(DefectDesc) as DefectCount from (dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID) inner join Inspection.dbo.DefectMaster on InspectionJobSummaryYearly.id=Inspection.dbo.DefectMaster.InspectionJobSummaryId WHERE Name ='" & fac & "' AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1,'" & dt & "') AND InspectionJobSummaryYearly.WorkRoom = '" & wr & "'  group by DefectDesc ORDER By DefectCount ASC"
+                Command.CommandType = CommandType.Text 'sets the type of the sql
+                Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                Connection.Open() 'opens the connction
+                DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                    segment = New List(Of String)()
+                    segment.Add(DR("DefectName"))
+                    segment.Add(DR("DefectCount"))
+                    retval.Add(segment)
+
+
+                End While
+                Connection.Close() 'closes the connection
+                DR.Close() 'closes the reader
+                Return retval
+            ElseIf gt = "No_of_Rejects" Then
+                Dim segment As New List(Of String)()
+                SQL = "select DefectDesc as DefectName, COUNT(DefectDesc) as DefectCount from (dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID) inner join Inspection.dbo.DefectMaster on InspectionJobSummaryYearly.id=Inspection.dbo.DefectMaster.InspectionJobSummaryId WHERE Name ='" & fac & "' AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1,'" & dt & "') AND InspectionJobSummaryYearly.WorkRoom = '" & wr & "'  AND DefectClass != 'MINOR'  group by DefectDesc ORDER By DefectCount ASC"
+                Command.CommandType = CommandType.Text 'sets the type of the sql
+                Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                Connection.Open() 'opens the connction
+                DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                    segment = New List(Of String)()
+                    segment.Add(DR("DefectName"))
+                    segment.Add(DR("DefectCount"))
+                    retval.Add(segment)
+
+
+                End While
+                Connection.Close() 'closes the connection
+                DR.Close() 'closes the reader
+                Return retval
+
+            ElseIf gt = "No_of_Inspections" Then
+                Dim segment As New List(Of String)()
+                SQL = "select InspectionJobSummaryYearly.id AS 'Id', JobNumber AS 'JobNumber', DataNo As 'DataNumber' from dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1, '" & dt & "')  AND InspectionJobSummaryYearly.WorkRoom = '" & wr & "' "
+                Command.CommandType = CommandType.Text 'sets the type of the sql
+                Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                Connection.Open() 'opens the connction
+                DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                    segment = New List(Of String)()
+                    segment.Add(DR("Id"))
+                    segment.Add(DR("JobNumber"))
+                    segment.Add(DR("DataNumber"))
+                    retval.Add(segment)
+
+
+                End While
+                Connection.Close() 'closes the connection
+                DR.Close() 'closes the reader
+                Return retval
+
+            ElseIf gt = "No_of_Rejected_Lots" Then
+                Dim segment As New List(Of String)()
+                SQL = "select InspectionJobSummaryYearly.id AS 'Id', JobNumber AS 'JobNumber', DataNo As 'DataNumber' from dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1, '" & dt & "') AND Technical_PassFail = 0 AND InspectionJobSummaryYearly.WorkRoom = '" & wr & "' "
+                Command.CommandType = CommandType.Text 'sets the type of the sql
+                Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                Connection.Open() 'opens the connction
+                DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                    segment = New List(Of String)()
+                    segment.Add(DR("Id"))
+                    segment.Add(DR("JobNumber"))
+                    segment.Add(DR("DataNumber"))
+                    retval.Add(segment)
+
+
+                End While
+                Connection.Close() 'closes the connection
+                DR.Close() 'closes the reader
+                Return retval
+
+
+            End If
+            Return retval
+        End Function
+        Public Function DrillDown(ByVal dt As String, ByVal fac As String, ByVal gt As String, ByVal tp As String, ByVal Fromdate As String, ByVal Todate As String, ByVal DataNo As String, ByVal WorkOrder As String, ByVal AuditType As String) As List(Of List(Of String))
+            Dim retval As New List(Of List(Of String))()
+            Dim WhereString As String = " AND Inspection_Finished BETWEEN '" & Fromdate & "' AND '" & Todate & "'"
+            If AuditType = "ALL" Then
+
+            ElseIf AuditType = "FINAL AUDIT" Then
+                WhereString = WhereString & " AND InspectionType = 'EOL'"
+            ElseIf AuditType = "IN LINE" Then
+                WhereString = WhereString & " AND InspectionType = 'IL'"
+            Else
+                WhereString = WhereString & " AND InspectionType = '" & AuditType & "'"
+            End If
+            If DataNo <> "ALL" Then
+                WhereString = WhereString & " AND DataNo = '" & DataNo & "'"
+            End If
+            If WorkOrder <> "ALL" Then
+                WhereString = WhereString & " AND JobNumber = '" & WorkOrder & "'"
+            End If
+            Dim SQL As String = ""
+
+            If gt = "No. of Defects" Then
+                Dim segment As New List(Of String)()
+                SQL = "select DefectDesc as DefectName, COUNT(DefectDesc) as DefectCount from (dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID) inner join Inspection.dbo.DefectMaster on InspectionJobSummaryYearly.id=Inspection.dbo.DefectMaster.InspectionJobSummaryId WHERE Name ='" & fac & "' AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1,'" & dt & "') group by DefectDesc ORDER By DefectCount ASC"
+                Command.CommandType = CommandType.Text 'sets the type of the sql
+                Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                Connection.Open() 'opens the connction
+                DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                    segment = New List(Of String)()
+                    segment.Add(DR("DefectName"))
+                    segment.Add(DR("DefectCount"))
+                    retval.Add(segment)
+
+
+                End While
+                Connection.Close() 'closes the connection
+                DR.Close() 'closes the reader
+                Return retval
+            ElseIf gt = "No. of Rejects" Then
+                Dim segment As New List(Of String)()
+                SQL = "select DefectDesc as DefectName, COUNT(DefectDesc) as DefectCount from (dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID) inner join Inspection.dbo.DefectMaster on InspectionJobSummaryYearly.id=Inspection.dbo.DefectMaster.InspectionJobSummaryId WHERE Name ='" & fac & "' AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1,'" & dt & "') AND DefectClass != 'MINOR'  group by DefectDesc ORDER By DefectCount ASC"
+                Command.CommandType = CommandType.Text 'sets the type of the sql
+                Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                Connection.Open() 'opens the connction
+                DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                    segment = New List(Of String)()
+                    segment.Add(DR("DefectName"))
+                    segment.Add(DR("DefectCount"))
+                    retval.Add(segment)
+
+
+                End While
+                Connection.Close() 'closes the connection
+                DR.Close() 'closes the reader
+                Return retval
+
+            ElseIf gt = "No. of Inspections" Then
+                Dim segment As New List(Of String)()
+                SQL = "select InspectionJobSummaryYearly.id AS 'Id', JobNumber AS 'JobNumber', DataNo As 'DataNumber' from dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1, '" & dt & "')"
+                Command.CommandType = CommandType.Text 'sets the type of the sql
+                Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                Connection.Open() 'opens the connction
+                DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                    segment = New List(Of String)()
+                    segment.Add(DR("Id"))
+                    segment.Add(DR("JobNumber"))
+                    segment.Add(DR("DataNumber"))
+                    retval.Add(segment)
+
+
+                End While
+                Connection.Close() 'closes the connection
+                DR.Close() 'closes the reader
+                Return retval
+
+            ElseIf gt = "No. of Rejected Lots" Then
+                Dim segment As New List(Of String)()
+                SQL = "select InspectionJobSummaryYearly.id AS 'Id', JobNumber AS 'JobNumber', DataNo As 'DataNumber' from dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1, '" & dt & "') AND Technical_PassFail = 0"
+                Command.CommandType = CommandType.Text 'sets the type of the sql
+                Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                Connection.Open() 'opens the connction
+                DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                    segment = New List(Of String)()
+                    segment.Add(DR("Id"))
+                    segment.Add(DR("JobNumber"))
+                    segment.Add(DR("DataNumber"))
+                    retval.Add(segment)
+
+
+                End While
+                Connection.Close() 'closes the connection
+                DR.Close() 'closes the reader
+                Return retval
+
+
+            End If
+            Return retval
+        End Function
         Public Function DrawChart(ByVal fac As String, ByVal gt As String, ByVal tp As String, ByVal Fromdate As String, ByVal Todate As String, ByVal DataNo As String, ByVal WorkOrder As String, ByVal AuditType As String) As List(Of List(Of String))
             Dim retval As New List(Of List(Of String))()
             Dim WhereString As String = " AND Inspection_Finished BETWEEN '" & Fromdate & "' AND '" & Todate & "'"

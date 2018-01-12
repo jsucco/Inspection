@@ -35,6 +35,22 @@ Namespace core
 
 
         End Function
+        Public Function DrillDownWR(ByVal dt As String, ByVal fac As String, ByVal gt As String, ByVal tp As String, ByVal wr As String, ByVal from As String, ByVal toDate As String, ByVal DN As String, ByVal WO As String, ByVal AT As String) As String
+
+
+
+            Return JsonConvert.SerializeObject(Inspect.DrillDownWR(dt, fac, gt, tp, wr, from, toDate, DN, WO, AT))
+
+
+        End Function
+        Public Function DrillDown(ByVal dt As String, ByVal fac As String, ByVal gt As String, ByVal tp As String, ByVal from As String, ByVal toDate As String, ByVal DN As String, ByVal WO As String, ByVal AT As String) As String
+
+
+
+            Return JsonConvert.SerializeObject(Inspect.DrillDown(dt, fac, gt, tp, from, toDate, DN, WO, AT))
+
+
+        End Function
         Public Function DrawChart(ByVal fac As String, ByVal gt As String, ByVal tp As String, ByVal from As String, ByVal toDate As String, ByVal DN As String, ByVal WO As String, ByVal AT As String) As String
 
 
