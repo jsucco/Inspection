@@ -8,19 +8,21 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
     <style type="text/css">
         .ui-widget-content td {
-            font-size: 1.2em;
+            font-size: 1em;
         }
 
         .l1 {
             padding-left: 1em;
         }
-
+        .ui-jqgrid tr.jqgrow td {
+        white-space: normal !important;
+    }
         .loading {
             position: fixed;
             z-index: 20000;
             height: 2em;
             width: 2em;
-            overflow: show;
+            overflow: visible;
             margin: auto;
             top: 0;
             left: 0;
@@ -667,7 +669,7 @@
                 gridComplete: function () {
                     for (var i = 0; i < rowsToColor.length; i++) {
 
-                        $("#" + rowsToColor[i]).find("td").css("background-color", "LawnGreen");
+                        $("#" + rowsToColor[i]).find("td").css("background-color", "LightGray");
 
                     }
                 }

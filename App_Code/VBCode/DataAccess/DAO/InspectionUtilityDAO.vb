@@ -1396,7 +1396,7 @@ Namespace core
             ' AND InspectionJobSummaryYearly.WorkRoom = '" & wr & "' 
             If gt = "No_of_Defects" Then
                 Dim segment As New List(Of String)()
-                SQL = "select DefectDesc as DefectName, COUNT(DefectDesc) as DefectCount from (dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID) inner join Inspection.dbo.DefectMaster on InspectionJobSummaryYearly.id=Inspection.dbo.DefectMaster.InspectionJobSummaryId WHERE Name ='" & fac & "' AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1,'" & dt & "') AND InspectionJobSummaryYearly.WorkRoom = '" & wr & "'  group by DefectDesc ORDER By DefectCount ASC"
+                SQL = "select DefectDesc as DefectName, COUNT(DefectDesc) as DefectCount from (dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID) inner join Inspection.dbo.DefectMaster on InspectionJobSummaryYearly.id=Inspection.dbo.DefectMaster.InspectionJobSummaryId WHERE Name ='" & fac & "' AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1,'" & dt & "') AND InspectionJobSummaryYearly.WorkRoom = '" & wr & "'  group by DefectDesc ORDER By DefectCount DESC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1416,7 +1416,7 @@ Namespace core
                 Return retval
             ElseIf gt = "No_of_Rejects" Then
                 Dim segment As New List(Of String)()
-                SQL = "select DefectDesc as DefectName, COUNT(DefectDesc) as DefectCount from (dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID) inner join Inspection.dbo.DefectMaster on InspectionJobSummaryYearly.id=Inspection.dbo.DefectMaster.InspectionJobSummaryId WHERE Name ='" & fac & "' AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1,'" & dt & "') AND InspectionJobSummaryYearly.WorkRoom = '" & wr & "'  AND DefectClass != 'MINOR'  group by DefectDesc ORDER By DefectCount ASC"
+                SQL = "select DefectDesc as DefectName, COUNT(DefectDesc) as DefectCount from (dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID) inner join Inspection.dbo.DefectMaster on InspectionJobSummaryYearly.id=Inspection.dbo.DefectMaster.InspectionJobSummaryId WHERE Name ='" & fac & "' AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1,'" & dt & "') AND InspectionJobSummaryYearly.WorkRoom = '" & wr & "'  AND DefectClass != 'MINOR'  group by DefectDesc ORDER By DefectCount DESC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1505,7 +1505,7 @@ Namespace core
 
             If gt = "No. of Defects" Then
                 Dim segment As New List(Of String)()
-                SQL = "select DefectDesc as DefectName, COUNT(DefectDesc) as DefectCount from (dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID) inner join Inspection.dbo.DefectMaster on InspectionJobSummaryYearly.id=Inspection.dbo.DefectMaster.InspectionJobSummaryId WHERE Name ='" & fac & "' AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1,'" & dt & "') group by DefectDesc ORDER By DefectCount ASC"
+                SQL = "select DefectDesc as DefectName, COUNT(DefectDesc) as DefectCount from (dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID) inner join Inspection.dbo.DefectMaster on InspectionJobSummaryYearly.id=Inspection.dbo.DefectMaster.InspectionJobSummaryId WHERE Name ='" & fac & "' AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1,'" & dt & "') group by DefectDesc ORDER By DefectCount DESC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1525,7 +1525,7 @@ Namespace core
                 Return retval
             ElseIf gt = "No. of Rejects" Then
                 Dim segment As New List(Of String)()
-                SQL = "select DefectDesc as DefectName, COUNT(DefectDesc) as DefectCount from (dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID) inner join Inspection.dbo.DefectMaster on InspectionJobSummaryYearly.id=Inspection.dbo.DefectMaster.InspectionJobSummaryId WHERE Name ='" & fac & "' AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1,'" & dt & "') AND DefectClass != 'MINOR'  group by DefectDesc ORDER By DefectCount ASC"
+                SQL = "select DefectDesc as DefectName, COUNT(DefectDesc) as DefectCount from (dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID) inner join Inspection.dbo.DefectMaster on InspectionJobSummaryYearly.id=Inspection.dbo.DefectMaster.InspectionJobSummaryId WHERE Name ='" & fac & "' AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1,'" & dt & "') AND DefectClass != 'MINOR'  group by DefectDesc ORDER By DefectCount DESC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
