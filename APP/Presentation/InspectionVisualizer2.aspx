@@ -17,7 +17,7 @@
 
         .loading {
             position: fixed;
-            z-index: 999;
+            z-index: 20000;
             height: 2em;
             width: 2em;
             overflow: show;
@@ -160,19 +160,30 @@
             </select>
         </div>
     </div>
-    <div style="position: absolute; width: 130px; left: 85%; height: 150px;">
-        <div id="actionbuttons" style="width: 110px; margin: 0px; position: relative; float: right; top: -2px;">
-            <a href="#" style="color: white !important; font-size: 19px; width: 65px; height: 60px;" class="actionButton">Clear
-            <br />
-                Search
+    <div style="position: absolute; width: 180px; left: 85%; height: 70px;">
+        <div id="actionbuttons" style="width: 180px; margin: 0px; position: relative; float: right; top: -2px;">
+
+
+            <a href="#" id="ab" style="color: white !important; font-size: 19px; width: 65px; height: 60px; display: block; float: left;" class="actionButton">Clear Search
             </a>
+
+
+
+
+            <a href="#" id="ab2" style="color: white  !important; font-size: 16px; width: 65px; height: 60px; display: block; margin-left: 90px;" class="actionButton">How To Use
+            </a>
+
+
+
+
+
         </div>
     </div>
     <div id="PageFilters">
-        <div style="position: absolute; z-index: 100; left: 95.2%;" id="filterdiv">
+       <%-- <div style="position: absolute; z-index: 100; left: 95.2%;" id="filterdiv">
             <a id="hideFilters" style="position: absolute; border-style: outset;"></a>
             <a id="showFilters" style="position: absolute; display: none; border-style: outset;"></a>
-        </div>
+        </div>--%>
         <div id="FilterDiv" style="position: relative; left: -10px; top: 70px; width: 100%; height: 100px; background-color: rgba(240,240,240,1); border: 1px solid #ccc; overflow: hidden;">
             <h2 style="position: absolute; top: -15px;">PAGE FILTERS</h2>
 
@@ -208,24 +219,34 @@
                 <select id="select-AuditType" data-role="flipswitch" class="PageFilter selector">
                 </select>
             </div>
-            <div data-role="fieldcontain" style="position: absolute; top: 30px; left: 90%; z-index: 100;">
+           <%-- <div data-role="fieldcontain" style="position: absolute; top: 30px; left: 90%; z-index: 100;">
                 <label for="select-based-flipswitch" class="filterlabel">Prp Code:</label>
                 <div style="position: relative;">
                     <select id="select-prp" style="position: absolute; left: -2px; width: 150px;" data-role="flipswitch" class="selector" multiple="multiple">
                     </select>
                 </div>
-            </div>
+            </div>--%>
         </div>
         <div id="GridDiv" style="position: relative; left: -10px; top: 170px; width: 100%; height: 100px;">
             <table id="MainGrid" style="width: 100%;">
             </table>
         </div>
+        <div id="InstructionDialog" style="display: none; z-index: 30000;">
 
+            <p>Welcome to the Inspection Visualizer!</p>
+            <p>To get started, select the locations that you want to view from the dropdown at the top of the page.  Clicking on a category will add all locations under that category.</p>
+            <p>If you want to see data for individual workrooms, click on one of the '+' icons on the far left of the data grid.  This will cause a sub-graph of all available workrooms to appear.</p>
+            <p>You can view line graphs for all 7 data categories.  To do so, double-click on the cell that has the desired category and time period.  The Custom field is controlled with the Page filters, located just under the location dropdown. </p>
+            <p>Once the linegraph is loaded, you can drill down further into the data if you choose.  To do so, just click on one of the nodes on the line graph.  Note that this will only work for 'No. of Defects', 'No. of Rejects','No. of Inspections', and 'No. of Rejected Lots'</p>
+            <p>To clear out all data, and wipe the grid clean, click 'Clear Search' in the top right corner of the page.</p>
+            <p>Any questions or bug reports should be directed to Kris Bredwell (kbredwell@standardtextile.com)</p>
+
+        </div>
         <div id="GraphDialog" class="GDIV" style="position: relative; display: block; z-index: 1000;">
             <section>
                 <div id="chart_div" style="position: absolute; left: 0px; top: 0px; width: 90%; height: 90%; z-index: 10000;"></div>
             </section>
-           
+
 
         </div>
 
@@ -414,10 +435,12 @@
             google.charts.load('current', { 'packages': ['corechart'] });
             google.charts.load('current', { 'packages': ['table'] });
             function drawWRChart(Facility, GridType, TimePeriod, WorkRoom) {
+                document.getElementById("loading").style.display = "block";
                 datahandler.DrawWRChart(Facility, GridType, TimePeriod, WorkRoom, fromdate, todate, $DataNo, $WorkOrder, $AuditType);
 
             }
             function drawChart(Facility, GridType, TimePeriod) {
+                document.getElementById("loading").style.display = "block";
                 datahandler.DrawChart(Facility, GridType, TimePeriod, fromdate, todate, $DataNo, $WorkOrder, $AuditType);
 
             }
@@ -451,6 +474,35 @@
                 return result;
             };
             var rowsToColor = [];
+            $("#InstructionDialog").wijdialog({
+                buttons: {
+
+                    Close: function () {
+                        $(this).wijdialog("close");
+                    }
+                },
+                open: function () {
+
+                },
+                close: function (event, ui) {
+
+                },
+                captionButtons: {
+                    pin: { visible: false },
+                    refresh: { visible: false },
+                    toggle: { visible: false },
+                    minimize: { visible: false },
+                    maximize: { visible: false }
+                },
+
+                resizable: false,
+                width: 1200,
+                height: 700,
+                autoOpen: false,
+                position: 'fixed',
+                modal: true
+
+            });
             $(".GDIV").wijdialog({
                 buttons: {
 
@@ -484,6 +536,7 @@
                 height: 700,
                 autoOpen: false,
                 position: 'fixed',
+                modal: true
 
             });
             $("#TableDialog").wijdialog({
@@ -996,10 +1049,13 @@
                 }
             });
 
-            $('.actionButton').on('click', function (event) {
+            $('#ab').on('click', function (event) {
                 $locSelect.val([]).trigger("change");
                 $('#MainGrid').jqGrid("clearGridData")
                 $('#MainGrid').trigger('reloadGrid');
+            });
+            $('#ab2').on('click', function (event) {
+                $('#InstructionDialog').wijdialog('open')
             });
             $('#backdiv').on('click', function (event) {
 
@@ -2950,7 +3006,9 @@
                             var chart = new google.visualization.Table(document.getElementById('table_div'));
                             chart.draw(dataarray, options);
                             $("#TableDialog").wijdialog("open");
+
                         }
+                        document.getElementById("loading").style.display = "none";
                     },
                     error: function (a, b, c) {
                         alert(c);
@@ -2989,7 +3047,7 @@
                             height: 520,
                             forceIFrame: true
                         };
-                        
+
                         var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
 
 
@@ -3005,10 +3063,12 @@
 
                             var item = selection[0];
                             if (item.row != null) {
+                                document.getElementById("loading").style.display = "block";
                                 datahandler.DrillDownWR((GraphData[item.row][0].getMonth() + 1) + "/" + GraphData[item.row][0].getDate() + "/" + (GraphData[item.row][0].getYear() + 1900), Facility, GridType, TimePeriod, WorkRoom, fromdate, todate, DataNo, WorkOrder, AuditType);
                             }
                         }
                         $(".GDIV").wijdialog("open");
+                        document.getElementById("loading").style.display = "none";
                     },
                     error: function (a, b, c) {
                         alert(c);
@@ -3029,7 +3089,7 @@
                             dataarray.addColumn('number', GridType);
                             NodeGraphData = [];
                             var dummy = [];
-                            
+
                             for (i = 0; i < conversion.length; i++) {
                                 dummy = [];
                                 dummy.push(conversion[i][0]);
@@ -3074,7 +3134,7 @@
                             dataarray.addColumn('string', 'Id');
                             dataarray.addColumn('string', 'Job Number');
                             dataarray.addColumn('string', 'Data Number');
-                            
+
                             NodeGraphData = [];
                             var dummy = [];
 
@@ -3095,6 +3155,7 @@
                             var chart = new google.visualization.Table(document.getElementById('table_div'));
                             chart.draw(dataarray, options);
                             $("#TableDialog").wijdialog("open");
+
                         }
                         if (GridType === 'No. of Rejected Lots') {
                             dataarray.addColumn('string', 'Id');
@@ -3121,7 +3182,9 @@
                             var chart = new google.visualization.Table(document.getElementById('table_div'));
                             chart.draw(dataarray, options);
                             $("#TableDialog").wijdialog("open");
+
                         }
+                        document.getElementById("loading").style.display = "none";
                     },
                     error: function (a, b, c) {
                         alert(c);
@@ -3177,10 +3240,12 @@
                             var item = selection[0];
                             if (item.row != null) {
                                 //GraphData[item.row][0]
-                                datahandler.DrillDown((GraphData[item.row][0].getMonth()+1) + "/" + GraphData[item.row][0].getDate() + "/" + (GraphData[item.row][0].getYear()+1900), Facility, GridType, TimePeriod, fromdate, todate, DataNo, WorkOrder, AuditType);
+                                document.getElementById("loading").style.display = "block";
+                                datahandler.DrillDown((GraphData[item.row][0].getMonth() + 1) + "/" + GraphData[item.row][0].getDate() + "/" + (GraphData[item.row][0].getYear() + 1900), Facility, GridType, TimePeriod, fromdate, todate, DataNo, WorkOrder, AuditType);
                             }
                         }
                         $(".GDIV").wijdialog("open");
+                        document.getElementById("loading").style.display = "none";
                     },
                     error: function (a, b, c) {
                         alert(c);
