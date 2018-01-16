@@ -14,9 +14,11 @@
         .l1 {
             padding-left: 1em;
         }
+
         .ui-jqgrid tr.jqgrow td {
-        white-space: normal !important;
-    }
+            white-space: normal !important;
+        }
+
         .loading {
             position: fixed;
             z-index: 20000;
@@ -182,7 +184,7 @@
         </div>
     </div>
     <div id="PageFilters">
-       <%-- <div style="position: absolute; z-index: 100; left: 95.2%;" id="filterdiv">
+        <%-- <div style="position: absolute; z-index: 100; left: 95.2%;" id="filterdiv">
             <a id="hideFilters" style="position: absolute; border-style: outset;"></a>
             <a id="showFilters" style="position: absolute; display: none; border-style: outset;"></a>
         </div>--%>
@@ -221,7 +223,7 @@
                 <select id="select-AuditType" data-role="flipswitch" class="PageFilter selector">
                 </select>
             </div>
-           <%-- <div data-role="fieldcontain" style="position: absolute; top: 30px; left: 90%; z-index: 100;">
+            <%-- <div data-role="fieldcontain" style="position: absolute; top: 30px; left: 90%; z-index: 100;">
                 <label for="select-based-flipswitch" class="filterlabel">Prp Code:</label>
                 <div style="position: relative;">
                     <select id="select-prp" style="position: absolute; left: -2px; width: 150px;" data-role="flipswitch" class="selector" multiple="multiple">
@@ -669,7 +671,7 @@
                 gridComplete: function () {
                     for (var i = 0; i < rowsToColor.length; i++) {
 
-                        $("#" + rowsToColor[i]).find("td").css("background-color", "LightGray");
+                        $("#" + rowsToColor[i]).find("td").css("background-color", "DarkGrey");
 
                     }
                 }
@@ -839,7 +841,7 @@
                 $("#select-AuditType").html(ithtml.join(''));
                 document.getElementById("select-AuditType").selectedIndex = 1;
             }
-            
+
             $("#menudiv").toggle();
             $("#loginView").toggle();
             $('#Locations .owl-item').each(function (index) {
@@ -864,11 +866,11 @@
 
                 window.location.assign('../../APP/APR_SiteEntry.aspx')
             });
-            
+
             $("#ExpandedImageCloser").on('click', function (event) {
                 $("#ExpandedImageHolder").toggle();
             });
-            
+
             $('.lnk_doc_type').on('click', function (e) {
                 $("#MainContent_ActiveReportId").val(e.currentTarget.id);
                 $('#MainContent_ReportCallBack').trigger('click');
@@ -955,7 +957,7 @@
                 },
                 date: exmtd_DateTo_fc
             });
-            
+
             $("#Graphs .owl-item").css("height", ($('#tabs').height() - 125).toString() + "px")
             //datahandler.GetDefectImages("999");
             //datahandler.GetDHULine();
@@ -1215,14 +1217,14 @@
                 });
             },
             RSSelectedRowCID: "",
-          
+
             Selected_ijs_id: 0,
-            
-            
-            
-            
-            
-            
+
+
+
+
+
+
             setSearchSelect: function (columnName, tableid) {
 
                 var names = grids.GetUniqueNames(columnName, tableid);
@@ -1245,13 +1247,13 @@
                 //);
                 //$("#gs_" + columnName).css("height", "40px");
             },
-         
-           
+
+
         };
-        
-            
-           
-           
+
+
+
+
         function FixJson(str) {
             return str
                 // wrap keys without quote with valid double quote
@@ -1261,8 +1263,8 @@
         };
         var mydata = [];
         var datahandler = {
-            
-           
+
+
             DrillDownWR: function (Date, Facility, GridType, TimePeriod, WorkRoom, fromdate, todate, DataNo, WorkOrder, AuditType) {
                 $.ajax({
                     url: "<%=Session("BaseUri")%>" + '/handlers/Presentation/SPC_InspectionVisualizer.ashx',
@@ -1394,8 +1396,10 @@
                         for (i = 0; i < conversion.length; i++) {
                             console.log(conversion[i]);
                             dummy = [];
+
                             dummy.push(new Date(conversion[i][0]))
                             dummy.push(parseFloat(conversion[i][1]))
+
                             console.log(dummy);
                             GraphData.push(dummy);
                         }
@@ -1562,6 +1566,7 @@
                     success: function (data) {
                         var conversion = JSON.parse(data);
                         console.log(conversion);
+                        console.log(Facility);
                         var dataarray = new google.visualization.DataTable();
                         dataarray.addColumn('date', 'Days');
                         dataarray.addColumn('number', GridType);
@@ -1570,8 +1575,11 @@
                         for (i = 0; i < conversion.length; i++) {
                             console.log(conversion[i]);
                             dummy = [];
+                            //WHAT DATA?
+
                             dummy.push(new Date(conversion[i][0]))
                             dummy.push(parseFloat(conversion[i][1]))
+
                             console.log(dummy);
                             GraphData.push(dummy);
                         }
@@ -1642,7 +1650,7 @@
                     }
                 });
             },
-            
+
             GetWorkOrders: function (FD, TD, cidArray, AT) {
                 $.ajax({
                     url: "<%=Session("BaseUri")%>" + '/handlers/Presentation/SPC_InspectionVisualizer.ashx',
@@ -1703,10 +1711,10 @@
                 });
 
             },
-           
+
 
         };
-       
+
 
     </script>
 

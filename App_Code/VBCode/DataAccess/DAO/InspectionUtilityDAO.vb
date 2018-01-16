@@ -1854,7 +1854,7 @@ Namespace core
                 Return retval
             ElseIf gt = "DHU" And tp = "Past Year" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select (CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select ISNULL((CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100, 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1875,7 +1875,7 @@ Namespace core
 
             ElseIf gt = "DHU" And tp = "Past 30 Days" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select (CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL , dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select ISNULL((CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100, 0) AS TOTAL , dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1895,7 +1895,7 @@ Namespace core
                 Return retval
             ElseIf gt = "DHU" And tp = "Custom" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select (CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString & " Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select ISNULL((CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100, 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString & " Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1916,7 +1916,7 @@ Namespace core
 
             ElseIf gt = "Reject Rate" And tp = "Past Year" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select (CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select ISNULL((CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100, 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1937,7 +1937,7 @@ Namespace core
 
             ElseIf gt = "Reject Rate" And tp = "Past 30 Days" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select (CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL , dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select ISNULL((CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100, 0) AS TOTAL , dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1957,7 +1957,7 @@ Namespace core
                 Return retval
             ElseIf gt = "Reject Rate" And tp = "Custom" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select (CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString & " Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select ISNULL((CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100, 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString & " Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
