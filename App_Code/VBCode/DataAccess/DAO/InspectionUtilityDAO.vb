@@ -3795,7 +3795,7 @@ Namespace core
             End If
 
 
-            Dim SQL As String = "Select Distinct WorkRoom from dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "'"
+            Dim SQL As String = "Select Distinct ISNULL(WorkRoom, 'Other') from dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "'"
             Command.CommandType = CommandType.Text
             Command.Connection = Connection
             Command.CommandText = SQL
