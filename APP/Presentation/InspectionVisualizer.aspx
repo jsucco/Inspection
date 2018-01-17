@@ -386,7 +386,7 @@
         var DefectPictureArrayF = [];
         var selectFiltervalues = [{ col: "id", val: "ALL" }, { col: "JobNumber", val: "ALL" }, { col: "UnitDesc", val: "ALL" }, { col: "Name", val: "ALL" }, { col: "Technical_PassFail", val: "ALL" }];
         var selectSpecFiltervalues = [{ col: "id", val: "ALL" }, { col: "JobNumber", val: "ALL" }, { col: "UnitDesc", val: "ALL" }, { col: "DataNo", val: "ALL" }];
-        var selList = ["1001", "115", "114", "627", "590", "661", "482", "485", "578", "113", "112", "111"];
+        var selList = ["1001", "115", "114", "627", "590", "482", "485", "578", "113", "112", "111"];
         var startX;
         var initialMouseX;
         var draggedObject;
@@ -624,7 +624,7 @@
                             { name: 'Reject_Rate', width: 200 },
                             { name: 'Lot_Acceptance', width: 200 }
                         ],
-                        rowNum: 20,
+                        rowNum: 100,
                         sortname: 'num',
                         sortorder: "asc",
                         height: '100%',
@@ -692,7 +692,7 @@
                     fchtml.push('<option value = "' + value.CID.trim() + '" class="l1">' + value.text.trim() + ' (' + value.Abreviation.trim() + ')</option>');
                     fcid.push(value.CID.trim());
                 }
-                else if (value.text.trim() === 'Carolina' || value.text.trim() === 'Thomaston' || value.Abreviation.trim() === 'PCE' || value.Abreviation.trim() === 'STM' || value.Abreviation.trim() === 'SAT') {
+                else if (value.text.trim() === 'Carolina' || value.text.trim() === 'Thomaston' || value.Abreviation.trim() === 'PCE' ) {
                     dchtml.push('<option value = "' + value.CID.trim() + '" class="l1">' + value.text.trim() + ' (' + value.Abreviation.trim() + ')</option>');
                     dcid.push(value.CID.trim());
                 }
@@ -700,7 +700,7 @@
                     ihtml.push('<option value = "' + value.CID.trim() + '" class="l1">' + value.text.trim() + ' (' + value.Abreviation.trim() + ')</option>');
                     iid.push(value.CID.trim());
                 }
-                else if (value.Abreviation.trim() !== 'ALL' && value.text.trim() !== 'Augusta') {
+                else if (value.Abreviation.trim() !== 'ALL' && value.text.trim() !== 'Augusta' && value.Abreviation.trim() !== 'STM' && value.Abreviation.trim() !== 'SAT') {
                     dhtml.push('<option value = "' + value.CID.trim() + '" class="l1">' + value.text.trim() + ' (' + value.Abreviation.trim() + ')</option>');
                     did.push(value.CID.trim());
                 }
