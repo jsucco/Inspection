@@ -577,9 +577,9 @@
             });
             $("#GlobalGrid").jqGrid({
                 datatype: 'local',
-                colNames: ['Time_Period', 'No. of Defects', 'No. of Rejects', 'No. of Inspections', 'No. of Rejected Lots', 'DHU', 'Reject Rate', 'Lot Acceptance'],
+                colNames: ['Facility', 'Time_Period', 'No. of Defects', 'No. of Rejects', 'No. of Inspections', 'No. of Rejected Lots', 'DHU', 'Reject Rate', 'Lot Acceptance'],
                 colModel: [
-                    
+                    { name: 'Facility', width: 200, align: 'center', cellattr: arrtSetting },
                     { name: 'Time_Period', width: 200, formatter: rowColorFormatter },
                     { name: 'No_of_Defects', width: 200 },
                     { name: 'No_of_Rejects', width: 200 },
