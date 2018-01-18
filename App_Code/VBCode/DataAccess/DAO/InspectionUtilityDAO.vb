@@ -1711,7 +1711,7 @@ Namespace core
             Dim retval As New List(Of String)()
             Dim startDate As DateTime = Convert.ToDateTime(fromDate)
             Dim oDate As DateTime = Convert.ToDateTime(toDate)
-            Dim WhereString2 As String = "WHERE CID IS NOT NULL"
+            Dim WhereString2 As String = "WHERE (CID = 114 OR CID = 115 OR CID = 590 OR CID = 1001 OR CID = 627)"
             If AT = "ALL" Then
                 WhereString2 = WhereString2 & " AND InspectionType != 'ROLL'"
             ElseIf AT = "FINAL AUDIT" Then
@@ -1727,7 +1727,7 @@ Namespace core
             If WO <> "ALL" Then
                 WhereString2 = WhereString2 & " AND JobNumber = '" & WO & "'"
             End If
-            Dim WhereString As String = "WHERE CID IS NOT NULL AND Inspection_Finished BETWEEN '" & startDate & "' AND '" & oDate & "'"
+            Dim WhereString As String = "WHERE (CID = 114 OR CID = 115 OR CID = 590 OR CID = 1001 OR CID = 627) AND Inspection_Finished BETWEEN '" & startDate & "' AND '" & oDate & "'"
             If AT = "ALL" Then
                 WhereString = WhereString & " AND InspectionType != 'ROLL'"
             ElseIf AT = "FINAL AUDIT" Then
@@ -2480,7 +2480,7 @@ Namespace core
 
                 End If
             ElseIf fac = "Global" Then
-                Dim WhereString2 As String = "WHERE CID IS NOT NULL"
+                Dim WhereString2 As String = "WHERE (CID = 114 OR CID = 115 OR CID = 590 OR CID = 1001 OR CID = 627)"
 
                 If AuditType = "ALL" Then
                     WhereString2 = WhereString2 & " AND InspectionType != 'ROLL'"
@@ -2497,7 +2497,7 @@ Namespace core
                 If WorkOrder <> "ALL" Then
                     WhereString2 = WhereString2 & " AND JobNumber = '" & WorkOrder & "'"
                 End If
-                Dim WhereString As String = "WHERE CID IS NOT NULL AND Inspection_Finished BETWEEN '" & Fromdate & "' AND '" & Todate & "'"
+                Dim WhereString As String = "WHERE (CID = 114 OR CID = 115 OR CID = 590 OR CID = 1001 OR CID = 627) AND Inspection_Finished BETWEEN '" & Fromdate & "' AND '" & Todate & "'"
                 If AuditType = "ALL" Then
                     WhereString = WhereString & " AND InspectionType != 'ROLL'"
                 ElseIf AuditType = "FINAL AUDIT" Then
@@ -3314,7 +3314,7 @@ Namespace core
 
                 End If
             ElseIf fac = "Global" Then
-                Dim WhereString2 As String = "WHERE CID IS NOT NULL"
+                Dim WhereString2 As String = "WHERE (CID = 114 OR CID = 115 OR CID = 590 OR CID = 1001 OR CID = 627)"
                 If AuditType = "ALL" Then
                     WhereString2 = WhereString2 & " AND InspectionType != 'ROLL'"
                 ElseIf AuditType = "FINAL AUDIT" Then
@@ -3330,7 +3330,7 @@ Namespace core
                 If WorkOrder <> "ALL" Then
                     WhereString2 = WhereString2 & " AND JobNumber = '" & WorkOrder & "'"
                 End If
-                Dim WhereString As String = "WHERE CID IS NOT NULL AND Inspection_Finished BETWEEN '" & Fromdate & "' AND '" & Todate & "'"
+                Dim WhereString As String = "WHERE (CID = 114 OR CID = 115 OR CID = 590 OR CID = 1001 OR CID = 627) AND Inspection_Finished BETWEEN '" & Fromdate & "' AND '" & Todate & "'"
                 If AuditType = "ALL" Then
                     WhereString = WhereString & " AND InspectionType != 'ROLL'"
                 ElseIf AuditType = "FINAL AUDIT" Then
@@ -3370,7 +3370,7 @@ Namespace core
                     Return retval
                 ElseIf gt = "No. of Defects" And tp = "Past 30 Days" Then
                     Dim segment As New List(Of String)()
-                    SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                     Command.CommandType = CommandType.Text 'sets the type of the sql
                     Command.Connection = Connection 'sets the connection of our sql command to MyDB
                     Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -3833,7 +3833,7 @@ Namespace core
                     Return retval
                 ElseIf gt = "No. of Defects" And tp = "Past 30 Days" Then
                     Dim segment As New List(Of String)()
-                    SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                     Command.CommandType = CommandType.Text 'sets the type of the sql
                     Command.Connection = Connection 'sets the connection of our sql command to MyDB
                     Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -4296,7 +4296,7 @@ Namespace core
                     Return retval
                 ElseIf gt = "No. of Defects" And tp = "Past 30 Days" Then
                     Dim segment As New List(Of String)()
-                    SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                     Command.CommandType = CommandType.Text 'sets the type of the sql
                     Command.Connection = Connection 'sets the connection of our sql command to MyDB
                     Command.CommandText = SQL 'sets the statement that executes at the data source to our string
