@@ -221,12 +221,12 @@ Namespace core
             DR.Close() 'closes the reader
             Return retval
         End Function
-        Public Function GetMonthlyDefectTotal(ByVal CID As Integer) As Integer
+        Public Function GetMonthlyDefectTotal(ByVal CID As Integer, ByVal WS As String) As Integer
             Dim retval As Integer = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " AND Inspection_Finished >= DATEADD(month,-1,GETDATE())"
+            Dim SQL As String = "Select SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & WS & " AND Inspection_Finished >= DATEADD(month,-1,GETDATE())"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -252,12 +252,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function GetYearlyDefectTotal(ByVal CID As Integer) As Integer
+        Public Function GetYearlyDefectTotal(ByVal CID As Integer, ByVal WS As String) As Integer
             Dim retval As Integer = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID
+            Dim SQL As String = "Select SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & WS
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -314,12 +314,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function GetMonthlyInspectionTotal(ByVal CID As Integer) As Integer
+        Public Function GetMonthlyInspectionTotal(ByVal CID As Integer, ByVal WS As String) As Integer
             Dim retval As Integer = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select COUNT(id) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
+            Dim SQL As String = "Select COUNT(id) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & WS & " And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -345,12 +345,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function GetYearlyInspectionTotal(ByVal CID As Integer) As Integer
+        Public Function GetYearlyInspectionTotal(ByVal CID As Integer, ByVal WS As String) As Integer
             Dim retval As Integer = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select COUNT(id) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID
+            Dim SQL As String = "Select COUNT(id) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & WS
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -408,12 +408,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function GetMonthlyRejectTotal(ByVal CID As Integer) As Integer
+        Public Function GetMonthlyRejectTotal(ByVal CID As Integer, ByVal WS As String) As Integer
             Dim retval As Integer = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select SUM(MajorsCount+RepairsCount+ScrapCount) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
+            Dim SQL As String = "Select SUM(MajorsCount+RepairsCount+ScrapCount) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & WS & " And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -439,12 +439,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function GetYearlyRejectTotal(ByVal CID As Integer) As Integer
+        Public Function GetYearlyRejectTotal(ByVal CID As Integer, ByVal WS As String) As Integer
             Dim retval As Integer = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select SUM(MajorsCount+RepairsCount+ScrapCount) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID
+            Dim SQL As String = "Select SUM(MajorsCount+RepairsCount+ScrapCount) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & WS
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -502,12 +502,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function GetMonthlyRejectLotTotal(ByVal CID As Integer) As Integer
+        Public Function GetMonthlyRejectLotTotal(ByVal CID As Integer, ByVal WS As String) As Integer
             Dim retval As Integer = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select COUNT(id) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " And Technical_PassFail = 0 And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
+            Dim SQL As String = "Select COUNT(id) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & WS & " And Technical_PassFail = 0 And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -533,12 +533,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function GetYearlyRejectLotTotal(ByVal CID As Integer) As Integer
+        Public Function GetYearlyRejectLotTotal(ByVal CID As Integer, ByVal WS As String) As Integer
             Dim retval As Double = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select COUNT(id) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " And Technical_PassFail = 0"
+            Dim SQL As String = "Select COUNT(id) AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & WS & " And Technical_PassFail = 0"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -595,12 +595,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function GetMonthlyDHU(ByVal CID As Integer) As Double
+        Public Function GetMonthlyDHU(ByVal CID As Integer, ByVal WS As String) As Double
             Dim retval As Integer = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select (CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
+            Dim SQL As String = "Select (CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & WS & " And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -626,12 +626,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function GetYearlyDHU(ByVal CID As Integer) As Double
+        Public Function GetYearlyDHU(ByVal CID As Integer, ByVal WS As String) As Double
             Dim retval As Double = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select (CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID
+            Dim SQL As String = "Select (CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & WS
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -688,12 +688,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function GetMonthlyRejectionRate(ByVal CID As Integer) As Double
+        Public Function GetMonthlyRejectionRate(ByVal CID As Integer, ByVal WS As String) As Double
             Dim retval As Integer = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select (CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
+            Dim SQL As String = "Select (CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & WS & " And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -719,12 +719,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function GetYearlyRejectionRate(ByVal CID As Integer) As Double
+        Public Function GetYearlyRejectionRate(ByVal CID As Integer, ByVal WS As String) As Double
             Dim retval As Double = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select (CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID
+            Dim SQL As String = "Select (CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & WS
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -781,12 +781,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function GetMonthlyLotAcceptance(ByVal CID As Integer) As String
+        Public Function GetMonthlyLotAcceptance(ByVal CID As Integer, ByVal WS As String) As String
             Dim retval As String = "'0.00%'"
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select Top (1) (CAST( (Select COUNT(id) from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " AND Technical_PassFail=1 AND Inspection_Finished >= DATEADD(month,-1,GETDATE())) AS Decimal(10,2))/CAST((Select COUNT(id) from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " AND Inspection_Finished >= DATEADD(month,-1,GETDATE())) AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly"
+            Dim SQL As String = "Select Top (1) (CAST( (Select COUNT(id) from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & WS & " AND Technical_PassFail=1 AND Inspection_Finished >= DATEADD(month,-1,GETDATE())) AS Decimal(10,2))/CAST((Select COUNT(id) from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & WS & " AND Inspection_Finished >= DATEADD(month,-1,GETDATE())) AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -812,12 +812,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function GetYearlyLotAcceptance(ByVal CID As Integer) As String
+        Public Function GetYearlyLotAcceptance(ByVal CID As Integer, ByVal WS As String) As String
             Dim retval As String = "'0.00%'"
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select Top (1) (CAST( (Select COUNT(id) from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & " AND Technical_PassFail=1 ) AS Decimal(10,2))/CAST((Select COUNT(id) from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & ") AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly"
+            Dim SQL As String = "Select Top (1) (CAST( (Select COUNT(id) from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & WS & " AND Technical_PassFail=1 ) AS Decimal(10,2))/CAST((Select COUNT(id) from dbo.InspectionJobSummaryYearly WHERE CID = " & CID & WS & ") AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -879,9 +879,25 @@ Namespace core
             Dim retval As New List(Of String)()
             Dim startDate As DateTime = Convert.ToDateTime(fromDate)
             Dim oDate As DateTime = Convert.ToDateTime(toDate)
+            Dim WhereString2 As String = ""
+            If AT = "ALL" Then
+                WhereString2 = WhereString2 & " AND InspectionType != 'ROLL'"
+            ElseIf AT = "FINAL AUDIT" Then
+                WhereString2 = WhereString2 & " AND InspectionType = 'EOL'"
+            ElseIf AT = "IN LINE" Then
+                WhereString2 = WhereString2 & " AND InspectionType = 'IL'"
+            Else
+                WhereString2 = WhereString2 & " AND InspectionType = '" & AT & "'"
+            End If
+            If DN <> "ALL" Then
+                WhereString2 = WhereString2 & " AND DataNo = '" & DN & "'"
+            End If
+            If WO <> "ALL" Then
+                WhereString2 = WhereString2 & " AND JobNumber = '" & WO & "'"
+            End If
             Dim WhereString As String = " AND Inspection_Finished BETWEEN '" & startDate & "' AND '" & oDate & "'"
             If AT = "ALL" Then
-
+                WhereString = WhereString & " AND InspectionType != 'ROLL'"
             ElseIf AT = "FINAL AUDIT" Then
                 WhereString = WhereString & " AND InspectionType = 'EOL'"
             ElseIf AT = "IN LINE" Then
@@ -909,9 +925,9 @@ Namespace core
                 DR = Command.ExecuteReader
                 If DR.HasRows = True Then
                     DR.Read()
-                    Dim Top As String = String.Format("Facility: '{0}', Time_Period: 'Past 30 Days', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ rowspan: '3' }} }}", DR.GetString(0), GetMonthlyDefectTotal(CID), GetMonthlyInspectionTotal(CID), GetMonthlyRejectTotal(CID), GetMonthlyRejectLotTotal(CID), GetMonthlyDHU(CID), GetMonthlyRejectionRate(CID), GetMonthlyLotAcceptance(CID))
+                    Dim Top As String = String.Format("Facility: '{0}', Time_Period: 'Past 30 Days', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ rowspan: '3' }} }}", DR.GetString(0), GetMonthlyDefectTotal(CID, WhereString2), GetMonthlyInspectionTotal(CID, WhereString2), GetMonthlyRejectTotal(CID, WhereString2), GetMonthlyRejectLotTotal(CID, WhereString2), GetMonthlyDHU(CID, WhereString2), GetMonthlyRejectionRate(CID, WhereString2), GetMonthlyLotAcceptance(CID, WhereString2))
                     retval.Add("{" + Top + "}")
-                    Dim Mid As String = String.Format("Facility: '{0}', Time_Period: 'Past Year', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", DR.GetString(0), GetYearlyDefectTotal(CID), GetYearlyInspectionTotal(CID), GetYearlyRejectTotal(CID), GetYearlyRejectLotTotal(CID), GetYearlyDHU(CID), GetYearlyRejectionRate(CID), GetYearlyLotAcceptance(CID))
+                    Dim Mid As String = String.Format("Facility: '{0}', Time_Period: 'Past Year', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", DR.GetString(0), GetYearlyDefectTotal(CID, WhereString2), GetYearlyInspectionTotal(CID, WhereString2), GetYearlyRejectTotal(CID, WhereString2), GetYearlyRejectLotTotal(CID, WhereString2), GetYearlyDHU(CID, WhereString2), GetYearlyRejectionRate(CID, WhereString2), GetYearlyLotAcceptance(CID, WhereString2))
                     retval.Add("{" + Mid + "}")
                     Dim Bottom As String = String.Format("Facility: '{0}', Time_Period: 'Custom', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", DR.GetString(0), GetCustomDefectTotal(CID, WhereString), GetCustomInspectionTotal(CID, WhereString), GetCustomRejectTotal(CID, WhereString), GetCustomRejectLotTotal(CID, WhereString), GetCustomDHU(CID, WhereString), GetCustomRejectionRate(CID, WhereString), GetCustomLotAcceptance(CID, WhereString))
                     retval.Add("{" + Bottom + "}")
@@ -925,9 +941,25 @@ Namespace core
         End Function
         Public Function DrawWRChart(ByVal fac As String, ByVal gt As String, ByVal tp As String, ByVal wr As String, ByVal Fromdate As String, ByVal Todate As String, ByVal DataNo As String, ByVal WorkOrder As String, ByVal AuditType As String) As List(Of List(Of String))
             Dim retval As New List(Of List(Of String))()
+            Dim WhereString2 As String = ""
+            If AuditType = "ALL" Then
+                WhereString2 = WhereString2 & " AND InspectionType != 'ROLL'"
+            ElseIf AuditType = "FINAL AUDIT" Then
+                WhereString2 = WhereString2 & " AND InspectionType = 'EOL'"
+            ElseIf AuditType = "IN LINE" Then
+                WhereString2 = WhereString2 & " AND InspectionType = 'IL'"
+            Else
+                WhereString2 = WhereString2 & " AND InspectionType = '" & AuditType & "'"
+            End If
+            If DataNo <> "ALL" Then
+                WhereString2 = WhereString2 & " AND DataNo = '" & DataNo & "'"
+            End If
+            If WorkOrder <> "ALL" Then
+                WhereString2 = WhereString2 & " AND JobNumber = '" & WorkOrder & "'"
+            End If
             Dim WhereString As String = " AND Inspection_Finished BETWEEN '" & Fromdate & "' AND '" & Todate & "'"
             If AuditType = "ALL" Then
-
+                WhereString = WhereString & " AND InspectionType != 'ROLL'"
             ElseIf AuditType = "FINAL AUDIT" Then
                 WhereString = WhereString & " AND InspectionType = 'EOL'"
             ElseIf AuditType = "IN LINE" Then
@@ -945,7 +977,7 @@ Namespace core
             'AND WorkRoom = '" & wr & "'
             If gt = "No_of_Defects" And tp = "Past Year" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND WorkRoom = '" & wr & "' Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND WorkRoom = '" & wr & "'" & WhereString2 & " Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -965,7 +997,7 @@ Namespace core
                 Return retval
             ElseIf gt = "No_of_Defects" And tp = "Past 30 Days" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND WorkRoom = '" & wr & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND WorkRoom = '" & wr & "'" & WhereString2 & " And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1005,7 +1037,7 @@ Namespace core
                 Return retval
             ElseIf gt = "No_of_Rejects" And tp = "Past Year" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select ISNULL(SUM(MajorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND WorkRoom = '" & wr & "' Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select ISNULL(SUM(MajorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " AND WorkRoom = '" & wr & "' Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1025,7 +1057,7 @@ Namespace core
                 Return retval
             ElseIf gt = "No_of_Rejects" And tp = "Past 30 Days" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select ISNULL(SUM(MajorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND WorkRoom = '" & wr & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select ISNULL(SUM(MajorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " AND WorkRoom = '" & wr & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1065,7 +1097,7 @@ Namespace core
                 Return retval
             ElseIf gt = "No_of_Inspections" And tp = "Past Year" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND WorkRoom = '" & wr & "' Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " AND WorkRoom = '" & wr & "' Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1085,7 +1117,7 @@ Namespace core
                 Return retval
             ElseIf gt = "No_of_Inspections" And tp = "Past 30 Days" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND WorkRoom = '" & wr & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " AND WorkRoom = '" & wr & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1125,7 +1157,7 @@ Namespace core
                 Return retval
             ElseIf gt = "No_of_Rejected_Lots" And tp = "Past Year" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND WorkRoom = '" & wr & "' AND Technical_PassFail=0 Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " AND WorkRoom = '" & wr & "' AND Technical_PassFail=0 Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1145,7 +1177,7 @@ Namespace core
                 Return retval
             ElseIf gt = "No_of_Rejected_Lots" And tp = "Past 30 Days" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND WorkRoom = '" & wr & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) AND Technical_PassFail=0 Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " AND WorkRoom = '" & wr & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) AND Technical_PassFail=0 Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1185,7 +1217,7 @@ Namespace core
                 Return retval
             ElseIf gt = "DHU" And tp = "Past Year" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select (CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND WorkRoom = '" & wr & "' Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select (CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " AND WorkRoom = '" & wr & "' Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1206,7 +1238,7 @@ Namespace core
 
             ElseIf gt = "DHU" And tp = "Past 30 Days" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select (CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL , dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND WorkRoom = '" & wr & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select (CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL , dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " AND WorkRoom = '" & wr & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1247,7 +1279,7 @@ Namespace core
 
             ElseIf gt = "Reject_Rate" And tp = "Past Year" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select (CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND WorkRoom = '" & wr & "' Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select (CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " AND WorkRoom = '" & wr & "' Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1268,7 +1300,7 @@ Namespace core
 
             ElseIf gt = "Reject_Rate" And tp = "Past 30 Days" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select (CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL , dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND WorkRoom = '" & wr & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select (CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL , dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " AND WorkRoom = '" & wr & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1309,7 +1341,7 @@ Namespace core
 
             ElseIf gt = "Lot_Acceptance" And tp = "Past Year" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select ISNULL((CAST(s3.TOTAL AS Decimal(10,2)))/(CAST( s3.TOTAL2 AS Decimal(10,2)))*100, 0) AS TOTAL3,dateadd(DAY,0, datediff(day,0, s3.Comp_Date)) AS Comp_Date3  FROM (Select s1.TOTAL, s2.TOTAL2, s2.Comp_Date From ((Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND WorkRoom = '" & wr & "' AND Technical_PassFail=1 Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))) AS s1 RIGHT JOIN (Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL2, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND WorkRoom = '" & wr & "' Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))) AS s2 ON s1.Comp_Date=s2.Comp_Date)) AS s3 ORDER by Comp_Date3 ASC"
+                SQL = "Select ISNULL((CAST(s3.TOTAL AS Decimal(10,2)))/(CAST( s3.TOTAL2 AS Decimal(10,2)))*100, 0) AS TOTAL3,dateadd(DAY,0, datediff(day,0, s3.Comp_Date)) AS Comp_Date3  FROM (Select s1.TOTAL, s2.TOTAL2, s2.Comp_Date From ((Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " AND WorkRoom = '" & wr & "' AND Technical_PassFail=1 Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))) AS s1 RIGHT JOIN (Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL2, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " AND WorkRoom = '" & wr & "' Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))) AS s2 ON s1.Comp_Date=s2.Comp_Date)) AS s3 ORDER by Comp_Date3 ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1330,7 +1362,7 @@ Namespace core
 
             ElseIf gt = "Lot_Acceptance" And tp = "Past 30 Days" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select ISNULL((CAST(s3.TOTAL AS Decimal(10,2)))/(CAST( s3.TOTAL2 AS Decimal(10,2)))*100, 0) AS TOTAL3,dateadd(DAY,0, datediff(day,0, s3.Comp_Date)) AS Comp_Date3  FROM (Select s1.TOTAL, s2.TOTAL2, s2.Comp_Date From ((Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND WorkRoom = '" & wr & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) AND Technical_PassFail=1 Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))) AS s1 RIGHT JOIN (Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL2, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND WorkRoom = '" & wr & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))) AS s2 ON s1.Comp_Date=s2.Comp_Date)) AS s3 ORDER by Comp_Date3 ASC"
+                SQL = "Select ISNULL((CAST(s3.TOTAL AS Decimal(10,2)))/(CAST( s3.TOTAL2 AS Decimal(10,2)))*100, 0) AS TOTAL3,dateadd(DAY,0, datediff(day,0, s3.Comp_Date)) AS Comp_Date3  FROM (Select s1.TOTAL, s2.TOTAL2, s2.Comp_Date From ((Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " AND WorkRoom = '" & wr & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) AND Technical_PassFail=1 Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))) AS s1 RIGHT JOIN (Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL2, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " AND WorkRoom = '" & wr & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))) AS s2 ON s1.Comp_Date=s2.Comp_Date)) AS s3 ORDER by Comp_Date3 ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1376,9 +1408,25 @@ Namespace core
         End Function
         Public Function DrillDownWR(ByVal dt As String, ByVal fac As String, ByVal gt As String, ByVal tp As String, ByVal wr As String, ByVal Fromdate As String, ByVal Todate As String, ByVal DataNo As String, ByVal WorkOrder As String, ByVal AuditType As String) As List(Of List(Of String))
             Dim retval As New List(Of List(Of String))()
+            Dim WhereString2 As String = ""
+            If AuditType = "ALL" Then
+                WhereString2 = WhereString2 & " AND InspectionType != 'ROLL'"
+            ElseIf AuditType = "FINAL AUDIT" Then
+                WhereString2 = WhereString2 & " AND InspectionType = 'EOL'"
+            ElseIf AuditType = "IN LINE" Then
+                WhereString2 = WhereString2 & " AND InspectionType = 'IL'"
+            Else
+                WhereString2 = WhereString2 & " AND InspectionType = '" & AuditType & "'"
+            End If
+            If DataNo <> "ALL" Then
+                WhereString2 = WhereString2 & " AND DataNo = '" & DataNo & "'"
+            End If
+            If WorkOrder <> "ALL" Then
+                WhereString2 = WhereString2 & " AND JobNumber = '" & WorkOrder & "'"
+            End If
             Dim WhereString As String = " AND Inspection_Finished BETWEEN '" & Fromdate & "' AND '" & Todate & "'"
             If AuditType = "ALL" Then
-
+                WhereString = WhereString & " AND InspectionType != 'ROLL'"
             ElseIf AuditType = "FINAL AUDIT" Then
                 WhereString = WhereString & " AND InspectionType = 'EOL'"
             ElseIf AuditType = "IN LINE" Then
@@ -1396,7 +1444,7 @@ Namespace core
             ' AND InspectionJobSummaryYearly.WorkRoom = '" & wr & "' 
             If gt = "No_of_Defects" Then
                 Dim segment As New List(Of String)()
-                SQL = "select DefectDesc as DefectName, COUNT(DefectDesc) as DefectCount from (Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID) inner join Inspection.dbo.DefectMaster on InspectionJobSummaryYearly.id=Inspection.dbo.DefectMaster.InspectionJobSummaryId WHERE Name ='" & fac & "' AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1,'" & dt & "') AND InspectionJobSummaryYearly.WorkRoom = '" & wr & "'  group by DefectDesc ORDER By DefectCount DESC"
+                SQL = "select DefectDesc as DefectName, COUNT(DefectDesc) as DefectCount from (Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID) inner join Inspection.dbo.DefectMaster on InspectionJobSummaryYearly.id=Inspection.dbo.DefectMaster.InspectionJobSummaryId WHERE Name ='" & fac & "'" & WhereString2 & " AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1,'" & dt & "') AND InspectionJobSummaryYearly.WorkRoom = '" & wr & "'  group by DefectDesc ORDER By DefectCount DESC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1416,7 +1464,7 @@ Namespace core
                 Return retval
             ElseIf gt = "No_of_Rejects" Then
                 Dim segment As New List(Of String)()
-                SQL = "select DefectDesc as DefectName, COUNT(DefectDesc) as DefectCount from (Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID) inner join Inspection.dbo.DefectMaster on InspectionJobSummaryYearly.id=Inspection.dbo.DefectMaster.InspectionJobSummaryId WHERE Name ='" & fac & "' AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1,'" & dt & "') AND InspectionJobSummaryYearly.WorkRoom = '" & wr & "'  AND DefectClass != 'MINOR'  group by DefectDesc ORDER By DefectCount DESC"
+                SQL = "select DefectDesc as DefectName, COUNT(DefectDesc) as DefectCount from (Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID) inner join Inspection.dbo.DefectMaster on InspectionJobSummaryYearly.id=Inspection.dbo.DefectMaster.InspectionJobSummaryId WHERE Name ='" & fac & "'" & WhereString2 & " AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1,'" & dt & "') AND InspectionJobSummaryYearly.WorkRoom = '" & wr & "'  AND DefectClass != 'MINOR'  group by DefectDesc ORDER By DefectCount DESC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1437,7 +1485,7 @@ Namespace core
 
             ElseIf gt = "No_of_Inspections" Then
                 Dim segment As New List(Of String)()
-                SQL = "select InspectionJobSummaryYearly.id AS 'Id', JobNumber AS 'JobNumber', DataNo As 'DataNumber' from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1, '" & dt & "')  AND InspectionJobSummaryYearly.WorkRoom = '" & wr & "' "
+                SQL = "select InspectionJobSummaryYearly.id AS 'Id', JobNumber AS 'JobNumber', DataNo As 'DataNumber' from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1, '" & dt & "')  AND InspectionJobSummaryYearly.WorkRoom = '" & wr & "' "
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1459,7 +1507,7 @@ Namespace core
 
             ElseIf gt = "No_of_Rejected_Lots" Then
                 Dim segment As New List(Of String)()
-                SQL = "select InspectionJobSummaryYearly.id AS 'Id', JobNumber AS 'JobNumber', DataNo As 'DataNumber' from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1, '" & dt & "') AND Technical_PassFail = 0 AND InspectionJobSummaryYearly.WorkRoom = '" & wr & "' "
+                SQL = "select InspectionJobSummaryYearly.id AS 'Id', JobNumber AS 'JobNumber', DataNo As 'DataNumber' from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1, '" & dt & "') AND Technical_PassFail = 0 AND InspectionJobSummaryYearly.WorkRoom = '" & wr & "' "
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1485,9 +1533,25 @@ Namespace core
         End Function
         Public Function DrillDown(ByVal dt As String, ByVal fac As String, ByVal gt As String, ByVal tp As String, ByVal Fromdate As String, ByVal Todate As String, ByVal DataNo As String, ByVal WorkOrder As String, ByVal AuditType As String) As List(Of List(Of String))
             Dim retval As New List(Of List(Of String))()
+            Dim WhereString2 As String = ""
+            If AuditType = "ALL" Then
+                WhereString2 = WhereString2 & " AND InspectionType != 'ROLL'"
+            ElseIf AuditType = "FINAL AUDIT" Then
+                WhereString2 = WhereString2 & " AND InspectionType = 'EOL'"
+            ElseIf AuditType = "IN LINE" Then
+                WhereString2 = WhereString2 & " AND InspectionType = 'IL'"
+            Else
+                WhereString2 = WhereString2 & " AND InspectionType = '" & AuditType & "'"
+            End If
+            If DataNo <> "ALL" Then
+                WhereString2 = WhereString2 & " AND DataNo = '" & DataNo & "'"
+            End If
+            If WorkOrder <> "ALL" Then
+                WhereString2 = WhereString2 & " AND JobNumber = '" & WorkOrder & "'"
+            End If
             Dim WhereString As String = " AND Inspection_Finished BETWEEN '" & Fromdate & "' AND '" & Todate & "'"
             If AuditType = "ALL" Then
-
+                WhereString = WhereString & " AND InspectionType != 'ROLL'"
             ElseIf AuditType = "FINAL AUDIT" Then
                 WhereString = WhereString & " AND InspectionType = 'EOL'"
             ElseIf AuditType = "IN LINE" Then
@@ -1505,7 +1569,7 @@ Namespace core
 
             If gt = "No. of Defects" Then
                 Dim segment As New List(Of String)()
-                SQL = "select DefectDesc as DefectName, COUNT(DefectDesc) as DefectCount from (Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID) inner join Inspection.dbo.DefectMaster on InspectionJobSummaryYearly.id=Inspection.dbo.DefectMaster.InspectionJobSummaryId WHERE Name ='" & fac & "' AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1,'" & dt & "') group by DefectDesc ORDER By DefectCount DESC"
+                SQL = "select DefectDesc as DefectName, COUNT(DefectDesc) as DefectCount from (Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID) inner join Inspection.dbo.DefectMaster on InspectionJobSummaryYearly.id=Inspection.dbo.DefectMaster.InspectionJobSummaryId WHERE Name ='" & fac & "'" & WhereString2 & " AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1,'" & dt & "') group by DefectDesc ORDER By DefectCount DESC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1525,7 +1589,7 @@ Namespace core
                 Return retval
             ElseIf gt = "No. of Rejects" Then
                 Dim segment As New List(Of String)()
-                SQL = "select DefectDesc as DefectName, COUNT(DefectDesc) as DefectCount from (Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID) inner join Inspection.dbo.DefectMaster on InspectionJobSummaryYearly.id=Inspection.dbo.DefectMaster.InspectionJobSummaryId WHERE Name ='" & fac & "' AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1,'" & dt & "') AND DefectClass != 'MINOR'  group by DefectDesc ORDER By DefectCount DESC"
+                SQL = "select DefectDesc as DefectName, COUNT(DefectDesc) as DefectCount from (Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID) inner join Inspection.dbo.DefectMaster on InspectionJobSummaryYearly.id=Inspection.dbo.DefectMaster.InspectionJobSummaryId WHERE Name ='" & fac & "'" & WhereString2 & " AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1,'" & dt & "') AND DefectClass != 'MINOR'  group by DefectDesc ORDER By DefectCount DESC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1546,7 +1610,7 @@ Namespace core
 
             ElseIf gt = "No. of Inspections" Then
                 Dim segment As New List(Of String)()
-                SQL = "select InspectionJobSummaryYearly.id AS 'Id', JobNumber AS 'JobNumber', DataNo As 'DataNumber' from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1, '" & dt & "')"
+                SQL = "select InspectionJobSummaryYearly.id AS 'Id', JobNumber AS 'JobNumber', DataNo As 'DataNumber' from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1, '" & dt & "')"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1568,7 +1632,7 @@ Namespace core
 
             ElseIf gt = "No. of Rejected Lots" Then
                 Dim segment As New List(Of String)()
-                SQL = "select InspectionJobSummaryYearly.id AS 'Id', JobNumber AS 'JobNumber', DataNo As 'DataNumber' from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1, '" & dt & "') AND Technical_PassFail = 0"
+                SQL = "select InspectionJobSummaryYearly.id AS 'Id', JobNumber AS 'JobNumber', DataNo As 'DataNumber' from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " AND Inspection_Finished >= '" & dt & "' and Inspection_Finished < dateadd(day,1, '" & dt & "') AND Technical_PassFail = 0"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1594,9 +1658,25 @@ Namespace core
         End Function
         Public Function DrawChart(ByVal fac As String, ByVal gt As String, ByVal tp As String, ByVal Fromdate As String, ByVal Todate As String, ByVal DataNo As String, ByVal WorkOrder As String, ByVal AuditType As String) As List(Of List(Of String))
             Dim retval As New List(Of List(Of String))()
+            Dim WhereString2 As String = ""
+            If AuditType = "ALL" Then
+                WhereString2 = WhereString2 & " AND InspectionType != 'ROLL'"
+            ElseIf AuditType = "FINAL AUDIT" Then
+                WhereString2 = WhereString2 & " AND InspectionType = 'EOL'"
+            ElseIf AuditType = "IN LINE" Then
+                WhereString2 = WhereString2 & " AND InspectionType = 'IL'"
+            Else
+                WhereString2 = WhereString2 & " AND InspectionType = '" & AuditType & "'"
+            End If
+            If DataNo <> "ALL" Then
+                WhereString2 = WhereString2 & " AND DataNo = '" & DataNo & "'"
+            End If
+            If WorkOrder <> "ALL" Then
+                WhereString2 = WhereString2 & " AND JobNumber = '" & WorkOrder & "'"
+            End If
             Dim WhereString As String = " AND Inspection_Finished BETWEEN '" & Fromdate & "' AND '" & Todate & "'"
             If AuditType = "ALL" Then
-
+                WhereString = WhereString & " AND InspectionType != 'ROLL'"
             ElseIf AuditType = "FINAL AUDIT" Then
                 WhereString = WhereString & " AND InspectionType = 'EOL'"
             ElseIf AuditType = "IN LINE" Then
@@ -1614,7 +1694,7 @@ Namespace core
 
             If gt = "No. of Defects" And tp = "Past Year" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & "Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1634,7 +1714,7 @@ Namespace core
                 Return retval
             ElseIf gt = "No. of Defects" And tp = "Past 30 Days" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1674,7 +1754,7 @@ Namespace core
                 Return retval
             ElseIf gt = "No. of Rejects" And tp = "Past Year" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select ISNULL(SUM(MajorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select ISNULL(SUM(MajorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1694,7 +1774,7 @@ Namespace core
                 Return retval
             ElseIf gt = "No. of Rejects" And tp = "Past 30 Days" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select ISNULL(SUM(MajorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select ISNULL(SUM(MajorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1734,7 +1814,7 @@ Namespace core
                 Return retval
             ElseIf gt = "No. of Inspections" And tp = "Past Year" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1754,7 +1834,7 @@ Namespace core
                 Return retval
             ElseIf gt = "No. of Inspections" And tp = "Past 30 Days" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1794,7 +1874,7 @@ Namespace core
                 Return retval
             ElseIf gt = "No. of Rejected Lots" And tp = "Past Year" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND Technical_PassFail=0 Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " AND Technical_PassFail=0 Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1814,7 +1894,7 @@ Namespace core
                 Return retval
             ElseIf gt = "No. of Rejected Lots" And tp = "Past 30 Days" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) AND Technical_PassFail=0 Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " And Inspection_Finished >= DATEADD(month,-1,GETDATE()) AND Technical_PassFail=0 Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1854,7 +1934,7 @@ Namespace core
                 Return retval
             ElseIf gt = "DHU" And tp = "Past Year" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select ISNULL((CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100, 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select ISNULL((CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100, 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1875,7 +1955,7 @@ Namespace core
 
             ElseIf gt = "DHU" And tp = "Past 30 Days" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select ISNULL((CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100, 0) AS TOTAL , dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select ISNULL((CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100, 0) AS TOTAL , dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1916,7 +1996,7 @@ Namespace core
 
             ElseIf gt = "Reject Rate" And tp = "Past Year" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select ISNULL((CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100, 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select ISNULL((CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100, 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1937,7 +2017,7 @@ Namespace core
 
             ElseIf gt = "Reject Rate" And tp = "Past 30 Days" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select ISNULL((CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100, 0) AS TOTAL , dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                SQL = "Select ISNULL((CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100, 0) AS TOTAL , dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1978,7 +2058,7 @@ Namespace core
 
             ElseIf gt = "Lot Acceptance" And tp = "Past Year" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select ISNULL((CAST(s3.TOTAL AS Decimal(10,2)))/(CAST( s3.TOTAL2 AS Decimal(10,2)))*100, 0) AS TOTAL3,dateadd(DAY,0, datediff(day,0, s3.Comp_Date)) AS Comp_Date3  FROM (Select s1.TOTAL, s2.TOTAL2, s2.Comp_Date From ((Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND Technical_PassFail=1 Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))) AS s1 RIGHT JOIN (Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL2, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))) AS s2 ON s1.Comp_Date=s2.Comp_Date)) AS s3 ORDER by Comp_Date3 ASC"
+                SQL = "Select ISNULL((CAST(s3.TOTAL AS Decimal(10,2)))/(CAST( s3.TOTAL2 AS Decimal(10,2)))*100, 0) AS TOTAL3,dateadd(DAY,0, datediff(day,0, s3.Comp_Date)) AS Comp_Date3  FROM (Select s1.TOTAL, s2.TOTAL2, s2.Comp_Date From ((Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " AND Technical_PassFail=1 Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))) AS s1 RIGHT JOIN (Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL2, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))) AS s2 ON s1.Comp_Date=s2.Comp_Date)) AS s3 ORDER by Comp_Date3 ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -1999,7 +2079,7 @@ Namespace core
 
             ElseIf gt = "Lot Acceptance" And tp = "Past 30 Days" Then
                 Dim segment As New List(Of String)()
-                SQL = "Select ISNULL((CAST(s3.TOTAL AS Decimal(10,2)))/(CAST( s3.TOTAL2 AS Decimal(10,2)))*100, 0) AS TOTAL3,dateadd(DAY,0, datediff(day,0, s3.Comp_Date)) AS Comp_Date3  FROM (Select s1.TOTAL, s2.TOTAL2, s2.Comp_Date From ((Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) AND Technical_PassFail=1 Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))) AS s1 RIGHT JOIN (Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL2, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))) AS s2 ON s1.Comp_Date=s2.Comp_Date)) AS s3 ORDER by Comp_Date3 ASC"
+                SQL = "Select ISNULL((CAST(s3.TOTAL AS Decimal(10,2)))/(CAST( s3.TOTAL2 AS Decimal(10,2)))*100, 0) AS TOTAL3,dateadd(DAY,0, datediff(day,0, s3.Comp_Date)) AS Comp_Date3  FROM (Select s1.TOTAL, s2.TOTAL2, s2.Comp_Date From ((Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " And Inspection_Finished >= DATEADD(month,-1,GETDATE()) AND Technical_PassFail=1 Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))) AS s1 RIGHT JOIN (Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL2, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "'" & WhereString2 & " And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))) AS s2 ON s1.Comp_Date=s2.Comp_Date)) AS s3 ORDER by Comp_Date3 ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
                 Command.Connection = Connection 'sets the connection of our sql command to MyDB
                 Command.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -3119,12 +3199,12 @@ Namespace core
             Return returnlist2
 
         End Function
-        Public Function WRGetMonthlyDefectTotal(ByVal Facility As String, ByVal WR As String) As Integer
+        Public Function WRGetMonthlyDefectTotal(ByVal Facility As String, ByVal WR As String, ByVal WS As String) As Integer
             Dim retval As Integer = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS TOTAL from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "' AND WorkRoom='" & WR & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
+            Dim SQL As String = "Select SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS TOTAL from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "'" & WS & " AND WorkRoom='" & WR & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -3150,12 +3230,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function WRGetYearlyDefectTotal(ByVal Facility As String, ByVal WR As String) As Integer
+        Public Function WRGetYearlyDefectTotal(ByVal Facility As String, ByVal WR As String, ByVal WS As String) As Integer
             Dim retval As Integer = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS TOTAL from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "' AND WorkRoom='" & WR & "'"
+            Dim SQL As String = "Select SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS TOTAL from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "'" & WS & " AND WorkRoom='" & WR & "'"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -3212,12 +3292,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function WRGetMonthlyInspectionTotal(ByVal Facility As String, ByVal WR As String) As Integer
+        Public Function WRGetMonthlyInspectionTotal(ByVal Facility As String, ByVal WR As String, ByVal WS As String) As Integer
             Dim retval As Integer = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "' AND WorkRoom='" & WR & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
+            Dim SQL As String = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "'" & WS & " AND WorkRoom='" & WR & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -3243,12 +3323,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function WRGetYearlyInspectionTotal(ByVal Facility As String, ByVal WR As String) As Integer
+        Public Function WRGetYearlyInspectionTotal(ByVal Facility As String, ByVal WR As String, ByVal WS As String) As Integer
             Dim retval As Integer = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "' AND WorkRoom='" & WR & "'"
+            Dim SQL As String = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "'" & WS & " AND WorkRoom='" & WR & "'"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -3306,12 +3386,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function WRGetMonthlyRejectTotal(ByVal Facility As String, ByVal WR As String) As Integer
+        Public Function WRGetMonthlyRejectTotal(ByVal Facility As String, ByVal WR As String, ByVal WS As String) As Integer
             Dim retval As Integer = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select SUM(MajorsCount+RepairsCount+ScrapCount) AS TOTAL from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "' AND WorkRoom='" & WR & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
+            Dim SQL As String = "Select SUM(MajorsCount+RepairsCount+ScrapCount) AS TOTAL from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "'" & WS & " AND WorkRoom='" & WR & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -3337,12 +3417,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function WRGetYearlyRejectTotal(ByVal Facility As String, ByVal WR As String) As Integer
+        Public Function WRGetYearlyRejectTotal(ByVal Facility As String, ByVal WR As String, ByVal WS As String) As Integer
             Dim retval As Integer = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select SUM(MajorsCount+RepairsCount+ScrapCount) AS TOTAL from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "' AND WorkRoom='" & WR & "'"
+            Dim SQL As String = "Select SUM(MajorsCount+RepairsCount+ScrapCount) AS TOTAL from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "'" & WS & " AND WorkRoom='" & WR & "'"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -3400,12 +3480,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function WRGetMonthlyRejectLotTotal(ByVal Facility As String, ByVal WR As String) As Integer
+        Public Function WRGetMonthlyRejectLotTotal(ByVal Facility As String, ByVal WR As String, ByVal WS As String) As Integer
             Dim retval As Integer = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "' AND WorkRoom='" & WR & "' And Technical_PassFail = 0 And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
+            Dim SQL As String = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "'" & WS & " AND WorkRoom='" & WR & "' And Technical_PassFail = 0 And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -3431,12 +3511,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function WRGetYearlyRejectLotTotal(ByVal Facility As String, ByVal WR As String) As Integer
+        Public Function WRGetYearlyRejectLotTotal(ByVal Facility As String, ByVal WR As String, ByVal WS As String) As Integer
             Dim retval As Double = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "' AND WorkRoom='" & WR & "' And Technical_PassFail = 0"
+            Dim SQL As String = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "'" & WS & " AND WorkRoom='" & WR & "' And Technical_PassFail = 0"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -3493,12 +3573,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function WRGetMonthlyDHU(ByVal Facility As String, ByVal WR As String) As Double
+        Public Function WRGetMonthlyDHU(ByVal Facility As String, ByVal WR As String, ByVal WS As String) As Double
             Dim retval As Integer = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select (CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "' AND WorkRoom='" & WR & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
+            Dim SQL As String = "Select (CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "'" & WS & " AND WorkRoom='" & WR & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -3524,12 +3604,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function WRGetYearlyDHU(ByVal Facility As String, ByVal WR As String) As Double
+        Public Function WRGetYearlyDHU(ByVal Facility As String, ByVal WR As String, ByVal WS As String) As Double
             Dim retval As Double = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select (CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "' AND WorkRoom='" & WR & "'"
+            Dim SQL As String = "Select (CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "'" & WS & " AND WorkRoom='" & WR & "'"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -3586,12 +3666,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function WRGetMonthlyRejectionRate(ByVal Facility As String, ByVal WR As String) As Double
+        Public Function WRGetMonthlyRejectionRate(ByVal Facility As String, ByVal WR As String, ByVal WS As String) As Double
             Dim retval As Integer = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select (CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "' AND WorkRoom='" & WR & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
+            Dim SQL As String = "Select (CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "'" & WS & " AND WorkRoom='" & WR & "' And Inspection_Finished >= DATEADD(month,-1,GETDATE())"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -3617,12 +3697,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function WRGetYearlyRejectionRate(ByVal Facility As String, ByVal WR As String) As Double
+        Public Function WRGetYearlyRejectionRate(ByVal Facility As String, ByVal WR As String, ByVal WS As String) As Double
             Dim retval As Double = 0
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select (CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "' AND WorkRoom='" & WR & "'"
+            Dim SQL As String = "Select (CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100 AS TOTAL from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "'" & WS & " AND WorkRoom='" & WR & "'"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -3679,12 +3759,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function WRGetMonthlyLotAcceptance(ByVal Facility As String, ByVal WR As String) As String
+        Public Function WRGetMonthlyLotAcceptance(ByVal Facility As String, ByVal WR As String, ByVal WS As String) As String
             Dim retval As String = "'0.00%'"
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select Top (1) (CAST( (Select COUNT(InspectionJobSummaryYearly.id) from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "' AND WorkRoom='" & WR & "' AND Technical_PassFail=1 AND Inspection_Finished >= DATEADD(month,-1,GETDATE())) AS Decimal(10,2))/CAST((Select COUNT(InspectionJobSummaryYearly.id) from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "' AND WorkRoom='" & WR & "' AND Inspection_Finished >= DATEADD(month,-1,GETDATE())) AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly"
+            Dim SQL As String = "Select Top (1) (CAST( (Select COUNT(InspectionJobSummaryYearly.id) from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "'" & WS & " AND WorkRoom='" & WR & "' AND Technical_PassFail=1 AND Inspection_Finished >= DATEADD(month,-1,GETDATE())) AS Decimal(10,2))/CAST((Select COUNT(InspectionJobSummaryYearly.id) from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "'" & WS & " AND WorkRoom='" & WR & "' AND Inspection_Finished >= DATEADD(month,-1,GETDATE())) AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -3710,12 +3790,12 @@ Namespace core
             DR2.Close() 'closes the reader
             Return retval
         End Function
-        Public Function WRGetYearlyLotAcceptance(ByVal Facility As String, ByVal WR As String) As String
+        Public Function WRGetYearlyLotAcceptance(ByVal Facility As String, ByVal WR As String, ByVal WS As String) As String
             Dim retval As String = "'0.00%'"
             Dim DR2 As SqlDataReader
             Dim Command2 As New SqlCommand
             Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
-            Dim SQL As String = "Select Top (1) (CAST( (Select COUNT(InspectionJobSummaryYearly.id) from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "' AND WorkRoom='" & WR & "' AND Technical_PassFail=1 ) AS Decimal(10,2))/CAST((Select COUNT(InspectionJobSummaryYearly.id) from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "' AND WorkRoom='" & WR & "') AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly"
+            Dim SQL As String = "Select Top (1) (CAST( (Select COUNT(InspectionJobSummaryYearly.id) from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "'" & WS & " AND WorkRoom='" & WR & "' AND Technical_PassFail=1 ) AS Decimal(10,2))/CAST((Select COUNT(InspectionJobSummaryYearly.id) from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly on dbo.InspectionJobSummaryYearly.CID=NCID Where Name='" & Facility & "'" & WS & " AND WorkRoom='" & WR & "') AS Decimal(10,2)))*100 AS TOTAL from dbo.InspectionJobSummaryYearly"
             Command2.CommandType = CommandType.Text 'sets the type of the sql
             Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
             Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
@@ -3777,9 +3857,25 @@ Namespace core
 
             Dim retList As New List(Of SPCInspection.MainGridSubgrid)()
             Dim WRList As New List(Of String)()
+            Dim WhereString2 As String = ""
+            If AuditType = "ALL" Then
+                WhereString2 = WhereString2 & " AND InspectionType != 'ROLL'"
+            ElseIf AuditType = "FINAL AUDIT" Then
+                WhereString2 = WhereString2 & " AND InspectionType = 'EOL'"
+            ElseIf AuditType = "IN LINE" Then
+                WhereString2 = WhereString2 & " AND InspectionType = 'IL'"
+            Else
+                WhereString2 = WhereString2 & " AND InspectionType = '" & AuditType & "'"
+            End If
+            If DataNo <> "ALL" Then
+                WhereString2 = WhereString2 & " AND DataNo = '" & DataNo & "'"
+            End If
+            If WorkOrder <> "ALL" Then
+                WhereString2 = WhereString2 & " AND JobNumber = '" & WorkOrder & "'"
+            End If
             Dim WhereString As String = " AND Inspection_Finished BETWEEN '" & Fromdate & "' AND '" & Todate & "'"
             If AuditType = "ALL" Then
-
+                WhereString = WhereString & " AND InspectionType != 'ROLL'"
             ElseIf AuditType = "FINAL AUDIT" Then
                 WhereString = WhereString & " AND InspectionType = 'EOL'"
             ElseIf AuditType = "IN LINE" Then
@@ -3807,24 +3903,24 @@ Namespace core
                 Dim Subrow As New SPCInspection.MainGridSubgrid()
                 If Time_Period = "Past Year" And DR.GetString(0) <> Nothing Then
                     Subrow.FacilityWorkroom = DR.GetString(0)
-                    Subrow.DHU = WRGetYearlyDHU(Facility, DR.GetString(0))
-                    Subrow.Lot_Acceptance = WRGetYearlyLotAcceptance(Facility, DR.GetString(0))
-                    Subrow.No_of_Defects = WRGetYearlyDefectTotal(Facility, DR.GetString(0))
-                    Subrow.No_of_Rejected_Lots = WRGetYearlyRejectLotTotal(Facility, DR.GetString(0))
-                    Subrow.No_of_Rejects = WRGetYearlyRejectTotal(Facility, DR.GetString(0))
-                    Subrow.Reject_Rate = WRGetYearlyRejectionRate(Facility, DR.GetString(0))
-                    Subrow.No_of_Inspections = WRGetYearlyInspectionTotal(Facility, DR.GetString(0))
+                    Subrow.DHU = WRGetYearlyDHU(Facility, DR.GetString(0), WhereString2)
+                    Subrow.Lot_Acceptance = WRGetYearlyLotAcceptance(Facility, DR.GetString(0), WhereString2)
+                    Subrow.No_of_Defects = WRGetYearlyDefectTotal(Facility, DR.GetString(0), WhereString2)
+                    Subrow.No_of_Rejected_Lots = WRGetYearlyRejectLotTotal(Facility, DR.GetString(0), WhereString2)
+                    Subrow.No_of_Rejects = WRGetYearlyRejectTotal(Facility, DR.GetString(0), WhereString2)
+                    Subrow.Reject_Rate = WRGetYearlyRejectionRate(Facility, DR.GetString(0), WhereString2)
+                    Subrow.No_of_Inspections = WRGetYearlyInspectionTotal(Facility, DR.GetString(0), WhereString2)
                     retList.Add(Subrow)
                 End If
                 If Time_Period = "Past 30 Days" And DR.GetString(0) <> Nothing Then
                     Subrow.FacilityWorkroom = DR.GetString(0)
-                    Subrow.DHU = WRGetMonthlyDHU(Facility, DR.GetString(0))
-                    Subrow.Lot_Acceptance = WRGetMonthlyLotAcceptance(Facility, DR.GetString(0))
-                    Subrow.No_of_Defects = WRGetMonthlyDefectTotal(Facility, DR.GetString(0))
-                    Subrow.No_of_Rejected_Lots = WRGetMonthlyRejectLotTotal(Facility, DR.GetString(0))
-                    Subrow.No_of_Rejects = WRGetMonthlyRejectTotal(Facility, DR.GetString(0))
-                    Subrow.Reject_Rate = WRGetMonthlyRejectionRate(Facility, DR.GetString(0))
-                    Subrow.No_of_Inspections = WRGetMonthlyInspectionTotal(Facility, DR.GetString(0))
+                    Subrow.DHU = WRGetMonthlyDHU(Facility, DR.GetString(0), WhereString2)
+                    Subrow.Lot_Acceptance = WRGetMonthlyLotAcceptance(Facility, DR.GetString(0), WhereString2)
+                    Subrow.No_of_Defects = WRGetMonthlyDefectTotal(Facility, DR.GetString(0), WhereString2)
+                    Subrow.No_of_Rejected_Lots = WRGetMonthlyRejectLotTotal(Facility, DR.GetString(0), WhereString2)
+                    Subrow.No_of_Rejects = WRGetMonthlyRejectTotal(Facility, DR.GetString(0), WhereString2)
+                    Subrow.Reject_Rate = WRGetMonthlyRejectionRate(Facility, DR.GetString(0), WhereString2)
+                    Subrow.No_of_Inspections = WRGetMonthlyInspectionTotal(Facility, DR.GetString(0), WhereString2)
                     retList.Add(Subrow)
                 End If
                 If Time_Period = "Custom" And DR.GetString(0) <> Nothing Then
