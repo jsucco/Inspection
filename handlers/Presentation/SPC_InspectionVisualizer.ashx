@@ -59,6 +59,15 @@ Namespace core
 
 
         End Function
+        Public Function GetGlobalDataArray(ByVal from As String, ByVal toDate As String, ByVal DN As String, ByVal WO As String, ByVal AT As String) As String
+
+
+
+            Return JsonConvert.SerializeObject(Inspect.GetGlobalDataArray(from, toDate, DN, WO, AT))
+
+
+
+        End Function
         Public Function GetDataArray(ByVal array As List(Of Integer), ByVal from As String, ByVal toDate As String, ByVal DN As String, ByVal WO As String, ByVal AT As String) As String
             If array IsNot Nothing Then
 
