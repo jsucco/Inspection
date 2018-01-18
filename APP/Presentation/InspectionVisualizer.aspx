@@ -231,11 +231,19 @@
                 </div>
             </div>--%>
         </div>
-        <div id="GlobalDiv" style="position: relative; left: -10px; top: 110px; width: 100%; height: 100px;">
+        <div id="GlobalDiv" style="position: relative; left: 10px; top: 110px; width: 100%; height: 100px;">
             <table id="GlobalGrid" style="width: 100%;">
             </table>
         </div>
-        <div id="GridDiv" style="position: relative; left: -10px; top: 170px; width: 100%; height: 100px;">
+        <div id="DomesticDiv" style="position: relative; left: 10px; top: 210px; width: 100%; height: 100px;">
+            <table id="DomesticGrid" style="width: 100%;">
+            </table>
+        </div>
+        <div id="InteriorsDiv" style="position: relative; left: 10px; top: 310px; width: 100%; height: 100px;">
+            <table id="InteriorsGrid" style="width: 100%;">
+            </table>
+        </div>
+        <div id="GridDiv" style="position: relative; left: -10px; top: 470px; width: 100%; height: 100px;">
             <table id="MainGrid" style="width: 100%;">
             </table>
         </div>
@@ -575,6 +583,109 @@
                 position: 'fixed',
                 modal: true
             });
+            function rowColorFormatter(cellValue, options, rowObject) {
+                if (cellValue === 'Custom')
+                    rowsToColor[rowsToColor.length] = options.rowId;
+                return cellValue;
+            };
+            $("#InteriorsGrid").jqGrid({
+                datatype: 'local',
+                colNames: ['Facility', 'Time_Period', 'No. of Defects', 'No. of Rejects', 'No. of Inspections', 'No. of Rejected Lots', 'DHU', 'Reject Rate', 'Lot Acceptance'],
+                colModel: [
+                    { name: 'Facility', width: 200, align: 'center', cellattr: arrtSetting },
+                    { name: 'Time_Period', width: 200, formatter: rowColorFormatter },
+                    { name: 'No_of_Defects', width: 200 },
+                    { name: 'No_of_Rejects', width: 200 },
+                    { name: 'No_of_Inspections', width: 200 },
+                    { name: 'No_of_Rejected_Lots', width: 200 },
+                    { name: 'DHU', width: 200 },
+                    { name: 'Reject_Rate', width: 200 },
+                    { name: 'Lot_Acceptance', width: 200 }
+                ],
+                cmTemplate: { sortable: false },
+                rowNum: 100,
+                //rowList: [5, 10, 20],
+                //pager: '#pager',
+                gridview: true,
+                hoverrows: false,
+
+                ignoreCase: true,
+                viewrecords: true,
+                height: '100%',
+                width: '100%',
+                shrinkToFit: true,
+                beforeSelectRow: function () {
+                    return false;
+                },
+                ondblClickRow: function (rowid, iRow, iCol, e) {
+
+                    var colNames = $(this).jqGrid("getGridParam", "colNames");
+                    var GridType = colNames[iCol];
+                    var rowNames = $(this).jqGrid("getRowData", iRow);
+                    var TP = rowNames.Time_Period;
+                    var Fac = rowNames.Facility;
+                    var colVal = $(this).jqGrid("getCell", rowid, iCol);
+                    drawChart(Fac, GridType, TP);
+
+                },
+                gridComplete: function () {
+                    for (var i = 0; i < rowsToColor.length; i++) {
+
+                        $("#" + rowsToColor[i]).find("td").css("background-color", "DarkGrey");
+
+                    }
+                }
+
+            });
+            $("#DomesticGrid").jqGrid({
+                datatype: 'local',
+                colNames: ['Facility', 'Time_Period', 'No. of Defects', 'No. of Rejects', 'No. of Inspections', 'No. of Rejected Lots', 'DHU', 'Reject Rate', 'Lot Acceptance'],
+                colModel: [
+                    { name: 'Facility', width: 200, align: 'center', cellattr: arrtSetting },
+                    { name: 'Time_Period', width: 200, formatter: rowColorFormatter },
+                    { name: 'No_of_Defects', width: 200 },
+                    { name: 'No_of_Rejects', width: 200 },
+                    { name: 'No_of_Inspections', width: 200 },
+                    { name: 'No_of_Rejected_Lots', width: 200 },
+                    { name: 'DHU', width: 200 },
+                    { name: 'Reject_Rate', width: 200 },
+                    { name: 'Lot_Acceptance', width: 200 }
+                ],
+                cmTemplate: { sortable: false },
+                rowNum: 100,
+                //rowList: [5, 10, 20],
+                //pager: '#pager',
+                gridview: true,
+                hoverrows: false,
+
+                ignoreCase: true,
+                viewrecords: true,
+                height: '100%',
+                width: '100%',
+                shrinkToFit: true,
+                beforeSelectRow: function () {
+                    return false;
+                },
+                ondblClickRow: function (rowid, iRow, iCol, e) {
+
+                    var colNames = $(this).jqGrid("getGridParam", "colNames");
+                    var GridType = colNames[iCol];
+                    var rowNames = $(this).jqGrid("getRowData", iRow);
+                    var TP = rowNames.Time_Period;
+                    var Fac = rowNames.Facility;
+                    var colVal = $(this).jqGrid("getCell", rowid, iCol);
+                    drawChart(Fac, GridType, TP);
+
+                },
+                gridComplete: function () {
+                    for (var i = 0; i < rowsToColor.length; i++) {
+
+                        $("#" + rowsToColor[i]).find("td").css("background-color", "DarkGrey");
+
+                    }
+                }
+
+            });
             $("#GlobalGrid").jqGrid({
                 datatype: 'local',
                 colNames: ['Facility', 'Time_Period', 'No. of Defects', 'No. of Rejects', 'No. of Inspections', 'No. of Rejected Lots', 'DHU', 'Reject Rate', 'Lot Acceptance'],
@@ -729,11 +840,7 @@
                 }
 
             });
-            function rowColorFormatter(cellValue, options, rowObject) {
-                if (cellValue === 'Custom')
-                    rowsToColor[rowsToColor.length] = options.rowId;
-                return cellValue;
-            }
+            
             fchtml.push('<option value="000" >Global Manufacturing</option>');
             dchtml.push('<option value="001" >Domestic Manufacturing</option>');
             dhtml.push('<option value="002" >Distribution</option>');
@@ -1676,6 +1783,56 @@
                     }
                 });
             },
+            InteriorsLocationChangeEvent: function (fromdate, todate, DataNo, WorkOrder, AuditType) {
+
+                //alert('Location Changed!');
+                $.ajax({
+                    url: "<%=Session("BaseUri")%>" + '/handlers/Presentation/SPC_InspectionVisualizer.ashx',
+                    type: 'GET',
+                    data: { method: 'GetInteriorsDataArray', args: { from: fromdate, toDate: todate, DN: DataNo, WO: WorkOrder, AT: AuditType } },
+                    success: function (data) {
+                        mydata = [];
+                        console.log(data);
+                        var conversion = JSON.parse(data);
+                        for (i = 0; i < conversion.length; i++) {
+                            mydata.push(JSON.parse(FixJson(conversion[i])));
+                        }
+                        console.log(mydata);
+                        $('#InteriorsGrid').jqGrid("clearGridData");
+                        $('#InteriorsGrid').jqGrid('setGridParam', { data: mydata });
+                        $('#InteriorsGrid').trigger('reloadGrid');
+                        document.getElementById("loading").style.display = "none";
+                    },
+                    error: function (a, b, c) {
+                        alert(c);
+                    }
+                });
+            },
+            DomesticLocationChangeEvent: function (fromdate, todate, DataNo, WorkOrder, AuditType) {
+
+                //alert('Location Changed!');
+                $.ajax({
+                    url: "<%=Session("BaseUri")%>" + '/handlers/Presentation/SPC_InspectionVisualizer.ashx',
+                    type: 'GET',
+                    data: { method: 'GetDomesticDataArray', args: { from: fromdate, toDate: todate, DN: DataNo, WO: WorkOrder, AT: AuditType } },
+                    success: function (data) {
+                        mydata = [];
+                        console.log(data);
+                        var conversion = JSON.parse(data);
+                        for (i = 0; i < conversion.length; i++) {
+                            mydata.push(JSON.parse(FixJson(conversion[i])));
+                        }
+                        console.log(mydata);
+                        $('#DomesticGrid').jqGrid("clearGridData");
+                        $('#DomesticGrid').jqGrid('setGridParam', { data: mydata });
+                        $('#DomesticGrid').trigger('reloadGrid');
+                        datahandler.InteriorsLocationChangeEvent(fromdate, todate, DataNo, WorkOrder, AuditType);;
+                    },
+                    error: function (a, b, c) {
+                        alert(c);
+                    }
+                });
+            },
             GlobalLocationChangeEvent: function (fromdate, todate, DataNo, WorkOrder, AuditType) {
                 
                 //alert('Location Changed!');
@@ -1694,7 +1851,7 @@
                         $('#GlobalGrid').jqGrid("clearGridData");
                         $('#GlobalGrid').jqGrid('setGridParam', { data: mydata });
                         $('#GlobalGrid').trigger('reloadGrid');
-                        document.getElementById("loading").style.display = "none";
+                        datahandler.DomesticLocationChangeEvent(fromdate, todate, DataNo, WorkOrder, AuditType);
                     },
                     error: function (a, b, c) {
                         alert(c);

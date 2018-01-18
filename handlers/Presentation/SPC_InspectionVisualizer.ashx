@@ -59,6 +59,24 @@ Namespace core
 
 
         End Function
+        Public Function GetInteriorsDataArray(ByVal from As String, ByVal toDate As String, ByVal DN As String, ByVal WO As String, ByVal AT As String) As String
+
+
+
+            Return JsonConvert.SerializeObject(Inspect.GetInteriorsDataArray(from, toDate, DN, WO, AT))
+
+
+
+        End Function
+        Public Function GetDomesticDataArray(ByVal from As String, ByVal toDate As String, ByVal DN As String, ByVal WO As String, ByVal AT As String) As String
+
+
+
+            Return JsonConvert.SerializeObject(Inspect.GetDomesticDataArray(from, toDate, DN, WO, AT))
+
+
+
+        End Function
         Public Function GetGlobalDataArray(ByVal from As String, ByVal toDate As String, ByVal DN As String, ByVal WO As String, ByVal AT As String) As String
 
 
