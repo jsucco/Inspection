@@ -235,19 +235,19 @@
             <table id="OverallGrid" style="width: 100%;">
             </table>
         </div>
-        <div id="GlobalDiv" style="position: relative; left: 10px; top: 170px; width: 100%; height: 100px;">
+        <div id="GlobalDiv" style="position: relative; left: 10px; top: 200px; width: 100%; height: 100px;">
             <table id="GlobalGrid" style="width: 100%;">
             </table>
         </div>
-        <div id="DomesticDiv" style="position: relative; left: 10px; top: 230px; width: 100%; height: 100px;">
+        <div id="DomesticDiv" style="position: relative; left: 10px; top: 290px; width: 100%; height: 100px;">
             <table id="DomesticGrid" style="width: 100%;">
             </table>
         </div>
-        <div id="InteriorsDiv" style="position: relative; left: 10px; top: 290px; width: 100%; height: 100px;">
+        <div id="InteriorsDiv" style="position: relative; left: 10px; top: 380px; width: 100%; height: 100px;">
             <table id="InteriorsGrid" style="width: 100%;">
             </table>
         </div>
-        <div id="GridDiv" style="position: relative; left: -10px; top: 350px; width: 100%; height: 100px;">
+        <div id="GridDiv" style="position: relative; left: -10px; top: 470px; width: 100%; height: 100px;">
             <table id="MainGrid" style="width: 100%;">
             </table>
         </div>

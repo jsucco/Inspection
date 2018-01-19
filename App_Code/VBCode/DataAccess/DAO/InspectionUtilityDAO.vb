@@ -1631,16 +1631,33 @@ Namespace core
             If WO <> "ALL" Then
                 WhereString = WhereString & " AND JobNumber = '" & WO & "'"
             End If
+            Dim WhereString3 As String = "WHERE CID IS NOT NULL And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0)"
+            If AT = "ALL" Then
+                WhereString3 = WhereString3 & " AND InspectionType != 'ROLL'"
+            ElseIf AT = "FINAL AUDIT" Then
+                WhereString2 = WhereString2 & " AND InspectionType = 'EOL'"
+            ElseIf AT = "IN LINE" Then
+                WhereString3 = WhereString3 & " AND InspectionType = 'IL'"
+            Else
+                WhereString3 = WhereString3 & " AND InspectionType = '" & AT & "'"
+            End If
+            If DN <> "ALL" Then
+                WhereString3 = WhereString3 & " AND DataNo = '" & DN & "'"
+            End If
+            If WO <> "ALL" Then
+                WhereString3 = WhereString3 & " AND JobNumber = '" & WO & "'"
+            End If
 
 
 
 
 
-
-            Dim Top As String = String.Format("Facility: '{0}', Time_Period: 'Past 30 Days', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ rowspan: '3' }} }}", "Overall", GetGlobalMonthlyDefectTotal(WhereString2), GetGlobalMonthlyInspectionTotal(WhereString2), GetGlobalMonthlyRejectTotal(WhereString2), GetGlobalMonthlyRejectLotTotal(WhereString2), GetGlobalMonthlyDHU(WhereString2), GetGlobalMonthlyRejectionRate(WhereString2), GetGlobalMonthlyLotAcceptance(WhereString2))
+            Dim Top As String = String.Format("Facility: '{0}', Time_Period: 'Past 30 Days', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ rowspan: '4' }} }}", "Overall", GetGlobalMonthlyDefectTotal(WhereString2), GetGlobalMonthlyInspectionTotal(WhereString2), GetGlobalMonthlyRejectTotal(WhereString2), GetGlobalMonthlyRejectLotTotal(WhereString2), GetGlobalMonthlyDHU(WhereString2), GetGlobalMonthlyRejectionRate(WhereString2), GetGlobalMonthlyLotAcceptance(WhereString2))
             retval.Add("{" + Top + "}")
             Dim Mid As String = String.Format("Facility: '{0}', Time_Period: 'Past Year', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", "Overall", GetGlobalYearlyDefectTotal(WhereString2), GetGlobalYearlyInspectionTotal(WhereString2), GetGlobalYearlyRejectTotal(WhereString2), GetGlobalYearlyRejectLotTotal(WhereString2), GetGlobalYearlyDHU(WhereString2), GetGlobalYearlyRejectionRate(WhereString2), GetGlobalYearlyLotAcceptance(WhereString2))
             retval.Add("{" + Mid + "}")
+            Dim Yesterday As String = String.Format("Facility: '{0}', Time_Period: 'Yesterday', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", "Overall", GetGlobalYearlyDefectTotal(WhereString3), GetGlobalYearlyInspectionTotal(WhereString3), GetGlobalYearlyRejectTotal(WhereString3), GetGlobalYearlyRejectLotTotal(WhereString3), GetGlobalYearlyDHU(WhereString3), GetGlobalYearlyRejectionRate(WhereString3), GetGlobalYearlyLotAcceptance(WhereString3))
+            retval.Add("{" + Yesterday + "}")
             Dim Bottom As String = String.Format("Facility: '{0}', Time_Period: 'Custom', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", "Overall", GetGlobalCustomDefectTotal(WhereString), GetGlobalCustomInspectionTotal(WhereString), GetGlobalCustomRejectTotal(WhereString), GetGlobalCustomRejectLotTotal(WhereString), GetGlobalCustomDHU(WhereString), GetGlobalCustomRejectionRate(WhereString), GetGlobalCustomLotAcceptance(WhereString))
             retval.Add("{" + Bottom + "}")
 
@@ -1687,16 +1704,33 @@ Namespace core
             If WO <> "ALL" Then
                 WhereString = WhereString & " AND JobNumber = '" & WO & "'"
             End If
+            Dim WhereString3 As String = "WHERE (CID = 485 OR CID = 482 OR CID = 578) And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0)"
+            If AT = "ALL" Then
+                WhereString3 = WhereString3 & " AND InspectionType != 'ROLL'"
+            ElseIf AT = "FINAL AUDIT" Then
+                WhereString2 = WhereString2 & " AND InspectionType = 'EOL'"
+            ElseIf AT = "IN LINE" Then
+                WhereString3 = WhereString3 & " AND InspectionType = 'IL'"
+            Else
+                WhereString3 = WhereString3 & " AND InspectionType = '" & AT & "'"
+            End If
+            If DN <> "ALL" Then
+                WhereString3 = WhereString3 & " AND DataNo = '" & DN & "'"
+            End If
+            If WO <> "ALL" Then
+                WhereString3 = WhereString3 & " AND JobNumber = '" & WO & "'"
+            End If
 
 
 
 
 
-
-            Dim Top As String = String.Format("Facility: '{0}', Time_Period: 'Past 30 Days', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ rowspan: '3' }} }}", "Domestic", GetGlobalMonthlyDefectTotal(WhereString2), GetGlobalMonthlyInspectionTotal(WhereString2), GetGlobalMonthlyRejectTotal(WhereString2), GetGlobalMonthlyRejectLotTotal(WhereString2), GetGlobalMonthlyDHU(WhereString2), GetGlobalMonthlyRejectionRate(WhereString2), GetGlobalMonthlyLotAcceptance(WhereString2))
+            Dim Top As String = String.Format("Facility: '{0}', Time_Period: 'Past 30 Days', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ rowspan: '4' }} }}", "Domestic", GetGlobalMonthlyDefectTotal(WhereString2), GetGlobalMonthlyInspectionTotal(WhereString2), GetGlobalMonthlyRejectTotal(WhereString2), GetGlobalMonthlyRejectLotTotal(WhereString2), GetGlobalMonthlyDHU(WhereString2), GetGlobalMonthlyRejectionRate(WhereString2), GetGlobalMonthlyLotAcceptance(WhereString2))
             retval.Add("{" + Top + "}")
             Dim Mid As String = String.Format("Facility: '{0}', Time_Period: 'Past Year', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", "Domestic", GetGlobalYearlyDefectTotal(WhereString2), GetGlobalYearlyInspectionTotal(WhereString2), GetGlobalYearlyRejectTotal(WhereString2), GetGlobalYearlyRejectLotTotal(WhereString2), GetGlobalYearlyDHU(WhereString2), GetGlobalYearlyRejectionRate(WhereString2), GetGlobalYearlyLotAcceptance(WhereString2))
             retval.Add("{" + Mid + "}")
+            Dim Yesterday As String = String.Format("Facility: '{0}', Time_Period: 'Yesterday', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", "Domestic", GetGlobalYearlyDefectTotal(WhereString3), GetGlobalYearlyInspectionTotal(WhereString3), GetGlobalYearlyRejectTotal(WhereString3), GetGlobalYearlyRejectLotTotal(WhereString3), GetGlobalYearlyDHU(WhereString3), GetGlobalYearlyRejectionRate(WhereString3), GetGlobalYearlyLotAcceptance(WhereString3))
+            retval.Add("{" + Yesterday + "}")
             Dim Bottom As String = String.Format("Facility: '{0}', Time_Period: 'Custom', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", "Domestic", GetGlobalCustomDefectTotal(WhereString), GetGlobalCustomInspectionTotal(WhereString), GetGlobalCustomRejectTotal(WhereString), GetGlobalCustomRejectLotTotal(WhereString), GetGlobalCustomDHU(WhereString), GetGlobalCustomRejectionRate(WhereString), GetGlobalCustomLotAcceptance(WhereString))
             retval.Add("{" + Bottom + "}")
 
@@ -1743,16 +1777,33 @@ Namespace core
             If WO <> "ALL" Then
                 WhereString = WhereString & " AND JobNumber = '" & WO & "'"
             End If
+            Dim WhereString3 As String = "WHERE (CID = 111 OR CID = 112) And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0)"
+            If AT = "ALL" Then
+                WhereString3 = WhereString3 & " AND InspectionType != 'ROLL'"
+            ElseIf AT = "FINAL AUDIT" Then
+                WhereString2 = WhereString2 & " AND InspectionType = 'EOL'"
+            ElseIf AT = "IN LINE" Then
+                WhereString3 = WhereString3 & " AND InspectionType = 'IL'"
+            Else
+                WhereString3 = WhereString3 & " AND InspectionType = '" & AT & "'"
+            End If
+            If DN <> "ALL" Then
+                WhereString3 = WhereString3 & " AND DataNo = '" & DN & "'"
+            End If
+            If WO <> "ALL" Then
+                WhereString3 = WhereString3 & " AND JobNumber = '" & WO & "'"
+            End If
 
 
 
 
 
-
-            Dim Top As String = String.Format("Facility: '{0}', Time_Period: 'Past 30 Days', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ rowspan: '3' }} }}", "Interiors", GetGlobalMonthlyDefectTotal(WhereString2), GetGlobalMonthlyInspectionTotal(WhereString2), GetGlobalMonthlyRejectTotal(WhereString2), GetGlobalMonthlyRejectLotTotal(WhereString2), GetGlobalMonthlyDHU(WhereString2), GetGlobalMonthlyRejectionRate(WhereString2), GetGlobalMonthlyLotAcceptance(WhereString2))
+            Dim Top As String = String.Format("Facility: '{0}', Time_Period: 'Past 30 Days', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ rowspan: '4' }} }}", "Interiors", GetGlobalMonthlyDefectTotal(WhereString2), GetGlobalMonthlyInspectionTotal(WhereString2), GetGlobalMonthlyRejectTotal(WhereString2), GetGlobalMonthlyRejectLotTotal(WhereString2), GetGlobalMonthlyDHU(WhereString2), GetGlobalMonthlyRejectionRate(WhereString2), GetGlobalMonthlyLotAcceptance(WhereString2))
             retval.Add("{" + Top + "}")
             Dim Mid As String = String.Format("Facility: '{0}', Time_Period: 'Past Year', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", "Interiors", GetGlobalYearlyDefectTotal(WhereString2), GetGlobalYearlyInspectionTotal(WhereString2), GetGlobalYearlyRejectTotal(WhereString2), GetGlobalYearlyRejectLotTotal(WhereString2), GetGlobalYearlyDHU(WhereString2), GetGlobalYearlyRejectionRate(WhereString2), GetGlobalYearlyLotAcceptance(WhereString2))
             retval.Add("{" + Mid + "}")
+            Dim Yesterday As String = String.Format("Facility: '{0}', Time_Period: 'Yesterday', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", "Interiors", GetGlobalYearlyDefectTotal(WhereString3), GetGlobalYearlyInspectionTotal(WhereString3), GetGlobalYearlyRejectTotal(WhereString3), GetGlobalYearlyRejectLotTotal(WhereString3), GetGlobalYearlyDHU(WhereString3), GetGlobalYearlyRejectionRate(WhereString3), GetGlobalYearlyLotAcceptance(WhereString3))
+            retval.Add("{" + Yesterday + "}")
             Dim Bottom As String = String.Format("Facility: '{0}', Time_Period: 'Custom', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", "Interiors", GetGlobalCustomDefectTotal(WhereString), GetGlobalCustomInspectionTotal(WhereString), GetGlobalCustomRejectTotal(WhereString), GetGlobalCustomRejectLotTotal(WhereString), GetGlobalCustomDHU(WhereString), GetGlobalCustomRejectionRate(WhereString), GetGlobalCustomLotAcceptance(WhereString))
             retval.Add("{" + Bottom + "}")
 
@@ -1799,16 +1850,33 @@ Namespace core
             If WO <> "ALL" Then
                 WhereString = WhereString & " AND JobNumber = '" & WO & "'"
             End If
+            Dim WhereString3 As String = "WHERE (CID = 114 OR CID = 115 OR CID = 590 OR CID = 1001 OR CID = 627) And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0)"
+            If AT = "ALL" Then
+                WhereString3 = WhereString3 & " AND InspectionType != 'ROLL'"
+            ElseIf AT = "FINAL AUDIT" Then
+                WhereString2 = WhereString2 & " AND InspectionType = 'EOL'"
+            ElseIf AT = "IN LINE" Then
+                WhereString3 = WhereString3 & " AND InspectionType = 'IL'"
+            Else
+                WhereString3 = WhereString3 & " AND InspectionType = '" & AT & "'"
+            End If
+            If DN <> "ALL" Then
+                WhereString3 = WhereString3 & " AND DataNo = '" & DN & "'"
+            End If
+            If WO <> "ALL" Then
+                WhereString3 = WhereString3 & " AND JobNumber = '" & WO & "'"
+            End If
 
 
 
 
 
-
-            Dim Top As String = String.Format("Facility: '{0}', Time_Period: 'Past 30 Days', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ rowspan: '3' }} }}", "Global", GetGlobalMonthlyDefectTotal(WhereString2), GetGlobalMonthlyInspectionTotal(WhereString2), GetGlobalMonthlyRejectTotal(WhereString2), GetGlobalMonthlyRejectLotTotal(WhereString2), GetGlobalMonthlyDHU(WhereString2), GetGlobalMonthlyRejectionRate(WhereString2), GetGlobalMonthlyLotAcceptance(WhereString2))
+            Dim Top As String = String.Format("Facility: '{0}', Time_Period: 'Past 30 Days', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ rowspan: '4' }} }}", "Global", GetGlobalMonthlyDefectTotal(WhereString2), GetGlobalMonthlyInspectionTotal(WhereString2), GetGlobalMonthlyRejectTotal(WhereString2), GetGlobalMonthlyRejectLotTotal(WhereString2), GetGlobalMonthlyDHU(WhereString2), GetGlobalMonthlyRejectionRate(WhereString2), GetGlobalMonthlyLotAcceptance(WhereString2))
             retval.Add("{" + Top + "}")
             Dim Mid As String = String.Format("Facility: '{0}', Time_Period: 'Past Year', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", "Global", GetGlobalYearlyDefectTotal(WhereString2), GetGlobalYearlyInspectionTotal(WhereString2), GetGlobalYearlyRejectTotal(WhereString2), GetGlobalYearlyRejectLotTotal(WhereString2), GetGlobalYearlyDHU(WhereString2), GetGlobalYearlyRejectionRate(WhereString2), GetGlobalYearlyLotAcceptance(WhereString2))
             retval.Add("{" + Mid + "}")
+            Dim Yesterday As String = String.Format("Facility: '{0}', Time_Period: 'Yesterday', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", "Global", GetGlobalYearlyDefectTotal(WhereString3), GetGlobalYearlyInspectionTotal(WhereString3), GetGlobalYearlyRejectTotal(WhereString3), GetGlobalYearlyRejectLotTotal(WhereString3), GetGlobalYearlyDHU(WhereString3), GetGlobalYearlyRejectionRate(WhereString3), GetGlobalYearlyLotAcceptance(WhereString3))
+            retval.Add("{" + Yesterday + "}")
             Dim Bottom As String = String.Format("Facility: '{0}', Time_Period: 'Custom', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", "Global", GetGlobalCustomDefectTotal(WhereString), GetGlobalCustomInspectionTotal(WhereString), GetGlobalCustomRejectTotal(WhereString), GetGlobalCustomRejectLotTotal(WhereString), GetGlobalCustomDHU(WhereString), GetGlobalCustomRejectionRate(WhereString), GetGlobalCustomLotAcceptance(WhereString))
             retval.Add("{" + Bottom + "}")
 
@@ -3545,6 +3613,147 @@ Namespace core
                     Connection.Close() 'closes the connection
                     DR.Close() 'closes the reader
                     Return retval
+                ElseIf gt = "No. of Defects" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0)AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date"))
+                        segment.Add(DR("TOTAL"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+                ElseIf gt = "No. of Rejects" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select ISNULL(SUM(MajorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date"))
+                        segment.Add(DR("TOTAL"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+                ElseIf gt = "No. of Inspections" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date"))
+                        segment.Add(DR("TOTAL"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+                ElseIf gt = "No. of Rejected Lots" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " AND Technical_PassFail=0 And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date"))
+                        segment.Add(DR("TOTAL"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+                ElseIf gt = "DHU" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select ISNULL((CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100, 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date"))
+                        segment.Add(DR("TOTAL"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+                ElseIf gt = "Reject Rate" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select ISNULL((CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100, 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date"))
+                        segment.Add(DR("TOTAL"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+                ElseIf gt = "Lot Acceptance" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select ISNULL((CAST(s3.TOTAL AS Decimal(10,2)))/(CAST( s3.TOTAL2 AS Decimal(10,2)))*100, 0) AS TOTAL3,dateadd(DAY,0, datediff(day,0, s3.Comp_Date)) AS Comp_Date3  FROM (Select s1.TOTAL, s2.TOTAL2, s2.Comp_Date From ((Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) AND Technical_PassFail=1 Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))) AS s1 RIGHT JOIN (Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL2, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))) AS s2 ON s1.Comp_Date=s2.Comp_Date)) AS s3 ORDER by Comp_Date3 ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date3"))
+                        segment.Add(DR("TOTAL3"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+
                 ElseIf gt = "No. of Defects" And tp = "Past 30 Days" Then
                     Dim segment As New List(Of String)()
                     SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
@@ -3565,6 +3774,7 @@ Namespace core
                     Connection.Close() 'closes the connection
                     DR.Close() 'closes the reader
                     Return retval
+
                 ElseIf gt = "No. of Defects" And tp = "Custom" Then
                     Dim segment As New List(Of String)()
                     SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString & " Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
@@ -4008,6 +4218,147 @@ Namespace core
                     Connection.Close() 'closes the connection
                     DR.Close() 'closes the reader
                     Return retval
+                ElseIf gt = "No. of Defects" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0)AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date"))
+                        segment.Add(DR("TOTAL"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+                ElseIf gt = "No. of Rejects" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select ISNULL(SUM(MajorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date"))
+                        segment.Add(DR("TOTAL"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+                ElseIf gt = "No. of Inspections" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date"))
+                        segment.Add(DR("TOTAL"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+                ElseIf gt = "No. of Rejected Lots" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " AND Technical_PassFail=0 And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date"))
+                        segment.Add(DR("TOTAL"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+                ElseIf gt = "DHU" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select ISNULL((CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100, 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date"))
+                        segment.Add(DR("TOTAL"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+                ElseIf gt = "Reject Rate" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select ISNULL((CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100, 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date"))
+                        segment.Add(DR("TOTAL"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+                ElseIf gt = "Lot Acceptance" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select ISNULL((CAST(s3.TOTAL AS Decimal(10,2)))/(CAST( s3.TOTAL2 AS Decimal(10,2)))*100, 0) AS TOTAL3,dateadd(DAY,0, datediff(day,0, s3.Comp_Date)) AS Comp_Date3  FROM (Select s1.TOTAL, s2.TOTAL2, s2.Comp_Date From ((Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) AND Technical_PassFail=1 Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))) AS s1 RIGHT JOIN (Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL2, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))) AS s2 ON s1.Comp_Date=s2.Comp_Date)) AS s3 ORDER by Comp_Date3 ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date3"))
+                        segment.Add(DR("TOTAL3"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+
                 ElseIf gt = "No. of Defects" And tp = "Past 30 Days" Then
                     Dim segment As New List(Of String)()
                     SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
@@ -4471,6 +4822,147 @@ Namespace core
                     Connection.Close() 'closes the connection
                     DR.Close() 'closes the reader
                     Return retval
+                ElseIf gt = "No. of Defects" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date"))
+                        segment.Add(DR("TOTAL"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+                ElseIf gt = "No. of Rejects" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select ISNULL(SUM(MajorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date"))
+                        segment.Add(DR("TOTAL"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+                ElseIf gt = "No. of Inspections" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date"))
+                        segment.Add(DR("TOTAL"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+                ElseIf gt = "No. of Rejected Lots" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " AND Technical_PassFail=0 And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date"))
+                        segment.Add(DR("TOTAL"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+                ElseIf gt = "DHU" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select ISNULL((CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100, 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date"))
+                        segment.Add(DR("TOTAL"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+                ElseIf gt = "Reject Rate" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select ISNULL((CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100, 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date"))
+                        segment.Add(DR("TOTAL"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+                ElseIf gt = "Lot Acceptance" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select ISNULL((CAST(s3.TOTAL AS Decimal(10,2)))/(CAST( s3.TOTAL2 AS Decimal(10,2)))*100, 0) AS TOTAL3,dateadd(DAY,0, datediff(day,0, s3.Comp_Date)) AS Comp_Date3  FROM (Select s1.TOTAL, s2.TOTAL2, s2.Comp_Date From ((Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) AND Technical_PassFail=1 Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))) AS s1 RIGHT JOIN (Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL2, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))) AS s2 ON s1.Comp_Date=s2.Comp_Date)) AS s3 ORDER by Comp_Date3 ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date3"))
+                        segment.Add(DR("TOTAL3"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+
                 ElseIf gt = "No. of Defects" And tp = "Past 30 Days" Then
                     Dim segment As New List(Of String)()
                     SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
@@ -4934,6 +5426,147 @@ Namespace core
                     Connection.Close() 'closes the connection
                     DR.Close() 'closes the reader
                     Return retval
+                ElseIf gt = "No. of Defects" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date"))
+                        segment.Add(DR("TOTAL"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+                ElseIf gt = "No. of Rejects" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select ISNULL(SUM(MajorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date"))
+                        segment.Add(DR("TOTAL"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+                ElseIf gt = "No. of Inspections" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date"))
+                        segment.Add(DR("TOTAL"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+                ElseIf gt = "No. of Rejected Lots" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " AND Technical_PassFail=0 And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date"))
+                        segment.Add(DR("TOTAL"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+                ElseIf gt = "DHU" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select ISNULL((CAST(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100, 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date"))
+                        segment.Add(DR("TOTAL"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+                ElseIf gt = "Reject Rate" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select ISNULL((CAST(SUM(MajorsCount+RepairsCount+ScrapCount) AS Decimal(10,2))/CAST(SUM(SampleSize) AS Decimal(10,2)))*100, 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date"))
+                        segment.Add(DR("TOTAL"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+                ElseIf gt = "Lot Acceptance" And tp = "Yesterday" Then
+                    Dim segment As New List(Of String)()
+                    SQL = "Select ISNULL((CAST(s3.TOTAL AS Decimal(10,2)))/(CAST( s3.TOTAL2 AS Decimal(10,2)))*100, 0) AS TOTAL3,dateadd(DAY,0, datediff(day,0, s3.Comp_Date)) AS Comp_Date3  FROM (Select s1.TOTAL, s2.TOTAL2, s2.Comp_Date From ((Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) AND Technical_PassFail=1 Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))) AS s1 RIGHT JOIN (Select COUNT(InspectionJobSummaryYearly.id) AS TOTAL2, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))) AS s2 ON s1.Comp_Date=s2.Comp_Date)) AS s3 ORDER by Comp_Date3 ASC"
+                    Command.CommandType = CommandType.Text 'sets the type of the sql
+                    Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                    Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                    Connection.Open() 'opens the connction
+                    DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                    While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                        segment = New List(Of String)()
+                        segment.Add(DR("Comp_Date3"))
+                        segment.Add(DR("TOTAL3"))
+                        retval.Add(segment)
+
+
+                    End While
+                    Connection.Close() 'closes the connection
+                    DR.Close() 'closes the reader
+                    Return retval
+
                 ElseIf gt = "No. of Defects" And tp = "Past 30 Days" Then
                     Dim segment As New List(Of String)()
                     SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= DATEADD(month,-1,GETDATE()) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
