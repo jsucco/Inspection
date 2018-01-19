@@ -59,6 +59,15 @@ Namespace core
 
 
         End Function
+        Public Function GetOverallDataArray(ByVal from As String, ByVal toDate As String, ByVal DN As String, ByVal WO As String, ByVal AT As String) As String
+
+
+
+            Return JsonConvert.SerializeObject(Inspect.GetOverallDataArray(from, toDate, DN, WO, AT))
+
+
+
+        End Function
         Public Function GetInteriorsDataArray(ByVal from As String, ByVal toDate As String, ByVal DN As String, ByVal WO As String, ByVal AT As String) As String
 
 
