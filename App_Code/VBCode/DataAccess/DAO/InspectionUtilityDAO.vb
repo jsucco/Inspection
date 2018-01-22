@@ -1580,11 +1580,11 @@ Namespace core
                 DR = Command.ExecuteReader
                 If DR.HasRows = True Then
                     DR.Read()
-                    Dim Top As String = String.Format("Facility: '{0}', Time_Period: 'Past 30 Days', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ rowspan: '3' }} }}", DR.GetString(0), GetMonthlyDefectTotal(CID, WhereString2), GetMonthlyInspectionTotal(CID, WhereString2), GetMonthlyRejectTotal(CID, WhereString2), GetMonthlyRejectLotTotal(CID, WhereString2), GetMonthlyDHU(CID, WhereString2), GetMonthlyRejectionRate(CID, WhereString2), GetMonthlyLotAcceptance(CID, WhereString2))
+                    Dim Top As String = String.Format("Facility: '{0}', Time_Period: 'Past 30 Days', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, Compliance_Ratio: '{8}', attr: {{ Facility: {{ rowspan: '3' }} }}", DR.GetString(0), GetMonthlyDefectTotal(CID, WhereString2), GetMonthlyInspectionTotal(CID, WhereString2), GetMonthlyRejectTotal(CID, WhereString2), GetMonthlyRejectLotTotal(CID, WhereString2), GetMonthlyDHU(CID, WhereString2), GetMonthlyRejectionRate(CID, WhereString2), GetMonthlyLotAcceptance(CID, WhereString2), GetMonthlyCR(CID, WhereString2))
                     retval.Add("{" + Top + "}")
-                    Dim Mid As String = String.Format("Facility: '{0}', Time_Period: 'Past Year', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", DR.GetString(0), GetYearlyDefectTotal(CID, WhereString2), GetYearlyInspectionTotal(CID, WhereString2), GetYearlyRejectTotal(CID, WhereString2), GetYearlyRejectLotTotal(CID, WhereString2), GetYearlyDHU(CID, WhereString2), GetYearlyRejectionRate(CID, WhereString2), GetYearlyLotAcceptance(CID, WhereString2))
+                    Dim Mid As String = String.Format("Facility: '{0}', Time_Period: 'Past Year', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, Compliance_Ratio: '{8}', attr: {{ Facility: {{ display: 'none' }} }}", DR.GetString(0), GetYearlyDefectTotal(CID, WhereString2), GetYearlyInspectionTotal(CID, WhereString2), GetYearlyRejectTotal(CID, WhereString2), GetYearlyRejectLotTotal(CID, WhereString2), GetYearlyDHU(CID, WhereString2), GetYearlyRejectionRate(CID, WhereString2), GetYearlyLotAcceptance(CID, WhereString2), GetYearlyCR(CID, WhereString2))
                     retval.Add("{" + Mid + "}")
-                    Dim Bottom As String = String.Format("Facility: '{0}', Time_Period: 'Custom', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", DR.GetString(0), GetCustomDefectTotal(CID, WhereString), GetCustomInspectionTotal(CID, WhereString), GetCustomRejectTotal(CID, WhereString), GetCustomRejectLotTotal(CID, WhereString), GetCustomDHU(CID, WhereString), GetCustomRejectionRate(CID, WhereString), GetCustomLotAcceptance(CID, WhereString))
+                    Dim Bottom As String = String.Format("Facility: '{0}', Time_Period: 'Custom', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, Compliance_Ratio: '{8}', attr: {{ Facility: {{ display: 'none' }} }}", DR.GetString(0), GetCustomDefectTotal(CID, WhereString), GetCustomInspectionTotal(CID, WhereString), GetCustomRejectTotal(CID, WhereString), GetCustomRejectLotTotal(CID, WhereString), GetCustomDHU(CID, WhereString), GetCustomRejectionRate(CID, WhereString), GetCustomLotAcceptance(CID, WhereString), GetCustomCR(CID, WhereString))
                     retval.Add("{" + Bottom + "}")
                 End If
                 Connection.Close()
@@ -1593,6 +1593,269 @@ Namespace core
 
             retval = retval.Distinct().ToList
             Return retval
+        End Function
+        Public Function GetCustomCR(ByVal CID As String, ByVal WS As String) As Double
+            Dim retval As Double = 0
+            Dim DR2 As SqlDataReader
+            Dim Command2 As New SqlCommand
+            Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
+            Dim SQL As String = "Select DataNo AS DN, InspectionType as IT, id as ID from dbo.InspectionJobSummaryYearly Where CID = " & CID & WS
+            Command2.CommandType = CommandType.Text 'sets the type of the sql
+            Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
+            Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
+            If (Connection2.State = ConnectionState.Closed) Then
+                Connection2.Open()
+            End If
+            Dim InitList As New List(Of List(Of String))()
+            Dim Segment = New List(Of String)
+            Dim UniqueList = New List(Of String)
+            DR2 = Command2.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+            While DR2.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                Segment = New List(Of String)()
+                Segment.Add(DR2("DN"))
+                Segment.Add(DR2("IT"))
+                Segment.Add(DR2("ID"))
+                InitList.Add(Segment)
+
+
+            End While
+            Connection2.Close() 'closes the connection
+            DR2.Close() 'closes the reader
+            For Each item As List(Of String) In InitList
+                UniqueList.Add(item(0))
+            Next
+            UniqueList = UniqueList.Distinct().ToList
+            Dim Numerator As Integer = 0
+            For Each item As String In UniqueList
+                Dim EOL As Boolean = False
+                Dim IL As Boolean = False
+                For Each Inspection As List(Of String) In InitList
+                    If item = Inspection(0) Then
+                        If Inspection(1) = "EOL" Then
+                            EOL = True
+                        End If
+                        If Inspection(1) = "IL" Then
+                            IL = True
+                        End If
+                    End If
+                Next
+                If EOL And IL Then
+                    Numerator = Numerator + 1
+                End If
+            Next
+            Return Numerator / UniqueList.Count
+        End Function
+        Public Function GetMonthlyCR(ByVal CID As String, ByVal WS As String) As Double
+            Dim retval As Double = 0
+            Dim DR2 As SqlDataReader
+            Dim Command2 As New SqlCommand
+            Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
+            Dim SQL As String = "Select DataNo AS DN, InspectionType as IT, id as ID from dbo.InspectionJobSummaryYearly Where CID = " & CID & WS & " AND Inspection_Finished >= DATEADD(month,-1,GETDATE())"
+            Command2.CommandType = CommandType.Text 'sets the type of the sql
+            Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
+            Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
+            If (Connection2.State = ConnectionState.Closed) Then
+                Connection2.Open()
+            End If
+            Dim InitList As New List(Of List(Of String))()
+            Dim Segment = New List(Of String)
+            Dim UniqueList = New List(Of String)
+            DR2 = Command2.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+            While DR2.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                Segment = New List(Of String)()
+                Segment.Add(DR2("DN"))
+                Segment.Add(DR2("IT"))
+                Segment.Add(DR2("ID"))
+                InitList.Add(Segment)
+
+
+            End While
+
+            Connection2.Close() 'closes the connection
+            DR2.Close() 'closes the reader
+            For Each item As List(Of String) In InitList
+                UniqueList.Add(item(0))
+            Next
+            UniqueList = UniqueList.Distinct().ToList
+            Dim Numerator As Integer = 0
+            For Each item As String In UniqueList
+                Dim EOL As Boolean = False
+                Dim IL As Boolean = False
+                For Each Inspection As List(Of String) In InitList
+                    If item = Inspection(0) Then
+                        If Inspection(1) = "EOL" Then
+                            EOL = True
+                        End If
+                        If Inspection(1) = "IL" Then
+                            IL = True
+                        End If
+                    End If
+                Next
+                If EOL And IL Then
+                    Numerator = Numerator + 1
+                End If
+            Next
+            Return Numerator / UniqueList.Count
+        End Function
+        Public Function GetYearlyCR(ByVal CID As String, ByVal WS As String) As Double
+            Dim retval As Double = 0
+            Dim DR2 As SqlDataReader
+            Dim Command2 As New SqlCommand
+            Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
+            Dim SQL As String = "Select DataNo AS DN, InspectionType as IT, id as ID from dbo.InspectionJobSummaryYearly Where CID = " & CID & WS
+            Command2.CommandType = CommandType.Text 'sets the type of the sql
+            Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
+            Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
+            If (Connection2.State = ConnectionState.Closed) Then
+                Connection2.Open()
+            End If
+            Dim InitList As New List(Of List(Of String))()
+            Dim Segment = New List(Of String)
+            Dim UniqueList = New List(Of String)
+            DR2 = Command2.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+            While DR2.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                Segment = New List(Of String)()
+                Segment.Add(DR2("DN"))
+                Segment.Add(DR2("IT"))
+                Segment.Add(DR2("ID"))
+                InitList.Add(Segment)
+
+
+            End While
+            Connection2.Close() 'closes the connection
+            DR2.Close() 'closes the reader
+            For Each item As List(Of String) In InitList
+                UniqueList.Add(item(0))
+            Next
+            UniqueList = UniqueList.Distinct().ToList
+            Dim Numerator As Integer = 0
+            For Each item As String In UniqueList
+                Dim EOL As Boolean = False
+                Dim IL As Boolean = False
+                For Each Inspection As List(Of String) In InitList
+                    If item = Inspection(0) Then
+                        If Inspection(1) = "EOL" Then
+                            EOL = True
+                        End If
+                        If Inspection(1) = "IL" Then
+                            IL = True
+                        End If
+                    End If
+                Next
+                If EOL And IL Then
+                    Numerator = Numerator + 1
+                End If
+            Next
+            Return Numerator / UniqueList.Count
+        End Function
+        Public Function GetGlobalYearlyCR(ByVal WS As String) As Double
+            Dim retval As Double = 0
+            Dim DR2 As SqlDataReader
+            Dim Command2 As New SqlCommand
+            Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
+            Dim SQL As String = "Select DataNo AS DN, InspectionType as IT, id as ID from dbo.InspectionJobSummaryYearly " & WS
+            Command2.CommandType = CommandType.Text 'sets the type of the sql
+            Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
+            Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
+            If (Connection2.State = ConnectionState.Closed) Then
+                Connection2.Open()
+            End If
+            Dim InitList As New List(Of List(Of String))()
+            Dim Segment = New List(Of String)
+            Dim UniqueList = New List(Of String)
+            DR2 = Command2.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+            While DR2.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                segment = New List(Of String)()
+                Segment.Add(DR2("DN"))
+                Segment.Add(DR2("IT"))
+                Segment.Add(DR2("ID"))
+                InitList.Add(Segment)
+
+
+            End While
+
+            Connection2.Close() 'closes the connection
+            DR2.Close() 'closes the reader
+            For Each item As List(Of String) In InitList
+                UniqueList.Add(item(0))
+            Next
+            UniqueList = UniqueList.Distinct().ToList
+            Dim Numerator As Integer = 0
+            For Each item As String In UniqueList
+                Dim EOL As Boolean = False
+                Dim IL As Boolean = False
+                For Each Inspection As List(Of String) In InitList
+                    If item = Inspection(0) Then
+                        If Inspection(1) = "EOL" Then
+                            EOL = True
+                        End If
+                        If Inspection(1) = "IL" Then
+                            IL = True
+                        End If
+                    End If
+                Next
+                If EOL And IL Then
+                    Numerator = Numerator + 1
+                End If
+            Next
+            Return Numerator / UniqueList.Count
+        End Function
+        Public Function GetGlobalMonthlyCR(ByVal WS As String) As Double
+            Dim retval As Double = 0
+            Dim DR2 As SqlDataReader
+            Dim Command2 As New SqlCommand
+            Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
+            Dim SQL As String = "Select DataNo AS DN, InspectionType as IT, id as ID from dbo.InspectionJobSummaryYearly " & WS & " AND Inspection_Finished >= DATEADD(month,-1,GETDATE())"
+            Command2.CommandType = CommandType.Text 'sets the type of the sql
+            Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
+            Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
+            If (Connection2.State = ConnectionState.Closed) Then
+                Connection2.Open()
+            End If
+            Dim InitList As New List(Of List(Of String))()
+            Dim Segment = New List(Of String)
+            Dim UniqueList = New List(Of String)
+            DR2 = Command2.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+            While DR2.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                Segment = New List(Of String)()
+                Segment.Add(DR2("DN"))
+                Segment.Add(DR2("IT"))
+                Segment.Add(DR2("ID"))
+                InitList.Add(Segment)
+
+
+            End While
+
+            Connection2.Close() 'closes the connection
+            DR2.Close() 'closes the reader
+            For Each item As List(Of String) In InitList
+                UniqueList.Add(item(0))
+            Next
+            UniqueList = UniqueList.Distinct().ToList
+            Dim Numerator As Integer = 0
+            For Each item As String In UniqueList
+                Dim EOL As Boolean = False
+                Dim IL As Boolean = False
+                For Each Inspection As List(Of String) In InitList
+                    If item = Inspection(0) Then
+                        If Inspection(1) = "EOL" Then
+                            EOL = True
+                        End If
+                        If Inspection(1) = "IL" Then
+                            IL = True
+                        End If
+                    End If
+                Next
+                If EOL And IL Then
+                    Numerator = Numerator + 1
+                End If
+            Next
+            Return Numerator / UniqueList.Count
         End Function
         Public Function GetOverallDataArray(ByVal fromDate As String, ByVal toDate As String, ByVal DN As String, ByVal WO As String, ByVal AT As String) As List(Of String)
             '{ id: "1", Facility: "Thomaston", Time_Period: "Past 30 Days", No_of_Defects: 100, No_of_Rejects: 1, No_of_Inspections: 10, No_of_Rejected_Lots: 12, DHU: 0.55, Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: { Facility: { rowspan: "3" } } },
@@ -1635,7 +1898,7 @@ Namespace core
             If AT = "ALL" Then
                 WhereString3 = WhereString3 & " AND InspectionType != 'ROLL'"
             ElseIf AT = "FINAL AUDIT" Then
-                WhereString2 = WhereString2 & " AND InspectionType = 'EOL'"
+                WhereString3 = WhereString3 & " AND InspectionType = 'EOL'"
             ElseIf AT = "IN LINE" Then
                 WhereString3 = WhereString3 & " AND InspectionType = 'IL'"
             Else
@@ -1652,13 +1915,13 @@ Namespace core
 
 
 
-            Dim Top As String = String.Format("Facility: '{0}', Time_Period: 'Past 30 Days', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ rowspan: '4' }} }}", "Overall", GetGlobalMonthlyDefectTotal(WhereString2), GetGlobalMonthlyInspectionTotal(WhereString2), GetGlobalMonthlyRejectTotal(WhereString2), GetGlobalMonthlyRejectLotTotal(WhereString2), GetGlobalMonthlyDHU(WhereString2), GetGlobalMonthlyRejectionRate(WhereString2), GetGlobalMonthlyLotAcceptance(WhereString2))
+            Dim Top As String = String.Format("Facility: '{0}', Time_Period: 'Past 30 Days', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, Compliance_Ratio : '{8}', attr: {{ Facility: {{ rowspan: '4' }} }}", "Overall", GetGlobalMonthlyDefectTotal(WhereString2), GetGlobalMonthlyInspectionTotal(WhereString2), GetGlobalMonthlyRejectTotal(WhereString2), GetGlobalMonthlyRejectLotTotal(WhereString2), GetGlobalMonthlyDHU(WhereString2), GetGlobalMonthlyRejectionRate(WhereString2), GetGlobalMonthlyLotAcceptance(WhereString2), GetGlobalMonthlyCR(WhereString2))
             retval.Add("{" + Top + "}")
-            Dim Mid As String = String.Format("Facility: '{0}', Time_Period: 'Past Year', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", "Overall", GetGlobalYearlyDefectTotal(WhereString2), GetGlobalYearlyInspectionTotal(WhereString2), GetGlobalYearlyRejectTotal(WhereString2), GetGlobalYearlyRejectLotTotal(WhereString2), GetGlobalYearlyDHU(WhereString2), GetGlobalYearlyRejectionRate(WhereString2), GetGlobalYearlyLotAcceptance(WhereString2))
+            Dim Mid As String = String.Format("Facility: '{0}', Time_Period: 'Past Year', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, Compliance_Ratio : '{8}', attr: {{ Facility: {{ display: 'none' }} }}", "Overall", GetGlobalYearlyDefectTotal(WhereString2), GetGlobalYearlyInspectionTotal(WhereString2), GetGlobalYearlyRejectTotal(WhereString2), GetGlobalYearlyRejectLotTotal(WhereString2), GetGlobalYearlyDHU(WhereString2), GetGlobalYearlyRejectionRate(WhereString2), GetGlobalYearlyLotAcceptance(WhereString2), GetGlobalYearlyCR(WhereString2))
             retval.Add("{" + Mid + "}")
-            Dim Yesterday As String = String.Format("Facility: '{0}', Time_Period: 'Yesterday', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", "Overall", GetGlobalYearlyDefectTotal(WhereString3), GetGlobalYearlyInspectionTotal(WhereString3), GetGlobalYearlyRejectTotal(WhereString3), GetGlobalYearlyRejectLotTotal(WhereString3), GetGlobalYearlyDHU(WhereString3), GetGlobalYearlyRejectionRate(WhereString3), GetGlobalYearlyLotAcceptance(WhereString3))
+            Dim Yesterday As String = String.Format("Facility: '{0}', Time_Period: 'Yesterday', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, Compliance_Ratio : '{8}', attr: {{ Facility: {{ display: 'none' }} }}", "Overall", GetGlobalYearlyDefectTotal(WhereString3), GetGlobalYearlyInspectionTotal(WhereString3), GetGlobalYearlyRejectTotal(WhereString3), GetGlobalYearlyRejectLotTotal(WhereString3), GetGlobalYearlyDHU(WhereString3), GetGlobalYearlyRejectionRate(WhereString3), GetGlobalYearlyLotAcceptance(WhereString3), GetGlobalYearlyCR(WhereString3))
             retval.Add("{" + Yesterday + "}")
-            Dim Bottom As String = String.Format("Facility: '{0}', Time_Period: 'Custom', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", "Overall", GetGlobalCustomDefectTotal(WhereString), GetGlobalCustomInspectionTotal(WhereString), GetGlobalCustomRejectTotal(WhereString), GetGlobalCustomRejectLotTotal(WhereString), GetGlobalCustomDHU(WhereString), GetGlobalCustomRejectionRate(WhereString), GetGlobalCustomLotAcceptance(WhereString))
+            Dim Bottom As String = String.Format("Facility: '{0}', Time_Period: 'Custom', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, Compliance_Ratio : '{8}', attr: {{ Facility: {{ display: 'none' }} }}", "Overall", GetGlobalCustomDefectTotal(WhereString), GetGlobalCustomInspectionTotal(WhereString), GetGlobalCustomRejectTotal(WhereString), GetGlobalCustomRejectLotTotal(WhereString), GetGlobalCustomDHU(WhereString), GetGlobalCustomRejectionRate(WhereString), GetGlobalCustomLotAcceptance(WhereString), GetGlobalYearlyCR(WhereString))
             retval.Add("{" + Bottom + "}")
 
 
@@ -1708,7 +1971,7 @@ Namespace core
             If AT = "ALL" Then
                 WhereString3 = WhereString3 & " AND InspectionType != 'ROLL'"
             ElseIf AT = "FINAL AUDIT" Then
-                WhereString2 = WhereString2 & " AND InspectionType = 'EOL'"
+                WhereString3 = WhereString3 & " AND InspectionType = 'EOL'"
             ElseIf AT = "IN LINE" Then
                 WhereString3 = WhereString3 & " AND InspectionType = 'IL'"
             Else
@@ -1725,13 +1988,13 @@ Namespace core
 
 
 
-            Dim Top As String = String.Format("Facility: '{0}', Time_Period: 'Past 30 Days', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ rowspan: '4' }} }}", "Domestic", GetGlobalMonthlyDefectTotal(WhereString2), GetGlobalMonthlyInspectionTotal(WhereString2), GetGlobalMonthlyRejectTotal(WhereString2), GetGlobalMonthlyRejectLotTotal(WhereString2), GetGlobalMonthlyDHU(WhereString2), GetGlobalMonthlyRejectionRate(WhereString2), GetGlobalMonthlyLotAcceptance(WhereString2))
+            Dim Top As String = String.Format("Facility: '{0}', Time_Period: 'Past 30 Days', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, Compliance_Ratio : '{8}', attr: {{ Facility: {{ rowspan: '4' }} }}", "Domestic", GetGlobalMonthlyDefectTotal(WhereString2), GetGlobalMonthlyInspectionTotal(WhereString2), GetGlobalMonthlyRejectTotal(WhereString2), GetGlobalMonthlyRejectLotTotal(WhereString2), GetGlobalMonthlyDHU(WhereString2), GetGlobalMonthlyRejectionRate(WhereString2), GetGlobalMonthlyLotAcceptance(WhereString2), GetGlobalMonthlyCR(WhereString2))
             retval.Add("{" + Top + "}")
-            Dim Mid As String = String.Format("Facility: '{0}', Time_Period: 'Past Year', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", "Domestic", GetGlobalYearlyDefectTotal(WhereString2), GetGlobalYearlyInspectionTotal(WhereString2), GetGlobalYearlyRejectTotal(WhereString2), GetGlobalYearlyRejectLotTotal(WhereString2), GetGlobalYearlyDHU(WhereString2), GetGlobalYearlyRejectionRate(WhereString2), GetGlobalYearlyLotAcceptance(WhereString2))
+            Dim Mid As String = String.Format("Facility: '{0}', Time_Period: 'Past Year', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, Compliance_Ratio : '{8}', attr: {{ Facility: {{ display: 'none' }} }}", "Domestic", GetGlobalYearlyDefectTotal(WhereString2), GetGlobalYearlyInspectionTotal(WhereString2), GetGlobalYearlyRejectTotal(WhereString2), GetGlobalYearlyRejectLotTotal(WhereString2), GetGlobalYearlyDHU(WhereString2), GetGlobalYearlyRejectionRate(WhereString2), GetGlobalYearlyLotAcceptance(WhereString2), GetGlobalYearlyCR(WhereString2))
             retval.Add("{" + Mid + "}")
-            Dim Yesterday As String = String.Format("Facility: '{0}', Time_Period: 'Yesterday', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", "Domestic", GetGlobalYearlyDefectTotal(WhereString3), GetGlobalYearlyInspectionTotal(WhereString3), GetGlobalYearlyRejectTotal(WhereString3), GetGlobalYearlyRejectLotTotal(WhereString3), GetGlobalYearlyDHU(WhereString3), GetGlobalYearlyRejectionRate(WhereString3), GetGlobalYearlyLotAcceptance(WhereString3))
+            Dim Yesterday As String = String.Format("Facility: '{0}', Time_Period: 'Yesterday', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, Compliance_Ratio : '{8}', attr: {{ Facility: {{ display: 'none' }} }}", "Domestic", GetGlobalYearlyDefectTotal(WhereString3), GetGlobalYearlyInspectionTotal(WhereString3), GetGlobalYearlyRejectTotal(WhereString3), GetGlobalYearlyRejectLotTotal(WhereString3), GetGlobalYearlyDHU(WhereString3), GetGlobalYearlyRejectionRate(WhereString3), GetGlobalYearlyLotAcceptance(WhereString3), GetGlobalYearlyCR(WhereString3))
             retval.Add("{" + Yesterday + "}")
-            Dim Bottom As String = String.Format("Facility: '{0}', Time_Period: 'Custom', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", "Domestic", GetGlobalCustomDefectTotal(WhereString), GetGlobalCustomInspectionTotal(WhereString), GetGlobalCustomRejectTotal(WhereString), GetGlobalCustomRejectLotTotal(WhereString), GetGlobalCustomDHU(WhereString), GetGlobalCustomRejectionRate(WhereString), GetGlobalCustomLotAcceptance(WhereString))
+            Dim Bottom As String = String.Format("Facility: '{0}', Time_Period: 'Custom', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, Compliance_Ratio : '{8}', attr: {{ Facility: {{ display: 'none' }} }}", "Domestic", GetGlobalCustomDefectTotal(WhereString), GetGlobalCustomInspectionTotal(WhereString), GetGlobalCustomRejectTotal(WhereString), GetGlobalCustomRejectLotTotal(WhereString), GetGlobalCustomDHU(WhereString), GetGlobalCustomRejectionRate(WhereString), GetGlobalCustomLotAcceptance(WhereString), GetGlobalYearlyCR(WhereString))
             retval.Add("{" + Bottom + "}")
 
 
@@ -1781,7 +2044,7 @@ Namespace core
             If AT = "ALL" Then
                 WhereString3 = WhereString3 & " AND InspectionType != 'ROLL'"
             ElseIf AT = "FINAL AUDIT" Then
-                WhereString2 = WhereString2 & " AND InspectionType = 'EOL'"
+                WhereString3 = WhereString3 & " AND InspectionType = 'EOL'"
             ElseIf AT = "IN LINE" Then
                 WhereString3 = WhereString3 & " AND InspectionType = 'IL'"
             Else
@@ -1798,13 +2061,13 @@ Namespace core
 
 
 
-            Dim Top As String = String.Format("Facility: '{0}', Time_Period: 'Past 30 Days', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ rowspan: '4' }} }}", "Interiors", GetGlobalMonthlyDefectTotal(WhereString2), GetGlobalMonthlyInspectionTotal(WhereString2), GetGlobalMonthlyRejectTotal(WhereString2), GetGlobalMonthlyRejectLotTotal(WhereString2), GetGlobalMonthlyDHU(WhereString2), GetGlobalMonthlyRejectionRate(WhereString2), GetGlobalMonthlyLotAcceptance(WhereString2))
+            Dim Top As String = String.Format("Facility: '{0}', Time_Period: 'Past 30 Days', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, Compliance_Ratio : '{8}', attr: {{ Facility: {{ rowspan: '4' }} }}", "Interiors", GetGlobalMonthlyDefectTotal(WhereString2), GetGlobalMonthlyInspectionTotal(WhereString2), GetGlobalMonthlyRejectTotal(WhereString2), GetGlobalMonthlyRejectLotTotal(WhereString2), GetGlobalMonthlyDHU(WhereString2), GetGlobalMonthlyRejectionRate(WhereString2), GetGlobalMonthlyLotAcceptance(WhereString2), GetGlobalMonthlyCR(WhereString2))
             retval.Add("{" + Top + "}")
-            Dim Mid As String = String.Format("Facility: '{0}', Time_Period: 'Past Year', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", "Interiors", GetGlobalYearlyDefectTotal(WhereString2), GetGlobalYearlyInspectionTotal(WhereString2), GetGlobalYearlyRejectTotal(WhereString2), GetGlobalYearlyRejectLotTotal(WhereString2), GetGlobalYearlyDHU(WhereString2), GetGlobalYearlyRejectionRate(WhereString2), GetGlobalYearlyLotAcceptance(WhereString2))
+            Dim Mid As String = String.Format("Facility: '{0}', Time_Period: 'Past Year', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, Compliance_Ratio : '{8}', attr: {{ Facility: {{ display: 'none' }} }}", "Interiors", GetGlobalYearlyDefectTotal(WhereString2), GetGlobalYearlyInspectionTotal(WhereString2), GetGlobalYearlyRejectTotal(WhereString2), GetGlobalYearlyRejectLotTotal(WhereString2), GetGlobalYearlyDHU(WhereString2), GetGlobalYearlyRejectionRate(WhereString2), GetGlobalYearlyLotAcceptance(WhereString2), GetGlobalYearlyCR(WhereString2))
             retval.Add("{" + Mid + "}")
-            Dim Yesterday As String = String.Format("Facility: '{0}', Time_Period: 'Yesterday', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", "Interiors", GetGlobalYearlyDefectTotal(WhereString3), GetGlobalYearlyInspectionTotal(WhereString3), GetGlobalYearlyRejectTotal(WhereString3), GetGlobalYearlyRejectLotTotal(WhereString3), GetGlobalYearlyDHU(WhereString3), GetGlobalYearlyRejectionRate(WhereString3), GetGlobalYearlyLotAcceptance(WhereString3))
+            Dim Yesterday As String = String.Format("Facility: '{0}', Time_Period: 'Yesterday', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, Compliance_Ratio : '{8}', attr: {{ Facility: {{ display: 'none' }} }}", "Interiors", GetGlobalYearlyDefectTotal(WhereString3), GetGlobalYearlyInspectionTotal(WhereString3), GetGlobalYearlyRejectTotal(WhereString3), GetGlobalYearlyRejectLotTotal(WhereString3), GetGlobalYearlyDHU(WhereString3), GetGlobalYearlyRejectionRate(WhereString3), GetGlobalYearlyLotAcceptance(WhereString3), GetGlobalYearlyCR(WhereString3))
             retval.Add("{" + Yesterday + "}")
-            Dim Bottom As String = String.Format("Facility: '{0}', Time_Period: 'Custom', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", "Interiors", GetGlobalCustomDefectTotal(WhereString), GetGlobalCustomInspectionTotal(WhereString), GetGlobalCustomRejectTotal(WhereString), GetGlobalCustomRejectLotTotal(WhereString), GetGlobalCustomDHU(WhereString), GetGlobalCustomRejectionRate(WhereString), GetGlobalCustomLotAcceptance(WhereString))
+            Dim Bottom As String = String.Format("Facility: '{0}', Time_Period: 'Custom', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, Compliance_Ratio : '{8}', attr: {{ Facility: {{ display: 'none' }} }}", "Interiors", GetGlobalCustomDefectTotal(WhereString), GetGlobalCustomInspectionTotal(WhereString), GetGlobalCustomRejectTotal(WhereString), GetGlobalCustomRejectLotTotal(WhereString), GetGlobalCustomDHU(WhereString), GetGlobalCustomRejectionRate(WhereString), GetGlobalCustomLotAcceptance(WhereString), GetGlobalYearlyCR(WhereString))
             retval.Add("{" + Bottom + "}")
 
 
@@ -1854,7 +2117,7 @@ Namespace core
             If AT = "ALL" Then
                 WhereString3 = WhereString3 & " AND InspectionType != 'ROLL'"
             ElseIf AT = "FINAL AUDIT" Then
-                WhereString2 = WhereString2 & " AND InspectionType = 'EOL'"
+                WhereString3 = WhereString3 & " AND InspectionType = 'EOL'"
             ElseIf AT = "IN LINE" Then
                 WhereString3 = WhereString3 & " AND InspectionType = 'IL'"
             Else
@@ -1871,13 +2134,13 @@ Namespace core
 
 
 
-            Dim Top As String = String.Format("Facility: '{0}', Time_Period: 'Past 30 Days', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ rowspan: '4' }} }}", "Global", GetGlobalMonthlyDefectTotal(WhereString2), GetGlobalMonthlyInspectionTotal(WhereString2), GetGlobalMonthlyRejectTotal(WhereString2), GetGlobalMonthlyRejectLotTotal(WhereString2), GetGlobalMonthlyDHU(WhereString2), GetGlobalMonthlyRejectionRate(WhereString2), GetGlobalMonthlyLotAcceptance(WhereString2))
+            Dim Top As String = String.Format("Facility: '{0}', Time_Period: 'Past 30 Days', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, Compliance_Ratio : '{8}', attr: {{ Facility: {{ rowspan: '4' }} }}", "Global", GetGlobalMonthlyDefectTotal(WhereString2), GetGlobalMonthlyInspectionTotal(WhereString2), GetGlobalMonthlyRejectTotal(WhereString2), GetGlobalMonthlyRejectLotTotal(WhereString2), GetGlobalMonthlyDHU(WhereString2), GetGlobalMonthlyRejectionRate(WhereString2), GetGlobalMonthlyLotAcceptance(WhereString2), GetGlobalMonthlyCR(WhereString2))
             retval.Add("{" + Top + "}")
-            Dim Mid As String = String.Format("Facility: '{0}', Time_Period: 'Past Year', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", "Global", GetGlobalYearlyDefectTotal(WhereString2), GetGlobalYearlyInspectionTotal(WhereString2), GetGlobalYearlyRejectTotal(WhereString2), GetGlobalYearlyRejectLotTotal(WhereString2), GetGlobalYearlyDHU(WhereString2), GetGlobalYearlyRejectionRate(WhereString2), GetGlobalYearlyLotAcceptance(WhereString2))
+            Dim Mid As String = String.Format("Facility: '{0}', Time_Period: 'Past Year', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, Compliance_Ratio : '{8}', attr: {{ Facility: {{ display: 'none' }} }}", "Global", GetGlobalYearlyDefectTotal(WhereString2), GetGlobalYearlyInspectionTotal(WhereString2), GetGlobalYearlyRejectTotal(WhereString2), GetGlobalYearlyRejectLotTotal(WhereString2), GetGlobalYearlyDHU(WhereString2), GetGlobalYearlyRejectionRate(WhereString2), GetGlobalYearlyLotAcceptance(WhereString2), GetGlobalYearlyCR(WhereString2))
             retval.Add("{" + Mid + "}")
-            Dim Yesterday As String = String.Format("Facility: '{0}', Time_Period: 'Yesterday', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", "Global", GetGlobalYearlyDefectTotal(WhereString3), GetGlobalYearlyInspectionTotal(WhereString3), GetGlobalYearlyRejectTotal(WhereString3), GetGlobalYearlyRejectLotTotal(WhereString3), GetGlobalYearlyDHU(WhereString3), GetGlobalYearlyRejectionRate(WhereString3), GetGlobalYearlyLotAcceptance(WhereString3))
+            Dim Yesterday As String = String.Format("Facility: '{0}', Time_Period: 'Yesterday', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, Compliance_Ratio : '{8}', attr: {{ Facility: {{ display: 'none' }} }}", "Global", GetGlobalYearlyDefectTotal(WhereString3), GetGlobalYearlyInspectionTotal(WhereString3), GetGlobalYearlyRejectTotal(WhereString3), GetGlobalYearlyRejectLotTotal(WhereString3), GetGlobalYearlyDHU(WhereString3), GetGlobalYearlyRejectionRate(WhereString3), GetGlobalYearlyLotAcceptance(WhereString3), GetGlobalYearlyCR(WhereString3))
             retval.Add("{" + Yesterday + "}")
-            Dim Bottom As String = String.Format("Facility: '{0}', Time_Period: 'Custom', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, attr: {{ Facility: {{ display: 'none' }} }}", "Global", GetGlobalCustomDefectTotal(WhereString), GetGlobalCustomInspectionTotal(WhereString), GetGlobalCustomRejectTotal(WhereString), GetGlobalCustomRejectLotTotal(WhereString), GetGlobalCustomDHU(WhereString), GetGlobalCustomRejectionRate(WhereString), GetGlobalCustomLotAcceptance(WhereString))
+            Dim Bottom As String = String.Format("Facility: '{0}', Time_Period: 'Custom', No_of_Defects: '{1}', No_of_Rejects: '{3}', No_of_Inspections: '{2}', No_of_Rejected_Lots: '{4}', DHU: '{5}', Reject_Rate: '{6}', Lot_Acceptance: {7}, Compliance_Ratio : '{8}', attr: {{ Facility: {{ display: 'none' }} }}", "Global", GetGlobalCustomDefectTotal(WhereString), GetGlobalCustomInspectionTotal(WhereString), GetGlobalCustomRejectTotal(WhereString), GetGlobalCustomRejectLotTotal(WhereString), GetGlobalCustomDHU(WhereString), GetGlobalCustomRejectionRate(WhereString), GetGlobalCustomLotAcceptance(WhereString), GetGlobalYearlyCR(WhereString))
             retval.Add("{" + Bottom + "}")
 
 
@@ -3615,7 +3878,7 @@ Namespace core
                     Return retval
                 ElseIf gt = "No. of Defects" And tp = "Yesterday" Then
                     Dim segment As New List(Of String)()
-                    SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0)AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
+                    SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from dbo.InspectionJobSummaryYearly " & WhereString2 & " And Inspection_Finished >= dateadd(day,datediff(day,1,GETDATE()),0) AND Inspection_Finished < dateadd(day,datediff(day,0,GETDATE()),0) Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                     Command.CommandType = CommandType.Text 'sets the type of the sql
                     Command.Connection = Connection 'sets the connection of our sql command to MyDB
                     Command.CommandText = SQL 'sets the statement that executes at the data source to our string

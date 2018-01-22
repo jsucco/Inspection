@@ -595,17 +595,18 @@
             };
             $("#OverallGrid").jqGrid({
                 datatype: 'local',
-                colNames: ['Facility', 'Time_Period', 'No. of Defects', 'No. of Rejects', 'No. of Inspections', 'No. of Rejected Lots', 'DHU', 'Reject Rate', 'Lot Acceptance'],
+                colNames: ['Facility', 'Time_Period', 'No. of Defects', 'No. of Rejects', 'No. of Inspections', 'No. of Rejected Lots', 'DHU', 'Reject Rate', 'Lot Acceptance', 'Compliance Ratio'],
                 colModel: [
-                    { name: 'Facility', width: 200, align: 'center', cellattr: arrtSetting },
-                    { name: 'Time_Period', width: 200},
-                    { name: 'No_of_Defects', width: 200 },
-                    { name: 'No_of_Rejects', width: 200 },
-                    { name: 'No_of_Inspections', width: 200 },
-                    { name: 'No_of_Rejected_Lots', width: 200 },
-                    { name: 'DHU', width: 200 },
-                    { name: 'Reject_Rate', width: 200 },
-                    { name: 'Lot_Acceptance', width: 200 }
+                    { name: 'Facility', width: 180, align: 'center', cellattr: arrtSetting },
+                    { name: 'Time_Period', width: 180},
+                    { name: 'No_of_Defects', width: 180 },
+                    { name: 'No_of_Rejects', width: 180 },
+                    { name: 'No_of_Inspections', width: 180 },
+                    { name: 'No_of_Rejected_Lots', width: 180 },
+                    { name: 'DHU', width: 180 },
+                    { name: 'Reject_Rate', width: 180 },
+                    { name: 'Lot_Acceptance', width: 180},
+                    { name: 'Compliance_Ratio', width: 180}
                 ],
                 cmTemplate: { sortable: false },
                 rowNum: 100,
@@ -636,17 +637,18 @@
             });
             $("#InteriorsGrid").jqGrid({
                 datatype: 'local',
-                colNames: ['Facility', 'Time_Period', 'No. of Defects', 'No. of Rejects', 'No. of Inspections', 'No. of Rejected Lots', 'DHU', 'Reject Rate', 'Lot Acceptance'],
+                colNames: ['Facility', 'Time_Period', 'No. of Defects', 'No. of Rejects', 'No. of Inspections', 'No. of Rejected Lots', 'DHU', 'Reject Rate', 'Lot Acceptance', 'Compliance Ratio'],
                 colModel: [
-                    { name: 'Facility', width: 200, align: 'center', cellattr: arrtSetting },
-                    { name: 'Time_Period', width: 200 },
-                    { name: 'No_of_Defects', width: 200 },
-                    { name: 'No_of_Rejects', width: 200 },
-                    { name: 'No_of_Inspections', width: 200 },
-                    { name: 'No_of_Rejected_Lots', width: 200 },
-                    { name: 'DHU', width: 200 },
-                    { name: 'Reject_Rate', width: 200 },
-                    { name: 'Lot_Acceptance', width: 200 }
+                    { name: 'Facility', width: 180, align: 'center', cellattr: arrtSetting },
+                    { name: 'Time_Period', width: 180 },
+                    { name: 'No_of_Defects', width: 180 },
+                    { name: 'No_of_Rejects', width: 180 },
+                    { name: 'No_of_Inspections', width: 180 },
+                    { name: 'No_of_Rejected_Lots', width: 180 },
+                    { name: 'DHU', width: 180 },
+                    { name: 'Reject_Rate', width: 180 },
+                    { name: 'Lot_Acceptance', width: 180 },
+                    { name: 'Compliance_Ratio', width: 180 }
                 ],
                 cmTemplate: { sortable: false },
                 rowNum: 100,
@@ -677,17 +679,18 @@
             });
             $("#DomesticGrid").jqGrid({
                 datatype: 'local',
-                colNames: ['Facility', 'Time_Period', 'No. of Defects', 'No. of Rejects', 'No. of Inspections', 'No. of Rejected Lots', 'DHU', 'Reject Rate', 'Lot Acceptance'],
+                colNames: ['Facility', 'Time_Period', 'No. of Defects', 'No. of Rejects', 'No. of Inspections', 'No. of Rejected Lots', 'DHU', 'Reject Rate', 'Lot Acceptance', 'Compliance Ratio'],
                 colModel: [
-                    { name: 'Facility', width: 200, align: 'center', cellattr: arrtSetting },
-                    { name: 'Time_Period', width: 200 },
-                    { name: 'No_of_Defects', width: 200 },
-                    { name: 'No_of_Rejects', width: 200 },
-                    { name: 'No_of_Inspections', width: 200 },
-                    { name: 'No_of_Rejected_Lots', width: 200 },
-                    { name: 'DHU', width: 200 },
-                    { name: 'Reject_Rate', width: 200 },
-                    { name: 'Lot_Acceptance', width: 200 }
+                    { name: 'Facility', width: 180, align: 'center', cellattr: arrtSetting },
+                    { name: 'Time_Period', width: 180 },
+                    { name: 'No_of_Defects', width: 180 },
+                    { name: 'No_of_Rejects', width: 180 },
+                    { name: 'No_of_Inspections', width: 180 },
+                    { name: 'No_of_Rejected_Lots', width: 180 },
+                    { name: 'DHU', width: 180 },
+                    { name: 'Reject_Rate', width: 180 },
+                    { name: 'Lot_Acceptance', width: 180 },
+                    { name: 'Compliance_Ratio', width: 180 }
                 ],
                 cmTemplate: { sortable: false },
                 rowNum: 100,
@@ -719,17 +722,18 @@
             });
             $("#GlobalGrid").jqGrid({
                 datatype: 'local',
-                colNames: ['Facility', 'Time_Period', 'No. of Defects', 'No. of Rejects', 'No. of Inspections', 'No. of Rejected Lots', 'DHU', 'Reject Rate', 'Lot Acceptance'],
+                colNames: ['Facility', 'Time_Period', 'No. of Defects', 'No. of Rejects', 'No. of Inspections', 'No. of Rejected Lots', 'DHU', 'Reject Rate', 'Lot Acceptance', 'Compliance Ratio'],
                 colModel: [
-                    { name: 'Facility', width: 200, align: 'center', cellattr: arrtSetting },
-                    { name: 'Time_Period', width: 200 },
-                    { name: 'No_of_Defects', width: 200 },
-                    { name: 'No_of_Rejects', width: 200 },
-                    { name: 'No_of_Inspections', width: 200 },
-                    { name: 'No_of_Rejected_Lots', width: 200 },
-                    { name: 'DHU', width: 200 },
-                    { name: 'Reject_Rate', width: 200 },
-                    { name: 'Lot_Acceptance', width: 200 }
+                    { name: 'Facility', width: 180, align: 'center', cellattr: arrtSetting },
+                    { name: 'Time_Period', width: 180 },
+                    { name: 'No_of_Defects', width: 180 },
+                    { name: 'No_of_Rejects', width: 180 },
+                    { name: 'No_of_Inspections', width: 180 },
+                    { name: 'No_of_Rejected_Lots', width: 180 },
+                    { name: 'DHU', width: 180 },
+                    { name: 'Reject_Rate', width: 180 },
+                    { name: 'Lot_Acceptance', width: 180 },
+                    { name: 'Compliance_Ratio', width: 180 }
                 ],
                 cmTemplate: { sortable: false },
                 rowNum: 100,
@@ -762,17 +766,18 @@
              });
             $("#MainGrid").jqGrid({
                 datatype: 'local',
-                colNames: ['Facility', 'Time_Period', 'No. of Defects', 'No. of Rejects', 'No. of Inspections', 'No. of Rejected Lots', 'DHU', 'Reject Rate', 'Lot Acceptance'],
+                colNames: ['Facility', 'Time_Period', 'No. of Defects', 'No. of Rejects', 'No. of Inspections', 'No. of Rejected Lots', 'DHU', 'Reject Rate', 'Lot Acceptance', 'Compliance Ratio'],
                 colModel: [
-                    { name: 'Facility', width: 200, align: 'center', cellattr: arrtSetting },
-                    { name: 'Time_Period', width: 200, formatter: rowColorFormatter },
-                    { name: 'No_of_Defects', width: 200 },
-                    { name: 'No_of_Rejects', width: 200 },
-                    { name: 'No_of_Inspections', width: 200 },
-                    { name: 'No_of_Rejected_Lots', width: 200 },
-                    { name: 'DHU', width: 200 },
-                    { name: 'Reject_Rate', width: 200 },
-                    { name: 'Lot_Acceptance', width: 200 }
+                    { name: 'Facility', width: 180, align: 'center', cellattr: arrtSetting },
+                    { name: 'Time_Period', width: 180, formatter: rowColorFormatter },
+                    { name: 'No_of_Defects', width: 180 },
+                    { name: 'No_of_Rejects', width: 180 },
+                    { name: 'No_of_Inspections', width: 180 },
+                    { name: 'No_of_Rejected_Lots', width: 180 },
+                    { name: 'DHU', width: 180 },
+                    { name: 'Reject_Rate', width: 180 },
+                    { name: 'Lot_Acceptance', width: 180 },
+                    { name: 'Compliance_Ratio', width: 180 }
                 ],
                 cmTemplate: { sortable: false },
                 rowNum: 100,
