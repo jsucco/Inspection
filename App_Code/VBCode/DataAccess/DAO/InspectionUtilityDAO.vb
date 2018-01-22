@@ -1646,6 +1646,60 @@ Namespace core
             Next
             Return Numerator / UniqueList.Count
         End Function
+        Public Function WRGetMonthlyCR(ByVal CID As String, ByVal WR As String, ByVal WS As String) As Double
+            Dim retval As Double = 0
+            Dim DR2 As SqlDataReader
+            Dim Command2 As New SqlCommand
+            Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
+
+            Dim SQL As String = "Select DataNo AS DN, InspectionType as IT, InspectionJobSummaryYearly.id as ID from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Inspection_Finished >= DATEADD(month,-1,GETDATE()) AND Name ='" & CID & "' AND WorkRoom = '" & WR & "' " & WS
+            Command2.CommandType = CommandType.Text 'sets the type of the sql
+            Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
+            Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
+            If (Connection2.State = ConnectionState.Closed) Then
+                Connection2.Open()
+            End If
+            Dim InitList As New List(Of List(Of String))()
+            Dim Segment = New List(Of String)
+            Dim UniqueList = New List(Of String)
+            DR2 = Command2.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+            While DR2.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                Segment = New List(Of String)()
+                Segment.Add(DR2("DN"))
+                Segment.Add(DR2("IT"))
+                Segment.Add(DR2("ID"))
+                InitList.Add(Segment)
+
+
+            End While
+
+            Connection2.Close() 'closes the connection
+            DR2.Close() 'closes the reader
+            For Each item As List(Of String) In InitList
+                UniqueList.Add(item(0))
+            Next
+            UniqueList = UniqueList.Distinct().ToList
+            Dim Numerator As Integer = 0
+            For Each item As String In UniqueList
+                Dim EOL As Boolean = False
+                Dim IL As Boolean = False
+                For Each Inspection As List(Of String) In InitList
+                    If item = Inspection(0) Then
+                        If Inspection(1) = "EOL" Then
+                            EOL = True
+                        End If
+                        If Inspection(1) = "IL" Then
+                            IL = True
+                        End If
+                    End If
+                Next
+                If EOL And IL Then
+                    Numerator = Numerator + 1
+                End If
+            Next
+            Return Numerator / UniqueList.Count
+        End Function
         Public Function GetMonthlyCR(ByVal CID As String, ByVal WS As String) As Double
             Dim retval As Double = 0
             Dim DR2 As SqlDataReader
@@ -1673,6 +1727,111 @@ Namespace core
 
             End While
 
+            Connection2.Close() 'closes the connection
+            DR2.Close() 'closes the reader
+            For Each item As List(Of String) In InitList
+                UniqueList.Add(item(0))
+            Next
+            UniqueList = UniqueList.Distinct().ToList
+            Dim Numerator As Integer = 0
+            For Each item As String In UniqueList
+                Dim EOL As Boolean = False
+                Dim IL As Boolean = False
+                For Each Inspection As List(Of String) In InitList
+                    If item = Inspection(0) Then
+                        If Inspection(1) = "EOL" Then
+                            EOL = True
+                        End If
+                        If Inspection(1) = "IL" Then
+                            IL = True
+                        End If
+                    End If
+                Next
+                If EOL And IL Then
+                    Numerator = Numerator + 1
+                End If
+            Next
+            Return Numerator / UniqueList.Count
+        End Function
+
+        Public Function WRGetCustomCR(ByVal CID As String, ByVal WR As String, ByVal WS As String) As Double
+            Dim retval As Double = 0
+            Dim DR2 As SqlDataReader
+            Dim Command2 As New SqlCommand
+            Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
+            Dim SQL As String = "Select DataNo AS DN, InspectionType as IT, InspectionJobSummaryYearly.id as ID from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & CID & "' AND WorkRoom = '" & WR & "' " & WS
+            Command2.CommandType = CommandType.Text 'sets the type of the sql
+            Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
+            Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
+            If (Connection2.State = ConnectionState.Closed) Then
+                Connection2.Open()
+            End If
+            Dim InitList As New List(Of List(Of String))()
+            Dim Segment = New List(Of String)
+            Dim UniqueList = New List(Of String)
+            DR2 = Command2.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+            While DR2.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                Segment = New List(Of String)()
+                Segment.Add(DR2("DN"))
+                Segment.Add(DR2("IT"))
+                Segment.Add(DR2("ID"))
+                InitList.Add(Segment)
+
+
+            End While
+            Connection2.Close() 'closes the connection
+            DR2.Close() 'closes the reader
+            For Each item As List(Of String) In InitList
+                UniqueList.Add(item(0))
+            Next
+            UniqueList = UniqueList.Distinct().ToList
+            Dim Numerator As Integer = 0
+            For Each item As String In UniqueList
+                Dim EOL As Boolean = False
+                Dim IL As Boolean = False
+                For Each Inspection As List(Of String) In InitList
+                    If item = Inspection(0) Then
+                        If Inspection(1) = "EOL" Then
+                            EOL = True
+                        End If
+                        If Inspection(1) = "IL" Then
+                            IL = True
+                        End If
+                    End If
+                Next
+                If EOL And IL Then
+                    Numerator = Numerator + 1
+                End If
+            Next
+            Return Numerator / UniqueList.Count
+        End Function
+        Public Function WRGetYearlyCR(ByVal CID As String, ByVal WR As String, ByVal WS As String) As Double
+            Dim retval As Double = 0
+            Dim DR2 As SqlDataReader
+            Dim Command2 As New SqlCommand
+            Dim Connection2 As New SqlConnection(ConfigurationManager.ConnectionStrings("MyDB").ConnectionString)
+            Dim SQL As String = "Select DataNo AS DN, InspectionType as IT, InspectionJobSummaryYearly.id as ID from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & CID & "' AND WorkRoom = '" & WR & "' " & WS
+            Command2.CommandType = CommandType.Text 'sets the type of the sql
+            Command2.Connection = Connection2 'sets the connection of our sql command to MyDB
+            Command2.CommandText = SQL 'sets the statement that executes at the data source to our string
+            If (Connection2.State = ConnectionState.Closed) Then
+                Connection2.Open()
+            End If
+            Dim InitList As New List(Of List(Of String))()
+            Dim Segment = New List(Of String)
+            Dim UniqueList = New List(Of String)
+            DR2 = Command2.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+            While DR2.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                Segment = New List(Of String)()
+                Segment.Add(DR2("DN"))
+                Segment.Add(DR2("IT"))
+                Segment.Add(DR2("ID"))
+                InitList.Add(Segment)
+
+
+            End While
             Connection2.Close() 'closes the connection
             DR2.Close() 'closes the reader
             For Each item As List(Of String) In InitList
@@ -8029,6 +8188,7 @@ Namespace core
                     Subrow.No_of_Rejects = WRGetYearlyRejectTotal(Facility, DR.GetString(0), WhereString2)
                     Subrow.Reject_Rate = WRGetYearlyRejectionRate(Facility, DR.GetString(0), WhereString2)
                     Subrow.No_of_Inspections = WRGetYearlyInspectionTotal(Facility, DR.GetString(0), WhereString2)
+                    Subrow.Compliance_Ratio = WRGetYearlyCR(Facility, DR.GetString(0), WhereString2)
                     retList.Add(Subrow)
                 End If
                 If Time_Period = "Past 30 Days" And DR.GetString(0) <> Nothing Then
@@ -8040,6 +8200,7 @@ Namespace core
                     Subrow.No_of_Rejects = WRGetMonthlyRejectTotal(Facility, DR.GetString(0), WhereString2)
                     Subrow.Reject_Rate = WRGetMonthlyRejectionRate(Facility, DR.GetString(0), WhereString2)
                     Subrow.No_of_Inspections = WRGetMonthlyInspectionTotal(Facility, DR.GetString(0), WhereString2)
+                    Subrow.Compliance_Ratio = WRGetMonthlyCR(Facility, DR.GetString(0), WhereString2)
                     retList.Add(Subrow)
                 End If
                 If Time_Period = "Custom" And DR.GetString(0) <> Nothing Then
@@ -8051,6 +8212,7 @@ Namespace core
                     Subrow.No_of_Rejects = WRGetCustomRejectTotal(Facility, DR.GetString(0), WhereString)
                     Subrow.Reject_Rate = WRGetCustomRejectionRate(Facility, DR.GetString(0), WhereString)
                     Subrow.No_of_Inspections = WRGetCustomInspectionTotal(Facility, DR.GetString(0), WhereString)
+                    Subrow.Compliance_Ratio = WRGetCustomCR(Facility, DR.GetString(0), WhereString)
                     retList.Add(Subrow)
                 End If
 

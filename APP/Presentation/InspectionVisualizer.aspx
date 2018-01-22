@@ -806,16 +806,17 @@
                     jQuery("#" + subgrid_table_id).jqGrid({
                         url: "<%=Session("BaseUri")%>" + '/handlers/Presentation/MainGrid_SubgridLoad.ashx?' + subgridquerystr,
                         datatype: "json",
-                        colNames: ['WorkRoom', 'No. of Defects', 'No. of Rejects', 'No. of Inspections', 'No. of Rejected Lots', 'DHU', 'Reject Rate', 'Lot Acceptance'],
+                        colNames: ['WorkRoom', 'No. of Defects', 'No. of Rejects', 'No. of Inspections', 'No. of Rejected Lots', 'DHU', 'Reject Rate', 'Lot Acceptance', 'Compliance Ratio'],
                         colModel: [
-                            { name: 'FacilityWorkroom', width: 200 },
-                            { name: 'No_of_Defects', width: 200 },
-                            { name: 'No_of_Rejects', width: 200 },
-                            { name: 'No_of_Inspections', width: 200 },
-                            { name: 'No_of_Rejected_Lots', width: 200 },
-                            { name: 'DHU', width: 200 },
-                            { name: 'Reject_Rate', width: 200 },
-                            { name: 'Lot_Acceptance', width: 200 }
+                            { name: 'FacilityWorkroom', width: 180 },
+                            { name: 'No_of_Defects', width: 180 },
+                            { name: 'No_of_Rejects', width: 180 },
+                            { name: 'No_of_Inspections', width: 180 },
+                            { name: 'No_of_Rejected_Lots', width: 180 },
+                            { name: 'DHU', width: 180 },
+                            { name: 'Reject_Rate', width: 180 },
+                            { name: 'Lot_Acceptance', width: 180 },
+                            { name: 'Compliance_Ratio', width: 180 }
                         ],
                         rowNum: 100,
                         sortname: 'num',

@@ -433,6 +433,7 @@ Namespace core
             Public Property DHU As Double
             Public Property Reject_Rate As Double
             Public Property Lot_Acceptance As String
+            Public Property Compliance_Ratio As String
         End Class
         Public Class SpecsSubgrid
             Public Property SMid As Integer
