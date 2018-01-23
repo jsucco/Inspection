@@ -2344,7 +2344,208 @@ Namespace core
             End If
             Dim SQL As String = ""
             'AND WorkRoom = '" & wr & "'
-            If gt = "No_of_Defects" And tp = "Past Year" Then
+            If gt = "Compliance_Ratio" And tp = "Past Year" Then
+                Dim retval2 As New List(Of List(Of String))()
+                Dim MLSegment As New List(Of List(Of String))()
+                Dim segment As New List(Of String)()
+                Dim ML As New List(Of List(Of List(Of String)))()
+                SQL = "Select DataNo AS DN, InspectionType as IT, InspectionJobSummaryYearly.id as ID, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND WorkRoom = '" & wr & "' " & WhereString2 & " ORDER BY Comp_Date ASC"
+                Command.CommandType = CommandType.Text 'sets the type of the sql
+                Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                Connection.Open() 'opens the connction
+                DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                    segment = New List(Of String)()
+                    segment.Add(DR("DN"))
+                    segment.Add(DR("IT"))
+                    segment.Add(DR("ID"))
+                    segment.Add(DR("Comp_Date"))
+                    retval.Add(segment)
+
+
+                End While
+                Connection.Close() 'closes the connection
+                DR.Close() 'closes the reader
+                Dim initDate As String = retval(0)(3)
+                For Each item As List(Of String) In retval
+                    If item(3) = initDate Then
+                        MLSegment.Add(item)
+                    Else
+                        ML.Add(MLSegment)
+                        MLSegment = New List(Of List(Of String))()
+                        MLSegment.Add(item)
+                        initDate = item(3)
+                    End If
+                Next
+                ML.Add(MLSegment)
+                For Each Block As List(Of List(Of String)) In ML
+                    Dim UniqueList As New List(Of String)()
+                    For Each item As List(Of String) In Block
+                        UniqueList.Add(item(0))
+                    Next
+                    UniqueList = UniqueList.Distinct().ToList
+                    Dim Numerator As Integer = 0
+                    For Each item As String In UniqueList
+                        Dim EOL As Boolean = False
+                        Dim IL As Boolean = False
+                        For Each Inspection As List(Of String) In Block
+                            If item = Inspection(0) Then
+                                If Inspection(1) = "EOL" Then
+                                    EOL = True
+                                End If
+                                If Inspection(1) = "IL" Then
+                                    IL = True
+                                End If
+                            End If
+                        Next
+                        If EOL And IL Then
+                            Numerator = Numerator + 1
+                        End If
+                    Next
+                    Dim retsegment As New List(Of String)()
+
+                    retsegment.Add(Block(0)(3))
+                    retsegment.Add(Numerator / UniqueList.Count)
+                    retval2.Add(retsegment)
+                Next
+                Return retval2
+            ElseIf gt = "Compliance_Ratio" And tp = "Custom" Then
+                Dim retval2 As New List(Of List(Of String))()
+                Dim MLSegment As New List(Of List(Of String))()
+                Dim segment As New List(Of String)()
+                Dim ML As New List(Of List(Of List(Of String)))()
+                SQL = "Select DataNo AS DN, InspectionType as IT, InspectionJobSummaryYearly.id as ID, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND WorkRoom = '" & wr & "' " & WhereString & " ORDER BY Comp_Date ASC"
+                Command.CommandType = CommandType.Text 'sets the type of the sql
+                Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                Connection.Open() 'opens the connction
+                DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                    segment = New List(Of String)()
+                    segment.Add(DR("DN"))
+                    segment.Add(DR("IT"))
+                    segment.Add(DR("ID"))
+                    segment.Add(DR("Comp_Date"))
+                    retval.Add(segment)
+
+
+                End While
+                Connection.Close() 'closes the connection
+                DR.Close() 'closes the reader
+                Dim initDate As String = retval(0)(3)
+                For Each item As List(Of String) In retval
+                    If item(3) = initDate Then
+                        MLSegment.Add(item)
+                    Else
+                        ML.Add(MLSegment)
+                        MLSegment = New List(Of List(Of String))()
+                        MLSegment.Add(item)
+                        initDate = item(3)
+                    End If
+                Next
+                ML.Add(MLSegment)
+                For Each Block As List(Of List(Of String)) In ML
+                    Dim UniqueList As New List(Of String)()
+                    For Each item As List(Of String) In Block
+                        UniqueList.Add(item(0))
+                    Next
+                    UniqueList = UniqueList.Distinct().ToList
+                    Dim Numerator As Integer = 0
+                    For Each item As String In UniqueList
+                        Dim EOL As Boolean = False
+                        Dim IL As Boolean = False
+                        For Each Inspection As List(Of String) In Block
+                            If item = Inspection(0) Then
+                                If Inspection(1) = "EOL" Then
+                                    EOL = True
+                                End If
+                                If Inspection(1) = "IL" Then
+                                    IL = True
+                                End If
+                            End If
+                        Next
+                        If EOL And IL Then
+                            Numerator = Numerator + 1
+                        End If
+                    Next
+                    Dim retsegment As New List(Of String)()
+
+                    retsegment.Add(Block(0)(3))
+                    retsegment.Add(Numerator / UniqueList.Count)
+                    retval2.Add(retsegment)
+                Next
+                Return retval2
+            ElseIf gt = "Compliance_Ratio" And tp = "Past 30 Days" Then
+                Dim retval2 As New List(Of List(Of String))()
+                Dim MLSegment As New List(Of List(Of String))()
+                Dim segment As New List(Of String)()
+                Dim ML As New List(Of List(Of List(Of String)))()
+                SQL = "Select DataNo AS DN, InspectionType as IT, InspectionJobSummaryYearly.id as ID, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Inspection_Finished >= DATEADD(month,-1,GETDATE()) AND WorkRoom = '" & wr & "' AND Name ='" & fac & "' " & WhereString2 & " ORDER BY Comp_Date ASC"
+                Command.CommandType = CommandType.Text 'sets the type of the sql
+                Command.Connection = Connection 'sets the connection of our sql command to MyDB
+                Command.CommandText = SQL 'sets the statement that executes at the data source to our string
+                Connection.Open() 'opens the connction
+                DR = Command.ExecuteReader 'sends the command text to the connection and builds tthe SqlDataReader
+                While DR.Read() 'Check whether the SqlDataReader has 1 or more rows
+
+                    segment = New List(Of String)()
+                    segment.Add(DR("DN"))
+                    segment.Add(DR("IT"))
+                    segment.Add(DR("ID"))
+                    segment.Add(DR("Comp_Date"))
+                    retval.Add(segment)
+
+
+                End While
+                Connection.Close() 'closes the connection
+                DR.Close() 'closes the reader
+                Dim initDate As String = retval(0)(3)
+                For Each item As List(Of String) In retval
+                    If item(3) = initDate Then
+                        MLSegment.Add(item)
+                    Else
+                        ML.Add(MLSegment)
+                        MLSegment = New List(Of List(Of String))()
+                        MLSegment.Add(item)
+                        initDate = item(3)
+                    End If
+                Next
+                ML.Add(MLSegment)
+                For Each Block As List(Of List(Of String)) In ML
+                    Dim UniqueList As New List(Of String)()
+                    For Each item As List(Of String) In Block
+                        UniqueList.Add(item(0))
+                    Next
+                    UniqueList = UniqueList.Distinct().ToList
+                    Dim Numerator As Integer = 0
+                    For Each item As String In UniqueList
+                        Dim EOL As Boolean = False
+                        Dim IL As Boolean = False
+                        For Each Inspection As List(Of String) In Block
+                            If item = Inspection(0) Then
+                                If Inspection(1) = "EOL" Then
+                                    EOL = True
+                                End If
+                                If Inspection(1) = "IL" Then
+                                    IL = True
+                                End If
+                            End If
+                        Next
+                        If EOL And IL Then
+                            Numerator = Numerator + 1
+                        End If
+                    Next
+                    Dim retsegment As New List(Of String)()
+
+                    retsegment.Add(Block(0)(3))
+                    retsegment.Add(Numerator / UniqueList.Count)
+                    retval2.Add(retsegment)
+                Next
+                Return retval2
+            ElseIf gt = "No. of Defects" And tp = "Past Year" Then
                 Dim segment As New List(Of String)()
                 SQL = "Select ISNULL(SUM(MajorsCount+MinorsCount+RepairsCount+ScrapCount), 0) AS TOTAL, dateadd(DAY,0, datediff(day,0, Inspection_Finished)) AS Comp_Date from Inspection.dbo.Locations inner join dbo.InspectionJobSummaryYearly On dbo.InspectionJobSummaryYearly.CID=NCID WHERE Name ='" & fac & "' AND WorkRoom = '" & wr & "'" & WhereString2 & " Group by dateadd(DAY, 0, DateDiff(Day, 0, Inspection_Finished))  ORDER BY Comp_Date ASC"
                 Command.CommandType = CommandType.Text 'sets the type of the sql
