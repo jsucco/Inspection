@@ -292,7 +292,7 @@
                 case "flagboard":
 
                     permission = true;
-                    window.location.href = 'http://maintenance.standardtextile.com?CID=' + CtxCID;
+                    window.location.href = 'http://aprtest.standardtextile.com/Manage/Locations?CID=' + CtxCID;
                     return;
                     Destination = "APRFlagboard";
 

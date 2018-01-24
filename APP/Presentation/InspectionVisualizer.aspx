@@ -231,23 +231,23 @@
                 </div>
             </div>--%>
         </div>
-        <div id="OverallDiv" style="position: relative; left: 10px; top: 110px; width: 100%; height: 100px;">
+        <div id="OverallDiv" style="position: relative; left: 15px; top: 110px; width: 100%; height: 100px;">
             <table id="OverallGrid" style="width: 100%;">
             </table>
         </div>
-        <div id="GlobalDiv" style="position: relative; left: 10px; top: 200px; width: 100%; height: 100px;">
+        <div id="GlobalDiv" style="position: relative; left: 15px; top: 190px; width: 100%; height: 100px;">
             <table id="GlobalGrid" style="width: 100%;">
             </table>
         </div>
-        <div id="DomesticDiv" style="position: relative; left: 10px; top: 290px; width: 100%; height: 100px;">
+        <div id="DomesticDiv" style="position: relative; left: 15px; top: 250px; width: 100%; height: 100px;">
             <table id="DomesticGrid" style="width: 100%;">
             </table>
         </div>
-        <div id="InteriorsDiv" style="position: relative; left: 10px; top: 380px; width: 100%; height: 100px;">
+        <div id="InteriorsDiv" style="position: relative; left: 15px; top: 310px; width: 100%; height: 100px;">
             <table id="InteriorsGrid" style="width: 100%;">
             </table>
         </div>
-        <div id="GridDiv" style="position: relative; left: -10px; top: 470px; width: 100%; height: 100px;">
+        <div id="GridDiv" style="position: relative; left: -10px; top: 370px; width: 100%; height: 100px;">
             <table id="MainGrid" style="width: 100%;">
             </table>
         </div>
@@ -677,6 +677,9 @@
 
                 }
             });
+            var interiorsgrid = $("#InteriorsGrid");
+            var interiorsgview = interiorsgrid.parents("div.ui-jqgrid-view");
+            interiorsgview.children("div.ui-jqgrid-hdiv").hide();
             $("#DomesticGrid").jqGrid({
                 datatype: 'local',
                 colNames: ['Facility', 'Time_Period', 'No. of Defects', 'No. of Rejects', 'No. of Inspections', 'No. of Rejected Lots', 'DHU', 'Reject Rate', 'Lot Acceptance', 'Compliance Ratio'],
@@ -720,6 +723,9 @@
                 }
 
             });
+            var domesticgrid = $("#DomesticGrid");
+            var domesticgview = domesticgrid.parents("div.ui-jqgrid-view");
+            domesticgview.children("div.ui-jqgrid-hdiv").hide();
             $("#GlobalGrid").jqGrid({
                 datatype: 'local',
                 colNames: ['Facility', 'Time_Period', 'No. of Defects', 'No. of Rejects', 'No. of Inspections', 'No. of Rejected Lots', 'DHU', 'Reject Rate', 'Lot Acceptance', 'Compliance Ratio'],
@@ -763,7 +769,10 @@
                 }
                 
 
-             });
+            });
+            var globalgrid = $("#GlobalGrid");
+            var globalgview = globalgrid.parents("div.ui-jqgrid-view");
+            globalgview.children("div.ui-jqgrid-hdiv").hide();
             $("#MainGrid").jqGrid({
                 datatype: 'local',
                 colNames: ['Facility', 'Time_Period', 'No. of Defects', 'No. of Rejects', 'No. of Inspections', 'No. of Rejected Lots', 'DHU', 'Reject Rate', 'Lot Acceptance', 'Compliance Ratio'],
