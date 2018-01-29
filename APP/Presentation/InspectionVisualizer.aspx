@@ -256,7 +256,7 @@
             <p>Welcome to the Inspection Visualizer!</p>
             <p>To get started, select the locations that you want to view from the dropdown at the top of the page.  Clicking on a category will add all locations under that category.</p>
             <p>If you want to see data for individual workrooms, click on one of the '+' icons on the far left of the data grid.  This will cause a sub-graph of all available workrooms to appear.</p>
-            <p>You can view line graphs for all 7 data categories.  To do so, double-click on the cell that has the desired category and time period.  The Custom field is controlled with the Page filters, located just under the location dropdown. </p>
+            <p>You can view line graphs for all 8 data categories.  To do so, double-click on the cell that has the desired category and time period.  The Custom field is controlled with the Page filters, located just under the location dropdown. </p>
             <p>Once the linegraph is loaded, you can drill down further into the data if you choose.  To do so, just click on one of the nodes on the line graph.  Note that this will only work for 'No. of Defects', 'No. of Rejects','No. of Inspections', and 'No. of Rejected Lots'</p>
             <p>To clear out all data, and wipe the grid clean, click 'Clear Search' in the top right corner of the page.</p>
             <p>Any questions or bug reports should be directed to Kris Bredwell (kbredwell@standardtextile.com)</p>
@@ -631,7 +631,9 @@
                     var TP = rowNames.Time_Period;
                     var Fac = rowNames.Facility;
                     var colVal = $(this).jqGrid("getCell", rowid, iCol);
-                    drawChart(Fac, GridType, TP);
+                    if (GridType != 'Time_Period' && GridType != 'Facility') {
+                        drawChart(Fac, GridType, TP);
+                    }
 
                 }
             });
@@ -673,7 +675,9 @@
                     var TP = rowNames.Time_Period;
                     var Fac = rowNames.Facility;
                     var colVal = $(this).jqGrid("getCell", rowid, iCol);
-                    drawChart(Fac, GridType, TP);
+                    if (GridType != 'Time_Period' && GridType != 'Facility') {
+                        drawChart(Fac, GridType, TP);
+                    }
 
                 }
             });
@@ -718,7 +722,10 @@
                     var TP = rowNames.Time_Period;
                     var Fac = rowNames.Facility;
                     var colVal = $(this).jqGrid("getCell", rowid, iCol);
-                    drawChart(Fac, GridType, TP);
+                    if (GridType != 'Time_Period' && GridType != 'Facility') {
+                        drawChart(Fac, GridType, TP);
+                    }
+                    
 
                 }
 
@@ -764,7 +771,9 @@
                     var TP = rowNames.Time_Period;
                     var Fac = rowNames.Facility;
                     var colVal = $(this).jqGrid("getCell", rowid, iCol);
-                    drawChart(Fac, GridType, TP);
+                    if (GridType != 'Time_Period' && GridType != 'Facility') {
+                        drawChart(Fac, GridType, TP);
+                    }
 
                 }
                 
@@ -868,7 +877,9 @@
                     var TP = rowNames.Time_Period;
                     var Fac = rowNames.Facility;
                     var colVal = $(this).jqGrid("getCell", rowid, iCol);
-                    drawChart(Fac, GridType, TP);
+                    if (GridType != 'Time_Period' && GridType != 'Facility') {
+                        drawChart(Fac, GridType, TP);
+                    }
 
                 },
                 gridComplete: function () {

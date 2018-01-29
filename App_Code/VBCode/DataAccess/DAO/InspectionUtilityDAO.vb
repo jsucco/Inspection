@@ -1644,7 +1644,7 @@ Namespace core
                     Numerator = Numerator + 1
                 End If
             Next
-            Return Numerator / UniqueList.Count
+            Return Math.Round(Numerator / UniqueList.Count, 2)
         End Function
         Public Function WRGetMonthlyCR(ByVal CID As String, ByVal WR As String, ByVal WS As String) As Double
             Dim retval As Double = 0
@@ -1698,7 +1698,7 @@ Namespace core
                     Numerator = Numerator + 1
                 End If
             Next
-            Return Numerator / UniqueList.Count
+            Return Math.Round(Numerator / UniqueList.Count, 2)
         End Function
         Public Function GetMonthlyCR(ByVal CID As String, ByVal WS As String) As Double
             Dim retval As Double = 0
@@ -1751,7 +1751,7 @@ Namespace core
                     Numerator = Numerator + 1
                 End If
             Next
-            Return Numerator / UniqueList.Count
+            Return Math.Round(Numerator / UniqueList.Count, 2)
         End Function
 
         Public Function WRGetCustomCR(ByVal CID As String, ByVal WR As String, ByVal WS As String) As Double
@@ -1804,7 +1804,7 @@ Namespace core
                     Numerator = Numerator + 1
                 End If
             Next
-            Return Numerator / UniqueList.Count
+            Return Math.Round(Numerator / UniqueList.Count, 2)
         End Function
         Public Function WRGetYearlyCR(ByVal CID As String, ByVal WR As String, ByVal WS As String) As Double
             Dim retval As Double = 0
@@ -1856,7 +1856,7 @@ Namespace core
                     Numerator = Numerator + 1
                 End If
             Next
-            Return Numerator / UniqueList.Count
+            Return Math.Round(Numerator / UniqueList.Count, 2)
         End Function
         Public Function GetYearlyCR(ByVal CID As String, ByVal WS As String) As Double
             Dim retval As Double = 0
@@ -1908,7 +1908,7 @@ Namespace core
                     Numerator = Numerator + 1
                 End If
             Next
-            Return Numerator / UniqueList.Count
+            Return Math.Round(Numerator / UniqueList.Count, 2)
         End Function
         Public Function GetGlobalYearlyCR(ByVal WS As String) As Double
             Dim retval As Double = 0
@@ -1961,7 +1961,7 @@ Namespace core
                     Numerator = Numerator + 1
                 End If
             Next
-            Return Numerator / UniqueList.Count
+            Return Math.Round(Numerator / UniqueList.Count, 2)
         End Function
         Public Function GetGlobalMonthlyCR(ByVal WS As String) As Double
             Dim retval As Double = 0
@@ -2014,7 +2014,7 @@ Namespace core
                     Numerator = Numerator + 1
                 End If
             Next
-            Return Numerator / UniqueList.Count
+            Return Math.Round(Numerator / UniqueList.Count, 2)
         End Function
         Public Function GetOverallDataArray(ByVal fromDate As String, ByVal toDate As String, ByVal DN As String, ByVal WO As String, ByVal AT As String) As List(Of String)
             '{ id: "1", Facility: "Thomaston", Time_Period: "Past 30 Days", No_of_Defects: 100, No_of_Rejects: 1, No_of_Inspections: 10, No_of_Rejected_Lots: 12, DHU: 0.55, Reject_Rate: '25%', Lot_Acceptance: '91.3%', attr: { Facility: { rowspan: "3" } } },
