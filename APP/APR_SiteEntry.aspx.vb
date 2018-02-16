@@ -147,7 +147,7 @@ Namespace core
             authCookie.Expires = expires
 
             Response.Cookies.Add(authCookie)
-
+            FormsAuthentication.SetAuthCookie(username, True)
             Authenticated_hidden.Value = "True"
         End Sub
 

@@ -2037,7 +2037,7 @@ Namespace core
             If WO <> "ALL" Then
                 WhereString2 = WhereString2 & " AND JobNumber = '" & WO & "'"
             End If
-            Dim WhereString As String = "WHERE CID IS NOT NULL AND Inspection_Finished BETWEEN '" & startDate & "' AND '" & oDate & "'"
+            Dim WhereString As String = "WHERE CID IS NOT NULL AND Cast(Inspection_Finished as Date) >= '" & startDate & "' AND Cast(Inspection_Finished as Date) <= '" & oDate & "'"
             If AT = "ALL" Then
                 WhereString = WhereString & " AND InspectionType != 'ROLL'"
             ElseIf AT = "FINAL AUDIT" Then
@@ -2110,7 +2110,7 @@ Namespace core
             If WO <> "ALL" Then
                 WhereString2 = WhereString2 & " AND JobNumber = '" & WO & "'"
             End If
-            Dim WhereString As String = "WHERE (CID = 485 OR CID = 482 OR CID = 578) AND Inspection_Finished BETWEEN '" & startDate & "' AND '" & oDate & "'"
+            Dim WhereString As String = "WHERE (CID = 485 OR CID = 482 OR CID = 578) AND Cast(Inspection_Finished as Date) >= '" & startDate & "' AND Cast(Inspection_Finished as Date) <= '" & oDate & "'"
             If AT = "ALL" Then
                 WhereString = WhereString & " AND InspectionType != 'ROLL'"
             ElseIf AT = "FINAL AUDIT" Then
@@ -2183,7 +2183,7 @@ Namespace core
             If WO <> "ALL" Then
                 WhereString2 = WhereString2 & " AND JobNumber = '" & WO & "'"
             End If
-            Dim WhereString As String = "WHERE (CID = 111 OR CID = 112) AND Inspection_Finished BETWEEN '" & startDate & "' AND '" & oDate & "'"
+            Dim WhereString As String = "WHERE (CID = 111 OR CID = 112) AND Cast(Inspection_Finished as Date) >= '" & startDate & "' AND Cast(Inspection_Finished as Date) <= '" & oDate & "'"
             If AT = "ALL" Then
                 WhereString = WhereString & " AND InspectionType != 'ROLL'"
             ElseIf AT = "FINAL AUDIT" Then
@@ -2256,7 +2256,7 @@ Namespace core
             If WO <> "ALL" Then
                 WhereString2 = WhereString2 & " AND JobNumber = '" & WO & "'"
             End If
-            Dim WhereString As String = "WHERE (CID = 114 OR CID = 115 OR CID = 590 OR CID = 1001 OR CID = 627) AND Inspection_Finished BETWEEN '" & startDate & "' AND '" & oDate & "'"
+            Dim WhereString As String = "WHERE (CID = 114 OR CID = 115 OR CID = 590 OR CID = 1001 OR CID = 627) AND Cast(Inspection_Finished as Date) >= '" & startDate & "' AND Cast(Inspection_Finished as Date) <= '" & oDate & "'"
             If AT = "ALL" Then
                 WhereString = WhereString & " AND InspectionType != 'ROLL'"
             ElseIf AT = "FINAL AUDIT" Then

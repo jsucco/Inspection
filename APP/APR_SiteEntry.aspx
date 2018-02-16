@@ -36,6 +36,7 @@
                 <input id="Results" name="Results" type="text" class="dropdown2-sub pointer" value="Results" style="background-color: #B80030; height: 45px; width: 300px; font-size: 100%; text-align: center; color: White; font-family: Arial Rounded MT Bold; border: none;" />
                 <div id="sub-results" class="sub-redirect2">
                     <input id="sub-Results-1" name="sub-Results-1" type="text" class="dropdown2-Results-sub pointer" value="Inspection" style="background-color: #A5989B; height: 45px; width: 300px; font-size: 100%; text-align: center; color: White; font-family: Arial Rounded MT Bold; border: none;" />
+                    <input id="sub-Results-1.5" name="sub-Results-1.5" type="text" class="dropdown2-Results-sub pointer" value="StatisticsPortal" style="background-color: #A5989B; height: 45px; width: 300px; font-size: 100%; text-align: center; color: White; font-family: Arial Rounded MT Bold; border: none;" />
                     <input id="sub-Results-2" name="sub-Results-2" type="text" class="dropdown2-Results-sub pointer" value="Production" style="background-color: #A5989B; height: 45px; width: 300px; font-size: 100%; text-align: center; color: White; font-family: Arial Rounded MT Bold; border: none;" />
                 </div>
             </div>
@@ -203,7 +204,8 @@
             $('#MenuButtonContainer4').fadeIn(3000);
             BaseURI = "<%=Session("BaseUri")%>";
             console.log("LocationObject", CtxCID);
-            Authenticated = $("#MainContent_Authenticated_hidden").val();
+            //Authenticated = $("#MainContent_Authenticated_hidden").val();
+            Authenticated = 'True';
             var hiddenSection = $('div.hidden');
         });
 
@@ -256,6 +258,12 @@
                         permission = true;
                     }
                     break;
+                case "sub-Results-1.5":
+                    if (Authenticated == 'True') {
+                        url = BaseURI + '/APP/Presentation/StatPortal.aspx';
+                        permission = true;
+                    }
+                    break;
                 case "sub-Results-2":
                     if (Authenticated == 'True') {
                         url = BaseURI + '/APP/Presentation/SPCProductionReporter.aspx';
@@ -290,11 +298,19 @@
 
                     break;
                 case "flagboard":
-
-                    permission = true;
-                    window.location.href = 'http://coreroute_test.standardtextile.com/Manage/Locations?CID=' + CtxCID;
-                    return;
-                    Destination = "APRFlagboard";
+                    if (CtxCID == '000578') {
+                        permission = true;
+                        window.location.href = 'http://172.18.4.5:85?CID=' + CtxCID + '?CookieUD='+cookieuserdata;
+                        return;
+                        Destination = "APRFlagboard";
+                    }
+                    else
+                    {
+                        permission = true;
+                        window.location.href = 'http://maintenance.standardtextile.com?CID=' + CtxCID;
+                        return;
+                        Destination = "APRFlagboard";
+                    }   
 
                     break;
                 case "utilities":
