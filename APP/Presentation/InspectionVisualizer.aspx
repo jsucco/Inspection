@@ -137,12 +137,12 @@
     </div>
         <div id="tabs" style="position:relative; display:none; Z-INDEX: 100; top: 80px; margin:auto; width: 100%; height: 100%; left: -10px;" >
         <ul>
-            <li><a href="#tabs-1">Overview</a></li>
-            <li><a href="#tabs-2">JobSummary</a></li>
-            <li><a href="#tabs-3">SpecSummary</a></li>
-            <li><a href="#tabs-4">Photos</a></li>
+            <%--<li><a href="#tabs-1">Overview</a></li>--%>
+            <li><a href="#tabs-1">JobSummary</a></li>
+            <li><a href="#tabs-2">SpecSummary</a></li>
+            <li><a href="#tabs-3">Photos</a></li>
         </ul>
-        <div id="tabs-1">
+        <%--<div id="tabs-0">
             <div data-role="fieldcontain" style="position:absolute; top:130px; left:40%; z-index:100;">
                 <label for="select-based-flipswitch" class="filterlabel">Select:</label>
                 <select id="select-graph" class="selector" style="position:absolute; left:80px; top:-8px;" data-role="flipswitch">
@@ -207,18 +207,18 @@
             <div id="ovsholder" style="position:absolute; top:150px; left:63%;">
                 <table id="ovsgrid" style="z-index:104; font-weight:800;"></table>                
              </div>             
-        </div>
-        <div id="tabs-2">
+        </div>--%>
+        <div id="tabs-1">
             <table id="ijsgrid" style=" font-size:smaller; Z-INDEX: 104; font-weight:800;  ">
                 </table>
                 <div id="ijsgridpager1" style="Z-INDEX: 105; position:absolute; z-index: 105;" ></div>
         </div>
-        <div id="tabs-3">
+        <div id="tabs-2">
             <table id="Specgrid" style=" font-size:smaller; Z-INDEX: 104; font-weight:800 ">
                 </table>
                 <div id="Specgridpager1" style="Z-INDEX: 105; position:absolute; z-index: 105;" ></div>
         </div>
-        <div id="tabs-4">
+        <div id="tabs-3">
             <div data-role="fieldcontain" style="position:absolute; top: 13%; left:10%; z-index:1000;">
                 <label for="select-based-flipswitch" class="filterlabel">Defect Type:</label>
                 <select id="select-DefectType-Photos" data-role="flipswitch" class="TabFilter selector">
@@ -764,17 +764,20 @@
                 select: function (e, args) {
                     SelectedTab = args.tab.innerText;
                     switch (SelectedTab) {
-                        case 'Overview':
-                            TabAccCnt[0].Overview++;
-                            //grids.RenderOvsgrid();
-                            break;
+                        //case 'Overview':
+                        //    TabAccCnt[0].Overview++;
+                        //    //grids.RenderOvsgrid();
+                        //    break;
                         case 'JobSummary':
                             TabAccCnt[0].JobSummary++;
 
-                            if (TabAccCnt[0].JobSummary == 1) {
-                                grids.RenderSummaryGrid()
+                            //if (TabAccCnt[0].JobSummary == 1) {
+                            //    grids.RenderSummaryGrid()
 
-                            } else if (TabAccCnt[0].JobSummary > 1) {
+                            //} 
+                            //else 
+                            grids.RenderSummaryGrid();
+                            if (TabAccCnt[0].JobSummary > 1) {
                                 $("#ijsgrid").jqGrid('setGridParam',
                                     { datatype: 'json' }).trigger('reloadGrid');
                             }
@@ -812,7 +815,7 @@
             datahandler.GetDataNos();
             datahandler.GetWorkOrders();
             //datahandler.GetREJLine();
-            grids.RenderOvsgrid();
+            grids.RenderSummaryGrid();
 
             $('#Graph2Holder').css("display", "none");
             $('select-graph').val("LineGraph");
